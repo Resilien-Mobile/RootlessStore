@@ -1,5 +1,7 @@
 # Rootless Store
 
+[English Version](README_zh-CN.md) · [官方WIKI页](https://resilien-mobile.github.io/RootlessStore_WiKi/) · [![CI](https://github.com/Resilien-Mobile/RootlessStore/actions/workflows/Action.yaml/badge.svg?branch=main)](https://github.com/Resilien-Mobile/RootlessStore/actions/workflows/Action.yaml)
+
 一个开源的、面向安卓生态的 Rootless 插件管理与运行平台
 
 ## 项目预览
