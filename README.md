@@ -1,6 +1,6 @@
 # Rootless Store
 
-[本文中文版](/asset/markdown/readme/README_zh-CN.md)
+[本文中文版](/asset/markdown/readme/README_zh-CN.md) · [Official Wiki](https://resilien-mobile.github.io/RootlessStore_WiKi/) · [![CI](https://github.com/Resilien-Mobile/RootlessStore/actions/workflows/Action.yaml/badge.svg?branch=main)](https://github.com/Resilien-Mobile/RootlessStore/actions/workflows/Action.yaml)
 
 An open-source, rootless plugin management and runtime platform for the Android ecosystem
 
