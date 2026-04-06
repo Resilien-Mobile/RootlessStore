@@ -31,7 +31,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     getSELinuxUseCase: GetSELinuxUseCase,
     getKernelStatusUseCase: GetKernelStatusUseCase,
     getAndroidAndAPIStatusUseCase: GetAndroidAndAPIStatusUseCase,
-    getOverallStatusUseCase: GetOverallStatusUseCase
+    private val getOverallStatusUseCase: GetOverallStatusUseCase
 ) : ViewModel() {
 
     val memoryStatus: StateFlow<MemoryStatus> =
@@ -74,6 +74,10 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
 
     private val _overallStatus = MutableStateFlow(getOverallStatusUseCase())
     val overallStatus = _overallStatus.asStateFlow()
+
+    fun refreshHosterOverallStatus() {
+        _overallStatus.value = getOverallStatusUseCase()
+    }
 
 
 }

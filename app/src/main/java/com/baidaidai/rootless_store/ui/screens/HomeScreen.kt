@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.baidaidai.rootless_store.components.homeScreen.HowToDevelopRootlessStorePlugin
 import com.baidaidai.rootless_store.components.homeScreen.RootLessStoreVersionCheckerContainer
 import com.baidaidai.rootless_store.components.homeScreen.RootlessStoreHosterStatusBoard
@@ -42,6 +46,24 @@ fun HomeScreen(
         storageStatus = storageStatus,
         tempStatus = temperatureStatus
     )
+
+
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    // A Listener about Maintaining OverallStatus fresh
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                homeScreenViewModel.refreshHosterOverallStatus()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
 
 
     Column(
