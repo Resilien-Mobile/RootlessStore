@@ -8,11 +8,13 @@ import com.baidaidai.rootless_store.domain.market.error.MarketError
 import com.baidaidai.rootless_store.domain.market.usecase.GetRemotePluginListUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.usecase.InstallPluginFromMarketUseCase
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceLocal
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
@@ -38,11 +40,13 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
     private var _pluginSourceUri = MutableStateFlow<String?>(null)
 
     // Market Error Handler
-    val _marketEvent = MutableSharedFlow<MarketError?>()
+    private val _marketEvent = MutableSharedFlow<MarketError?>()
 
     val marketEvent = _marketEvent.asSharedFlow()
 
+    private val _currentPluginSource = MutableStateFlow<PluginSourceLocal?>(null)
 
+    val currentPluginSource = _currentPluginSource.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val remotePluginList = _pluginSourceUri
@@ -69,6 +73,15 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
                 old
             }
         }
+    }
+
+    fun updateCurrentPluginSource(
+        pluginSourceLocal: PluginSourceLocal
+    ){
+        _currentPluginSource.update { old ->
+            if(pluginSourceLocal != old) pluginSourceLocal else old
+        }
+
     }
 
     fun installPlugin(

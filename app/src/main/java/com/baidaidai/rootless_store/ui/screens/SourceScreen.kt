@@ -18,13 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.components.sourcesScreen.SourceScreenListItem
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceLocal
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SourceScreen(
     contentPadding: PaddingValues,
     sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
-    onListItemClick: (pluginSourceUri: String)-> Unit
+    onListItemClick: (pluginSourceLocal: PluginSourceLocal)-> Unit
 ){
     val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()
     val sourceScreenLeadingDeleteButtonStatus by sourceScreenViewModel.deleterShowStatus.collectAsState()
@@ -47,7 +48,7 @@ fun SourceScreen(
                             pluginSourceLocal = pluginSource,
                             sourceScreenViewModel
                         ) {
-                            onListItemClick(pluginSource.sourceRemoteEndpoint)
+                            onListItemClick(pluginSource)
                         }
                         if (listIndex!=pluginSourceList.size-1){
                             Spacer(modifier = Modifier.height(2.dp))
