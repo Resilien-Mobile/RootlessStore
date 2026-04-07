@@ -28,6 +28,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.baidaidai.rootless_store.ShizukuActivity
 import com.baidaidai.rootless_store.components.executeScreen.executeScreenNecessaryComponents
+import com.baidaidai.rootless_store.components.marketScreen.MarketScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.pluginsScreen.PluginScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.sourcesScreen.SourcesScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.startScreen.StartScreenErrorDialog
@@ -59,6 +60,7 @@ fun RootlessStoreStartScreenContainer(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route ?: "HomeScreen"
+    val currentPluginSource by marketScreenViewModel.currentPluginSource.collectAsState()
 
     // Define the operation ,which after got the file's URI
     val openDocumentLauncher = rememberLauncherForActivityResult(
@@ -129,6 +131,9 @@ fun RootlessStoreStartScreenContainer(
                 )
                 "ExecuteScreen" -> executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
                     scrollBehavior = scrollBehavior
+                )
+                "MarketScreen" -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
+                    sourceName = currentPluginSource!!.sourceName
                 )
                 else -> StartScreenNecessaryComponents.StartScreenTopAppBar(scrollBehavior)
             }
@@ -211,8 +216,9 @@ fun RootlessStoreStartScreenContainer(
                 SourceScreen(
                     contentPadding = contentPadding,
                     sourceScreenViewModel = sourceScreenViewModel
-                ){ pluginSourceUri ->
-                    marketScreenViewModel.updatePluginSourceUri(pluginSourceUri)
+                ){ pluginSourceLocal ->
+                    marketScreenViewModel.updatePluginSourceUri(pluginSourceLocal.sourceRemoteEndpoint)
+                    marketScreenViewModel.updateCurrentPluginSource(pluginSourceLocal)
                     navController.navigate("MarketScreen")
                 }
             }
