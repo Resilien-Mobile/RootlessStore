@@ -2,8 +2,10 @@ package com.baidaidai.rootless_store.ui.screens
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Scaffold
@@ -38,11 +40,14 @@ import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.theme.RootlessStoreTheme
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootlessStoreStartScreenContainer(
     pluginScreenViewModel: RootLessStorePluginScreenViewModel = hiltViewModel(),
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel = hiltViewModel()
+    sourceScreenViewModel: RootLessStoreSourceScreenViewModel = hiltViewModel(),
+    fileIntentUri:Uri?,
+    onHandlerEnded:()-> Unit
 ){
     // VM & VM Data
     val marketScreenViewModel = hiltViewModel<RootLessStoreMarketScreenViewModel>()
@@ -63,6 +68,16 @@ fun RootlessStoreStartScreenContainer(
             pluginScreenViewModel.updateFileURI(uri)
             pluginScreenViewModel.installPlugin()
         }
+    }
+
+    LaunchedEffect(fileIntentUri) {
+        val uri = fileIntentUri ?: return@LaunchedEffect
+        navController.navigate("PluginScreen") {
+            launchSingleTop = true
+        }
+        pluginScreenViewModel.updateFileURI(uri)
+        pluginScreenViewModel.installPlugin()
+        onHandlerEnded()
     }
 
     // Local Data
@@ -229,11 +244,12 @@ fun RootlessStoreStartScreenContainer(
 
 
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@PreviewLightDark
-@Composable
-private fun _RootlessStoreStratScreenContainerPrevierer_(){
-    RootlessStoreTheme() {
-        RootlessStoreStartScreenContainer()
-    }
-}
+//@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+//@PreviewLightDark
+//@Composable
+//private fun _RootlessStoreStratScreenContainerPrevierer_(){
+//    RootlessStoreTheme() {
+//        RootlessStoreStartScreenContainer()
+//    }
+//}
