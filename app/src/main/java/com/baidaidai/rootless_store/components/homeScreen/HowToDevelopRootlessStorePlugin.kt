@@ -41,7 +41,7 @@ fun HowToDevelopRootlessStorePlugin(){
             .clickable(
                 enabled = true,
                 onClick = {
-                    val url = "https://baidaidai-gfwd-origin.github.io/rootless_store-wiki/plugin-development"
+                    val url = "https://resilien-mobile.github.io/RootlessStore_WiKi/plugin-development/"
                     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                     context.startActivity(intent)
                 }
