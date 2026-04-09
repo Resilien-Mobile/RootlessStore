@@ -4,33 +4,32 @@ import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.baidaidai.rootless_store.domain.error.RootlessStoreError
+import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenActionCard
+import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModelSheet
+import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenOverviewCard
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
-import com.baidaidai.rootless_store.ui.theme.RootlessStoreTheme
+import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ShizukuAdbScreen(
     contentPaddingValues: PaddingValues,
@@ -42,124 +41,84 @@ fun ShizukuAdbScreen(
     val context = LocalContext.current
     val activity = context as? Activity
 
+    var sheetState by remember { mutableStateOf(false) }
+    var remainderTime by remember { mutableIntStateOf(6) }
+
 
     LaunchedEffect(endpointActived) {
         if (endpointActived) {
+            sheetState = true
+            while (remainderTime > 0){
+                delay(1000)
+                remainderTime--
+            }
             activity?.finish()
         }
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .padding(contentPaddingValues)
-            .padding(horizontal = 15.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(vertical = 15.dp)
-    ) {
-        item {
-            ShizukuAdbScreenOverviewCard()
-        }
-        item {
-            ShizukuAdbScreenActionCard(
-                step = "Step 1",
-                title = "Request ADB Authorization",
-                description = "Grant Rootless Store the ADB authorization it needs before entering the shell flow. Finish this step first so the following connection step can continue normally.",
-                buttonText = if (shizukuActived) {
-                    "Actived ✓"
-                } else {
-                    "Request Authorization"
-                },
-                onClick = {
-                    shizukuAdbScreenViewModel.activeShizuku()
-                }
-            )
-        }
-        item {
-            ShizukuAdbScreenActionCard(
-                step = "Step 2",
-                title = "Connect to Shizuku UserActivity",
-                description = "After ADB authorization is ready, open Shizuku's UserActivity and enter the ADB shell session used by Rootless Store. This is the final step before the user can continue with the shell-based workflow.",
-                buttonText = if (endpointActived) {
-                    "Actived ✓"
-                } else {
-                    "Connect to Shizuku"
-                },
-                onClick = {
-                    shizukuAdbScreenViewModel.activeShizukuEndpoint()
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun ShizukuAdbScreenOverviewCard(){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
+    if (sheetState){
+        ShizukuAdbScreenModelSheet(
+            remainderTime = remainderTime,
+            onDismissRequest = { sheetState = false},
+            onCloseButtonClick = { sheetState = false },
+            onReturnButtonClick = { activity?.finish() }
         )
-    ) {
-        Column(
+    }else{
+        LazyColumn(
             modifier = Modifier
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(contentPaddingValues)
+                .padding(horizontal = 15.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(vertical = 15.dp)
         ) {
-            Text(
-                text = "Rootless Store ADB",
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = "Some Rootless Store features depend on an ADB shell instead of a full root shell. This page helps the user complete the required setup in the correct order: request ADB authorization first, then connect into Shizuku's ADB shell environment.",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
-private fun ShizukuAdbScreenActionCard(
-    step: String,
-    title: String,
-    description: String,
-    buttonText: String,
-    onClick: () -> Unit
-){
-    Card(
-        modifier = Modifier
-            .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = step,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium
-            )
-            HorizontalDivider()
-            Button(
-                onClick = onClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                Text(buttonText)
+            item {
+                ShizukuAdbScreenOverviewCard()
+            }
+            item {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    Spacer(modifier = Modifier.height(10.dp))
+                    LinearWavyProgressIndicator(
+                        progress = {
+                            if (endpointActived) {
+                                1f
+                            }else if (shizukuActived){
+                                0.5f
+                            }else{
+                                0.05f
+                            }
+                        },
+                        amplitude = {1f},
+                        waveSpeed = 10.dp,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
+            item {
+                ShizukuAdbScreenActionCard(
+                    step = "Step 1",
+                    title = "Request Shizuku Auth",
+                    description = "Grant ADB authorization so Rootless Store can start the shell workflow and unlock the next step",
+                    targetStatus = shizukuActived,
+                    onClick = {
+                        shizukuAdbScreenViewModel.activeShizuku()
+                    }
+                )
+            }
+            item {
+                ShizukuAdbScreenActionCard(
+                    step = "Step 2",
+                    title = "Connect to Shizuku",
+                    description = "After authorization is ready open Shizuku and enter the ADB shell session to finish setup and continue",
+                    targetStatus = endpointActived,
+                    onClick = {
+                        shizukuAdbScreenViewModel.activeShizukuEndpoint()
+                    }
+                )
             }
         }
     }

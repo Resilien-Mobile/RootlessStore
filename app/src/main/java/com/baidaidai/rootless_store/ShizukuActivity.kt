@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ShizukuActivity: ComponentActivity() {
-    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -34,7 +37,15 @@ class ShizukuActivity: ComponentActivity() {
                 }
             }
             RootlessStoreTheme {
-                Scaffold { contentPadding ->
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = {
+                                Text("Shizuku Auth")
+                            }
+                        )
+                    }
+                ) { contentPadding ->
                     if (sharedEvent is RootlessStoreError){
                         StartScreenErrorDialog(shizukuAdbScreenViewModel, sharedEvent)
                     }
