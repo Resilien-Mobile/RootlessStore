@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Scaffold
@@ -30,6 +31,7 @@ import com.baidaidai.rootless_store.ShizukuActivity
 import com.baidaidai.rootless_store.components.executeScreen.executeScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.marketScreen.MarketScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.pluginsScreen.PluginScreenNecessaryComponents
+import com.baidaidai.rootless_store.components.shellScreen.ShellScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.sourcesScreen.SourcesScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.startScreen.StartScreenErrorDialog
 import com.baidaidai.rootless_store.components.startScreen.StartScreenRepositoryDialog
@@ -38,6 +40,7 @@ import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.theme.RootlessStoreTheme
 
@@ -53,6 +56,7 @@ fun RootlessStoreStartScreenContainer(
     // VM & VM Data
     val marketScreenViewModel = hiltViewModel<RootLessStoreMarketScreenViewModel>()
     val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>()
+    val shellScreenViewModel = hiltViewModel<RootLessStoreShellScreenViewModel>()
     val pluginInfoCount by pluginScreenViewModel.pluginInfoCount.collectAsState()
     val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
 
@@ -71,6 +75,9 @@ fun RootlessStoreStartScreenContainer(
             pluginScreenViewModel.installPlugin()
         }
     }
+
+    val lazyColumnState = rememberLazyListState()
+    val totalListLength = shellScreenViewModel.shellOutputList.collectAsState().value.size
 
     LaunchedEffect(fileIntentUri) {
         val uri = fileIntentUri ?: return@LaunchedEffect
@@ -134,6 +141,18 @@ fun RootlessStoreStartScreenContainer(
                 )
                 "MarketScreen" -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
                     sourceName = currentPluginSource!!.sourceName
+                )
+                "ShellScreen" -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
+                    onTopIconClick = {
+                        lazyColumnState.scrollToItem(0)
+                    },
+                    onBottomIconClick = {
+
+                        lazyColumnState.scrollToItem(totalListLength)
+                    },
+                    onDeleteIconClick = {
+                        shellScreenViewModel.cleanShellOutputList()
+                    }
                 )
                 else -> StartScreenNecessaryComponents.StartScreenTopAppBar(scrollBehavior)
             }
@@ -234,7 +253,11 @@ fun RootlessStoreStartScreenContainer(
             composable(
                 route = "ShellScreen"
             ){
-                ShellScreen(contentPaddingValues = contentPadding)
+                ShellScreen(
+                    contentPaddingValues = contentPadding,
+                    shellScreenViewModel = shellScreenViewModel,
+                    lazyColumnState = lazyColumnState
+                )
             }
             composable(
                 route = "ExecuteScreen"

@@ -37,4 +37,26 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
             .waitFor()
         return process == 0
     }
+
+    override fun command(commandContent: String, callback: IShellCallback ){
+        val process = ProcessBuilder("sh","-c",commandContent).start()
+
+        process
+            .inputStream
+            .bufferedReader()
+            .useLines{ line ->
+                line.forEach {
+                    callback.onExecute(it)
+                }
+            }
+
+        process
+            .errorStream
+            .bufferedReader()
+            .useLines{ line ->
+                line.forEach {
+                    callback.onError(it)
+                }
+            }
+    }
 }

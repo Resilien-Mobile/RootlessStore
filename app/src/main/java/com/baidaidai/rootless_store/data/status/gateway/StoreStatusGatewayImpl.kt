@@ -86,4 +86,13 @@ class StoreStatusGatewayImpl @Inject constructor(
             HosterOverallStatus.LIMITED
         }
     }
+
+    fun getRootStatus(): Boolean {
+        return Shell.getShell().isRoot
+    }
+
+    fun getShizukuStatus(): Boolean {
+        return shizukuEndpointManager.bind()
+    }
+
 }
