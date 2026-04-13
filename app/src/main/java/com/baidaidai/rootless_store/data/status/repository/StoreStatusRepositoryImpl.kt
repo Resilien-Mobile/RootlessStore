@@ -7,6 +7,7 @@ import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
+import com.topjohnwu.superuser.Shell
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -27,4 +28,8 @@ class StoreStatusRepositoryImpl @Inject constructor(
     fun getAndroidAndAPIStatus(): AndroidAndAPIStatus = storeStatusGatewayImpl.getAndroidAndAPIStatus()
 
     fun getOverallStatus(): HosterOverallStatus = storeStatusGatewayImpl.getHosterOverallStatus()
+
+    fun getRootStatus(): Boolean = storeStatusGatewayImpl.getRootStatus()
+
+    fun getShizukuStatus(): Boolean = storeStatusGatewayImpl.getShizukuStatus()
 }
