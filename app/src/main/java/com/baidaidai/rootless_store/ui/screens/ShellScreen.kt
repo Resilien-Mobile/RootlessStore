@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -23,6 +25,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -30,6 +33,7 @@ import androidx.compose.material3.SplitButtonDefaults
 import androidx.compose.material3.SplitButtonLayout
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,18 +53,35 @@ import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import androidx.compose.ui.graphics.*
+import com.topjohnwu.superuser.Shell
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ShellScreen(
-    contentPaddingValues: PaddingValues
+    contentPaddingValues: PaddingValues,
+    shellScreenViewModel: RootLessStoreShellScreenViewModel,
+    lazyColumnState: LazyListState
 ){
     var commandContent by remember { mutableStateOf("") }
     var shellEnvironment by remember { mutableStateOf(ShellEnvironment.AppShell) }
     var trailingButtonStatus by remember { mutableStateOf(false) }
 
-    val shellScreenViewModel = hiltViewModel<RootLessStoreShellScreenViewModel>()
     val shellOutputList by shellScreenViewModel.shellOutputList.collectAsState()
+    val rootShellStatus by shellScreenViewModel.rootShellStatus.collectAsState()
+    val adbShellStatus by shellScreenViewModel.adbShellStatus.collectAsState()
+
+    LaunchedEffect(shellOutputList.size) {
+        if (shellOutputList.isNotEmpty()) {
+            lazyColumnState.scrollToItem(shellOutputList.lastIndex)
+        }
+    }
+
+    val shellEnvironmentSymbol = remember(shellEnvironment){
+        when(shellEnvironment){
+            ShellEnvironment.AppShell, ShellEnvironment.ADBShell -> "~"
+            ShellEnvironment.RootShell -> "#"
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -99,6 +120,21 @@ fun ShellScreen(
         ) {
             Column{
                 OutlinedTextField(
+                    leadingIcon = {
+                        Text(shellEnvironmentSymbol)
+                    },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                commandContent = ""
+                            }
+                        ) {
+                            Icon(
+                                painterResource(R.drawable.outline_close_24),
+                                contentDescription = "Delete"
+                            )
+                        }
+                    },
                     value = commandContent,
                     onValueChange = {
                         commandContent = it
@@ -192,6 +228,7 @@ fun ShellScreen(
                                         )
                                         Spacer(modifier = Modifier.height(2.dp))
                                         DropdownMenuItem(
+                                            enabled = adbShellStatus,
                                             selected = shellEnvironment == ShellEnvironment.ADBShell,
                                             shapes = MenuDefaults.itemShape(2,4),
                                             leadingIcon = {
@@ -209,6 +246,7 @@ fun ShellScreen(
                                         )
                                         Spacer(modifier = Modifier.height(2.dp))
                                         DropdownMenuItem(
+                                            enabled = rootShellStatus,
                                             selected = shellEnvironment == ShellEnvironment.RootShell,
                                             shapes = MenuDefaults.itemShape(3,4),
                                             leadingIcon = {
@@ -244,13 +282,17 @@ fun ShellScreen(
                 .fillMaxWidth()
         ) {
             LazyColumn(
+                state = lazyColumnState,
                 modifier = Modifier
-                    .padding(30.dp)
+                    .padding(horizontal = 25.dp, vertical = 15.dp)
             ){
                 items(
                     items = shellOutputList
                 ){ shellResult ->
-                    Text(shellResult.command)
+                    if(shellResult.command != null){
+                        Text(shellResult.command)
+                    }
+
                     if (shellResult.resulTag == ResultTag.RedLine){
                         Text(
                             shellResult.content,
@@ -268,14 +310,14 @@ fun ShellScreen(
     }
 }
 
-@Composable
-@PreviewLightDark
-private fun GreetingScreenPreview(){
-    Scaffold(
-        topBar = {
-            ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar()
-        }
-    ) { contentPadding->
-        ShellScreen(contentPaddingValues = contentPadding)
-    }
-}
+//@Composable
+//@PreviewLightDark
+//private fun GreetingScreenPreview(){
+//    Scaffold(
+//        topBar = {
+//            ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar()
+//        }
+//    ) { contentPadding->
+//        ShellScreen(contentPaddingValues = contentPadding)
+//    }
+//}

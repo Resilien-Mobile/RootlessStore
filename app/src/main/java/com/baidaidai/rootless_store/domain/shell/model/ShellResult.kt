@@ -5,6 +5,6 @@ import kotlin.String
 
 data class ShellResult(
     val resulTag: ResultTag,
-    val command: String,
+    val command: String?,
     val content: String
 )
