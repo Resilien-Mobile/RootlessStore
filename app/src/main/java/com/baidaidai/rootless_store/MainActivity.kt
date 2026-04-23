@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity(){
 
     private var fileIntentUri: Uri? by mutableStateOf(null)
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -66,7 +65,6 @@ class MainActivity : ComponentActivity(){
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -75,12 +73,17 @@ class MainActivity : ComponentActivity(){
         handleFileIntent(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun handleFileIntent(intent: Intent?) {
         if (intent?.action != Intent.ACTION_SEND) {
             this.fileIntentUri = null
         }
-        val uri = intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
-        this.fileIntentUri = uri
+        val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent?.getParcelableExtra(Intent.EXTRA_STREAM)
+        }
+
+        fileIntentUri = uri
     }
 }
