@@ -6,12 +6,12 @@
 
 ## 项目预览
 <p>
-    <img src="/asset/picture/HomeScreen.png" width="32%" />
-    <img src="/asset/picture/PluginScreen.png" width="32%" />
-    <img src="/asset/picture/SourceScreen.png" width="32%" />
-    <img src="/asset/picture/ExecuteScreen.png" width="32%" />
-    <img src="/asset/picture/AdbShizukuScreen.png" width="32%" />
-    <img src="/asset/picture/ShellScreen.png" width="32%" />
+    <img src="/asset/picture/zh-rCN/HomeScreen.png" width="32%" />
+    <img src="/asset/picture/zh-rCN/PluginScreen.png" width="32%" />
+    <img src="/asset/picture/zh-rCN/SourceScreen.png" width="32%" />
+    <img src="/asset/picture/zh-rCN/ExecuteScreen.png" width="32%" />
+    <img src="/asset/picture/zh-rCN/AdbShizukuScreen.png" width="32%" />
+    <img src="/asset/picture/zh-rCN/ShellScreen.png" width="32%" />
 </p>
 
 ## 项目简介
