@@ -1,4 +1,96 @@
 <resources>
     <string name="app_name">Rootless Store</string>
     <string name="app_version">v0.0.75</string>
+
+    <!-- Home Screen Strings -->
+    <string name="home_screen_version_checker_container_icon_content_description">Terminal Icon</string>
+    <string name="home_screen_version_checker_container_headline">Rootless Store is Running</string>
+    <string name="home_screen_version_checker_container_supporting">Version {version}</string>
+
+    <string name="home_screen_hoster_status_board_icon_content_description">Hoster Status</string>
+    <string name="home_screen_hoster_status_board_title">Hoster Status</string>
+    <string name="home_screen_hoster_status_board_overall">Overall: %1$s</string>
+    <string name="home_screen_hoster_status_board_memory_label">Memory</string>
+    <string name="home_screen_hoster_status_board_storage_label">Storage</string>
+    <string name="home_screen_hoster_status_board_version_label">Version</string>
+    <string name="home_screen_hoster_status_board_kernel_label">Kernel</string>
+    <string name="home_screen_hoster_status_board_selinux_label">SELinux</string>
+    <string name="home_screen_hoster_status_board_plugins_label">Plugins</string>
+    <string name="home_screen_hoster_status_board_temp_label">Temp</string>
+
+    <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">Develop Icon</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_headline">Learn Rootless Store</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">Learn how to develop Rootless Store plugins</string>
+
+    <!-- Shizuku ADB Screen: Overview Card -->
+    <string name="shizuku_adb_screen_overview_card_title">Shizuku Authorization</string>
+    <string name="shizuku_adb_screen_overview_card_icon_content_description">Shizuku Icon</string>
+    <string name="shizuku_adb_screen_overview_card_description">Some Rootless Store features rely on Shizuku’s ADB capabilities. Please grant Shizuku authorization first, then connect to the UserService.</string>
+
+    <!-- Shizuku ADB Screen: Action Cards -->
+    <string name="shizuku_adb_screen_action_card_start_content_description">Start</string>
+    <string name="shizuku_adb_screen_action_card_step_1_label">Step 1</string>
+    <string name="shizuku_adb_screen_action_card_step_1_title">Request Shizuku Auth</string>
+    <string name="shizuku_adb_screen_action_card_step_1_description">Grant ADB authorization so Rootless Store can start the shell workflow and unlock the next step</string>
+    <string name="shizuku_adb_screen_action_card_step_2_label">Step 2</string>
+    <string name="shizuku_adb_screen_action_card_step_2_title">Connect to Shizuku UserService</string>
+    <string name="shizuku_adb_screen_action_card_step_2_description">Connect to the Shizuku UserService to complete the final setup</string>
+
+    <!-- Shizuku ADB Screen: Bottom Sheet -->
+    <string name="shizuku_adb_screen_bottom_sheet_title">All done</string>
+    <!-- Countdown text is intentionally split to avoid format parameters for now. -->
+    <string name="shizuku_adb_screen_bottom_sheet_countdown_context">Returning to Home in {second} s</string>
+    <string name="shizuku_adb_screen_bottom_sheet_close_button">Close</string>
+    <string name="shizuku_adb_screen_bottom_sheet_return_button">Return now</string>
+
+    <!-- Shell Screen Strings -->
+    <string name="shell_screen_command_input_label">Shell Command</string>
+
+    <!-- Plugin Screen: Top App Bar -->
+    <string name="plugin_screen_top_app_bar_title">Plugin</string>
+    <string name="plugin_screen_top_app_bar_subtitle">Installed {pluginCount} plugins</string>
+    <string name="plugin_screen_top_app_bar_edit_button">Edit</string>
+    <string name="plugin_screen_top_app_bar_filter_content_description">Filter</string>
+
+    <!-- Plugin Screen: Floating Button -->
+    <string name="plugin_screen_floating_button_install_content_description">Install</string>
+
+    <!-- Plugin Screen: Info Container -->
+    <string name="plugin_screen_info_container_local_delete_button_content_description">Delete button</string>
+    <string name="plugin_screen_info_container_local_icon_content_description">Plugin Icon</string>
+    <string name="plugin_screen_info_container_local_version">Version: {version}</string>
+    <string name="plugin_screen_info_container_local_author_label">Author</string>
+    <string name="plugin_screen_info_container_local_source_label">Source</string>
+    <string name="plugin_screen_info_container_local_state_label">State</string>
+    <string name="plugin_screen_info_container_local_required_label">Required</string>
+
+    <!-- Sources Screen: Top App Bar -->
+    <string name="sources_screen_top_app_bar_title">Sources</string>
+    <string name="sources_screen_top_app_bar_subtitle">Added {sourceCount} sources</string>
+    <string name="sources_screen_top_app_bar_edit_button">Edit</string>
+    <string name="sources_screen_top_app_bar_add_content_description">Add</string>
+
+    <!-- Sources Screen: List Item -->
+    <string name="sources_screen_list_item_go_to_content_description">Go to</string>
+    <string name="sources_screen_list_item_delete_content_description">Delete</string>
+    <string name="sources_screen_list_item_icon_content_description">Source Icon</string>
+
+    <!-- Sources Screen: Repository Dialog -->
+    <string name="sources_screen_repository_dialog_confirm_button">Add</string>
+    <string name="sources_screen_repository_dialog_dismiss_button">Cancel</string>
+    <string name="sources_screen_repository_dialog_title">Add Source</string>
+    <string name="sources_screen_repository_dialog_description">Add a repository to update and discover plugins.</string>
+    <string name="sources_screen_repository_dialog_input_label">Source URL</string>
+    <string name="sources_screen_repository_dialog_input_placeholder">https://endpoint/api/v1</string>
+
+    <!-- Execute Screen: Top App Bar -->
+    <string name="execute_screen_top_app_bar_title">Executing Plugin</string>
+    <string name="execute_screen_top_app_bar_share_content_description">Share</string>
+    <string name="execute_screen_top_app_bar_stop_content_description">Stop</string>
+    <string name="execute_screen_top_app_bar_back_content_description">Back</string>
+
+    <!-- Start Screen: Navigation Bar -->
+    <string name="start_screen_navigation_bar_home_label">Home</string>
+    <string name="start_screen_navigation_bar_plugin_label">Plugin</string>
+    <string name="start_screen_navigation_bar_sources_label">Sources</string>
 </resources>

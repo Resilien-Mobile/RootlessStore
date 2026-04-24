@@ -1,0 +1,93 @@
+<resources>
+    <!-- Home Screen Strings -->
+    <string name="home_screen_version_checker_container_icon_content_description">终端图标</string>
+    <string name="home_screen_version_checker_container_headline">Rootless Store 正运行</string>
+    <string name="home_screen_version_checker_container_supporting">版本 {version}</string>
+
+    <string name="home_screen_hoster_status_board_icon_content_description">宿主状态</string>
+    <string name="home_screen_hoster_status_board_title">宿主状态</string>
+    <string name="home_screen_hoster_status_board_overall">总体状态：%1$s</string>
+    <string name="home_screen_hoster_status_board_memory_label">内存</string>
+    <string name="home_screen_hoster_status_board_storage_label">存储</string>
+    <string name="home_screen_hoster_status_board_version_label">版本</string>
+    <string name="home_screen_hoster_status_board_kernel_label">内核</string>
+    <string name="home_screen_hoster_status_board_selinux_label">SELinux</string>
+    <string name="home_screen_hoster_status_board_plugins_label">插件</string>
+    <string name="home_screen_hoster_status_board_temp_label">温度</string>
+
+    <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">开发图标</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_headline">了解 Rootless Store</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">了解如何开发 Rootless Store 插件</string>
+
+    <!-- Shizuku ADB Screen: Overview Card -->
+    <string name="shizuku_adb_screen_overview_card_title">Shizuku 授权</string>
+    <string name="shizuku_adb_screen_overview_card_icon_content_description">Shizuku 图标</string>
+    <string name="shizuku_adb_screen_overview_card_description">Rootless Store 的部分功能依赖 Shizuku 提供的 ADB 能力，请先授予 Shizuku 授权，然后再连接到 UserService</string>
+
+    <!-- Shizuku ADB Screen: Action Cards -->
+    <string name="shizuku_adb_screen_action_card_start_content_description">开始</string>
+    <string name="shizuku_adb_screen_action_card_step_1_label">步骤 1</string>
+    <string name="shizuku_adb_screen_action_card_step_1_title">请求 Shizuku 授权</string>
+    <string name="shizuku_adb_screen_action_card_step_1_description">授予 ADB 授权，让 Rootless Store 可以启动 Shell 流程并解锁下一步。</string>
+    <string name="shizuku_adb_screen_action_card_step_2_label">步骤 2</string>
+    <string name="shizuku_adb_screen_action_card_step_2_title">连接到 Shizuku UserService</string>
+    <string name="shizuku_adb_screen_action_card_step_2_description">请连接到 Shizuku UserService 以完成最后准备</string>
+
+    <!-- Shizuku ADB Screen: Bottom Sheet -->
+    <string name="shizuku_adb_screen_bottom_sheet_title">已完成</string>
+    <!-- Countdown text is intentionally split to avoid format parameters for now. -->
+    <string name="shizuku_adb_screen_bottom_sheet_countdown_context">返回首页倒计时 {second} 秒</string>
+    <string name="shizuku_adb_screen_bottom_sheet_close_button">关闭</string>
+    <string name="shizuku_adb_screen_bottom_sheet_return_button">立即返回</string>
+
+    <!-- Shell Screen Strings -->
+    <string name="shell_screen_command_input_label">Shell 命令</string>
+
+    <!-- Plugin Screen: Top App Bar -->
+    <string name="plugin_screen_top_app_bar_title">插件页</string>
+    <string name="plugin_screen_top_app_bar_subtitle">已安装了 {pluginCount} 个插件</string>
+    <string name="plugin_screen_top_app_bar_edit_button">编辑</string>
+    <string name="plugin_screen_top_app_bar_filter_content_description">筛选</string>
+
+    <!-- Plugin Screen: Floating Button -->
+    <string name="plugin_screen_floating_button_install_content_description">安装</string>
+
+    <!-- Plugin Screen: Info Container -->
+    <string name="plugin_screen_info_container_local_delete_button_content_description">删除按钮</string>
+    <string name="plugin_screen_info_container_local_icon_content_description">插件图标</string>
+    <string name="plugin_screen_info_container_local_version">版本：{version}</string>
+    <string name="plugin_screen_info_container_local_author_label">作者</string>
+    <string name="plugin_screen_info_container_local_source_label">来源</string>
+    <string name="plugin_screen_info_container_local_state_label">状态</string>
+    <string name="plugin_screen_info_container_local_required_label">最低权限</string>
+
+    <!-- Sources Screen: Top App Bar -->
+    <string name="sources_screen_top_app_bar_title">插件源</string>
+    <string name="sources_screen_top_app_bar_subtitle">已添加了 {sourceCount} 个插件源</string>
+    <string name="sources_screen_top_app_bar_edit_button">编辑</string>
+    <string name="sources_screen_top_app_bar_add_content_description">添加</string>
+
+    <!-- Sources Screen: List Item -->
+    <string name="sources_screen_list_item_go_to_content_description">前往</string>
+    <string name="sources_screen_list_item_delete_content_description">删除</string>
+    <string name="sources_screen_list_item_icon_content_description">源图标</string>
+
+    <!-- Sources Screen: Repository Dialog -->
+    <string name="sources_screen_repository_dialog_confirm_button">添加</string>
+    <string name="sources_screen_repository_dialog_dismiss_button">取消</string>
+    <string name="sources_screen_repository_dialog_title">添加插件源</string>
+    <string name="sources_screen_repository_dialog_description">添加一个仓库源，用于更新和发现更多插件</string>
+    <string name="sources_screen_repository_dialog_input_label">插件源 URL</string>
+    <string name="sources_screen_repository_dialog_input_placeholder">https://endpoint/api/v1</string>
+
+    <!-- Execute Screen: Top App Bar -->
+    <string name="execute_screen_top_app_bar_title">正执行插件</string>
+    <string name="execute_screen_top_app_bar_share_content_description">分享</string>
+    <string name="execute_screen_top_app_bar_stop_content_description">停止</string>
+    <string name="execute_screen_top_app_bar_back_content_description">返回</string>
+
+    <!-- Start Screen: Navigation Bar -->
+    <string name="start_screen_navigation_bar_home_label">主页</string>
+    <string name="start_screen_navigation_bar_plugin_label">插件页</string>
+    <string name="start_screen_navigation_bar_sources_label">插件源</string>
+</resources>
