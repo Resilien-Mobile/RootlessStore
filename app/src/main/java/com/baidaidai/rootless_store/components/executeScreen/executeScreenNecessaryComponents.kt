@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.baidaidai.rootless_store.R
 
@@ -21,7 +22,7 @@ object executeScreenNecessaryComponents {
         scrollBehavior: TopAppBarScrollBehavior
     ){
         MediumFlexibleTopAppBar(
-            title = { Text("Executing Plugin") },
+            title = { Text(stringResource(R.string.execute_screen_top_app_bar_title)) },
             scrollBehavior = scrollBehavior,
             actions = {
                 ExecuteScreenStopButton()
@@ -40,7 +41,7 @@ object executeScreenNecessaryComponents {
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_ios_share),
-                contentDescription = "Share"
+                contentDescription = stringResource(R.string.execute_screen_top_app_bar_share_content_description)
             )
         }
     }
@@ -52,7 +53,7 @@ object executeScreenNecessaryComponents {
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_disabled),
-                contentDescription = "Stop"
+                contentDescription = stringResource(R.string.execute_screen_top_app_bar_stop_content_description)
             )
         }
     }
@@ -64,7 +65,7 @@ object executeScreenNecessaryComponents {
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_arrow_back),
-                contentDescription = "Back"
+                contentDescription = stringResource(R.string.execute_screen_top_app_bar_back_content_description)
             )
         }
     }

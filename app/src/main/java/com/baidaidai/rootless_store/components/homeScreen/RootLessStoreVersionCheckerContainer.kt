@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.core.i18n.icuString
 
 @Composable
 fun RootLessStoreVersionCheckerContainer(){
@@ -47,7 +48,7 @@ fun RootLessStoreVersionCheckerContainer(){
             ){
                 Icon(
                     painter = painterResource(R.drawable.terminal_24px),
-                    contentDescription = "Terminal Icon",
+                    contentDescription = stringResource(R.string.home_screen_version_checker_container_icon_content_description),
                     modifier = Modifier
                         .size(30.dp)
                 )
@@ -57,11 +58,14 @@ fun RootLessStoreVersionCheckerContainer(){
                 )
                 Column{
                     Text(
-                        text = "RootLessStore is Running",
+                        text = stringResource(R.string.home_screen_version_checker_container_headline),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "Version: $versionNumber",
+                        text = icuString(
+                            R.string.home_screen_version_checker_container_supporting,
+                            mapOf("version" to versionNumber)
+                        ),
                         style = MaterialTheme.typography.titleSmall
                     )
                 }

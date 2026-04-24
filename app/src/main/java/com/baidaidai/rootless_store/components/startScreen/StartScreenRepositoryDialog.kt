@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 
@@ -35,14 +36,14 @@ fun StartScreenRepositoryDialog(
             Button(
                 onClick = onConfirmButtonClick
             ) {
-                Text("Add")
+                Text(stringResource(R.string.sources_screen_repository_dialog_confirm_button))
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissButtonClick
             ) {
-                Text("Cancel")
+                Text(stringResource(R.string.sources_screen_repository_dialog_dismiss_button))
             }
         },
         title = {
@@ -58,12 +59,12 @@ fun StartScreenRepositoryDialog(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Add Source",
+                        text = stringResource(R.string.sources_screen_repository_dialog_title),
                         style = MaterialTheme.typography.titleLarge
                     )
                 }
                 Text(
-                    text = "Add a repository to update and discover plugins.",
+                    text = stringResource(R.string.sources_screen_repository_dialog_description),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -77,8 +78,8 @@ fun StartScreenRepositoryDialog(
                 OutlinedTextField(
                     value = sourceDomainContent,
                     onValueChange = { newValue -> onTextFieldValueChange(newValue)},
-                    label = { Text("Source URL") },
-                    placeholder = { Text("https://endpoint/api/v1") },
+                    label = { Text(stringResource(R.string.sources_screen_repository_dialog_input_label)) },
+                    placeholder = { Text(stringResource(R.string.sources_screen_repository_dialog_input_placeholder)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )

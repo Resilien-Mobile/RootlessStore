@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
@@ -63,7 +64,7 @@ fun RootlessStoreHosterStatusBoard(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.monitor_heart_24px),
-                            contentDescription = "Hoster Status",
+                            contentDescription = stringResource(R.string.home_screen_hoster_status_board_icon_content_description),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier
                                 .size(24.dp)
@@ -73,7 +74,7 @@ fun RootlessStoreHosterStatusBoard(
                                 .width(10.dp)
                         )
                         Text(
-                            text = "Hoster Status",
+                            text = stringResource(R.string.home_screen_hoster_status_board_title),
                             style = MaterialTheme.typography.titleMedium
                         )
                     }
@@ -115,12 +116,12 @@ fun RootlessStoreHosterStatusBoard(
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     HosterStatusCircularProgressRow(
-                        label = "Memory",
+                        label = stringResource(R.string.home_screen_hoster_status_board_memory_label),
                         currentValue = hosterStatus.memoryStatus.usedMemory,
                         maxValue = hosterStatus.memoryStatus.totalMemory
                     )
                     HosterStatusCircularProgressRow(
-                        label = "Storage",
+                        label = stringResource(R.string.home_screen_hoster_status_board_storage_label),
                         currentValue = hosterStatus.storageStatus.usedStorage,
                         maxValue = hosterStatus.storageStatus.totalStorage
                     )
@@ -140,30 +141,42 @@ fun RootlessStoreHosterStatusBoard(
                 modifier = Modifier
                     .padding(horizontal = 30.dp, vertical = 20.dp)
             ) {
-                HosterStatusRow("Version", "${hosterStatus.osAndAPIVersion?.androidVersion} (${hosterStatus.osAndAPIVersion?.apiVersion})")
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp)
+                HosterStatusRow(
+                    stringResource(R.string.home_screen_hoster_status_board_version_label),
+                    "${hosterStatus.osAndAPIVersion?.androidVersion} (${hosterStatus.osAndAPIVersion?.apiVersion})"
                 )
-                HosterStatusRow("Kernel", hosterStatus.kernelVersion ?: "null")
-                Spacer(
-                    modifier = Modifier
-                        .height(8.dp)
-                )
-                HosterStatusRow("SELinux", hosterStatus.selinuxStatus.toString())
                 Spacer(
                     modifier = Modifier
                         .height(8.dp)
                 )
                 HosterStatusRow(
-                    "Plugins",
+                    stringResource(R.string.home_screen_hoster_status_board_kernel_label),
+                    hosterStatus.kernelVersion ?: "null"
+                )
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
+                HosterStatusRow(
+                    stringResource(R.string.home_screen_hoster_status_board_selinux_label),
+                    hosterStatus.selinuxStatus.toString()
+                )
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
+                HosterStatusRow(
+                    stringResource(R.string.home_screen_hoster_status_board_plugins_label),
                     "${hosterStatus.pluginStatus.enabledCount}/${hosterStatus.pluginStatus.totalCount}"
                 )
                 Spacer(
                     modifier = Modifier
                         .height(8.dp)
                 )
-                HosterStatusRow("Temp", hosterStatus.tempStatus?.toString() ?: "null")
+                HosterStatusRow(
+                    stringResource(R.string.home_screen_hoster_status_board_temp_label),
+                    hosterStatus.tempStatus?.toString() ?: "null"
+                )
             }
         }
     }
