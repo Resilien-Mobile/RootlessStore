@@ -22,7 +22,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenActionCard
 import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModelSheet
 import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenOverviewCard
@@ -100,9 +102,9 @@ fun ShizukuAdbScreen(
             }
             item {
                 ShizukuAdbScreenActionCard(
-                    step = "Step 1",
-                    title = "Request Shizuku Auth",
-                    description = "Grant ADB authorization so Rootless Store can start the shell workflow and unlock the next step",
+                    step = stringResource(R.string.shizuku_adb_screen_action_card_step_1_label),
+                    title = stringResource(R.string.shizuku_adb_screen_action_card_step_1_title),
+                    description = stringResource(R.string.shizuku_adb_screen_action_card_step_1_description),
                     targetStatus = shizukuActived,
                     onClick = {
                         shizukuAdbScreenViewModel.activeShizuku()
@@ -111,9 +113,9 @@ fun ShizukuAdbScreen(
             }
             item {
                 ShizukuAdbScreenActionCard(
-                    step = "Step 2",
-                    title = "Connect to Shizuku",
-                    description = "After authorization is ready open Shizuku and enter the ADB shell session to finish setup and continue",
+                    step = stringResource(R.string.shizuku_adb_screen_action_card_step_2_label),
+                    title = stringResource(R.string.shizuku_adb_screen_action_card_step_2_title),
+                    description = stringResource(R.string.shizuku_adb_screen_action_card_step_2_description),
                     targetStatus = endpointActived,
                     onClick = {
                         shizukuAdbScreenViewModel.activeShizukuEndpoint()

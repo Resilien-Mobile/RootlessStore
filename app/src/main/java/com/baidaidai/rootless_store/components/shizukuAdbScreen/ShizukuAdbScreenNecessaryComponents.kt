@@ -30,9 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.core.i18n.icuString
 
 object ShizukuAdbScreenNecessaryComponents {
 
@@ -73,7 +75,7 @@ object ShizukuAdbScreenNecessaryComponents {
                 Spacer(Modifier.height(16.dp))
 
                 Text(
-                    text = "All done",
+                    text = stringResource(R.string.shizuku_adb_screen_bottom_sheet_title),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
@@ -82,7 +84,7 @@ object ShizukuAdbScreenNecessaryComponents {
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = "Returning to Home in $remainderTime s",
+                    text = icuString(R.string.shizuku_adb_screen_bottom_sheet_countdown_context,mapOf("second" to remainderTime)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -98,13 +100,13 @@ object ShizukuAdbScreenNecessaryComponents {
                         onClick = onCloseButtonClick,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Close")
+                        Text(stringResource(R.string.shizuku_adb_screen_bottom_sheet_close_button))
                     }
                     Button(
                         onClick = onReturnButtonClick,
                         modifier = Modifier.weight(1f)
                     ) {
-                        Text("Return now")
+                        Text(stringResource(R.string.shizuku_adb_screen_bottom_sheet_return_button))
                     }
                 }
             }
@@ -163,7 +165,7 @@ object ShizukuAdbScreenNecessaryComponents {
                                 }else{
                                     painterResource(R.drawable.material_symbols_play_arrow)
                                 },
-                                contentDescription = "Start",
+                                contentDescription = stringResource(R.string.shizuku_adb_screen_action_card_start_content_description),
                                 modifier = Modifier.size(24.dp)
                             )
                         }
@@ -201,17 +203,17 @@ object ShizukuAdbScreenNecessaryComponents {
                     verticalAlignment = Alignment.CenterVertically,
                 ){
                     Text(
-                        text = "Shizuku Access",
+                        text = stringResource(R.string.shizuku_adb_screen_overview_card_title),
                         style = MaterialTheme.typography.titleLargeEmphasized
                     )
                     Icon(
                         painterResource(R.drawable.material_shizuku_icon),
-                        contentDescription = "Shizuku Icon",
+                        contentDescription = stringResource(R.string.shizuku_adb_screen_overview_card_icon_content_description),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                 }
                 Text(
-                    text = "Rootless Store uses Shizuku’s ADB shell for some features so please request ADB authorization.\nFirst then connect to Shizuku.",
+                    text = stringResource(R.string.shizuku_adb_screen_overview_card_description),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

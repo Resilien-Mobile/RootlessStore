@@ -11,7 +11,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.core.i18n.icuString
 
 object PluginScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -24,16 +26,21 @@ object PluginScreenNecessaryComponents {
     ){
         LargeFlexibleTopAppBar(
             title = {
-                Text("Plugin")
+                Text(stringResource(R.string.plugin_screen_top_app_bar_title))
             },
             subtitle = {
-                Text(text = "Instead $pluginInfoCount plugin")
+                Text(
+                    text = icuString(
+                        R.string.plugin_screen_top_app_bar_subtitle,
+                        mapOf("pluginCount" to pluginInfoCount)
+                    )
+                )
             },
             navigationIcon = {
                 TextButton(
                     onClick = textButtonOnClick
                 ) {
-                    Text("Edit")
+                    Text(stringResource(R.string.plugin_screen_top_app_bar_edit_button))
                 }
             },
             actions = {
@@ -42,7 +49,7 @@ object PluginScreenNecessaryComponents {
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_filter_list),
-                        contentDescription = "Filter"
+                        contentDescription = stringResource(R.string.plugin_screen_top_app_bar_filter_content_description)
                     )
                 }
             },
@@ -59,7 +66,7 @@ object PluginScreenNecessaryComponents {
         ) {
             Icon(
                 painter = painterResource(R.drawable.outline_box_add_24),
-                contentDescription = "Install"
+                contentDescription = stringResource(R.string.plugin_screen_floating_button_install_content_description)
             )
         }
     }

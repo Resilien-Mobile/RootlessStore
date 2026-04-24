@@ -12,6 +12,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceLocal
@@ -36,7 +37,7 @@ fun SourceScreenLeadingDeleteButton(
         ) {
             Icon(
                 painter = painterResource(R.drawable.outline_close_small_24),
-                contentDescription = "Delete",
+                contentDescription = stringResource(R.string.sources_screen_list_item_delete_content_description),
             )
         }
         Spacer(modifier = Modifier.width(12.dp))

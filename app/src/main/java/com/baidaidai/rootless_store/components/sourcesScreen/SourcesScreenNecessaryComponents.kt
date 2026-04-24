@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.core.i18n.icuString
 
 object SourcesScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -21,16 +23,21 @@ object SourcesScreenNecessaryComponents {
     ){
         LargeFlexibleTopAppBar(
             title = {
-                Text("Sources")
+                Text(stringResource(R.string.sources_screen_top_app_bar_title))
             },
             subtitle = {
-                Text(text = "Append $sourceCount Source")
+                Text(
+                    text = icuString(
+                        R.string.sources_screen_top_app_bar_subtitle,
+                        mapOf("sourceCount" to sourceCount)
+                    )
+                )
             },
             navigationIcon = {
                 TextButton(
                     onClick = textButtonOnClick
                 ) {
-                    Text("Edit")
+                    Text(stringResource(R.string.sources_screen_top_app_bar_edit_button))
                 }
             },
             actions = {
@@ -39,7 +46,7 @@ object SourcesScreenNecessaryComponents {
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_24px),
-                        contentDescription = "Add"
+                        contentDescription = stringResource(R.string.sources_screen_top_app_bar_add_content_description)
                     )
                 }
             }

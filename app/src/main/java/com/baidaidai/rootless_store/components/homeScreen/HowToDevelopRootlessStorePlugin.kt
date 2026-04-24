@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.baidaidai.rootless_store.R
@@ -61,7 +62,7 @@ fun HowToDevelopRootlessStorePlugin(){
             ){
                 Icon(
                     painter = painterResource(R.drawable.outline_construction_24),
-                    contentDescription = "Develop Icon",
+                    contentDescription = stringResource(R.string.home_screen_how_to_develop_rootless_store_plugin_icon_content_description),
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(color = MaterialTheme.colorScheme.secondaryFixed)
@@ -75,11 +76,11 @@ fun HowToDevelopRootlessStorePlugin(){
                 )
                 Column{
                     Text(
-                        text = "Learn Rootless Store",
+                        text = stringResource(R.string.home_screen_how_to_develop_rootless_store_plugin_headline),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = "Learn how to develop RootlessStore plugins",
+                        text = stringResource(R.string.home_screen_how_to_develop_rootless_store_plugin_supporting),
                         style = MaterialTheme.typography.labelSmall
                     )
                 }

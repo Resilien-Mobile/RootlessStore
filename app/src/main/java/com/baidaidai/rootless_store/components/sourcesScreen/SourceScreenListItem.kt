@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceLocal
@@ -38,7 +39,7 @@ fun SourceScreenListItem(
         trailingContent = {
             Icon(
                 painter = painterResource(R.drawable.outline_arrow_forward_ios_24),
-                contentDescription = "go to"
+                contentDescription = stringResource(R.string.sources_screen_list_item_go_to_content_description)
             )
         },
         colors = SourceListItemColor(),
@@ -53,7 +54,7 @@ fun SourceScreenListItem(
                 // Should Change Intro Compatible Source
                 Image(
                     painter = painterResource(R.drawable.ic_launcher_background),
-                    contentDescription = "2",
+                    contentDescription = stringResource(R.string.sources_screen_list_item_icon_content_description),
                     modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)

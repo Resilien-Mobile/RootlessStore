@@ -11,6 +11,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.baidaidai.rootless_store.R
@@ -38,7 +39,7 @@ object StartScreenNecessaryComponents {
             NavBarItemSpec(
                 number = 0,
                 pattern = painterResource(R.drawable.outline_home_24),
-                contentDeprecated = "Home",
+                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_home_label),
                 compatibleDestinationList = listOf(
                     "HomeScreen",
                     "ShellScreen"
@@ -47,7 +48,7 @@ object StartScreenNecessaryComponents {
             NavBarItemSpec(
                 number = 1,
                 pattern = painterResource(R.drawable.outline_extension_24),
-                contentDeprecated = "Plugin",
+                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_plugin_label),
                 compatibleDestinationList = listOf(
                     "PluginScreen",
                     "ExecuteScreen"
@@ -56,7 +57,7 @@ object StartScreenNecessaryComponents {
             NavBarItemSpec(
                 number = 2,
                 pattern = painterResource(R.drawable.outline_list_alt_24),
-                contentDeprecated = "Sources",
+                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_sources_label),
                 compatibleDestinationList = listOf(
                     "SourcesScreen",
                     "MarketScreen"

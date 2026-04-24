@@ -53,6 +53,7 @@ import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.res.stringResource
 import com.topjohnwu.superuser.Shell
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -141,7 +142,7 @@ fun ShellScreen(
                     },
                     maxLines = 1,
                     label = {
-                        Text("Shell Command")
+                        Text(stringResource(R.string.shell_screen_command_input_label))
                     },
                     modifier = Modifier
                         .fillMaxWidth()

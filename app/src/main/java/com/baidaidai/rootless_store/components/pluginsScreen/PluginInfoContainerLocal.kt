@@ -24,9 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.core.i18n.icuString
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 
 @Composable
@@ -49,7 +51,7 @@ fun PluginInfoContainerLocal(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.outline_close_24),
-                            contentDescription = "delete button",
+                            contentDescription = stringResource(R.string.plugin_screen_info_container_local_delete_button_content_description),
                             modifier = Modifier
                                 .fillMaxSize()
                         )
@@ -78,7 +80,7 @@ fun PluginInfoContainerLocal(
                 ){
                     Icon(
                         painter = painterResource(R.drawable.outline_extension_24),
-                        contentDescription = "Plugin Icon",
+                        contentDescription = stringResource(R.string.plugin_screen_info_container_local_icon_content_description),
                         modifier = Modifier
                             .size(24.dp)
                     )
@@ -95,7 +97,10 @@ fun PluginInfoContainerLocal(
                             style = MaterialTheme.typography.titleMedium
                         )
                         Text(
-                            text = "Version: ${pluginManifest.installedVersion}",
+                            text = icuString(
+                                R.string.plugin_screen_info_container_local_version,
+                                mapOf("version" to pluginManifest.installedVersion)
+                            ),
                             style = MaterialTheme.typography.labelMedium
                         )
                     }
@@ -119,11 +124,20 @@ fun PluginInfoContainerLocal(
                     modifier = Modifier
                         .padding(24.dp)
                 ) {
-                    PluginInfoRow(label = "Author", value = pluginManifest.author)
-                    PluginInfoRow(label = "Source", value = pluginManifest.source.toString())
-                    PluginInfoRow(label = "State", value = pluginManifest.state.toString())
                     PluginInfoRow(
-                        label = "Required",
+                        label = stringResource(R.string.plugin_screen_info_container_local_author_label),
+                        value = pluginManifest.author
+                    )
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_source_label),
+                        value = pluginManifest.source.toString()
+                    )
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_state_label),
+                        value = pluginManifest.state.toString()
+                    )
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_required_label),
                         value = pluginManifest.requiredEnvironment.toString()
                     )
                 }
