@@ -1,16 +1,22 @@
 package com.baidaidai.rootless_store.data.plugin.repository
 
 import android.net.Uri
+import android.util.Log
 import com.baidaidai.rootless_store.core.util.OutOfStringLike
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginCoreGatewayImpl
+import com.baidaidai.rootless_store.data.plugin.room.EnvironmentInfoEntity
 import com.baidaidai.rootless_store.data.plugin.room.PluginInfoEntity
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.LocalManifest
 import com.baidaidai.rootless_store.domain.plugin.repository.PluginCoreRepository
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class PluginCoreRepositoryImpl @Inject constructor(
@@ -19,12 +25,18 @@ class PluginCoreRepositoryImpl @Inject constructor(
 ): PluginCoreRepository {
 
     private val pluginInfoDAO = rootlessStoreDatabase.pluginInfoDao()
+    private val environmentInfoDAO = rootlessStoreDatabase.environmentInfoDao()
 
     // Create
     override suspend fun insertOnePluginInfo(
         pluginInfoEntity: PluginInfoEntity
     ){
         pluginInfoDAO.insertOnePluginInfo(pluginInfoEntity)
+    }
+    override suspend fun insertOneEnvironmentInfo(
+        environmentInfoEntity: EnvironmentInfoEntity
+    ){
+        environmentInfoDAO.insertOneEnvironmentInfo(environmentInfoEntity)
     }
 
     // Update
@@ -36,6 +48,14 @@ class PluginCoreRepositoryImpl @Inject constructor(
         pluginInfoDAO.updateEnabled(pluginID = pluginID, enabled = false)
     }
 
+    override suspend fun enableEnvironmentByID(environmentID: String) {
+        environmentInfoDAO.updateEnabled(environmentID = environmentID, enabled = true)
+    }
+
+    override suspend fun disableEnvironmentByID(environmentID: String) {
+        environmentInfoDAO.updateEnabled(environmentID = environmentID, enabled = false)
+    }
+
     // READ
     override suspend fun getOnePluginInfo(
         pluginID: String
@@ -44,9 +64,21 @@ class PluginCoreRepositoryImpl @Inject constructor(
         return pluginInfo
     }
 
+    override suspend fun getOneEnvironmentInfo(
+        environmentID: String
+    ): EnvironmentManifestLocal? {
+        val environmentInfo = environmentInfoDAO.getOneEntireEnvironmentInfoByEnvironmentID(environmentID)
+        return environmentInfo
+    }
+
     override fun getWholePluginInfo(): Flow<List<PluginManifestRoom>?> {
         val pluginManifestList = pluginInfoDAO.getEntirePluginManifest()
         return pluginManifestList
+    }
+
+    override fun getWholeEnvironmentInfo(): Flow<List<EnvironmentManifestRoom>?> {
+        val environmentManifestList = environmentInfoDAO.getEntireEnvironmentManifest()
+        return environmentManifestList
     }
 
     override fun getPluginInfoCount(): Flow<Int> {
@@ -61,31 +93,104 @@ class PluginCoreRepositoryImpl @Inject constructor(
         return pluginInfoDAO.getEnabledPluginCount()
     }
 
+    override suspend fun getAvailableEnvironmentPath(): String {
+        return environmentInfoDAO.getEnabledEnvironment()
+            .first()
+            .joinToString(":") { environmentManifest ->
+                pluginCoreGatewayImpl.getEnvironmentRuntimePATH(environmentManifest)
+            }
+    }
+
+    override suspend fun getAvailableEnvironmentLDPATH(): String {
+        return environmentInfoDAO.getEnabledEnvironment()
+            .first()
+            .joinToString(":") { environmentManifest ->
+                pluginCoreGatewayImpl.getEnvironmentLDPATH(environmentManifest)
+            }
+    }
+
+    override suspend fun getAvailableEnvironmentConfig(): Map<String, String> {
+        val environmentManifests = environmentInfoDAO.getEnabledEnvironment().first()
+
+        return buildMap {
+            environmentManifests.forEach { environmentManifest ->
+                putAll(pluginCoreGatewayImpl.getEnvironmentConfig(environmentManifest))
+            }
+        }
+    }
+
+    suspend fun getEnvironmentConfigKeyList(): List<String> {
+        return getAvailableEnvironmentConfig().keys.toList()
+    }
+
+    suspend fun getEnvironmentConfigValueList(): List<String> {
+        return getAvailableEnvironmentConfig().values.toList()
+    }
+
+
+
     // Delete
     override suspend fun deleteOnePluginInfo(pluginInfoEntity: PluginInfoEntity) {
         pluginInfoDAO.deleteOnePluginInfo(pluginInfoEntity)
+    }
+
+    suspend fun deleteOneEnvironmentInfo(environmentEntity: EnvironmentInfoEntity) {
+        environmentInfoDAO.deleteOneEnvironmentInfo(environmentEntity)
     }
 
     // Operator
     override suspend fun installOnePlugin(
         uri: Uri,
     ): PluginError?{
-        try {
-            val pluginManiFest = pluginCoreGatewayImpl.parsePluginManifest(uri).toManifestRoom()
-            val pluginInfoEntity = PluginInfoEntity.fromManifest(pluginManiFest)
 
-            pluginCoreGatewayImpl.installPluginFromLocal(uri)
-            pluginCoreGatewayImpl.setPluginEntryPointExecutable(pluginManiFest)
-            insertOnePluginInfo(pluginInfoEntity)
+        val pluginType = pluginCoreGatewayImpl.judgeManifest(uri)
 
-            return null
-        }catch (error: Throwable){
-            val errorStack  = error.stackTrace.OutOfStringLike()
+        when(pluginType){
+            LocalManifest.PluginManifestLocal -> {
 
-            return PluginError(
-                errorMessage = error.message!!,
-                errorCause = errorStack
-            )
+                Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
+
+                try {
+                    val pluginManiFest = pluginCoreGatewayImpl.parsePluginManifest(uri).toManifestRoom()
+                    val pluginInfoEntity = PluginInfoEntity.fromManifest(pluginManiFest)
+
+                    pluginCoreGatewayImpl.installPluginFromLocal(uri)
+                    pluginCoreGatewayImpl.setPluginEntryPointExecutable(pluginManiFest)
+                    insertOnePluginInfo(pluginInfoEntity)
+
+                    return null
+                }catch (error: Throwable){
+                    val errorStack  = error.stackTrace.OutOfStringLike()
+
+                    return PluginError(
+                        errorMessage = error.message!!,
+                        errorCause = errorStack
+                    )
+                }
+            }
+
+            LocalManifest.EnvironmentManifestLocal -> {
+
+                Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
+
+                try {
+                    val environmentManiFest = pluginCoreGatewayImpl.parseEnvironmentManifest(uri).toManifestRoom()
+                    val environmentEntity = EnvironmentInfoEntity.fromManifest(environmentManiFest)
+
+                    pluginCoreGatewayImpl.installEnvironmentFromLocal(uri)
+                    pluginCoreGatewayImpl.setEnvironmentEntryPointExecutable(environmentManiFest)
+                    insertOneEnvironmentInfo(environmentEntity)
+
+                    return null
+                }catch (error: Throwable){
+                    val errorStack  = error.stackTrace.OutOfStringLike()
+
+                    return PluginError(
+                        errorMessage = error.message!!,
+                        errorCause = errorStack
+                    )
+                }
+            }
         }
     }
 
@@ -109,6 +214,17 @@ class PluginCoreRepositoryImpl @Inject constructor(
                 errorCause = errorStack
             )
         }
+    }
+
+    override suspend fun installOneEnvironment(uri: Uri): PluginError? {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun installOneEnvironmentFromMarket(
+        pluginURI: String,
+        pluginManifestRemote: PluginManifestRemote
+    ): PluginError? {
+        TODO("Not yet implemented")
     }
 
 }

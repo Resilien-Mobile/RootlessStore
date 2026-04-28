@@ -1,6 +1,7 @@
 package com.baidaidai.rootless_store.data.shell.gateway
 
 import android.util.Log
+import com.baidaidai.rootless_store.data.plugin.repository.PluginCoreRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
@@ -13,13 +14,33 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.text.orEmpty
 
 class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
+    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl
 ) {
 
     fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
-        val process = ProcessBuilder("sh", "-c", commandContent).start()
+        val processBuilder = ProcessBuilder("sh", "-c", commandContent)
+
+        val environment = processBuilder.environment()
+
+        val oldPATH = environment["PATH"].orEmpty()
+        val oldLDPATH = environment["LD_LIBRARY_PATH"].orEmpty()
+
+        val environmentPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentPath()
+        val environmentLDPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentLDPATH()
+        val environmentConfig = pluginCoreRepositoryImpl.getAvailableEnvironmentConfig()
+
+        environment["PATH"] = "$environmentPATH:$oldPATH"
+        environment["LD_LIBRARY_PATH"] = "$environmentLDPATH:$oldLDPATH"
+        environment.putAll(environmentConfig)
+
+        Log.d("executePluginEntryPoint","environmentPATH: $environmentPATH")
+        Log.d("executePluginEntryPoint","environmentLDPATH: $environmentLDPATH")
+
+        val process = processBuilder.start()
 
         launch(Dispatchers.IO) {
             process.inputStream.bufferedReader().useLines { lines ->
@@ -75,8 +96,20 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
             Log.d("exam",(shizukuAdbRepositoryImpl.getShizukuEndpoint()==null).toString())
 
+            val environmentPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentPath()
+            val environmentLDPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentLDPATH()
+            val environmentConfigKeyList = pluginCoreRepositoryImpl.getEnvironmentConfigKeyList()
+            val environmentConfigValueList = pluginCoreRepositoryImpl.getEnvironmentConfigValueList()
+
             shizukuAdbRepositoryImpl.getShizukuEndpoint()
-                ?.command(commandContent, callback)
+                ?.command(
+                    commandContent,
+                    environmentPATH,
+                    environmentLDPATH,
+                    environmentConfigKeyList,
+                    environmentConfigValueList,
+                    callback
+                )
         }
         awaitClose {  }
     }
