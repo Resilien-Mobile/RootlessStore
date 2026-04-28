@@ -3,6 +3,9 @@ package com.baidaidai.rootless_store.data.fileSystem.gateway
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifest
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
@@ -20,14 +23,22 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
 ){
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
+        private const val ENVIRONMENT_DIR_NAME = "Environment"
         private const val PLUGIN_MANIFEST_FILE_NAME = "PluginManifest.json"
+        private const val ENVIRONMENT_MANIFEST_FILE_NAME = "EnvironmentManifest.json"
     }
 
     private fun getInternalPluginRootDirectory(): File {
         return File(context.filesDir, PLUGIN_DIR_NAME)
     }
+    private fun getInternalEnvironmentRootDirectory(): File {
+        return File(context.filesDir, ENVIRONMENT_DIR_NAME)
+    }
     private fun ensureInternalPluginRootDirectory(): File {
         return getInternalPluginRootDirectory().apply { mkdirs() }
+    }
+    private fun ensureInternalEnvironmentRootDirectory(): File {
+        return getInternalEnvironmentRootDirectory().apply { mkdirs() }
     }
 
     // Default FS Operator
@@ -50,6 +61,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun confirmPluginPathExists(): Boolean{
         return confirmPathExists(PLUGIN_DIR_NAME)
     }  // /File/Plugin?
+    fun confirmEnvironmentPathExists(): Boolean{
+        return confirmPathExists(ENVIRONMENT_DIR_NAME)
+    }  // /File/Environment?
     private fun confirmPathExists(path: String): Boolean{
         val targetFile = File(context.filesDir, path)
         Log.d("confirmPathExists", targetFile.exists().toString())
@@ -176,6 +190,55 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
+    fun unzipEnvironmentFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
+
+        // Get file's name, always powered by readManiFestJsonContent
+        val directoryName = when {
+
+            !directoryName.isNullOrBlank() -> {
+                directoryName.trim()
+
+            }  // 只有destinationFilName显式指定，否则不走
+
+            else -> {
+                readRawEnvironmentManifest(originFileURI).let { json ->
+                    readEnvironmentManifestJsonContent(json).environmentPackageName
+                }.trim()
+            }
+
+        }
+
+        // Create Void Directory
+        val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
+        val createdFileDirectory = createVoidFileDirectory(internalEnvironmentRootDirectory, directoryName).apply {
+            mkdirs()
+        }
+
+        // Open IO Stream
+        context.contentResolver.openInputStream(originFileURI).use{ fis ->
+            // Unzip from File Input Stream
+            ZipInputStream(BufferedInputStream(fis)).use { zis ->
+                var entry = zis.nextEntry
+                while (entry != null) {
+                    val outFile = File(createdFileDirectory, entry.name)
+
+                    if (entry.isDirectory) {
+                        outFile.mkdirs()
+                    } else {
+                        outFile.parentFile?.mkdirs()
+                        FileOutputStream(outFile).use { out ->
+                            zis.copyTo(out)
+                        }
+                    }
+
+                    zis.closeEntry()
+                    entry = zis.nextEntry
+                }
+            }
+
+        }
+    }
+    @Suppress("UNUSED_PARAMETER")
     fun unZipFromURI(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
         // Provide void file, for copy use
@@ -209,7 +272,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Read FS Operator
-    fun readRawPluginManifest(uri: Uri): String{
+    private fun readRawManifest(uri: Uri, manifestFileName: String): String? {
         context.contentResolver.openInputStream(uri).use { inputStream ->
 //            if (inputStream == null) {
 //                Log.e("readZipContent", "openInputStream returned null, uri=$uri")
@@ -225,12 +288,12 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
                     val entryPath = zipEntry.name                       // 可能是 "a/b/PluginManifest.json"
                     val fileNameOnly = entryPath.substringAfterLast('/') // 取最后一级文件名
                     val isTarget = !zipEntry.isDirectory &&
-                        fileNameOnly.equals(PLUGIN_MANIFEST_FILE_NAME, ignoreCase = true)
+                        fileNameOnly.equals(manifestFileName, ignoreCase = true)
 
                     if (isTarget) {
                         // 读取当前 entry 的内容（这里用 readBytes，适合 manifest 这种小文件）
                         val json = zipInputStream.readBytes().toString(Charsets.UTF_8)
-                        Log.d("readZipContent", "PluginManifest.json content: $json")
+                        Log.d("readZipContent", "$manifestFileName content: $json")
 
                         zipInputStream.closeEntry()
                         return json
@@ -240,11 +303,19 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
                     zipEntry = zipInputStream.nextEntry
                 }
 
-                Log.w("readZipContent", "PluginManifest.json not found, uri=$uri")
-                return ""
+                Log.w("readZipContent", "$manifestFileName not found, uri=$uri")
+                return null
             }
         }
+    }
+
+    fun readRawPluginManifest(uri: Uri): String{
+        return readRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
+    fun readRawEnvironmentManifest(uri: Uri): String{
+        return readRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
+    }  // Get JSON File
+
     fun readManifestJsonContent(jsonContent: String): PluginManifestLocal {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
@@ -253,6 +324,14 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val manifest: PluginManifestLocal = json.decodeFromString(PluginManifestLocal.Companion.serializer(),jsonContent)
         return manifest
     }  // Convert JSON to PluginManifestLocal
+    fun readEnvironmentManifestJsonContent(jsonContent: String): EnvironmentManifestLocal {
+        val json = Json {
+            ignoreUnknownKeys = true // JSON 多字段也不炸
+            isLenient = true
+        }
+        val manifest: EnvironmentManifestLocal = json.decodeFromString(EnvironmentManifestLocal.Companion.serializer(),jsonContent)
+        return manifest
+    }  // Convert JSON to EnvironmentManifestLocal
 
     // Delete FS Operator
     @Deprecated(
@@ -277,5 +356,12 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val pluginEntryPoint = pluginManifestRoom.entryPoint
         val _child = "$pluginPackageName/$pluginEntryPoint"
         return File(pluginRootDirectory,_child).setExecutable(true)
+    }
+    fun setEnvironmentEntryPointExecutable(environmentManifestRoom: EnvironmentManifestRoom): Boolean{
+        val environmentRootDirectory = getInternalEnvironmentRootDirectory()
+        val environmentPackageName = environmentManifestRoom.environmentPackageName
+        val environmentEntryPoint = environmentManifestRoom.entryPoint
+        val _child = "$environmentPackageName/$environmentEntryPoint"
+        return File(environmentRootDirectory,_child).setExecutable(true)
     }
 }
