@@ -49,6 +49,10 @@
     <string name="plugin_screen_top_app_bar_edit_button">编辑</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">筛选</string>
 
+    <!-- Plugin Screen: Secondary Tab Row -->
+    <string name="plugin_screen_secondary_tab_row_plugins_label">插件</string>
+    <string name="plugin_screen_secondary_tab_row_environment_label">环境</string>
+
     <!-- Plugin Screen: Floating Button -->
     <string name="plugin_screen_floating_button_install_content_description">安装</string>
 

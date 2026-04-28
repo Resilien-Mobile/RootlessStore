@@ -52,6 +52,10 @@
     <string name="plugin_screen_top_app_bar_edit_button">Edit</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">Filter</string>
 
+    <!-- Plugin Screen: Secondary Tab Row -->
+    <string name="plugin_screen_secondary_tab_row_plugins_label">Plugins</string>
+    <string name="plugin_screen_secondary_tab_row_environment_label">Environment</string>
+
     <!-- Plugin Screen: Floating Button -->
     <string name="plugin_screen_floating_button_install_content_description">Install</string>
 

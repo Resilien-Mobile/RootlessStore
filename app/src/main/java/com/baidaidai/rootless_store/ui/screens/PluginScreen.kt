@@ -15,7 +15,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.components.pluginsScreen.PluginInfoContainerLocal
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
@@ -56,7 +58,7 @@ fun RootlessStorePluginScreenContainer(
                     .height(48.dp)
                     .weight(1f)
             ) {
-                Text("Plugins")
+                Text(stringResource(R.string.plugin_screen_secondary_tab_row_plugins_label))
             }
 
             Tab(
@@ -66,7 +68,7 @@ fun RootlessStorePluginScreenContainer(
                     .height(48.dp)
                     .weight(1f)
             ) {
-                Text("Environment")
+                Text(stringResource(R.string.plugin_screen_secondary_tab_row_environment_label))
             }
         }
         when(selectedTabIndex){
