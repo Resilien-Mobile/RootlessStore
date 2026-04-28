@@ -1,11 +1,17 @@
 package com.baidaidai.rootless_store.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -13,7 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.components.pluginsScreen.PluginInfoContainerLocal
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
 
 @Composable
@@ -23,12 +33,73 @@ fun RootlessStorePluginScreenContainer(
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
     executeScreenViewModel: RootLessStoreExecuteScreenViewModel
 ){
-    val renderingList by pluginScreenViewModel.pluginInfoList.collectAsState()
+    val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
+    val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
     val badgeShowState by pluginScreenViewModel.badgeShowState.collectAsState()
 
-    LazyColumn(
+    var selectedTabIndex by rememberSaveable{ mutableIntStateOf(0) }
+
+    Column(
         modifier = Modifier
             .padding(contentPadding)
+            .fillMaxSize(),
+    ) {
+        SecondaryTabRow(
+            selectedTabIndex = selectedTabIndex,
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Tab(
+                selected = selectedTabIndex == 0,
+                onClick = { selectedTabIndex = 0 },
+                modifier = Modifier
+                    .height(48.dp)
+                    .weight(1f)
+            ) {
+                Text("Plugins")
+            }
+
+            Tab(
+                selected = selectedTabIndex == 1,
+                onClick = { selectedTabIndex = 1 },
+                modifier = Modifier
+                    .height(48.dp)
+                    .weight(1f)
+            ) {
+                Text("Environment")
+            }
+        }
+        when(selectedTabIndex){
+            0 -> {
+                PluginScreen(
+                    badgeShowState = badgeShowState,
+                    renderingList = pluginInfoList,
+                    navController = navController,
+                    executeScreenViewModel = executeScreenViewModel,
+                    pluginScreenViewModel = pluginScreenViewModel
+                )
+            }
+            1 -> {
+                EnvironmentScreen(
+                    badgeShowState = badgeShowState,
+                    renderingList = environmentInfoList,
+                    pluginScreenViewModel = pluginScreenViewModel
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PluginScreen(
+    badgeShowState: Boolean,
+    renderingList: List<PluginManifestRoom>,
+    navController: NavController,
+    executeScreenViewModel: RootLessStoreExecuteScreenViewModel,
+    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
+){
+    LazyColumn(
+        modifier = Modifier
             .fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(
@@ -65,14 +136,3 @@ fun RootlessStorePluginScreenContainer(
         }
     }
 }
-
-//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-//@PreviewLightDark
-//@Composable
-//private fun _RootlessStorePluginScreenContainerPreview_(){
-//    RootlessStoreTheme {
-//        Scaffold {
-//            RootlessStorePluginScreenContainer(contentPadding = it)
-//        }
-//    }
-//}

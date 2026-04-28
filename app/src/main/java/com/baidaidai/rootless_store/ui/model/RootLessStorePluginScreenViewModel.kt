@@ -4,12 +4,15 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.usecase.GetWholePluginInfoUseCase
 import com.baidaidai.rootless_store.domain.plugin.usecase.InstallOnePluginUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.usecase.AbortPluginProcessUseCase
 import com.baidaidai.rootless_store.domain.plugin.usecase.UninstallOnePluginUseCase
 import com.baidaidai.rootless_store.domain.plugin.usecase.GetPluginInfoCountUseCase
+import com.baidaidai.rootless_store.domain.plugin.usecase.GetWholeEnvironmentInfoUseCase
+import com.baidaidai.rootless_store.domain.plugin.usecase.SetEnvironmentEnabledUseCase
 import com.baidaidai.rootless_store.domain.plugin.usecase.SetPluginEnabledUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -26,8 +29,10 @@ import kotlin.collections.emptyList
 @HiltViewModel
 class RootLessStorePluginScreenViewModel @Inject constructor(
     private val getWholePluginInfoUseCase: GetWholePluginInfoUseCase,
+    private val getWholeEnvironmentInfoUseCase: GetWholeEnvironmentInfoUseCase,
     private val installOnePluginUseCase: InstallOnePluginUseCase,
     private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
+    private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
     private val uninstallOnePluginUseCase: UninstallOnePluginUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
     pluginInfoCountUseCase: GetPluginInfoCountUseCase
@@ -44,6 +49,12 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList<PluginManifestRoom>()
+    )
+
+    val environmentInfoList = getWholeEnvironmentInfoUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList<EnvironmentManifestRoom>()
     )
 
     val pluginInfoCount = pluginInfoCountUseCase().stateIn(
@@ -84,6 +95,18 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
             setPluginEnabledUseCase(
                 pluginID = pluginID,
                 pluginEnabledStatus = pluginEnabledStatus
+            )
+        }
+    }
+
+    fun setEnvironmentEnabled(
+        environmentID: String,
+        environmentEnabledStatus: Boolean
+    ){
+        viewModelScope.launch {
+            setEnvironmentEnabledUseCase(
+                environmentID = environmentID,
+                environmentEnabledStatus = environmentEnabledStatus
             )
         }
     }

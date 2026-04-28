@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.core.i18n.icuString
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 
 @Composable
@@ -139,6 +140,121 @@ fun PluginInfoContainerLocal(
                     PluginInfoRow(
                         label = stringResource(R.string.plugin_screen_info_container_local_required_label),
                         value = pluginManifest.requiredEnvironment.toString()
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PluginInfoContainerLocal(
+    badgeShowState: Boolean = true,
+    environmentManifest: EnvironmentManifestRoom,
+    onSwitchClick: ()-> Unit,
+    onBadgeClick:()-> Unit,
+    onCardClick:()-> Unit,
+){
+    BadgedBox(
+        badge = {
+            if (badgeShowState){
+                Badge(
+                    modifier = Modifier
+                        .size(16.dp)
+                ){
+                    IconButton(
+                        onClick = { onBadgeClick() }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.outline_close_24),
+                            contentDescription = stringResource(R.string.plugin_screen_info_container_local_delete_button_content_description),
+                            modifier = Modifier
+                                .fillMaxSize()
+                        )
+                    }
+                }
+            }
+        }
+    ) {
+        Column(
+            modifier = Modifier
+                .clip(MaterialTheme.shapes.large)
+                .clickable{ onCardClick() }
+            ,
+        ) {
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.extraSmall)
+            ){
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp)
+                    ,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Icon(
+                        painter = painterResource(R.drawable.outline_extension_24),
+                        contentDescription = stringResource(R.string.plugin_screen_info_container_local_icon_content_description),
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .width(12.dp)
+                    )
+                    Column(
+                        modifier = Modifier
+                        .weight(1f)
+                    ){
+                        Text(
+                            text = environmentManifest.environmentRenderingName,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Text(
+                            text = icuString(
+                                R.string.plugin_screen_info_container_local_version,
+                                mapOf("version" to environmentManifest.installedVersion)
+                            ),
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                    Switch(
+                        checked = environmentManifest.enabled,
+                        onCheckedChange = { onSwitchClick() }
+                    )
+                }
+            }
+            Spacer(
+                modifier = Modifier
+                    .height(2.dp)
+            )
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainerHigh,
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.extraSmall)
+            ){
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier
+                        .padding(24.dp)
+                ) {
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_author_label),
+                        value = environmentManifest.author
+                    )
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_source_label),
+                        value = environmentManifest.source.toString()
+                    )
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_state_label),
+                        value = environmentManifest.state.toString()
+                    )
+                    PluginInfoRow(
+                        label = stringResource(R.string.plugin_screen_info_container_local_required_label),
+                        value = environmentManifest.requiredEnvironment.toString()
                     )
                 }
             }
