@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.components.pluginsScreen.PluginInfoContainerLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 
 @Composable
@@ -36,16 +35,9 @@ fun EnvironmentScreen(
                         environmentID = it.environmentID,
                         environmentEnabledStatus = !it.enabled
                     )
-
-//                    if (!it.enabled){
-//                        navController.navigate("ExecuteScreen")
-//                        executeScreenViewModel.executeOnePlugin(it)
-//                    }else{
-//                        executeScreenViewModel.abortPluginProcess(it)
-//                    }
                 },
                 onBadgeClick = {
-//                    pluginScreenViewModel.uninstallPlugin(it)
+                    pluginScreenViewModel.uninstallEnvironment(it)
                 },
                 onCardClick = {},
                 badgeShowState = badgeShowState

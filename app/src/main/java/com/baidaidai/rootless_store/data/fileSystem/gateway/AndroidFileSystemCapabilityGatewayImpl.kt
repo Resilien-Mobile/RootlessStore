@@ -3,7 +3,6 @@ package com.baidaidai.rootless_store.data.fileSystem.gateway
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -345,6 +344,12 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
     fun deleteDirectoryByPackageName(pluginPackageName: String): Boolean {
         val targetFile = File(getInternalPluginRootDirectory(), pluginPackageName)
+
+        return targetFile.deleteRecursively()
+    }
+
+    fun deleteEnvironmentDirectoryByPackageName(environmentPackageName: String): Boolean {
+        val targetFile = File(getInternalEnvironmentRootDirectory(), environmentPackageName)
 
         return targetFile.deleteRecursively()
     }

@@ -76,6 +76,12 @@ class PluginCoreGatewayImpl @Inject constructor(
         androidFileSystemCapabilityGatewayImpl.deleteDirectoryByPackageName(pluginPackageName)
     }
 
+    fun uninstallEnvironment(
+        environmentPackageName: String  // Should use environmentManifest<Room/Local>
+    ) {
+        androidFileSystemCapabilityGatewayImpl.deleteEnvironmentDirectoryByPackageName(environmentPackageName)
+    }
+
     internal fun parsePluginManifest(originFileURI: Uri): PluginManifestLocal {
         return androidFileSystemCapabilityGatewayImpl.readRawPluginManifest(uri = originFileURI).let {
             androidFileSystemCapabilityGatewayImpl.readManifestJsonContent(it)

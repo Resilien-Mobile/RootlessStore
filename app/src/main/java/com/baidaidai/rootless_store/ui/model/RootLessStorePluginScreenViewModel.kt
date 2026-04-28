@@ -14,6 +14,7 @@ import com.baidaidai.rootless_store.domain.plugin.usecase.GetPluginInfoCountUseC
 import com.baidaidai.rootless_store.domain.plugin.usecase.GetWholeEnvironmentInfoUseCase
 import com.baidaidai.rootless_store.domain.plugin.usecase.SetEnvironmentEnabledUseCase
 import com.baidaidai.rootless_store.domain.plugin.usecase.SetPluginEnabledUseCase
+import com.baidaidai.rootless_store.domain.plugin.usecase.UninstallOneEnvironmentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,6 +35,7 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
     private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
     private val uninstallOnePluginUseCase: UninstallOnePluginUseCase,
+    private val uninstallOneEnvironmentUseCase: UninstallOneEnvironmentUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
     pluginInfoCountUseCase: GetPluginInfoCountUseCase
 ): ViewModel() {
@@ -85,6 +87,13 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             uninstallOnePluginUseCase(pluginManifestRoom)
+        }
+    }
+    fun uninstallEnvironment(
+        environmentManifestRoom: EnvironmentManifestRoom
+    ){
+        viewModelScope.launch {
+            uninstallOneEnvironmentUseCase(environmentManifestRoom)
         }
     }
     fun setPluginEnabled(

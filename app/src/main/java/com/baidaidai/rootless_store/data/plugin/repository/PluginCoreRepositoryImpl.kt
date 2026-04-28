@@ -134,6 +134,10 @@ class PluginCoreRepositoryImpl @Inject constructor(
         pluginInfoDAO.deleteOnePluginInfo(pluginInfoEntity)
     }
 
+    suspend fun deleteOneEnvironmentInfo(environmentEntity: EnvironmentInfoEntity) {
+        environmentInfoDAO.deleteOneEnvironmentInfo(environmentEntity)
+    }
+
     // Operator
     override suspend fun installOnePlugin(
         uri: Uri,
