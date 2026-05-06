@@ -70,22 +70,29 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         environmentLDPATH: String,
         environmentConfigKeyList: MutableList<String>,
         environmentConfigValueList: MutableList<String>,
-        callback: IShellCallback
+        callback: IShellCallback,
+        useRunAs: Boolean
     ) {
         val processBuilder = ProcessBuilder(
-            "run-as",
-            "com.baidaidai.rootless_store",
-            "sh",
-            "-c",
-            """
-                export PATH="$environmentPATH:${'$'}PATH"
-                export LD_LIBRARY_PATH="$environmentLDPATH:${'$'}LD_LIBRARY_PATH"
-                ${buildEnvironmentConfigExportString(
-                        environmentConfigKeyList = environmentConfigKeyList,
-                        environmentConfigValueList = environmentConfigValueList
+            buildList {
+                if (useRunAs) {
+                    add("run-as")
+                    add("com.baidaidai.rootless_store")
+                }
+                add("sh")
+                add("-c")
+                add(
+                    """
+                    export PATH="$environmentPATH:${'$'}PATH"
+                    export LD_LIBRARY_PATH="$environmentLDPATH:${'$'}LD_LIBRARY_PATH"
+                    ${buildEnvironmentConfigExportString(
+                            environmentConfigKeyList = environmentConfigKeyList,
+                            environmentConfigValueList = environmentConfigValueList
                     )}
-                $commandContent
-            """.trimIndent()
+                    $commandContent
+                """.trimIndent()
+                )
+            }
         )
 
         Log.d("ShizukuEndpointTemplate","environmentPATH: $environmentPATH")

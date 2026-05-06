@@ -17,6 +17,7 @@ interface IShellService {
         String environmentLDPATH,
         in List<String> environmentConfigKeyList,
         in List<String> environmentConfigValueList,
-        IShellCallback callback
+        IShellCallback callback,
+        boolean useRunAs
     );
 }

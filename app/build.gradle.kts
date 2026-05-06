@@ -16,9 +16,9 @@ android {
     defaultConfig {
         applicationId = "com.baidaidai.rootless_store"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 28
         versionCode = 1
-        versionName = "0.0.9"
+        versionName = "0.0.901"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -76,6 +76,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
     implementation("androidx.navigation:navigation-compose:2.9.6")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("androidx.datastore:datastore-preferences:1.2.1")
 
     // Room Libs
     implementation("androidx.room:room-runtime:2.8.4")

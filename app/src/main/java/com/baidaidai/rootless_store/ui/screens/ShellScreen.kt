@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuGroup
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.DropdownMenuPopup
@@ -39,6 +41,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
@@ -70,6 +73,7 @@ fun ShellScreen(
     val shellOutputList by shellScreenViewModel.shellOutputList.collectAsState()
     val rootShellStatus by shellScreenViewModel.rootShellStatus.collectAsState()
     val adbShellStatus by shellScreenViewModel.adbShellStatus.collectAsState()
+    val shellContextPreferences by shellScreenViewModel.shellContextPreferences.collectAsState()
 
     LaunchedEffect(shellOutputList.size) {
         if (shellOutputList.isNotEmpty()) {
@@ -152,122 +156,161 @@ fun ShellScreen(
                         .height(20.dp)
                 )
                 Row(
-                    horizontalArrangement = Arrangement.End,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .height(56.dp)
                 ){
-                    SplitButtonLayout(
-                        leadingButton = {
-                            Button(
-                                onClick = {
-                                    shellScreenViewModel.runCommand(shellCommandContainer)
-                                },
-                                contentPadding = SplitButtonDefaults.MediumLeadingButtonContentPadding,
-                                shape = SplitButtonDefaults.leadingButtonShapesFor(
-                                    SplitButtonDefaults.MediumContainerHeight).shape,
+                    when(shellEnvironment){
+                        ShellEnvironment.ADBShell -> {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
                                 modifier = Modifier
-                                    .height(56.dp)
-
-                            ) {
-                                Icon(
-                                    painterResource(R.drawable.terminal_24px),
-                                    contentDescription = "Run Command",
-                                    modifier = Modifier
-                                        .size(SplitButtonDefaults.LeadingIconSize)
+                                    .fillMaxHeight()
+                                    .weight(1f)
+                            ){
+                                Text("Enable run-as")
+                                Checkbox(
+                                    checked = shellContextPreferences.enableRunAs,
+                                    onCheckedChange = shellScreenViewModel::setEnableRunAs
                                 )
-                                Spacer(
-                                    modifier = Modifier
-                                        .size(8.dp)
-                                )
-                                Text(text = "Run")
                             }
-                        },
-                        trailingButton = {
-                            Column{
+                        }
+                        else -> {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .weight(1f)
+                            ){
+                                Text("Jump to directory")
+                                Checkbox(
+                                    checked = shellContextPreferences.jumpToDirectory,
+                                    onCheckedChange = shellScreenViewModel::setJumpToDirectory
+                                )
+                            }
+                        }
+                    }
+                    Box(
+                        contentAlignment = Alignment.CenterEnd,
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxSize()
+                    ) {
+                        SplitButtonLayout(
+                            leadingButton = {
                                 Button(
                                     onClick = {
-                                        trailingButtonStatus = !trailingButtonStatus
+                                        shellScreenViewModel.runCommand(shellCommandContainer)
                                     },
-                                    shape = trailingButtonSize,
-                                    contentPadding = trailingButtonContentPadding,
+                                    contentPadding = SplitButtonDefaults.MediumLeadingButtonContentPadding,
+                                    shape = SplitButtonDefaults.leadingButtonShapesFor(
+                                        SplitButtonDefaults.MediumContainerHeight).shape,
                                     modifier = Modifier
                                         .height(56.dp)
-                                ){
-                                    Icon(
-                                        painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
-                                        contentDescription = "Expand More",
-                                        modifier = Modifier
-                                            .size(26.dp)
-                                            .rotate(if (trailingButtonStatus) 0f else -90f )
-                                    )
-                                }
 
-                                DropdownMenuPopup(
-                                    expanded = trailingButtonStatus,
-                                    onDismissRequest = { trailingButtonStatus = !trailingButtonStatus},
-                                    offset = DpOffset(x = 0.dp, y = 8.dp)
                                 ) {
-                                    DropdownMenuGroup(
-                                        shapes = MenuDefaults.groupShapes(),
-                                    ) {
+                                    Icon(
+                                        painterResource(R.drawable.terminal_24px),
+                                        contentDescription = "Run Command",
+                                        modifier = Modifier
+                                            .size(SplitButtonDefaults.LeadingIconSize)
+                                    )
+                                    Spacer(
+                                        modifier = Modifier
+                                            .size(8.dp)
+                                    )
+                                    Text(text = "Run")
+                                }
+                            },
+                            trailingButton = {
+                                Column{
+                                    Button(
+                                        onClick = {
+                                            trailingButtonStatus = !trailingButtonStatus
+                                        },
+                                        shape = trailingButtonSize,
+                                        contentPadding = trailingButtonContentPadding,
+                                        modifier = Modifier
+                                            .height(56.dp)
+                                    ){
+                                        Icon(
+                                            painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
+                                            contentDescription = "Expand More",
+                                            modifier = Modifier
+                                                .size(26.dp)
+                                                .rotate(if (trailingButtonStatus) 0f else -90f )
+                                        )
+                                    }
 
-                                        DropdownMenuItem(
-                                            selected = shellEnvironment == ShellEnvironment.AppShell,
-                                            shapes = MenuDefaults.itemShape(1,4),
-                                            leadingIcon = {
-                                                Icon(
-                                                    painterResource(R.drawable.material_symbols_applicaitons),
-                                                    contentDescription = "App shell"
-                                                )
-                                            },
-                                            text = {
-                                                Text("App Shell")
-                                            },
-                                            onClick = {
-                                                shellEnvironment = ShellEnvironment.AppShell
-                                            },
-                                        )
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        DropdownMenuItem(
-                                            enabled = adbShellStatus,
-                                            selected = shellEnvironment == ShellEnvironment.ADBShell,
-                                            shapes = MenuDefaults.itemShape(2,4),
-                                            leadingIcon = {
-                                                Icon(
-                                                    painterResource(R.drawable.material_symbols_adb),
-                                                    contentDescription = "ADB shell"
-                                                )
-                                            },
-                                            text = {
-                                                Text("ADB shell")
-                                            },
-                                            onClick = {
-                                                shellEnvironment = ShellEnvironment.ADBShell
-                                            }
-                                        )
-                                        Spacer(modifier = Modifier.height(2.dp))
-                                        DropdownMenuItem(
-                                            enabled = rootShellStatus,
-                                            selected = shellEnvironment == ShellEnvironment.RootShell,
-                                            shapes = MenuDefaults.itemShape(3,4),
-                                            leadingIcon = {
-                                                Icon(
-                                                    painterResource(R.drawable.material_symbols_cyclone),
-                                                    contentDescription = "Root shell"
-                                                )
-                                            },
-                                            text = {
-                                                Text("Root Shell")
-                                            },
-                                            onClick = {
-                                                shellEnvironment = ShellEnvironment.RootShell
-                                            }
-                                        )
+                                    DropdownMenuPopup(
+                                        expanded = trailingButtonStatus,
+                                        onDismissRequest = { trailingButtonStatus = !trailingButtonStatus},
+                                        offset = DpOffset(x = 0.dp, y = 8.dp)
+                                    ) {
+                                        DropdownMenuGroup(
+                                            shapes = MenuDefaults.groupShapes(),
+                                        ) {
+
+                                            DropdownMenuItem(
+                                                selected = shellEnvironment == ShellEnvironment.AppShell,
+                                                shapes = MenuDefaults.itemShape(1,4),
+                                                leadingIcon = {
+                                                    Icon(
+                                                        painterResource(R.drawable.material_symbols_applicaitons),
+                                                        contentDescription = "App shell"
+                                                    )
+                                                },
+                                                text = {
+                                                    Text("App Shell")
+                                                },
+                                                onClick = {
+                                                    shellEnvironment = ShellEnvironment.AppShell
+                                                },
+                                            )
+                                            Spacer(modifier = Modifier.height(2.dp))
+                                            DropdownMenuItem(
+                                                enabled = adbShellStatus,
+                                                selected = shellEnvironment == ShellEnvironment.ADBShell,
+                                                shapes = MenuDefaults.itemShape(2,4),
+                                                leadingIcon = {
+                                                    Icon(
+                                                        painterResource(R.drawable.material_symbols_adb),
+                                                        contentDescription = "ADB shell"
+                                                    )
+                                                },
+                                                text = {
+                                                    Text("ADB shell")
+                                                },
+                                                onClick = {
+                                                    shellEnvironment = ShellEnvironment.ADBShell
+                                                }
+                                            )
+                                            Spacer(modifier = Modifier.height(2.dp))
+                                            DropdownMenuItem(
+                                                enabled = rootShellStatus,
+                                                selected = shellEnvironment == ShellEnvironment.RootShell,
+                                                shapes = MenuDefaults.itemShape(3,4),
+                                                leadingIcon = {
+                                                    Icon(
+                                                        painterResource(R.drawable.material_symbols_cyclone),
+                                                        contentDescription = "Root shell"
+                                                    )
+                                                },
+                                                text = {
+                                                    Text("Root Shell")
+                                                },
+                                                onClick = {
+                                                    shellEnvironment = ShellEnvironment.RootShell
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         }
