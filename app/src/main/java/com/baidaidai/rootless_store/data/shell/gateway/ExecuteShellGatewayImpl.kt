@@ -1,7 +1,9 @@
 package com.baidaidai.rootless_store.data.shell.gateway
 
 import android.util.Log
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginCoreRepositoryImpl
+import com.baidaidai.rootless_store.data.shell.repository.ShellPreferencesRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
@@ -11,6 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,11 +22,18 @@ import kotlin.text.orEmpty
 
 class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
-    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl
+    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl,
+    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
+    private val shellPreferencesRepositoryImpl: ShellPreferencesRepositoryImpl
 ) {
 
     fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
-        val processBuilder = ProcessBuilder("sh", "-c", commandContent)
+
+        val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
+
+        val changeDirectory = if (preferences.jumpToDirectory) "cd ${androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath()} &&" else ""
+
+        val processBuilder = ProcessBuilder("sh", "-c", "$changeDirectory$commandContent")
 
         val environment = processBuilder.environment()
 
@@ -72,6 +83,10 @@ class ExecuteShellGatewayImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     fun runCommandByADBShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+
+        val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
+        val useRunAs = preferences.enableRunAs
+
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
                 onExecuteCallback = { session ->
@@ -108,7 +123,8 @@ class ExecuteShellGatewayImpl @Inject constructor(
                     environmentLDPATH,
                     environmentConfigKeyList,
                     environmentConfigValueList,
-                    callback
+                    callback,
+                    useRunAs
                 )
         }
         awaitClose {  }
