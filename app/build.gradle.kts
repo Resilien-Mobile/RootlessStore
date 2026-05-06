@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.baidaidai.rootless_store"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 28
         versionCode = 1
         versionName = "0.0.9"
 
