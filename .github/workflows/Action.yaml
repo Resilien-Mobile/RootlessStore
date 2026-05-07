@@ -28,7 +28,7 @@ jobs:
 
       # 组装 debug APK
       - name: Build debug APK
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleDebug
 
       # 上传给 Actions 页面下载查看
       - name: Upload debug APK
