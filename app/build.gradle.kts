@@ -13,6 +13,15 @@ android {
         version = release(36)
     }
 
+    signingConfigs {
+        create("github") {
+            storeFile = file("release.jks")
+            storePassword = System.getenv("DEBUG_STORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("DEBUG_KEY_PASSWORD") ?: "android"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.baidaidai.rootless_store"
         minSdk = 26
@@ -30,6 +39,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("github") {
+            initWith(getByName("debug"))
+            signingConfig = signingConfigs.getByName("github")
         }
     }
     compileOptions {
