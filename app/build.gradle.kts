@@ -14,7 +14,7 @@ android {
     }
 
     signingConfigs {
-        create("Github") {
+        create("github") {
             storeFile = file("release.jks")
             storePassword = System.getenv("DEBUG_STORE_PASSWORD") ?: "android"
             keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
@@ -40,11 +40,10 @@ android {
                 "proguard-rules.pro"
             )
         }
-        create("Github") {
+        create("github") {
             initWith(getByName("debug"))
-            signingConfig = signingConfigs.getByName("Github")
+            signingConfig = signingConfigs.getByName("github")
         }
-
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
