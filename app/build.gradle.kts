@@ -15,7 +15,7 @@ android {
 
     signingConfigs {
         getByName("debug") {
-            storeFile = file(System.getenv("DEBUG_STORE_FILE") ?: "debug-keystore.jks")
+            storeFile = file("release.jks")
             storePassword = System.getenv("DEBUG_STORE_PASSWORD") ?: "android"
             keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
             keyPassword = System.getenv("DEBUG_KEY_PASSWORD") ?: "android"

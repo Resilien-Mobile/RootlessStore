@@ -27,11 +27,6 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x ./gradlew
 
-      - name: Prepare Environment Variables
-        run: echo "$DEBUG_KEYSTORE_BASE64" | base64 --decode > app/debug-keystore.jks
-        env:
-          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
-
       # 组装 debug APK
       - name: Build debug APK
         run: ./gradlew assembleDebug
