@@ -10,7 +10,6 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
-    environment: release
 
     steps:
       - name: Checkout
@@ -29,11 +28,7 @@ jobs:
 
       # 组装 debug APK
       - name: Build debug APK
-        run: ./gradlew assembleGithub
-        env:
-          DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
-          DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
-          DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
+        run: ./gradlew assembleRelease
 
       # 上传给 Actions 页面下载查看
       - name: Upload debug APK
