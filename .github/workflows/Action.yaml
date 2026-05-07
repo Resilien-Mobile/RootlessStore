@@ -29,7 +29,7 @@ jobs:
 
       # 组装 debug APK
       - name: Build debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleGithub
         env:
           DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
           DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}

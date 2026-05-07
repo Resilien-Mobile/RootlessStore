@@ -14,7 +14,7 @@ android {
     }
 
     signingConfigs {
-        getByName("debug") {
+        create("Github") {
             storeFile = file("release.jks")
             storePassword = System.getenv("DEBUG_STORE_PASSWORD") ?: "android"
             keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
@@ -33,9 +33,6 @@ android {
     }
 
     buildTypes {
-        debug {
-            signingConfig = signingConfigs.getByName("debug")
-        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -43,6 +40,11 @@ android {
                 "proguard-rules.pro"
             )
         }
+        create("Github") {
+            initWith(getByName("debug"))
+            signingConfig = signingConfigs.getByName("Github")
+        }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
