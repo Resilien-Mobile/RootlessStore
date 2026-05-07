@@ -13,6 +13,15 @@ android {
         version = release(36)
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(System.getenv("DEBUG_STORE_FILE") ?: "debug-keystore.jks")
+            storePassword = System.getenv("DEBUG_STORE_PASSWORD") ?: "android"
+            keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
+            keyPassword = System.getenv("DEBUG_KEY_PASSWORD") ?: "android"
+        }
+    }
+
     defaultConfig {
         applicationId = "com.baidaidai.rootless_store"
         minSdk = 26
@@ -24,6 +33,9 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(

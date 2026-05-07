@@ -10,6 +10,7 @@ on:
 jobs:
   build-debug:
     runs-on: ubuntu-latest
+    environment: release
 
     steps:
       - name: Checkout
@@ -26,9 +27,18 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x ./gradlew
 
+      - name: Prepare Environment Variables
+        run: echo "$DEBUG_KEYSTORE_BASE64" | base64 --decode > app/debug-keystore.jks
+        env:
+          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+
       # 组装 debug APK
       - name: Build debug APK
         run: ./gradlew assembleDebug
+        env:
+          DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
+          DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
+          DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
 
       # 上传给 Actions 页面下载查看
       - name: Upload debug APK
