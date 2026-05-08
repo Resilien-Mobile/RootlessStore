@@ -137,7 +137,22 @@ fun RootlessStoreStartScreenContainer(
                     sourceCount = sourceCount
                 )
                 "ExecuteScreen" -> executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
+                    onExecuteScreenStopButtonClick = {
+                        executeScreenViewModel.abortPluginProcess()
+                    },
+                    onExecuteScreenBackButtonClick = {
+                        navController.popBackStack()
+                    },
+                    onExecuteScreenShareButtonClick = {
+                        val executeLog = executeScreenViewModel.exportExecuteLog()
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, executeLog)
+
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share"))
+                    }
                 )
                 "MarketScreen" -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
                     sourceName = currentPluginSource!!.sourceName
