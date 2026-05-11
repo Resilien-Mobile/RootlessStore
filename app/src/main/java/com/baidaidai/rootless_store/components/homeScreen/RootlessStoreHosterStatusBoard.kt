@@ -1,5 +1,7 @@
 package com.baidaidai.rootless_store.components.homeScreen
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,10 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ChipColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
@@ -32,7 +34,8 @@ import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatu
 @Composable
 fun RootlessStoreHosterStatusBoard(
     hosterStatus: RootlessStoreHosterStatus,
-    onChipClick:()-> Unit
+    onChipClick:()-> Unit,
+    onChipLongClick: () -> Unit
 ){
     val cardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -82,29 +85,10 @@ fun RootlessStoreHosterStatusBoard(
                         modifier = Modifier
                             .height(4.dp)
                     )
-                    AssistChip(
-                        enabled = true,
+                    OverallStatusChip(
+                        hosterStatus = hosterStatus,
+                        onLongClick = onChipLongClick,
                         onClick = onChipClick,
-                        label = {
-                            Text(
-                                text = "Overall: ${hosterStatus.hosterOverallStatus ?: "null"}",
-                                maxLines = 1,
-                                softWrap = false
-                            )
-                        },
-                        colors = ChipColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            labelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            leadingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            trailingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            disabledLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            disabledLeadingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            disabledTrailingIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        ),
-                        border = null,
-                        modifier = Modifier
-                            .scale(0.95f)
                     )
                 }
                 Row(
@@ -178,6 +162,46 @@ fun RootlessStoreHosterStatusBoard(
                     hosterStatus.tempStatus?.toString() ?: "null"
                 )
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+
+@Composable
+
+fun OverallStatusChip(
+    hosterStatus: RootlessStoreHosterStatus,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier
+            .scale(0.95f)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
+        shape = AssistChipDefaults.shape,
+        color = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+        ) {
+        Row(
+            modifier = Modifier
+                .height(32.dp)
+                .padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Overall: ${hosterStatus.hosterOverallStatus}",
+                maxLines = 1,
+                softWrap = false,
+                style = MaterialTheme.typography.labelLarge,
+                overflow = TextOverflow.Ellipsis
+            )
         }
     }
 }

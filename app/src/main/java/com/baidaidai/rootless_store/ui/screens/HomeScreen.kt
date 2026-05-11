@@ -15,6 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.baidaidai.rootless_store.components.homeScreen.HomeScreenContextSwitchDialog
 import com.baidaidai.rootless_store.components.homeScreen.HowToDevelopRootlessStorePlugin
 import com.baidaidai.rootless_store.components.homeScreen.RootLessStoreVersionCheckerContainer
 import com.baidaidai.rootless_store.components.homeScreen.RootlessStoreHosterStatusBoard
@@ -35,6 +36,7 @@ fun HomeScreen(
     val kernelStatus by homeScreenViewModel.kernelStatus.collectAsState()
     val androidAndAPIStatus by homeScreenViewModel.androidAndAPIStatus.collectAsState()
     val hosterOverallStatus by homeScreenViewModel.overallStatus.collectAsState()
+    val dialogStats by homeScreenViewModel.dialogStatus.collectAsState()
 
     val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
         hosterOverallStatus = hosterOverallStatus,
@@ -51,20 +53,15 @@ fun HomeScreen(
 
     val lifecycleOwner = LocalLifecycleOwner.current
     // A Listener about Maintaining OverallStatus fresh
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) {
-                homeScreenViewModel.refreshHosterOverallStatus()
-            }
-        }
 
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+    if (dialogStats){
+        HomeScreenContextSwitchDialog(
+            onDismissButtonClick = homeScreenViewModel::changeDialogStatus,
+            homeScreenViewModel = homeScreenViewModel,
+            onConfirmButtonClick = homeScreenViewModel::setExecuteContextPreference,
+            onRevertButtonClick = homeScreenViewModel::revertExecuteContextPreference
+        )
     }
-
 
     Column(
         modifier = Modifier
@@ -82,7 +79,8 @@ fun HomeScreen(
         /* Hoster Status */
         RootlessStoreHosterStatusBoard(
             hosterStatus = rootlessStoreHosterStatus,
-            onChipClick = onChipClick
+            onChipClick = onChipClick,
+            onChipLongClick = homeScreenViewModel::changeDialogStatus
         )
         Spacer(
             modifier = Modifier
