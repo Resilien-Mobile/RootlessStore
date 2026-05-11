@@ -7,7 +7,6 @@ import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
-import com.topjohnwu.superuser.Shell
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -32,4 +31,13 @@ class StoreStatusRepositoryImpl @Inject constructor(
     fun getRootStatus(): Boolean = storeStatusGatewayImpl.getRootStatus()
 
     fun getShizukuStatus(): Boolean = storeStatusGatewayImpl.getShizukuStatus()
+
+    fun getExecuteContextPreference(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.getExecuteContextPreference()
+
+    suspend fun setExecuteContextPreference(hosterOverallStatus: HosterOverallStatus) = storeStatusGatewayImpl.setExecuteContextPreference(hosterOverallStatus)
+
+    fun getEnableChooserPreference(): Flow<Boolean> = storeStatusGatewayImpl.getEnableChooserPreference()
+
+    suspend fun setEnableChooserPreference(chooserStatus: Boolean) = storeStatusGatewayImpl.setEnableChooserPreference(chooserStatus)
+
 }

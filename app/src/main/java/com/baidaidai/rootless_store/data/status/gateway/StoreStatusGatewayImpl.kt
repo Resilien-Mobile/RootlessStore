@@ -1,6 +1,12 @@
 package com.baidaidai.rootless_store.data.status.gateway
 
+import android.content.Context
 import android.util.Log
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.client.ShizukuAuthManager
 import com.baidaidai.rootless_store.data.shizuku.client.ShizukuEndpointManager
 import com.baidaidai.rootless_store.data.status.datasource.AndroidAndAPIVersionDataSource
@@ -16,9 +22,13 @@ import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
 import com.topjohnwu.superuser.Shell
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Inject
 
 class StoreStatusGatewayImpl @Inject constructor(
@@ -28,8 +38,12 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val kernelStatusDataSource: KernelStatusDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
     private val androidAndAPIVersionDataSource: AndroidAndAPIVersionDataSource,
-    private val shizukuEndpointManager: ShizukuEndpointManager
+    private val shizukuEndpointManager: ShizukuEndpointManager,
+    @ApplicationContext context: Context
 ) {
+
+    private val dataStore = context.rootlessStorePreferencesDataStore
+
     fun getMemoryStatus(): Flow<MemoryStatus> = flow {
         while (true){
             val totalMemory = memoryStatusDataSource.getTotalMemory()
@@ -93,6 +107,51 @@ class StoreStatusGatewayImpl @Inject constructor(
 
     fun getShizukuStatus(): Boolean {
         return shizukuEndpointManager.bind()
+    }
+
+    fun getExecuteContextPreference(): Flow<HosterOverallStatus> {
+        return dataStore.data
+            .catch { error ->
+                if (error is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw error
+                }
+            }
+            .map { preference ->
+                preference[EXECUTE_CONTEXT]?.let { HosterOverallStatus.valueOf(it) } ?: HosterOverallStatus.LIMITED
+            }
+    }
+
+    suspend fun setExecuteContextPreference(hosterOverallStatus: HosterOverallStatus) {
+        dataStore.edit { preference ->
+            preference[EXECUTE_CONTEXT] = hosterOverallStatus.name
+        }
+    }
+
+    fun getEnableChooserPreference(): Flow<Boolean> {
+        return dataStore.data
+            .catch { error ->
+                if (error is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw error
+                }
+            }
+            .map { preference ->
+                preference[ENABLE_CHOOSER] ?: false
+            }
+    }
+
+    suspend fun setEnableChooserPreference(enableStatus: Boolean) {
+        dataStore.edit { preference ->
+            preference[ENABLE_CHOOSER] = enableStatus
+        }
+    }
+
+    private companion object {
+        val EXECUTE_CONTEXT = stringPreferencesKey("execute_context")
+        val ENABLE_CHOOSER = booleanPreferencesKey("enable_chooser")
     }
 
 }
