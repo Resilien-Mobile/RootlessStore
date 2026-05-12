@@ -2,9 +2,11 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.source.error.SourceError
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceLocal
-import com.baidaidai.rootless_store.domain.source.usecase.AddOneSourceUseCase
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
+import com.baidaidai.rootless_store.domain.source.usecase.AddOneSourceByAuthenticationUseCase
+import com.baidaidai.rootless_store.domain.source.usecase.AddOneSourceByDefaultUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.DeleteOneSourceUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.GetPluginSourceCountUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.GetWholeSourceUseCase
@@ -23,9 +25,12 @@ import javax.inject.Inject
 class RootLessStoreSourceScreenViewModel @Inject constructor(
     getWholeSourceUseCase: GetWholeSourceUseCase,
     getPluginSourceCountUseCase: GetPluginSourceCountUseCase,
-    private val addOneSourceUseCase: AddOneSourceUseCase,
-    private val deleteOneSourceUseCase: DeleteOneSourceUseCase
+    private val addOneSourceByDefaultUseCase: AddOneSourceByDefaultUseCase,
+    private val addOneSourceByAuthenticationUseCase: AddOneSourceByAuthenticationUseCase,
+    private val deleteOneSourceUseCase: DeleteOneSourceUseCase,
 ): ViewModel(){
+
+    var latestPluginSourceEndpoint = ""
 
     val sourceList = getWholeSourceUseCase().stateIn(
         scope = viewModelScope,
@@ -39,25 +44,67 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
         initialValue = 0
     )
 
-    val _sourceEvent = MutableSharedFlow<SourceError?>()
+    val _sourceEvent = MutableSharedFlow<PluginSourceEvent.SourceError?>()
     val sourceEvent = _sourceEvent.asSharedFlow()
 
     private val _deleterShowStatus = MutableStateFlow(false)
     val deleterShowStatus = _deleterShowStatus.asStateFlow()
 
-    fun addOneSource(
+    private val _authenticationAlertDialogShowStatus = MutableStateFlow(false)
+    val authenticationAlertDialogShowStatus = _authenticationAlertDialogShowStatus.asStateFlow()
+
+    private val _authenticationBottomSheetShowStatus = MutableStateFlow(false)
+    val authenticationBottomSheetShowStatus = _authenticationBottomSheetShowStatus.asStateFlow()
+
+    fun addOneSourceByDefault(
         sourceURI: String
     ){
-        viewModelScope.launch {
-            val result = addOneSourceUseCase(sourceURI)
 
-            if(result is SourceError){
-                _sourceEvent.emit(result)
-            }else{
-                _sourceEvent.emit(null)
+        latestPluginSourceEndpoint = sourceURI
+
+        viewModelScope.launch {
+            val result = addOneSourceByDefaultUseCase(sourceURI)
+
+            when(result){
+                is PluginSourceEvent.SourceError -> {
+                    _sourceEvent.emit(result)
+                }
+                is PluginSourceEvent.SourceAuthentication -> {
+                    _authenticationAlertDialogShowStatus.value = true
+                }
+                is PluginSourceEvent.Success -> {
+                    _sourceEvent.emit(null)
+                }
             }
         }
     }
+
+    fun addOneSourceByAuthentication(userName: String, passWord: String){
+        val pluginSourceAuthFormInput = PluginSourceAuthFormInput(
+            sourceRemoteEndpoint = latestPluginSourceEndpoint,
+            userName = userName,
+            passWord = passWord
+        )
+
+        viewModelScope.launch {
+            val result = addOneSourceByAuthenticationUseCase(pluginSourceAuthFormInput)
+
+            when(result){
+                is PluginSourceEvent.SourceError -> {
+                    _sourceEvent.emit(result)
+                    cancelSourceAuthentication()
+                }
+                is PluginSourceEvent.SourceAuthentication -> {
+
+                }
+                is PluginSourceEvent.Success -> {
+                    _sourceEvent.emit(null)
+                    cancelSourceAuthentication()
+                }
+            }
+        }
+    }
+
     fun onOkButtonClick(){
         viewModelScope.launch {
             _sourceEvent.emit(null)
@@ -65,15 +112,28 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
     }
 
     fun deleteOneSource(
-        pluginSourceLocal: PluginSourceLocal
+        pluginSourceInfo: PluginSourceInfo
     ){
         viewModelScope.launch {
-            deleteOneSourceUseCase(pluginSourceLocal)
+            deleteOneSourceUseCase(pluginSourceInfo)
         }
     }
+
     fun changeDeleterShowStatus(){
         _deleterShowStatus.update {
             !it
         }
     }
+
+    fun startSourceAuthentication() {
+        _authenticationAlertDialogShowStatus.value = false
+        _authenticationBottomSheetShowStatus.value = true
+    }
+
+    fun cancelSourceAuthentication() {
+        _authenticationAlertDialogShowStatus.value = false
+        _authenticationBottomSheetShowStatus.value = false
+    }
+
+
 }
