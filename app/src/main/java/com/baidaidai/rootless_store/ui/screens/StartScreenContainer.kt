@@ -206,7 +206,7 @@ fun RootlessStoreStartScreenContainer(
                     alertDialogStatus = !alertDialogStatus
                 },
                 onConfirmButtonClick = {
-                    sourceScreenViewModel.addOneSource(sourceURI = sourceDomainContent)
+                    sourceScreenViewModel.addOneSourceByDefault(sourceURI = sourceDomainContent)
                     alertDialogStatus = !alertDialogStatus
                 },
                 onDismissButtonClick = {

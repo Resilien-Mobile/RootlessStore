@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -17,18 +18,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.components.sourcesScreen.SourceScreenAlertDialog
 import com.baidaidai.rootless_store.components.sourcesScreen.SourceScreenListItem
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceLocal
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+import com.baidaidai.rootless_store.components.sourcesScreen.SourceScreenAuthenticationModalBottomSheet
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SourceScreen(
     contentPadding: PaddingValues,
     sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
-    onListItemClick: (pluginSourceLocal: PluginSourceLocal)-> Unit
+    onListItemClick: (pluginSourceInfo: PluginSourceInfo)-> Unit
 ){
     val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()
     val sourceScreenLeadingDeleteButtonStatus by sourceScreenViewModel.deleterShowStatus.collectAsState()
+
+    val authenticationBottomSheetShowStatus by sourceScreenViewModel.authenticationBottomSheetShowStatus.collectAsState()
+    val authenticationAlertDialogShowStatus by sourceScreenViewModel.authenticationAlertDialogShowStatus.collectAsState()
+
+
+
+    if(authenticationAlertDialogShowStatus){
+        SourceScreenAlertDialog(
+            onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
+            onConfirmButtonClick = sourceScreenViewModel::startSourceAuthentication,
+            onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication
+        )
+    }
+
+    if (authenticationBottomSheetShowStatus){
+        SourceScreenAuthenticationModalBottomSheet(
+            onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
+            onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication,
+        ) { userName, passWord ->
+            sourceScreenViewModel.addOneSourceByAuthentication(userName,passWord)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -45,7 +71,7 @@ fun SourceScreen(
                     Column {
                         SourceScreenListItem(
                             sourceScreenLeadingDeleteButtonStatus,
-                            pluginSourceLocal = pluginSource,
+                            pluginSourceInfo = pluginSource,
                             sourceScreenViewModel
                         ) {
                             onListItemClick(pluginSource)
