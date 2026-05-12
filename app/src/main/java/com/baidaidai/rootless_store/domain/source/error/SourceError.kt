@@ -1,8 +1,5 @@
 package com.baidaidai.rootless_store.domain.source.error
 
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 
-data class SourceError(
-    override val errorMessage: String,
-    override val errorCause: String
-): RootlessStoreError

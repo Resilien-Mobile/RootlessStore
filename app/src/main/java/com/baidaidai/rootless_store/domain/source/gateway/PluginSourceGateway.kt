@@ -1,9 +1,9 @@
 package com.baidaidai.rootless_store.domain.source.gateway
 
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceDTO
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 
 interface PluginSourceGateway {
-    suspend fun getPluginSourceMetaInfo(
+    suspend fun getPluginSource(
         sourceRemoteEndpoint: String
-    ): PluginSourceDTO
+    ): PluginSourceInfo
 }
