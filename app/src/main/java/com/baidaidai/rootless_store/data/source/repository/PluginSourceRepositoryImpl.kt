@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceInfo
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import kotlinx.coroutines.flow.map
 
 class PluginSourceRepositoryImpl @Inject constructor(
@@ -64,26 +65,46 @@ class PluginSourceRepositoryImpl @Inject constructor(
         try{
 
             val pluginSource = pluginSourceGatewayImpl.getPluginSource(sourceRemoteEndpoint = pluginSourceAuthFormInput.sourceRemoteEndpoint)
-            val sourceAuthenticationInfo = pluginSourceGatewayImpl.getPluginSourceAuthenticationInfo(pluginSourceAuthFormInput)
+            val sourceAuthenticationResult = pluginSourceGatewayImpl.getPluginSourceAuthenticationResult(pluginSourceAuthFormInput)
 
             /**
              * 验证，打断异常会话
              */
-            if (sourceAuthenticationInfo.userAccessToken == ""){
-                return PluginSourceEvent.SourceError(
-                    errorMessage = "Verification failed",
-                    errorCause = ""
-                )
+            return when(sourceAuthenticationResult){
+                is PluginSourceAuthenticationResult.Success -> {
+                    val pluginSourceEntity = PluginSourceEntity
+                        .fromPluginSourceLocal(pluginSource)
+                        .copy(userAccessToken = sourceAuthenticationResult.userAccessToken)
+
+                    pluginSourceDAO.insertOnePluginSource(pluginSourceEntity)
+
+                    PluginSourceEvent.Success
+                }
+                is PluginSourceAuthenticationResult.AccessDenied -> {
+                    PluginSourceEvent.SourceError(
+                        errorMessage = "Verification failed",
+                        errorCause = sourceAuthenticationResult.errorMessage
+                    )
+                }
+                is PluginSourceAuthenticationResult.ServerError -> {
+                    PluginSourceEvent.SourceError(
+                        errorMessage = "Server error",
+                        errorCause = "Please try again later"
+                    )
+                }
+                is PluginSourceAuthenticationResult.NetworkError -> {
+                    PluginSourceEvent.SourceError(
+                        errorMessage = "Network error",
+                        errorCause = "Please try again later"
+                    )
+                }
+                else -> {
+                    PluginSourceEvent.SourceError(
+                        errorMessage = "不可能的错误",
+                        errorCause = "你猜是什么错误呢？"
+                    )
+                }
             }
-
-
-            val pluginSourceEntity = PluginSourceEntity
-                .fromPluginSourceLocal(pluginSource)
-                .copy(userAccessToken = sourceAuthenticationInfo.userAccessToken)
-
-            pluginSourceDAO.insertOnePluginSource(pluginSourceEntity)
-
-            return PluginSourceEvent.Success
 
         }catch (error: Throwable){
 
