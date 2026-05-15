@@ -146,15 +146,14 @@ class PluginCoreRepositoryImpl @Inject constructor(
     override suspend fun installOnePlugin(
         uri: Uri,
     ): PluginError?{
+        try {
+            val pluginType = pluginCoreGatewayImpl.judgeManifest(uri)
 
-        val pluginType = pluginCoreGatewayImpl.judgeManifest(uri)
+            when(pluginType){
+                LocalManifest.PluginManifestLocal -> {
 
-        when(pluginType){
-            LocalManifest.PluginManifestLocal -> {
+                    Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
 
-                Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
-
-                try {
                     val pluginManiFestRoom = pluginCoreGatewayImpl.parsePluginManifest(uri).toManifestRoom()
                     val pluginInfoEntity = PluginInfoEntity.fromPluginManifestRoom(pluginManiFestRoom)
 
@@ -163,21 +162,12 @@ class PluginCoreRepositoryImpl @Inject constructor(
                     insertOnePluginInfo(pluginInfoEntity)
 
                     return null
-                }catch (error: Throwable){
-                    val errorStack  = error.stackTrace.OutOfStringLike()
-
-                    return PluginError(
-                        errorMessage = error.message!!,
-                        errorCause = errorStack
-                    )
                 }
-            }
 
-            LocalManifest.EnvironmentManifestLocal -> {
+                LocalManifest.EnvironmentManifestLocal -> {
 
-                Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
+                    Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
 
-                try {
                     val environmentManiFest = pluginCoreGatewayImpl.parseEnvironmentManifest(uri).toManifestRoom()
                     val environmentEntity = EnvironmentInfoEntity.fromEnvironmentManifestRoom(environmentManiFest)
 
@@ -186,15 +176,15 @@ class PluginCoreRepositoryImpl @Inject constructor(
                     insertOneEnvironmentInfo(environmentEntity)
 
                     return null
-                }catch (error: Throwable){
-                    val errorStack  = error.stackTrace.OutOfStringLike()
-
-                    return PluginError(
-                        errorMessage = error.message!!,
-                        errorCause = errorStack
-                    )
                 }
             }
+        }catch (error: Throwable){
+            val errorStack  = error.stackTrace.OutOfStringLike()
+
+            return PluginError(
+                errorMessage = error.message!!,
+                errorCause = errorStack
+            )
         }
     }
 
