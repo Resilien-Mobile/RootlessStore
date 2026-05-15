@@ -4,11 +4,11 @@ import com.baidaidai.rootless_store.data.plugin.repository.PluginCoreRepositoryI
 import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
 import javax.inject.Inject
 
-class InstallPluginFromMarketUseCase @Inject constructor(
+class InstallEnvironmentFromMarketUseCase @Inject constructor(
     private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl
 ) {
     suspend operator fun invoke(
-        pluginURI: String,
+        environmentURI: String,
         manifest: RootlessStoreManifestCollection
-    ) = pluginCoreRepositoryImpl.installOnePluginFromMarket(pluginURI,manifest)
+    ) = pluginCoreRepositoryImpl.installOnePluginFromMarket(environmentURI,manifest)
 }

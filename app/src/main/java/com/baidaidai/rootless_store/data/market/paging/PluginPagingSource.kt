@@ -3,33 +3,37 @@ package com.baidaidai.rootless_store.data.market.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.baidaidai.rootless_store.core.util.OutOfStringLike
+import com.baidaidai.rootless_store.data.market.mapper.PluginMarketMapper.toPluginPageResponse
 import com.baidaidai.rootless_store.data.market.remote.api.PluginMarketAPI
 import com.baidaidai.rootless_store.data.market.remote.dto.PluginPageResponseDTO
 import com.baidaidai.rootless_store.domain.market.error.MarketError
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
+import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
 import io.ktor.client.call.body
+import kotlinx.serialization.json.Json
 
 class PluginPagingSource (
     private val api: PluginMarketAPI,
     private val pluginSourceUri: String,
     private val onError: suspend (MarketError)-> Unit
-) : PagingSource<Int, PluginManifestRemote>() {
+) : PagingSource<Int, RootlessStoreManifestCollection>() {
 
     // Core Suspend Method for Paging fetching Data
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PluginManifestRemote> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RootlessStoreManifestCollection> {
         try{
             val page = params.key ?: 0
 
-            val resp = api.getPlugins(
+            val response = api.getPlugins(
                 pageNumber = page,
                 pluginSourceUri
             )
-                .body<PluginPageResponseDTO>()
 
-            val nextKey = if (resp.meta.hasMore) page + 1 else null
+            val pluginPageResponseDTO = response.body<PluginPageResponseDTO>()
+            val pluginPageResponse = pluginPageResponseDTO.toPluginPageResponse()
+
+            val nextKey = if (pluginPageResponseDTO.meta.hasMore) page + 1 else null
 
             return LoadResult.Page(
-                data = resp.data,
+                data = pluginPageResponse.data,
                 prevKey = if (page == 0) null else page - 1,
                 nextKey = nextKey
             )
@@ -44,7 +48,7 @@ class PluginPagingSource (
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, PluginManifestRemote>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, RootlessStoreManifestCollection>): Int? {
         TODO("Not yet implemented")
     }
 }

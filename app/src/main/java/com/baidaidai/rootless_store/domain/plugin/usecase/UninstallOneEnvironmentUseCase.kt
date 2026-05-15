@@ -13,7 +13,7 @@ class UninstallOneEnvironmentUseCase @Inject constructor(
     suspend operator fun invoke(
         environmentManifestRoom: EnvironmentManifestRoom
     ){
-        val environmentInfoEntity = EnvironmentInfoEntity.fromManifest(environmentManifestRoom)
+        val environmentInfoEntity = EnvironmentInfoEntity.fromEnvironmentManifestRoom(environmentManifestRoom)
         val environmentPackageName = environmentInfoEntity.environmentPackageName
 
         pluginFileSystemGateway.uninstallEnvironment(environmentPackageName)

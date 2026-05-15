@@ -42,26 +42,26 @@ data class PluginInfoEntity(
          * This is the single source of truth for mapping
          * manifest data into database entity.
          */
-        fun fromManifest(
-            manifest: PluginManifestRoom
+        fun fromPluginManifestRoom(
+            pluginManifestRoom: PluginManifestRoom
         ): PluginInfoEntity =
             PluginInfoEntity(
-                pluginID = manifest.pluginID,
+                pluginID = pluginManifestRoom.pluginID,
 
                 // Basic Infos
-                installedVersion = manifest.installedVersion,
-                pluginRenderingName = manifest.pluginRenderingName,
-                pluginPackageName = manifest.pluginPackageName,
-                iconURI = manifest.iconURI,
-                author = manifest.author,
-                pluginDescription = manifest.pluginDescription,
+                installedVersion = pluginManifestRoom.installedVersion,
+                pluginRenderingName = pluginManifestRoom.pluginRenderingName,
+                pluginPackageName = pluginManifestRoom.pluginPackageName,
+                iconURI = pluginManifestRoom.iconURI,
+                author = pluginManifestRoom.author,
+                pluginDescription = pluginManifestRoom.pluginDescription,
 
                 // Runtime Infos
                 enabled = false,
-                requiredEnvironment = manifest.requiredEnvironment,
-                state = manifest.state,
-                source = manifest.source,
-                entryPoint = manifest.entryPoint
+                requiredEnvironment = pluginManifestRoom.requiredEnvironment,
+                state = pluginManifestRoom.state,
+                source = pluginManifestRoom.source,
+                entryPoint = pluginManifestRoom.entryPoint
             )
     }
 }

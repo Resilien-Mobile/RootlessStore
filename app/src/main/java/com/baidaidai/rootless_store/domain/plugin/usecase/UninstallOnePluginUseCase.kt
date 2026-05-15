@@ -13,7 +13,7 @@ class UninstallOnePluginUseCase @Inject constructor(
     suspend operator fun invoke(
         pluginManifestRoom: PluginManifestRoom
     ){
-        val pluginInfoEntity = PluginInfoEntity.fromManifest(pluginManifestRoom)
+        val pluginInfoEntity = PluginInfoEntity.fromPluginManifestRoom(pluginManifestRoom)
         val pluginPackageName = pluginInfoEntity.pluginPackageName
 
         pluginFileSystemGateway.uninstallPlugin(pluginPackageName)

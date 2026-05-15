@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
-interface EnvironmentManifest {
+sealed interface EnvironmentManifest: RootlessStoreManifestCollection {
     // ─────────────────────────────────────────────────────────────
     // Environment Basic Infos
     // ─────────────────────────────────────────────────────────────

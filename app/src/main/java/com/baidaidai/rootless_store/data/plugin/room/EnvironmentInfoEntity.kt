@@ -44,28 +44,28 @@ data class EnvironmentInfoEntity(
          * This is the single source of truth for mapping
          * manifest data into database entity.
          */
-        fun fromManifest(
-            manifest: EnvironmentManifestRoom
+        fun fromEnvironmentManifestRoom(
+            environmentManifestRoom: EnvironmentManifestRoom
         ): EnvironmentInfoEntity =
             EnvironmentInfoEntity(
-                environmentID = manifest.environmentID,
+                environmentID = environmentManifestRoom.environmentID,
 
                 // Basic Infos
-                installedVersion = manifest.installedVersion,
-                environmentRenderingName = manifest.environmentRenderingName,
-                environmentPackageName = manifest.environmentPackageName,
-                iconURI = manifest.iconURI,
-                author = manifest.author,
-                environmentDescription = manifest.environmentDescription,
+                installedVersion = environmentManifestRoom.installedVersion,
+                environmentRenderingName = environmentManifestRoom.environmentRenderingName,
+                environmentPackageName = environmentManifestRoom.environmentPackageName,
+                iconURI = environmentManifestRoom.iconURI,
+                author = environmentManifestRoom.author,
+                environmentDescription = environmentManifestRoom.environmentDescription,
 
                 // Runtime Infos
                 enabled = false,
-                requiredEnvironment = manifest.requiredEnvironment,
-                state = manifest.state,
-                source = manifest.source,
-                entryPoint = manifest.entryPoint,
-                ldLibraryPath = manifest.ldLibraryPath,
-                env = manifest.env
+                requiredEnvironment = environmentManifestRoom.requiredEnvironment,
+                state = environmentManifestRoom.state,
+                source = environmentManifestRoom.source,
+                entryPoint = environmentManifestRoom.entryPoint,
+                ldLibraryPath = environmentManifestRoom.ldLibraryPath,
+                env = environmentManifestRoom.env
             )
     }
 }
