@@ -3,9 +3,11 @@ package com.baidaidai.rootless_store.domain.plugin.manifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@SerialName("EnvironmentManifestRemote")
 data class EnvironmentManifestRemote(
     override val installedVersion: String,
     override val environmentRenderingName: String,
@@ -36,7 +38,7 @@ data class EnvironmentManifestRemote(
             env = emptyMap()
         )
     }
-    fun toManifestRoom(): EnvironmentManifestRoom{
+    fun toEnvironmentManifestRoom(): EnvironmentManifestRoom{
         return EnvironmentManifestRoom(
             enabled = false,
             state = PluginState.Great,

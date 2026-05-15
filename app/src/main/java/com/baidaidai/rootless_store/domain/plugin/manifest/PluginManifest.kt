@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
-import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 
-sealed interface PluginManifest {
+sealed interface PluginManifest: RootlessStoreManifestCollection {
 
     // ─────────────────────────────────────────────────────────────
     // Plugin Basic Infos
@@ -110,6 +110,7 @@ sealed interface PluginManifest {
     interface PluginManifestLocal: PluginManifest
     interface PluginManifestRemote: PluginManifest {
         val pluginURI: String
+        val pluginRunModel: PluginRunModel
     }
     interface PluginManifestRoom: PluginManifest {
         val enabled: Boolean
