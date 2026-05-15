@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Rootless Store</string>
-    <string name="app_version">v0.0.904</string>
+    <string name="app_version">v1.0.0-alpha</string>
 
     <!-- Home Screen Strings -->
     <string name="home_screen_version_checker_container_icon_content_description">Terminal Icon</string>
