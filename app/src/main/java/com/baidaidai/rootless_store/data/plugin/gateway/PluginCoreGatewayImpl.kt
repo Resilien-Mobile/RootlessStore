@@ -7,8 +7,9 @@ import com.baidaidai.rootless_store.data.plugin.remote.datasource.DownloadPlugin
 import com.baidaidai.rootless_store.domain.plugin.gateway.PluginCoreGateway
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.manifest.LocalManifest
+import com.baidaidai.rootless_store.domain.plugin.model.LocalManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
@@ -40,6 +41,14 @@ class PluginCoreGatewayImpl @Inject constructor(
         _pre_intallPlugin(
             originFileByteChannel = remotePluginContent,
             destinationFileName = pluginPackageName
+        )
+    }
+    suspend fun installEnvironmentFromMarket(environmentURI: String, environmentManifestRemote: EnvironmentManifestRemote){
+        val remoteEnvironmentContent: ByteReadChannel = downloadPluginPackage.usePluginURI(environmentURI).bodyAsChannel()  // Just Download raw zip file
+        val environmentPackageName = environmentManifestRemote.environmentPackageName
+        _pre_intallEnvironment(
+            originFileByteChannel = remoteEnvironmentContent,
+            destinationFileName = environmentPackageName
         )
     }
 
@@ -139,6 +148,19 @@ class PluginCoreGatewayImpl @Inject constructor(
         }else{
             androidFileSystemCapabilityGatewayImpl.createFileDir("Plugin")
             _pre_intallPlugin(originFileByteChannel,destination,destinationFileName)
+        }
+    }
+
+    private fun _pre_intallEnvironment(originFileByteChannel: ByteReadChannel, destination: File = defaultEnvironmentLocation, destinationFileName: String) {
+        if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()){
+            androidFileSystemCapabilityGatewayImpl.unZipEnvironmentFromURI(
+                originFileByteChannel = originFileByteChannel,
+                pluginRootDirectory = destination,
+                directoryName = destinationFileName
+            )
+        }else{
+            androidFileSystemCapabilityGatewayImpl.createFileDir("Environment")
+            _pre_intallEnvironment(originFileByteChannel,destination,destinationFileName)
         }
     }
 }

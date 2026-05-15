@@ -269,6 +269,38 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
             }
         }
     }
+    @Suppress("UNUSED_PARAMETER")
+    fun unZipEnvironmentFromURI(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
+
+        // Provide void file, for copy use
+        val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
+        createVoidFileDirectory(internalEnvironmentRootDirectory, directoryName)  // needs prevent override files
+        val operationFile = File(internalEnvironmentRootDirectory, directoryName).apply {
+            mkdirs()
+        }
+
+        // The core of copy operator
+        originFileByteChannel.toInputStream().use { input ->
+            ZipInputStream(BufferedInputStream(input)).use { zis ->
+                var entry = zis.nextEntry
+                while (entry != null) {
+                    val outFile = File(operationFile, entry.name)
+
+                    if (entry.isDirectory) {
+                        outFile.mkdirs()
+                    } else {
+                        outFile.parentFile?.mkdirs()
+                        FileOutputStream(outFile).use { out ->
+                            zis.copyTo(out)
+                        }
+                    }
+
+                    zis.closeEntry()
+                    entry = zis.nextEntry
+                }
+            }
+        }
+    }
 
     // Read FS Operator
     private fun readRawManifest(uri: Uri, manifestFileName: String): String? {

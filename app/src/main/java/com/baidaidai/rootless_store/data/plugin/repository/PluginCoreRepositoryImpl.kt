@@ -8,13 +8,17 @@ import com.baidaidai.rootless_store.data.plugin.gateway.PluginCoreGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.room.EnvironmentInfoEntity
 import com.baidaidai.rootless_store.data.plugin.room.PluginInfoEntity
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.manifest.LocalManifest
+import com.baidaidai.rootless_store.domain.plugin.model.LocalManifest
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.repository.PluginCoreRepository
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -151,11 +155,11 @@ class PluginCoreRepositoryImpl @Inject constructor(
                 Log.d("PluginCoreRepositoryImpl.installOnePlugin","pluginType: ${pluginType.name}")
 
                 try {
-                    val pluginManiFest = pluginCoreGatewayImpl.parsePluginManifest(uri).toManifestRoom()
-                    val pluginInfoEntity = PluginInfoEntity.fromManifest(pluginManiFest)
+                    val pluginManiFestRoom = pluginCoreGatewayImpl.parsePluginManifest(uri).toManifestRoom()
+                    val pluginInfoEntity = PluginInfoEntity.fromPluginManifestRoom(pluginManiFestRoom)
 
                     pluginCoreGatewayImpl.installPluginFromLocal(uri)
-                    pluginCoreGatewayImpl.setPluginEntryPointExecutable(pluginManiFest)
+                    pluginCoreGatewayImpl.setPluginEntryPointExecutable(pluginManiFestRoom)
                     insertOnePluginInfo(pluginInfoEntity)
 
                     return null
@@ -175,7 +179,7 @@ class PluginCoreRepositoryImpl @Inject constructor(
 
                 try {
                     val environmentManiFest = pluginCoreGatewayImpl.parseEnvironmentManifest(uri).toManifestRoom()
-                    val environmentEntity = EnvironmentInfoEntity.fromManifest(environmentManiFest)
+                    val environmentEntity = EnvironmentInfoEntity.fromEnvironmentManifestRoom(environmentManiFest)
 
                     pluginCoreGatewayImpl.installEnvironmentFromLocal(uri)
                     pluginCoreGatewayImpl.setEnvironmentEntryPointExecutable(environmentManiFest)
@@ -196,16 +200,35 @@ class PluginCoreRepositoryImpl @Inject constructor(
 
     override suspend fun installOnePluginFromMarket(
         pluginURI: String,
-        pluginManifestRemote: PluginManifestRemote
+        manifest: RootlessStoreManifestCollection
     ): PluginError? {
         try {
-            val pluginInfoEntity = PluginInfoEntity.fromManifest(pluginManifestRemote.toManifestRoom())
+            when(manifest){
+                is PluginManifest -> {
+                    val pluginManifestRemote = manifest as PluginManifestRemote
+                    val pluginManifestRoom = pluginManifestRemote.toManifestRoom()
 
-            pluginCoreGatewayImpl.installPluginFromMarket(pluginURI,pluginManifestRemote)
-            pluginCoreGatewayImpl.setPluginEntryPointExecutable(pluginManifestRoom = pluginManifestRemote.toManifestRoom())
-            insertOnePluginInfo(pluginInfoEntity = pluginInfoEntity)
+                    val pluginInfoEntity = PluginInfoEntity.fromPluginManifestRoom(pluginManifestRoom)
 
-            return null
+                    pluginCoreGatewayImpl.installPluginFromMarket(pluginURI,pluginManifestRemote)
+                    pluginCoreGatewayImpl.setPluginEntryPointExecutable(pluginManifestRoom = pluginManifestRemote.toManifestRoom())
+                    insertOnePluginInfo(pluginInfoEntity = pluginInfoEntity)
+
+                    return null
+                }
+                is EnvironmentManifest -> {
+                    val environmentManifestRemote = manifest as EnvironmentManifestRemote
+                    val environmentManifestRoom = environmentManifestRemote.toEnvironmentManifestRoom()
+
+                    val environmentInfoEntity = EnvironmentInfoEntity.fromEnvironmentManifestRoom(environmentManifestRoom)
+
+                    pluginCoreGatewayImpl.installEnvironmentFromMarket(pluginURI, environmentManifestRemote)
+                    pluginCoreGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifestRoom = environmentManifestRoom)
+                    insertOneEnvironmentInfo(environmentInfoEntity = environmentInfoEntity)
+
+                    return null
+                }
+            }
         }catch (error: Throwable){
             val errorStack  = error.stackTrace.OutOfStringLike()
 
@@ -214,17 +237,6 @@ class PluginCoreRepositoryImpl @Inject constructor(
                 errorCause = errorStack
             )
         }
-    }
-
-    override suspend fun installOneEnvironment(uri: Uri): PluginError? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun installOneEnvironmentFromMarket(
-        pluginURI: String,
-        pluginManifestRemote: PluginManifestRemote
-    ): PluginError? {
-        TODO("Not yet implemented")
     }
 
 }

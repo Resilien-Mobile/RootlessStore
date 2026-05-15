@@ -7,8 +7,8 @@ import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
 import kotlinx.coroutines.flow.Flow
 
 interface PluginCoreRepository {
@@ -40,7 +40,5 @@ interface PluginCoreRepository {
 
     // Operator
     suspend fun installOnePlugin(uri: Uri): PluginError?
-    suspend fun installOnePluginFromMarket(pluginURI: String, pluginManifestRemote: PluginManifestRemote): PluginError?
-    suspend fun installOneEnvironment(uri: Uri): PluginError?
-    suspend fun installOneEnvironmentFromMarket(pluginURI: String, pluginManifestRemote: PluginManifestRemote): PluginError?
+    suspend fun installOnePluginFromMarket(pluginURI: String, manifest: RootlessStoreManifestCollection): PluginError?
 }
