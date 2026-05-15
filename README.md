@@ -8,7 +8,7 @@ An open-source, rootless plugin management and runtime platform for the Android 
 <p>
     <img src="/asset/picture/HomeScreen.png" width="32%" />
     <img src="/asset/picture/PluginScreen.png" width="32%" />
-    <img src="/asset/picture/SourceScreen.png" width="32%" />
+    <img src="/asset/picture/MarketScreen.png" width="32%" />
     <img src="/asset/picture/ExecuteScreen.png" width="32%" />
     <img src="/asset/picture/AdbShizukuScreen.png" width="32%" />
     <img src="/asset/picture/ShellScreen.png" width="32%" />
@@ -42,9 +42,9 @@ It stands on three core principles:
 - [x] Complete the core pages and documentation structure
 - [x] Establish the basic interfaces for Source and Market
 - [x] Build the initial runtime plugin development documentation
-- [ ] Improve the Market and plugin detail UI
+- [x] Improve the Market and plugin detail UI
 - [ ] Improve filtering, state feedback, and permission boundaries
-- [ ] Support private sources, invisible sources, and paid sources
+- [x] Support private sources, invisible sources, and paid sources
 - [ ] Publish to F-Droid
 
 ## Why I Built Rootless Store
