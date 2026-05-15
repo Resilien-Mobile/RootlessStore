@@ -96,7 +96,7 @@ fun RootlessStoreStartScreenContainer(
     val context = LocalContext.current
 
     val scrollBehavior = when(currentDestination){
-        "PluginScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        "PluginScreen", "MarketScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
     }
 
@@ -155,7 +155,8 @@ fun RootlessStoreStartScreenContainer(
                     }
                 )
                 "MarketScreen" -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
-                    sourceName = currentPluginSource!!.sourceName
+                    sourceName = currentPluginSource!!.sourceName,
+                    scrollBehavior = scrollBehavior
                 )
                 "ShellScreen" -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
                     onTopIconClick = {

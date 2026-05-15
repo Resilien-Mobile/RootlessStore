@@ -7,9 +7,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MediumFlexibleTopAppBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 object MarketScreenNecessaryComponents {
 
@@ -19,7 +19,8 @@ object MarketScreenNecessaryComponents {
         onBackButtonClick: ()-> Unit = {},
         onSearchButtonClick: ()-> Unit = {},
         onFilterButtonClick: ()-> Unit = {},
-        sourceName: String = "Null"
+        sourceName: String = "Null",
+        scrollBehavior: TopAppBarScrollBehavior
     ){
         MediumFlexibleTopAppBar(
             title = {
@@ -55,14 +56,15 @@ object MarketScreenNecessaryComponents {
                         contentDescription = "Back"
                     )
                 }
-            }
+            },
+            scrollBehavior = scrollBehavior
         )
     }
 
 }
 
-@Composable
-@PreviewLightDark
-fun _MarketScreenScreenTopAppBarPreview_(){
-    MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar()
-}
+//@Composable
+//@PreviewLightDark
+//fun _MarketScreenScreenTopAppBarPreview_(){
+//    MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar()
+//}
