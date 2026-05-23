@@ -3,6 +3,7 @@ package com.baidaidai.rootless_store.components.startScreen
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -21,11 +22,22 @@ object StartScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun StartScreenTopAppBar(
-        scrollBehavior: TopAppBarScrollBehavior
+        scrollBehavior: TopAppBarScrollBehavior,
+        onSettingClick:()-> Unit
     ){
         TopAppBar(
             title = {
                 Text("Rootless Store")
+            },
+            actions = {
+                IconButton(
+                    onClick = onSettingClick
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.material_symbols_settings),
+                        contentDescription = "Setting"
+                    )
+                }
             },
             scrollBehavior = scrollBehavior
         )
@@ -42,7 +54,8 @@ object StartScreenNecessaryComponents {
                 contentDeprecated = stringResource(R.string.start_screen_navigation_bar_home_label),
                 compatibleDestinationList = listOf(
                     "HomeScreen",
-                    "ShellScreen"
+                    "ShellScreen",
+                    "SettingScreen"
                 )
             ),
             NavBarItemSpec(

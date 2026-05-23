@@ -94,4 +94,50 @@
     <string name="start_screen_navigation_bar_home_label">主页</string>
     <string name="start_screen_navigation_bar_plugin_label">插件页</string>
     <string name="start_screen_navigation_bar_sources_label">插件源</string>
+
+    <!-- Setting Screen: Top App Bar -->
+    <string name="setting_screen_top_app_bar_title">设置</string>
+
+    <!-- Setting Screen: Sections -->
+    <string name="setting_screen_section_general_title">通用</string>
+    <string name="setting_screen_section_source_title">源</string>
+    <string name="setting_screen_section_permission_title">权限</string>
+    <string name="setting_screen_section_about_title">关于</string>
+
+    <!-- Setting Screen: General -->
+    <string name="setting_screen_general_check_latest_version_headline">检测最新版本</string>
+    <string name="setting_screen_general_check_latest_version_supporting">暂不可用</string>
+    <string name="setting_screen_general_check_latest_version_icon_content_description">检测最新版本</string>
+    <string name="setting_screen_general_notify_plugin_status_headline">通知插件状态</string>
+    <string name="setting_screen_general_notify_plugin_status_supporting">插件状态通知设置</string>
+    <string name="setting_screen_general_notify_plugin_status_icon_content_description">插件状态通知</string>
+    <string name="setting_screen_general_third_party_push_headline">通过第三方推送通知</string>
+    <string name="setting_screen_general_third_party_push_supporting">第三方通知推送设置</string>
+    <string name="setting_screen_general_third_party_push_icon_content_description">第三方通知推送</string>
+
+    <!-- Setting Screen: Source -->
+    <string name="setting_screen_source_allow_insecure_connection_headline">允许使用不安全连接</string>
+    <string name="setting_screen_source_allow_insecure_connection_supporting">允许直接使用 HTTP 通信</string>
+    <string name="setting_screen_source_allow_insecure_connection_icon_content_description">允许使用不安全连接</string>
+    <string name="setting_screen_source_use_dot_protected_connection_headline">使用 DoT 保护连接</string>
+    <string name="setting_screen_source_use_dot_protected_connection_supporting">使用 DNS-over-TLS 保护连接</string>
+    <string name="setting_screen_source_use_dot_protected_connection_icon_content_description">使用 DoT 保护连接</string>
+
+    <!-- Setting Screen: Permission -->
+    <string name="setting_screen_permission_all_files_access_headline">所有文件访问权限</string>
+    <string name="setting_screen_permission_all_files_access_supporting">用于拓展磁盘上下文权限</string>
+    <string name="setting_screen_permission_all_files_access_icon_content_description">所有文件访问权限</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_headline">停止限制子进程</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_supporting">允许子进程保持运行</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_icon_content_description">停止限制子进程</string>
+    <string name="setting_screen_permission_notification_headline">通知权限</string>
+    <string name="setting_screen_permission_notification_supporting">用于显示应用通知</string>
+    <string name="setting_screen_permission_notification_icon_content_description">通知权限</string>
+    <string name="setting_screen_permission_battery_headline">开启允许后台使用</string>
+    <string name="setting_screen_permission_battery_supporting">允许 Rootless Store 在后台运行</string>
+    <string name="setting_screen_permission_battery_icon_content_description">电池权限</string>
+    <string name="setting_screen_permission_open_content_description">打开</string>
+
+    <!-- Setting Screen: About -->
+    <string name="setting_screen_about_rootless_store_headline">关于 Rootless Store</string>
 </resources>

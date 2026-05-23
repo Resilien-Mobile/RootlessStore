@@ -97,4 +97,50 @@
     <string name="start_screen_navigation_bar_home_label">Home</string>
     <string name="start_screen_navigation_bar_plugin_label">Plugin</string>
     <string name="start_screen_navigation_bar_sources_label">Sources</string>
+
+    <!-- Setting Screen: Top App Bar -->
+    <string name="setting_screen_top_app_bar_title">Settings</string>
+
+    <!-- Setting Screen: Sections -->
+    <string name="setting_screen_section_general_title">General</string>
+    <string name="setting_screen_section_source_title">Source</string>
+    <string name="setting_screen_section_permission_title">Permission</string>
+    <string name="setting_screen_section_about_title">About</string>
+
+    <!-- Setting Screen: General -->
+    <string name="setting_screen_general_check_latest_version_headline">Check latest version</string>
+    <string name="setting_screen_general_check_latest_version_supporting">Not available yet</string>
+    <string name="setting_screen_general_check_latest_version_icon_content_description">Check latest version</string>
+    <string name="setting_screen_general_notify_plugin_status_headline">Notify plugin status</string>
+    <string name="setting_screen_general_notify_plugin_status_supporting">Plugin status notification settings</string>
+    <string name="setting_screen_general_notify_plugin_status_icon_content_description">Plugin status notification</string>
+    <string name="setting_screen_general_third_party_push_headline">Use third party notification push</string>
+    <string name="setting_screen_general_third_party_push_supporting">Third party notification push settings</string>
+    <string name="setting_screen_general_third_party_push_icon_content_description">Third party notification push</string>
+
+    <!-- Setting Screen: Source -->
+    <string name="setting_screen_source_allow_insecure_connection_headline">Allow insecure connection</string>
+    <string name="setting_screen_source_allow_insecure_connection_supporting">Allow direct HTTP communication</string>
+    <string name="setting_screen_source_allow_insecure_connection_icon_content_description">Allow insecure connection</string>
+    <string name="setting_screen_source_use_dot_protected_connection_headline">Use DoT protected connection</string>
+    <string name="setting_screen_source_use_dot_protected_connection_supporting">Protect the connection with DNS-over-TLS</string>
+    <string name="setting_screen_source_use_dot_protected_connection_icon_content_description">Use DoT protected connection</string>
+
+    <!-- Setting Screen: Permission -->
+    <string name="setting_screen_permission_all_files_access_headline">All files access permission</string>
+    <string name="setting_screen_permission_all_files_access_supporting">Used to extend disk context permissions</string>
+    <string name="setting_screen_permission_all_files_access_icon_content_description">All files access permission</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_headline">Stop restricting child process</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_supporting">Allow child processes to keep running</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_icon_content_description">Stop restricting child process</string>
+    <string name="setting_screen_permission_notification_headline">Notification permission</string>
+    <string name="setting_screen_permission_notification_supporting">Used to display app notifications</string>
+    <string name="setting_screen_permission_notification_icon_content_description">Notification permission</string>
+    <string name="setting_screen_permission_battery_headline">Allow background usage</string>
+    <string name="setting_screen_permission_battery_supporting">Allow Rootless Store to run in the background</string>
+    <string name="setting_screen_permission_battery_icon_content_description">Battery permission</string>
+    <string name="setting_screen_permission_open_content_description">Open</string>
+
+    <!-- Setting Screen: About -->
+    <string name="setting_screen_about_rootless_store_headline">About Rootless Store</string>
 </resources>
