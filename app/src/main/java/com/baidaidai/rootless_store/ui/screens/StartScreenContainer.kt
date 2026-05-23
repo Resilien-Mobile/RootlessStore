@@ -8,7 +8,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -21,7 +20,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,6 +29,7 @@ import com.baidaidai.rootless_store.ShizukuActivity
 import com.baidaidai.rootless_store.components.executeScreen.executeScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.marketScreen.MarketScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.pluginsScreen.PluginScreenNecessaryComponents
+import com.baidaidai.rootless_store.components.settingScreen.SettingScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.shellScreen.ShellScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.sourcesScreen.SourcesScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.startScreen.StartScreenErrorDialog
@@ -42,7 +41,6 @@ import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
-import com.baidaidai.rootless_store.ui.theme.RootlessStoreTheme
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,7 +94,7 @@ fun RootlessStoreStartScreenContainer(
     val context = LocalContext.current
 
     val scrollBehavior = when(currentDestination){
-        "PluginScreen", "MarketScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        "PluginScreen", "MarketScreen", "SettingScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
     }
 
@@ -170,7 +168,13 @@ fun RootlessStoreStartScreenContainer(
                         shellScreenViewModel.cleanShellOutputList()
                     }
                 )
-                else -> StartScreenNecessaryComponents.StartScreenTopAppBar(scrollBehavior)
+                "SettingScreen" -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
+                    scrollBehavior = scrollBehavior
+                )
+                else -> StartScreenNecessaryComponents.StartScreenTopAppBar(
+                    scrollBehavior = scrollBehavior,
+                    onSettingClick = { navController.navigate("SettingScreen") }
+                )
             }
         },
         bottomBar = { StartScreenNecessaryComponents.StartScreenNavigationBar(navController)},
@@ -281,6 +285,13 @@ fun RootlessStoreStartScreenContainer(
                 ExecuteScreen(
                     contentPaddingValues = contentPadding,
                     executeScreenViewModel = executeScreenViewModel
+                )
+            }
+            composable(
+                route = "SettingScreen"
+            ){
+                SettingScreen(
+                    contentPaddingValues = contentPadding
                 )
             }
         }
