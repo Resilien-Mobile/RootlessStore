@@ -67,6 +67,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_check_latest_version_headline),
                     supportingText = stringResource(R.string.setting_screen_general_check_latest_version_supporting),
+                    checked = settingPanelPreferences.enableAutoUpdate,
+                    onSwitchClicked = settingScreenViewModel::setEnableAutoUpdate,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_upgrade),

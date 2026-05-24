@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreference
 import com.baidaidai.rootless_store.domain.setting.usecase.GetSettingScreenPreferencesUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetAllowInsecureConnectionUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.SetEnableAutoUpdateUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetNotifyPluginStatusUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetUseDotProtectedConnectionUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetUseThirdPartyNotificationPushUseCase
@@ -21,7 +22,8 @@ class RootLessStoreSettingScreenViewModel @Inject constructor(
     private val setNotifyPluginStatusUseCase: SetNotifyPluginStatusUseCase,
     private val setUseThirdPartyNotificationPushUseCase: SetUseThirdPartyNotificationPushUseCase,
     private val setAllowInsecureConnectionUseCase: SetAllowInsecureConnectionUseCase,
-    private val setUseDotProtectedConnectionUseCase: SetUseDotProtectedConnectionUseCase
+    private val setUseDotProtectedConnectionUseCase: SetUseDotProtectedConnectionUseCase,
+    private val setEnableAutoUpdateUseCase: SetEnableAutoUpdateUseCase,
 ) : ViewModel() {
 
     val settingPanelPreferences: StateFlow<SettingScreenPreference> =
@@ -52,6 +54,12 @@ class RootLessStoreSettingScreenViewModel @Inject constructor(
     fun setUseDotProtectedConnection(enabled: Boolean) {
         viewModelScope.launch {
             setUseDotProtectedConnectionUseCase(enabled)
+        }
+    }
+
+    fun setEnableAutoUpdate(enabled: Boolean) {
+        viewModelScope.launch {
+            setEnableAutoUpdateUseCase(enabled)
         }
     }
 }

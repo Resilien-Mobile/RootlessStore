@@ -1,8 +1,10 @@
 package com.baidaidai.rootless_store.ui.model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.data.status.repository.GetOverallStatusUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.GetEnableAutoUpdatePreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
@@ -20,6 +22,7 @@ import com.baidaidai.rootless_store.domain.status.usecase.GetStorageStatusUseCas
 import com.baidaidai.rootless_store.domain.status.usecase.GetTemperatureStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetEnableChooserPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetExecuteContextPreferenceUseCase
+import com.baidaidai.rootless_store.domain.update.usecase.GetLatestVersionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,12 +48,22 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     private val getRootStatusUseCase: GetRootStatusUseCase,
     private val getOverallStatusUseCase: GetOverallStatusUseCase,
     private val setExecuteContextPreferenceUseCase: SetExecuteContextPreferenceUseCase,
-    private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase
+    private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
+    private val getEnableAutoUpdatePreferenceUseCase: GetEnableAutoUpdatePreferenceUseCase,
+    private val getLatestVersionUseCase: GetLatestVersionUseCase
 ) : ViewModel() {
+
+    init {
+        getLatestVersion()
+    }
 
     private var _dialogStatus = MutableStateFlow(false)
     private val _currentExecuteContextSelected = MutableStateFlow<HosterOverallStatus?>(null)
     val dialogStatus = _dialogStatus.asStateFlow()
+
+    // Latest Version Status
+    private val _latestVersion = MutableStateFlow<String?>(null)
+    val latestVersion = _latestVersion.asStateFlow()
 
 
     val memoryStatus: StateFlow<MemoryStatus> =
@@ -154,4 +167,15 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
         _dialogStatus.value = !_dialogStatus.value
     }
 
+    fun getLatestVersion(){
+        viewModelScope.launch {
+            val enableAutoUpdate = getEnableAutoUpdatePreferenceUseCase().first()
+            Log.d("getLatestVersion",enableAutoUpdate.toString())
+
+            if(enableAutoUpdate){
+                val latestVersion = getLatestVersionUseCase()
+                _latestVersion.value = latestVersion
+            }
+        }
+    }
 }
