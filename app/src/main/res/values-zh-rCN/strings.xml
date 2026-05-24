@@ -106,7 +106,7 @@
 
     <!-- Setting Screen: General -->
     <string name="setting_screen_general_check_latest_version_headline">检测最新版本</string>
-    <string name="setting_screen_general_check_latest_version_supporting">暂不可用</string>
+    <string name="setting_screen_general_check_latest_version_supporting">自动检测最新版本</string>
     <string name="setting_screen_general_check_latest_version_icon_content_description">检测最新版本</string>
     <string name="setting_screen_general_notify_plugin_status_headline">通知插件状态</string>
     <string name="setting_screen_general_notify_plugin_status_supporting">插件状态通知设置</string>

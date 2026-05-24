@@ -17,6 +17,7 @@ import javax.inject.Inject
 class SettingPreferenceRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
+    // Read
     val getSettingScreenPreference: Flow<SettingScreenPreference> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
@@ -28,6 +29,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
             }
             .map { preferences ->
                 SettingScreenPreference(
+                    enableAutoUpdate = preferences[ENABLE_AUTO_UPDATE] ?: false,
                     notifyPluginStatus = preferences[NOTIFY_PLUGIN_STATUS] ?: false,
                     useThirdPartyNotificationPush = preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] ?: false,
                     allowInsecureConnection = preferences[ALLOW_INSECURE_CONNECTION] ?: false,
@@ -35,6 +37,20 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
                 )
             }
 
+    fun getEnableAutoUpdatePreference(): Flow<Boolean> =
+        context.rootlessStorePreferencesDataStore.data
+            .catch { error ->
+                if (error is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw error
+                }
+            }
+            .map { preferences ->
+                preferences[ENABLE_AUTO_UPDATE] ?: false
+            }
+
+    // Update
     suspend fun setNotifyPluginStatus(enabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[NOTIFY_PLUGIN_STATUS] = enabled
@@ -59,10 +75,17 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
         }
     }
 
+    suspend fun changeEnableAutoUpdate(enabled: Boolean) {
+        context.rootlessStorePreferencesDataStore.edit { preferences ->
+            preferences[ENABLE_AUTO_UPDATE] = enabled
+        }
+    }
+
     private companion object {
         val NOTIFY_PLUGIN_STATUS = booleanPreferencesKey("setting_notify_plugin_status")
         val USE_THIRD_PARTY_NOTIFICATION_PUSH = booleanPreferencesKey("setting_use_third_party_notification_push")
         val ALLOW_INSECURE_CONNECTION = booleanPreferencesKey("setting_allow_insecure_connection")
         val USE_DOT_PROTECTED_CONNECTION = booleanPreferencesKey("setting_use_dot_protected_connection")
+        val ENABLE_AUTO_UPDATE = booleanPreferencesKey("setting_enable_auto_update")
     }
 }
