@@ -1,7 +1,5 @@
 package com.baidaidai.rootless_store.components.homeScreen
 
-import android.content.Intent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,39 +16,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.core.i18n.icuString
 
 @Composable
-fun RootLessStoreVersionCheckerContainer(
-    latestVersionNumber: String
-){
+fun RootLessStoreVersionTagContainer(){
 
-    val context = LocalContext.current
+    val versionNumber = stringResource(R.string.app_version)
+
     val cardColors = CardDefaults.cardColors(
-        containerColor = colorScheme.secondaryContainer,
-        contentColor = colorScheme.onSecondaryContainer,
+        containerColor = colorScheme.primaryContainer,
+        contentColor = colorScheme.onPrimaryContainer,
     )
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                enabled = true,
-                onClick = {
-                    val url = "https://github.com/Resilien-Mobile/RootlessStore/releases/latest"
-                    val intent = Intent(Intent.ACTION_VIEW, url.toUri())
-                    context.startActivity(intent)
-                }
-            ),
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(),
         colors = cardColors
     ){
         Column(
             modifier = Modifier
-                .padding(horizontal = 30.dp, vertical = 10.dp)
+                .padding(30.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -58,8 +47,8 @@ fun RootLessStoreVersionCheckerContainer(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Icon(
-                    painter = painterResource(R.drawable.material_symbols_bottom),
-                    contentDescription = "new version",
+                    painter = painterResource(R.drawable.terminal_24px),
+                    contentDescription = stringResource(R.string.home_screen_version_checker_container_icon_content_description),
                     modifier = Modifier
                         .size(30.dp)
                 )
@@ -69,11 +58,14 @@ fun RootLessStoreVersionCheckerContainer(
                 )
                 Column{
                     Text(
-                        text = "New Version Available",
+                        text = stringResource(R.string.home_screen_version_checker_container_headline),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = latestVersionNumber,
+                        text = icuString(
+                            R.string.home_screen_version_checker_container_supporting,
+                            mapOf("version" to versionNumber)
+                        ),
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
