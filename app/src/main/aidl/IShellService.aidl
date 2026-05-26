@@ -8,7 +8,8 @@ interface IShellService {
         String environmentPATH,
         String environmentLDPATH,
         in List<String> environmentConfigKeyList,
-        in List<String> environmentConfigValueList
+        in List<String> environmentConfigValueList,
+        boolean enableMonitor
     );
     boolean kill(int progressPid);
     void command(
