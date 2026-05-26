@@ -50,6 +50,19 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
                 preferences[ENABLE_AUTO_UPDATE] ?: false
             }
 
+    fun getEnableNotifyPluginStatus(): Flow<Boolean> =
+        context.rootlessStorePreferencesDataStore.data
+            .catch { error ->
+                if (error is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw error
+                }
+            }
+            .map { preferences ->
+                preferences[NOTIFY_PLUGIN_STATUS] ?: false
+            }
+
     // Update
     suspend fun setNotifyPluginStatus(enabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->

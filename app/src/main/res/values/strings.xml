@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Rootless Store</string>
-    <string name="app_version">v1.0.5</string>
+    <string name="app_version">v1.1.0</string>
+    <string name="notification_channel_id">Rootless Store Status Monitoring</string>
 
     <!-- Home Screen Strings -->
     <string name="home_screen_version_checker_container_icon_content_description">Terminal Icon</string>

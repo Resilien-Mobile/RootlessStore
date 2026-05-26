@@ -1,6 +1,7 @@
 package com.baidaidai.rootless_store.data.execute.gateway
 
 import android.util.Log
+import com.baidaidai.rootless_store.data.monitor.ProcessMonitor
 import com.baidaidai.rootless_store.data.plugin.repository.PluginCoreRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
@@ -18,7 +19,8 @@ import javax.inject.Inject
 
 class PluginExecuteGatewayImpl @Inject constructor(
     private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
-    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl
+    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl,
+    private val processMonitor: ProcessMonitor
 ) {
 
     internal fun createCallbackList(
@@ -37,7 +39,11 @@ class PluginExecuteGatewayImpl @Inject constructor(
             "sh"
         }
     }
-    fun executePluginEntryPoint(pluginExecuteEntryPoint: String,pluginPackageDirectory: String): Flow<ExecuteResult> = callbackFlow {
+    fun executePluginEntryPoint(
+        pluginExecuteEntryPoint: String,
+        pluginPackageDirectory: String,
+        enableMonitor: Boolean = false
+    ): Flow<ExecuteResult> = callbackFlow {
         val processBuilder = ProcessBuilder(
             rootEnvironmentSwitch(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginExecuteEntryPoint"
         )
@@ -59,6 +65,10 @@ class PluginExecuteGatewayImpl @Inject constructor(
         Log.d("executePluginEntryPoint","environmentLDPATH: $environmentLDPATH")
 
         val process = processBuilder.start()
+
+        if (enableMonitor){
+            processMonitor(process)
+        }
 
         launch(Dispatchers.IO) {
             process.inputStream.bufferedReader().useLines { lines ->
@@ -88,7 +98,11 @@ class PluginExecuteGatewayImpl @Inject constructor(
     }
         .flowOn(Dispatchers.IO)
 
-    fun executePluginEntryPointByShizuku(pluginExecuteEntryPoint: String,pluginPackageDirectory: String): Flow<ExecuteResult> =
+    fun executePluginEntryPointByShizuku(
+        pluginExecuteEntryPoint: String,
+        pluginPackageDirectory: String,
+        enableMonitor: Boolean
+    ): Flow<ExecuteResult> =
 
         callbackFlow {
             launch(Dispatchers.IO) {
@@ -108,6 +122,9 @@ class PluginExecuteGatewayImpl @Inject constructor(
                                 content = "- ${error.toString()}"
                             )
                         )
+                    },
+                    onProcessExitedCallback = { exitCode ->
+                        processMonitor(exitCode)
                     }
                 )
 
@@ -126,7 +143,8 @@ class PluginExecuteGatewayImpl @Inject constructor(
                         environmentPATH,
                         environmentLDPATH,
                         environmentConfigKeyList,
-                        environmentConfigValueList
+                        environmentConfigValueList,
+                        enableMonitor
                     )
             }
             awaitClose {  }
@@ -135,7 +153,7 @@ class PluginExecuteGatewayImpl @Inject constructor(
     fun abortPluginProcess(pluginProcessPID: Int?){
         if (pluginProcessPID != null){
             ProcessBuilder(
-                rootEnvironmentSwitch(), "-c", "kill $pluginProcessPID"
+                rootEnvironmentSwitch(), "-c", "kill -9 $pluginProcessPID"
             ).start()
         }
     }

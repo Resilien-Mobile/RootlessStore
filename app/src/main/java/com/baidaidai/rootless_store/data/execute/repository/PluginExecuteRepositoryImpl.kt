@@ -21,40 +21,54 @@ class PluginExecuteRepositoryImpl @Inject constructor(
         pidRegex.find(line)?.groupValues?.get(1)?.toIntOrNull()
 
     fun executeOnePlugin(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifestRoom: PluginManifestRoom,
+        enableMonitor: Boolean = false
     ): Flow<ExecuteResult> {
         var pidSaved = false
         val pluginExecuteEntryPoint = androidFileSystemCapabilityGatewayImpl.getPluginEntryPoint(pluginManifestRoom)
         val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
-        return pluginExecuteGatewayImpl.executePluginEntryPoint(pluginExecuteEntryPoint,pluginPackageDirectory).onEach { ExecuteResult ->
-            if (!pidSaved) {
-                val content = ExecuteResult.content
-                val pid = parsePid(content)
-                if (pid != null) {
-                    pidSaved = true
-                    val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
-                    val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
-                    pluginExecuteStatusDao.insertOnePluginExecuteStatus(pluginExecuteStatusEntry) // 写 DAO
+        return pluginExecuteGatewayImpl
+            .executePluginEntryPoint(
+                pluginExecuteEntryPoint,
+                pluginPackageDirectory,
+                enableMonitor = enableMonitor
+            )
+            .onEach { ExecuteResult ->
+                if (!pidSaved) {
+                    val content = ExecuteResult.content
+                    val pid = parsePid(content)
+                    if (pid != null) {
+                        pidSaved = true
+                        val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
+                        val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
+                        pluginExecuteStatusDao.insertOnePluginExecuteStatus(pluginExecuteStatusEntry) // 写 DAO
                 }
             }
         }
     }
 
     fun executeOnePluginByShizuku(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifestRoom: PluginManifestRoom,
+        enableMonitor: Boolean = false
     ): Flow<ExecuteResult> {
         var pidSaved = false
         val pluginExecuteEntryPoint = androidFileSystemCapabilityGatewayImpl.getPluginEntryPoint(pluginManifestRoom)
         val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
-        return pluginExecuteGatewayImpl.executePluginEntryPointByShizuku(pluginExecuteEntryPoint,pluginPackageDirectory).onEach { ExecuteResult ->
-            if (!pidSaved) {
-                val content = ExecuteResult.content
-                val pid = parsePid(content)
-                if (pid != null) {
-                    pidSaved = true
-                    val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
-                    val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
-                    pluginExecuteStatusDao.insertOnePluginExecuteStatus(pluginExecuteStatusEntry) // 写 DAO
+        return pluginExecuteGatewayImpl
+            .executePluginEntryPointByShizuku(
+                pluginExecuteEntryPoint,
+                pluginPackageDirectory,
+                enableMonitor = enableMonitor
+            )
+            .onEach { ExecuteResult ->
+                if (!pidSaved) {
+                    val content = ExecuteResult.content
+                    val pid = parsePid(content)
+                    if (pid != null) {
+                        pidSaved = true
+                        val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
+                        val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
+                        pluginExecuteStatusDao.insertOnePluginExecuteStatus(pluginExecuteStatusEntry) // 写 DAO
                 }
             }
         }

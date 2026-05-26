@@ -2,6 +2,10 @@ package com.baidaidai.rootless_store.data.shizuku.server
 
 import IShellCallback
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 internal class ShizukuEndpointTemplate : IShellService.Stub() {
 
@@ -12,8 +16,12 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         environmentPATH: String,
         environmentLDPATH: String,
         environmentConfigKeyList: MutableList<String>,
-        environmentConfigValueList: MutableList<String>
+        environmentConfigValueList: MutableList<String>,
+        enableMonitor: Boolean
     ) {
+
+        val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
         val processBuilder = ProcessBuilder(
             "run-as",
             "com.baidaidai.rootless_store",
@@ -51,12 +59,20 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
                     callback.onError(it)
                 }
             }
+
+        if (enableMonitor){
+            coroutineScope.launch {
+                val exitCode = process.waitFor()
+                callback.onProcessExited(exitCode)
+            }
+        }
+
     }
 
     override fun kill(progressPid: Int): Boolean {
 
         val process = ProcessBuilder(
-            "run-as","com.baidaidai.rootless_store","sh","-c","kill ${progressPid.toString()}"
+            "run-as","com.baidaidai.rootless_store","sh","-c","kill -9 $progressPid"
         )
             .redirectErrorStream(true)
             .start()
