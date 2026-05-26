@@ -72,7 +72,7 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
     override fun kill(progressPid: Int): Boolean {
 
         val process = ProcessBuilder(
-            "run-as","com.baidaidai.rootless_store","sh","-c","kill ${progressPid.toString()}"
+            "run-as","com.baidaidai.rootless_store","sh","-c","kill -9 $progressPid"
         )
             .redirectErrorStream(true)
             .start()

@@ -153,7 +153,7 @@ class PluginExecuteGatewayImpl @Inject constructor(
     fun abortPluginProcess(pluginProcessPID: Int?){
         if (pluginProcessPID != null){
             ProcessBuilder(
-                rootEnvironmentSwitch(), "-c", "kill $pluginProcessPID"
+                rootEnvironmentSwitch(), "-c", "kill -9 $pluginProcessPID"
             ).start()
         }
     }
