@@ -1,0 +1,143 @@
+<resources>
+    <!-- Home Screen Strings -->
+    <string name="home_screen_version_checker_container_icon_content_description">終端圖示</string>
+    <string name="home_screen_version_checker_container_headline">Rootless Store 正在執行</string>
+    <string name="home_screen_version_checker_container_supporting">版本 {version}</string>
+
+    <string name="home_screen_hoster_status_board_icon_content_description">宿主狀態</string>
+    <string name="home_screen_hoster_status_board_title">宿主狀態</string>
+    <string name="home_screen_hoster_status_board_overall">總體狀態：%1$s</string>
+    <string name="home_screen_hoster_status_board_memory_label">記憶體</string>
+    <string name="home_screen_hoster_status_board_storage_label">儲存空間</string>
+    <string name="home_screen_hoster_status_board_version_label">版本</string>
+    <string name="home_screen_hoster_status_board_kernel_label">核心</string>
+    <string name="home_screen_hoster_status_board_selinux_label">SELinux</string>
+    <string name="home_screen_hoster_status_board_plugins_label">外掛</string>
+    <string name="home_screen_hoster_status_board_temp_label">溫度</string>
+
+    <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">開發圖示</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_headline">了解 Rootless Store</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">了解如何開發 Rootless Store 外掛</string>
+
+    <!-- Shizuku ADB Screen: Overview Card -->
+    <string name="shizuku_adb_screen_overview_card_title">Shizuku 授權</string>
+    <string name="shizuku_adb_screen_overview_card_icon_content_description">Shizuku 圖示</string>
+    <string name="shizuku_adb_screen_overview_card_description">Rootless Store 的部分功能依賴 Shizuku 提供的 ADB 能力，請先授予 Shizuku 授權，然後再連線到 UserService</string>
+
+    <!-- Shizuku ADB Screen: Action Cards -->
+    <string name="shizuku_adb_screen_action_card_start_content_description">開始</string>
+    <string name="shizuku_adb_screen_action_card_step_1_label">步驟 1</string>
+    <string name="shizuku_adb_screen_action_card_step_1_title">請求 Shizuku 授權</string>
+    <string name="shizuku_adb_screen_action_card_step_1_description">授予 ADB 授權，讓 Rootless Store 可以啟動 Shell 流程並解鎖下一步。</string>
+    <string name="shizuku_adb_screen_action_card_step_2_label">步驟 2</string>
+    <string name="shizuku_adb_screen_action_card_step_2_title">連線到 Shizuku UserService</string>
+    <string name="shizuku_adb_screen_action_card_step_2_description">請連線到 Shizuku UserService 以完成最後準備</string>
+
+    <!-- Shizuku ADB Screen: Bottom Sheet -->
+    <string name="shizuku_adb_screen_bottom_sheet_title">已完成</string>
+    <!-- Countdown text is intentionally split to avoid format parameters for now. -->
+    <string name="shizuku_adb_screen_bottom_sheet_countdown_context">返回首頁倒數 {second} 秒</string>
+    <string name="shizuku_adb_screen_bottom_sheet_close_button">關閉</string>
+    <string name="shizuku_adb_screen_bottom_sheet_return_button">立即返回</string>
+
+    <!-- Shell Screen Strings -->
+    <string name="shell_screen_command_input_label">Shell 指令</string>
+
+    <!-- Plugin Screen: Top App Bar -->
+    <string name="plugin_screen_top_app_bar_title">外掛頁</string>
+    <string name="plugin_screen_top_app_bar_subtitle">已安裝 {pluginCount} 個外掛</string>
+    <string name="plugin_screen_top_app_bar_edit_button">編輯</string>
+    <string name="plugin_screen_top_app_bar_filter_content_description">篩選</string>
+
+    <!-- Plugin Screen: Secondary Tab Row -->
+    <string name="plugin_screen_secondary_tab_row_plugins_label">外掛</string>
+    <string name="plugin_screen_secondary_tab_row_environment_label">環境</string>
+
+    <!-- Plugin Screen: Floating Button -->
+    <string name="plugin_screen_floating_button_install_content_description">安裝</string>
+
+    <!-- Plugin Screen: Info Container -->
+    <string name="plugin_screen_info_container_local_delete_button_content_description">刪除按鈕</string>
+    <string name="plugin_screen_info_container_local_icon_content_description">外掛圖示</string>
+    <string name="plugin_screen_info_container_local_version">版本：{version}</string>
+    <string name="plugin_screen_info_container_local_author_label">作者</string>
+    <string name="plugin_screen_info_container_local_source_label">來源</string>
+    <string name="plugin_screen_info_container_local_state_label">狀態</string>
+    <string name="plugin_screen_info_container_local_required_label">最低權限</string>
+
+    <!-- Sources Screen: Top App Bar -->
+    <string name="sources_screen_top_app_bar_title">外掛來源</string>
+    <string name="sources_screen_top_app_bar_subtitle">已新增 {sourceCount} 個外掛來源</string>
+    <string name="sources_screen_top_app_bar_edit_button">編輯</string>
+    <string name="sources_screen_top_app_bar_add_content_description">新增</string>
+
+    <!-- Sources Screen: List Item -->
+    <string name="sources_screen_list_item_go_to_content_description">前往</string>
+    <string name="sources_screen_list_item_delete_content_description">刪除</string>
+    <string name="sources_screen_list_item_icon_content_description">來源圖示</string>
+
+    <!-- Sources Screen: Repository Dialog -->
+    <string name="sources_screen_repository_dialog_confirm_button">新增</string>
+    <string name="sources_screen_repository_dialog_dismiss_button">取消</string>
+    <string name="sources_screen_repository_dialog_title">新增外掛來源</string>
+    <string name="sources_screen_repository_dialog_description">新增一個儲存庫來源，用於更新和發現更多外掛</string>
+    <string name="sources_screen_repository_dialog_input_label">外掛來源 URL</string>
+    <string name="sources_screen_repository_dialog_input_placeholder">https://endpoint/api/v1</string>
+
+    <!-- Execute Screen: Top App Bar -->
+    <string name="execute_screen_top_app_bar_title">正在執行外掛</string>
+    <string name="execute_screen_top_app_bar_share_content_description">分享</string>
+    <string name="execute_screen_top_app_bar_stop_content_description">停止</string>
+    <string name="execute_screen_top_app_bar_back_content_description">返回</string>
+
+    <!-- Start Screen: Navigation Bar -->
+    <string name="start_screen_navigation_bar_home_label">首頁</string>
+    <string name="start_screen_navigation_bar_plugin_label">外掛頁</string>
+    <string name="start_screen_navigation_bar_sources_label">外掛來源</string>
+
+    <!-- Setting Screen: Top App Bar -->
+    <string name="setting_screen_top_app_bar_title">設定</string>
+
+    <!-- Setting Screen: Sections -->
+    <string name="setting_screen_section_general_title">一般</string>
+    <string name="setting_screen_section_source_title">來源</string>
+    <string name="setting_screen_section_permission_title">權限</string>
+    <string name="setting_screen_section_about_title">關於</string>
+
+    <!-- Setting Screen: General -->
+    <string name="setting_screen_general_check_latest_version_headline">檢查最新版本</string>
+    <string name="setting_screen_general_check_latest_version_supporting">自動檢查最新版本</string>
+    <string name="setting_screen_general_check_latest_version_icon_content_description">檢查最新版本</string>
+    <string name="setting_screen_general_notify_plugin_status_headline">通知外掛狀態</string>
+    <string name="setting_screen_general_notify_plugin_status_supporting">外掛狀態通知設定</string>
+    <string name="setting_screen_general_notify_plugin_status_icon_content_description">外掛狀態通知</string>
+    <string name="setting_screen_general_third_party_push_headline">透過第三方推播通知</string>
+    <string name="setting_screen_general_third_party_push_supporting">第三方通知推播設定</string>
+    <string name="setting_screen_general_third_party_push_icon_content_description">第三方通知推播</string>
+
+    <!-- Setting Screen: Source -->
+    <string name="setting_screen_source_allow_insecure_connection_headline">允許使用不安全連線</string>
+    <string name="setting_screen_source_allow_insecure_connection_supporting">允許直接使用 HTTP 通訊</string>
+    <string name="setting_screen_source_allow_insecure_connection_icon_content_description">允許使用不安全連線</string>
+    <string name="setting_screen_source_use_dot_protected_connection_headline">使用 DoT 保護連線</string>
+    <string name="setting_screen_source_use_dot_protected_connection_supporting">使用 DNS-over-TLS 保護連線</string>
+    <string name="setting_screen_source_use_dot_protected_connection_icon_content_description">使用 DoT 保護連線</string>
+
+    <!-- Setting Screen: Permission -->
+    <string name="setting_screen_permission_all_files_access_headline">所有檔案存取權限</string>
+    <string name="setting_screen_permission_all_files_access_supporting">用於拓展磁碟上下文權限</string>
+    <string name="setting_screen_permission_all_files_access_icon_content_description">所有檔案存取權限</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_headline">停止限制子行程</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_supporting">允許子行程持續執行</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_icon_content_description">停止限制子行程</string>
+    <string name="setting_screen_permission_notification_headline">通知權限</string>
+    <string name="setting_screen_permission_notification_supporting">用於顯示應用通知</string>
+    <string name="setting_screen_permission_notification_icon_content_description">通知權限</string>
+    <string name="setting_screen_permission_battery_headline">開啟允許背景使用</string>
+    <string name="setting_screen_permission_battery_supporting">允許 Rootless Store 在背景執行</string>
+    <string name="setting_screen_permission_battery_icon_content_description">電池權限</string>
+    <string name="setting_screen_permission_open_content_description">開啟</string>
+
+    <!-- Setting Screen: About -->
+    <string name="setting_screen_about_rootless_store_headline">關於 Rootless Store</string>
+</resources>
