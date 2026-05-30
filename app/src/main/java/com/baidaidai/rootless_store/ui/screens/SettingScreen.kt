@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,7 +37,8 @@ import androidx.core.net.toUri
 @Composable
 fun SettingScreen(
     contentPaddingValues: PaddingValues,
-    settingScreenViewModel: RootLessStoreSettingScreenViewModel = hiltViewModel()
+    settingScreenViewModel: RootLessStoreSettingScreenViewModel = hiltViewModel(),
+    onThirdPartyNotificationSettingClick: ()-> Unit
 ){
 
     val settingPanelPreferences by settingScreenViewModel.settingPanelPreferences.collectAsState()
@@ -100,6 +102,16 @@ fun SettingScreen(
                             painter = painterResource(R.drawable.material_symbols_notification_add),
                             contentDescription = stringResource(R.string.setting_screen_general_third_party_push_icon_content_description)
                         )
+                    },
+                    trailingContent = {
+                        IconButton(
+                            onClick = onThirdPartyNotificationSettingClick
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.material_symbols_settings),
+                                contentDescription = "setting"
+                            )
+                        }
                     }
                 )
             }
