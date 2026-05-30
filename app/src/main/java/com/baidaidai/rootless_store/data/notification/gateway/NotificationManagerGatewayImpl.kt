@@ -11,12 +11,14 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.baidaidai.rootless_store.MainActivity
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.data.notification.remote.api.BarkNotificationAPI
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class NotificationManagerGatewayImpl @Inject constructor(
     @ApplicationContext
-    private val context: Context
+    private val context: Context,
+    private val barkNotificationAPI: BarkNotificationAPI
 ) {
 
     fun pushDefaultNotification(
@@ -53,6 +55,29 @@ class NotificationManagerGatewayImpl @Inject constructor(
             .from(context)
             .notify(notificationId, notification)
 
+    }
+
+    suspend fun pushNormalNotificationOverBark(
+        title: String,
+        message: String,
+        apiKey: String
+    ){
+        barkNotificationAPI.pushNormalNotification(
+            title = title,
+            message = message,
+            apiKey = apiKey
+        )
+    }
+
+    suspend fun pushWarningNotificationOverBark(
+        title: String,
+        message: String,
+        apiKey: String
+    ){
+        barkNotificationAPI.pushWarningNotification(
+            message = message,
+            apiKey = apiKey
+        )
     }
 
 }

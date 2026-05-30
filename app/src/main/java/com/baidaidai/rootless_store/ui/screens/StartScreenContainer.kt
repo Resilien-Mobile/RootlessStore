@@ -35,12 +35,14 @@ import com.baidaidai.rootless_store.components.sourcesScreen.SourcesScreenNecess
 import com.baidaidai.rootless_store.components.startScreen.StartScreenErrorDialog
 import com.baidaidai.rootless_store.components.startScreen.StartScreenRepositoryDialog
 import com.baidaidai.rootless_store.components.startScreen.StartScreenNecessaryComponents
+import com.baidaidai.rootless_store.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenNecessaryComponents
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootLessStoreThirdPartyNotificationScreenViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +57,7 @@ fun RootlessStoreStartScreenContainer(
     val marketScreenViewModel = hiltViewModel<RootLessStoreMarketScreenViewModel>()
     val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>()
     val shellScreenViewModel = hiltViewModel<RootLessStoreShellScreenViewModel>()
+    val thirdPartyNotificationScreenViewModel = hiltViewModel<RootLessStoreThirdPartyNotificationScreenViewModel>()
     val pluginInfoCount by pluginScreenViewModel.pluginInfoCount.collectAsState()
     val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
 
@@ -94,7 +97,7 @@ fun RootlessStoreStartScreenContainer(
     val context = LocalContext.current
 
     val scrollBehavior = when(currentDestination){
-        "PluginScreen", "MarketScreen", "SettingScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        "PluginScreen", "MarketScreen", "SettingScreen", "ThirdPartyNotificationScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
     }
 
@@ -170,6 +173,12 @@ fun RootlessStoreStartScreenContainer(
                 )
                 "SettingScreen" -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
                     scrollBehavior = scrollBehavior
+                )
+                "ThirdPartyNotificationScreen" -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
+                    scrollBehavior = scrollBehavior,
+                    onSaveButtonClick = {
+                        thirdPartyNotificationScreenViewModel.onSubmitClick()
+                    }
                 )
                 else -> StartScreenNecessaryComponents.StartScreenTopAppBar(
                     scrollBehavior = scrollBehavior,
@@ -291,7 +300,18 @@ fun RootlessStoreStartScreenContainer(
                 route = "SettingScreen"
             ){
                 SettingScreen(
-                    contentPaddingValues = contentPadding
+                    contentPaddingValues = contentPadding,
+                    onThirdPartyNotificationSettingClick = {
+                        navController.navigate("ThirdPartyNotificationScreen")
+                    }
+                )
+            }
+            composable(
+                route = "ThirdPartyNotificationScreen"
+            ){
+                ThirdPartyNotificationScreen(
+                    contentPaddingValues = contentPadding,
+                    thirdPartyNotificationScreenViewModel = thirdPartyNotificationScreenViewModel
                 )
             }
         }

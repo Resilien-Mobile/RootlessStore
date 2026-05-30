@@ -21,7 +21,8 @@ fun SettingScreenListItemDefault(
     supportingText: String,
     leadingContent: @Composable (() -> Unit)? = null,
     checked: Boolean = false,
-    onSwitchClicked: (Boolean)-> Unit = {}
+    onSwitchClicked: (Boolean)-> Unit = {},
+    trailingContent: @Composable (()-> Unit)? = null
 ){
     ListItem(
         modifier = modifier
@@ -44,10 +45,14 @@ fun SettingScreenListItemDefault(
         },
         leadingContent = leadingContent,
         trailingContent = {
-            Switch(
-                checked = checked,
-                onCheckedChange = onSwitchClicked,
-            )
+            if (trailingContent != null){
+                trailingContent()
+            }else{
+                Switch(
+                    checked = checked,
+                    onCheckedChange = onSwitchClicked,
+                )
+            }
         },
         colors = ListItemColors()
     )
