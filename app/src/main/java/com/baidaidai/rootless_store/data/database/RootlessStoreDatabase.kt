@@ -6,6 +6,8 @@ import androidx.room.TypeConverters
 import com.baidaidai.rootless_store.data.database.repository.RoomConvertRepositoryImpl
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusDAO
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusEntry
+import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceDAO
+import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceEntity
 import com.baidaidai.rootless_store.data.plugin.room.EnvironmentInfoDAO
 import com.baidaidai.rootless_store.data.plugin.room.EnvironmentInfoEntity
 import com.baidaidai.rootless_store.data.plugin.room.PluginInfoDAO
@@ -18,10 +20,11 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         PluginInfoEntity::class,
         PluginSourceEntity::class,
         PluginExecuteStatusEntry::class,
-        EnvironmentInfoEntity::class
+        EnvironmentInfoEntity::class,
+        NotificationPreferenceEntity::class
         // 其它表也一起加进来
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(RoomConvertRepositoryImpl::class)
@@ -30,6 +33,7 @@ abstract class RootlessStoreDatabase : RoomDatabase() {
     abstract fun environmentInfoDao(): EnvironmentInfoDAO
     abstract fun pluginSourceDao(): PluginSourceDAO
     abstract fun pluginExecuteStatusDao(): PluginExecuteStatusDAO
+    abstract fun notificationPreferenceDao(): NotificationPreferenceDAO
 
     // 其它 DAO 也在这里暴露
 }
