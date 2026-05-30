@@ -1,15 +1,16 @@
 package com.baidaidai.rootless_store.data.monitor
 
 import com.baidaidai.rootless_store.data.notification.gateway.NotificationManagerGatewayImpl
+import com.baidaidai.rootless_store.domain.notification.usecase.PostPluginExitNotificationUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProcessMonitor @Inject constructor(
-    private val notificationManagerGatewayImpl: NotificationManagerGatewayImpl
+    private val notificationManagerGatewayImpl: NotificationManagerGatewayImpl,
+    private val postPluginExitNotificationUseCase: PostPluginExitNotificationUseCase
 ) {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -37,6 +38,9 @@ class ProcessMonitor @Inject constructor(
                 title = "你有一个插件已退出",
                 message = "若非本人操作，请尽快前往处理"
             )
+        coroutineScope.launch {
+            postPluginExitNotificationUseCase()
+        }
     }
 
 }
