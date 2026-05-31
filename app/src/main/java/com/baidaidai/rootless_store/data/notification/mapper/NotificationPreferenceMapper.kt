@@ -8,6 +8,8 @@ object NotificationPreferenceMapper {
     fun NotificationPreferenceEntity.toNotificationPreference(): NotificationPreference {
         return NotificationPreference(
             apiKey = apiKey,
+            notificationTitle = notificationTitle,
+            selfBuiltServer = selfBuiltServer,
             criticalWarning = criticalWarning
         )
     }
@@ -15,6 +17,8 @@ object NotificationPreferenceMapper {
     fun NotificationPreference.toNotificationPreferenceEntity(): NotificationPreferenceEntity {
         return NotificationPreferenceEntity(
             apiKey = apiKey,
+            notificationTitle = notificationTitle,
+            selfBuiltServer = selfBuiltServer,
             criticalWarning = criticalWarning
         )
     }

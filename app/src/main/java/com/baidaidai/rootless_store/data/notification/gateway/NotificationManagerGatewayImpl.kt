@@ -58,10 +58,13 @@ class NotificationManagerGatewayImpl @Inject constructor(
     }
 
     suspend fun pushNormalNotificationOverBark(
-        title: String,
-        message: String,
+        title: String? = null,
+        message: String? = null,
         apiKey: String
     ){
+        val title = title ?: defaultNotificationTitle
+        val message = message ?: defaultNotificationContent
+
         barkNotificationAPI.pushNormalNotification(
             title = title,
             message = message,
@@ -70,14 +73,25 @@ class NotificationManagerGatewayImpl @Inject constructor(
     }
 
     suspend fun pushWarningNotificationOverBark(
-        title: String,
-        message: String,
+        title: String? = null,
+        message: String? = null,
         apiKey: String
     ){
+        val title = title ?: defaultNotificationTitle
+        val message = message ?: defaultNotificationContent
+
         barkNotificationAPI.pushWarningNotification(
+            title = title,
             message = message,
             apiKey = apiKey
         )
+    }
+
+    companion object {
+
+        val defaultNotificationTitle = "Rootless Store"
+        val defaultNotificationContent = "你有一个插件异常退出，若非本人操作，请及时前往处理"
+
     }
 
 }
