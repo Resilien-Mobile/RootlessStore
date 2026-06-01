@@ -75,9 +75,10 @@ class PluginCoreRepositoryImpl @Inject constructor(
         return environmentInfo
     }
 
-    override fun getWholePluginInfo(): Flow<List<PluginManifestRoom>?> {
-        val pluginManifestList = pluginInfoDAO.getEntirePluginManifest()
-        return pluginManifestList
+    override fun getWholePluginInfo(): Flow<List<PluginManifestRoom>> {
+        val pluginManifestRoomList = pluginInfoDAO.getEntirePluginManifest()
+
+        return pluginManifestRoomList
     }
 
     override fun getWholeEnvironmentInfo(): Flow<List<EnvironmentManifestRoom>?> {
