@@ -18,10 +18,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.network.ktor2.KtorNetworkFetcherFactory
+import coil3.request.crossfade
 import com.baidaidai.rootless_store.ui.screens.RootlessStoreStartScreenContainer
 import com.baidaidai.rootless_store.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
+import io.ktor.client.HttpClient
+import javax.inject.Inject
 import kotlin.jvm.java
 
 val RootLessStoreLocalContext = compositionLocalOf<Context>{
@@ -29,7 +36,24 @@ val RootLessStoreLocalContext = compositionLocalOf<Context>{
 }
 
 @HiltAndroidApp
-class RootlessStoreApp : Application()
+class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
+
+    @Inject
+    lateinit var ktorClient: HttpClient
+
+    override fun newImageLoader(context: PlatformContext): ImageLoader {
+        return ImageLoader.Builder(context)
+            .components {
+                add(
+                    KtorNetworkFetcherFactory(
+                        httpClient = ktorClient
+                    )
+                )
+            }
+            .crossfade(true)
+            .build()
+    }
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(){
