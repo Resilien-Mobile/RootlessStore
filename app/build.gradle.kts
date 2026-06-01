@@ -111,4 +111,7 @@ dependencies {
     implementation("io.ktor:ktor-client-android:2.3.13")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.13")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.13")
+
+    // Coil Libs
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
 }
