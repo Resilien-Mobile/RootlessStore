@@ -25,24 +25,12 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
     private val _thirdPartyNotificationScreenUiState = MutableStateFlow(RootLessStoreThirdPartyNotificationScreenUiState())
     val thirdPartyNotificationScreenUiState = _thirdPartyNotificationScreenUiState.asStateFlow()
 
-
-    // Ui Event cluster
-    // Change UiState methods
     fun onBarkApiKeyChanged(barkApiKey: String){
         _thirdPartyNotificationScreenUiState.update {
             it.copy(barkApiKey = barkApiKey)
         }
     }
-    fun onNotificationTitleChanged(notificationTitle: String?){
-        _thirdPartyNotificationScreenUiState.update {
-            it.copy(notificationTitle = notificationTitle)
-        }
-    }
-    fun onSelfBuiltServerChanged(selfBuiltServer: String?){
-        _thirdPartyNotificationScreenUiState.update {
-            it.copy(selfBuiltServer = selfBuiltServer)
-        }
-    }
+
     fun onWarningNotificationEnabledChanged(enabled: Boolean){
         _thirdPartyNotificationScreenUiState.update {
             it.copy(warningNotificationEnabled = enabled)
@@ -55,8 +43,6 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
 
             addOneNotificationPreferenceUseCase(
                 barkApiKey = uiState.barkApiKey,
-                notificationTitle = uiState.notificationTitle,
-                selfBuiltServer = uiState.selfBuiltServer,
                 warningNotificationEnabled = uiState.warningNotificationEnabled
             )
         }

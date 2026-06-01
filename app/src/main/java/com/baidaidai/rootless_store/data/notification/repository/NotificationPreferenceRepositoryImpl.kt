@@ -21,19 +21,6 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
     }
 
     // Update
-    suspend fun updateOneNotificationPreference(
-        apiKey: String,
-        notificationTitle: String? = null,
-        selfBuiltServer: String? = null,
-        criticalWarning: Boolean
-    ) {
-        notificationPreferenceDAO.updateOneNotificationPreference(
-            apiKey = apiKey,
-            notificationTitle = notificationTitle,
-            selfBuiltServer = selfBuiltServer,
-            criticalWarning = criticalWarning,
-        )
-    }
 
     // Read
     suspend fun getOneNotificationPreference(): NotificationPreference? {

@@ -9,22 +9,17 @@ class PostPluginExitNotificationUseCase @Inject constructor(
     private val notificationPreferenceRepositoryImpl: NotificationPreferenceRepositoryImpl
 ) {
 
-    suspend operator fun invoke(){
+    suspend operator fun invoke(
+        title: String = "Rootless Store",
+        message: String = "你有一个插件异常退出，若非本人操作，请及时前往处理",
+    ){
         val notificationPreference = notificationPreferenceRepositoryImpl.getOneNotificationPreference()
 
         if (notificationPreference != null){
             if (notificationPreference.criticalWarning){
-                notificationManagerGatewayImpl
-                    .pushWarningNotificationOverBark(
-                        title = notificationPreference.notificationTitle,
-                        apiKey = notificationPreference.apiKey
-                    )
+                notificationManagerGatewayImpl.pushWarningNotificationOverBark(title,message, apiKey = notificationPreference.apiKey)
             }else{
-                notificationManagerGatewayImpl
-                    .pushNormalNotificationOverBark(
-                        title = notificationPreference.notificationTitle,
-                        apiKey = notificationPreference.apiKey
-                    )
+                notificationManagerGatewayImpl.pushNormalNotificationOverBark(title,message, apiKey = notificationPreference.apiKey)
             }
         }
 

@@ -127,7 +127,7 @@ fun PluginTagTonalAssistChip(
         }
 
         HosterOverallStatus.PERMISSIVE -> {
-            painterResource(R.drawable.material_symbols_warning)
+            painterResource(R.drawable.material_symbols_warning_24px)
         }
 
         HosterOverallStatus.ADB -> {
