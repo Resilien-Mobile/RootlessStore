@@ -1,6 +1,7 @@
 package com.baidaidai.rootless_store.components.pluginsScreen
 
 import android.net.Uri
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -43,6 +44,7 @@ fun DynamicPluginIcon(
                 is AsyncImagePainter.State.Success -> {
                     SubcomposeAsyncImageContent(
                         modifier = modifier
+                            .padding(6.dp)
                             .size(40.dp)
                     )
                 }
