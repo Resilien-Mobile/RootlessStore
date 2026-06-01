@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.core.i18n.icuString
 import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
@@ -79,11 +81,11 @@ fun PluginInfoContainerLocal(
                     ,
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    Icon(
-                        painter = painterResource(R.drawable.outline_extension_24),
-                        contentDescription = stringResource(R.string.plugin_screen_info_container_local_icon_content_description),
+                    DynamicPluginIcon(
+                        iconUri = pluginManifest.iconURI?.toUri(),
+                        contentDescription = "Plugin Icon",
                         modifier = Modifier
-                            .size(24.dp)
+                            .clip(CircleShape)
                     )
                     Spacer(
                         modifier = Modifier

@@ -24,7 +24,7 @@ data class PluginManifestRoom(
             pluginRenderingName = "Test Plugin",
             pluginPackageName = "TestPlugin",
             pluginID = "29bb10c46772264df3c0d0fade57d2eb",
-            iconURI = "content://rootless_store/plugin_icon/test",
+            iconURI = null,
             author = "Rootless Store(Creater. Bai)",
             requiredEnvironment = HosterOverallStatus.LIMITED,
             pluginDescription = "Tested by Creater. Bai",
