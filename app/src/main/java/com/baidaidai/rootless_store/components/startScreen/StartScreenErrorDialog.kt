@@ -34,7 +34,7 @@ fun StartScreenErrorDialog(
         },
         icon = {
             Icon(
-                painter = painterResource(R.drawable.material_symbols_warning_24px),
+                painter = painterResource(R.drawable.material_symbols_warning),
                 contentDescription = "Dialog Warning Logo"
             )
         },
@@ -71,7 +71,7 @@ fun StartScreenErrorDialog(
         },
         icon = {
             Icon(
-                painter = painterResource(R.drawable.material_symbols_warning_24px),
+                painter = painterResource(R.drawable.material_symbols_warning),
                 contentDescription = "Dialog Warning Logo"
             )
         },
