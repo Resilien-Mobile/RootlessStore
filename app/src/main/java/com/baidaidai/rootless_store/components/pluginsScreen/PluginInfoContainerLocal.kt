@@ -196,11 +196,11 @@ fun PluginInfoContainerLocal(
                     ,
                     verticalAlignment = Alignment.CenterVertically
                 ){
-                    Icon(
-                        painter = painterResource(R.drawable.outline_extension_24),
-                        contentDescription = stringResource(R.string.plugin_screen_info_container_local_icon_content_description),
+                    DynamicPluginIcon(
+                        iconUri = environmentManifest.iconURI?.toUri(),
+                        contentDescription = "Plugin Icon",
                         modifier = Modifier
-                            .size(24.dp)
+                            .clip(CircleShape)
                     )
                     Spacer(
                         modifier = Modifier
