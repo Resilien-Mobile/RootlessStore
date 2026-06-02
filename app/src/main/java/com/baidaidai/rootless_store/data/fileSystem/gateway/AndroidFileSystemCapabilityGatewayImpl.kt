@@ -40,7 +40,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         return getInternalEnvironmentRootDirectory().apply { mkdirs() }
     }
 
-    // Default FS Operator
+    // Default FS Operator (Plugin)
     fun getDefaultPluginDirectoryPath(): String{
         return getInternalPluginRootDirectory().path
     } // /File/Plugin
@@ -55,6 +55,16 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
     }  // /File/Plugin/PLUGIN
+
+    // Default FS Operator (Environment)
+    fun getDefaultEnvironmentDirectoryPath(): String{
+        return getInternalEnvironmentRootDirectory().path
+    } // /File/Environment
+    fun getEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
+        val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
+        val environmentPackageName = environmentManifestRoom.environmentPackageName
+        return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
+    }  // /File/Environment/ENVIRONMENT
 
     // Search FS Operator
     fun confirmPluginPathExists(): Boolean{
