@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PluginExecuteStatusDAO {
     /**
-     * CUR
+     * CURD
      */
 
     // Create
@@ -28,5 +28,15 @@ interface PluginExecuteStatusDAO {
 
     @Query("SELECT executePID FROM PluginExecuteStatusEntry WHERE pluginID = :pluginID LIMIT 1")
     suspend fun getPluginExecutePIDByPluginID(pluginID: String): Int?
+
+    @Query("SELECT * FROM PluginExecuteStatusEntry")
+    suspend fun getAllExecutingPluginEntity(): List<PluginExecuteStatusEntry>
+
+    // Delete
+    @Query("DELETE FROM PluginExecuteStatusEntry WHERE pluginID = :pluginID")
+    suspend fun deleteExecuteRecordByPluginID(pluginID: String)
+
+    @Query("DELETE FROM PluginExecuteStatusEntry")
+    suspend fun deleteAllExecuteRecord()
 
 }
