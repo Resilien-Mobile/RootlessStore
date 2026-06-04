@@ -16,7 +16,7 @@ import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 fun MarketScreen(
     contentPadding: PaddingValues,
     marketScreenViewModel: RootLessStoreMarketScreenViewModel,
-    navController: NavController
+    navigateToPluginScreen: () -> Unit
 ){
 
     val _contentPadding = PaddingValues(vertical = 15.dp)
@@ -38,7 +38,7 @@ fun MarketScreen(
                 manifest = remotePluginListContent!!
             ) {
                 marketScreenViewModel.installPlugin(remotePluginListContent)
-                navController.navigate("PluginScreen")
+                navigateToPluginScreen()
             }
         }
     }

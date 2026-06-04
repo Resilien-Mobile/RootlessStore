@@ -3,6 +3,7 @@ package com.baidaidai.rootless_store.ui.screens
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -21,10 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.baidaidai.rootless_store.ShizukuActivity
 import com.baidaidai.rootless_store.components.executeScreen.executeScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.marketScreen.MarketScreenNecessaryComponents
@@ -37,6 +38,15 @@ import com.baidaidai.rootless_store.components.startScreen.StartScreenRepository
 import com.baidaidai.rootless_store.components.startScreen.StartScreenNecessaryComponents
 import com.baidaidai.rootless_store.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenNecessaryComponents
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
+import com.baidaidai.rootless_store.domain.navigation.`interface`.RootlessNavigationKey
+import com.baidaidai.rootless_store.domain.navigation.model.ExecuteScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.HomeScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.MarketScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.PluginScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.SettingScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.ShellScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.SourceScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificationScreenKey
 import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
@@ -55,17 +65,17 @@ fun RootlessStoreStartScreenContainer(
 ){
     // VM & VM Data
     val marketScreenViewModel = hiltViewModel<RootLessStoreMarketScreenViewModel>()
-    val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>()
     val shellScreenViewModel = hiltViewModel<RootLessStoreShellScreenViewModel>()
     val thirdPartyNotificationScreenViewModel = hiltViewModel<RootLessStoreThirdPartyNotificationScreenViewModel>()
     val pluginInfoCount by pluginScreenViewModel.pluginInfoCount.collectAsState()
     val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
 
     // Navigation
-    val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination?.route ?: "HomeScreen"
+    val navigationBackStack = rememberNavBackStack(HomeScreenKey)
+    val currentDestination = navigationBackStack.lastOrNull()
+
     val currentPluginSource by marketScreenViewModel.currentPluginSource.collectAsState()
+
 
     // Define the operation ,which after got the file's URI
     val openDocumentLauncher = rememberLauncherForActivityResult(
@@ -77,30 +87,21 @@ fun RootlessStoreStartScreenContainer(
         }
     }
 
-    val lazyColumnState = rememberLazyListState()
+    val lazyColumnState = rememberLazyListState() /*TODO("Can migration Intro VM")*/
     val totalListLength = shellScreenViewModel.shellOutputList.collectAsState().value.size
-
-    LaunchedEffect(fileIntentUri) {
-        val uri = fileIntentUri ?: return@LaunchedEffect
-        navController.navigate("PluginScreen") {
-            launchSingleTop = true
-        }
-        pluginScreenViewModel.updateFileURI(uri)
-        pluginScreenViewModel.installPlugin()
-        onHandlerEnded()
-    }
 
     // Local Data
     var alertDialogStatus by rememberSaveable{ mutableStateOf(false) }
     var sourceDomainContent by rememberSaveable{ mutableStateOf("") }
     var sharedEvent by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
     val context = LocalContext.current
-
+    val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     val scrollBehavior = when(currentDestination){
-        "PluginScreen", "MarketScreen", "SettingScreen", "ThirdPartyNotificationScreen" -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        PluginScreenKey, MarketScreenKey, SettingScreenKey, ThirdPartyNotificationScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
     }
 
+    // Effects
     LaunchedEffect(0) {
         sourceScreenViewModel.sourceEvent.collect { event ->
             sharedEvent = event
@@ -116,19 +117,40 @@ fun RootlessStoreStartScreenContainer(
             sharedEvent = event
         }
     }
+    LaunchedEffect(fileIntentUri) {
+        val uri = fileIntentUri ?: return@LaunchedEffect
+        /* TODO("navController") */
+        navigationBackStack.add(PluginScreenKey)
+        pluginScreenViewModel.updateFileURI(uri)
+        pluginScreenViewModel.installPlugin()
+        onHandlerEnded()
+    }
 
+
+    @Composable
+    fun executeViewModelBuilder(pluginID: String): RootLessStoreExecuteScreenViewModel {
+        val viewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(viewModelStoreOwner = viewModelStoreOwner, key = pluginID)
+        return viewModel
+    }
+
+    val currentExecuteViewModel =
+        if (currentDestination is ExecuteScreenKey) {
+            executeViewModelBuilder(currentDestination.pluginID)
+        }else{
+            executeViewModelBuilder("abc")
+        }
 
     Scaffold(
         topBar = {
             when(currentDestination){
-                "PluginScreen" -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
+                PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
                     pluginInfoCount = pluginInfoCount,
                     textButtonOnClick = {
                         pluginScreenViewModel.changeBadgeShowStatus()
                     },
                     scrollBehavior = scrollBehavior
                 )
-                "SourcesScreen" -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
+                SourceScreenKey -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
                     iconButtonOnClick = {
                         alertDialogStatus = !alertDialogStatus
                     },
@@ -137,29 +159,31 @@ fun RootlessStoreStartScreenContainer(
                     },
                     sourceCount = sourceCount
                 )
-                "ExecuteScreen" -> executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
-                    scrollBehavior = scrollBehavior,
-                    onExecuteScreenStopButtonClick = {
-                        executeScreenViewModel.abortPluginProcess()
-                    },
-                    onExecuteScreenBackButtonClick = {
-                        navController.popBackStack()
-                    },
-                    onExecuteScreenShareButtonClick = {
-                        val executeLog = executeScreenViewModel.exportExecuteLog()
-                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, executeLog)
+                is ExecuteScreenKey -> {
+                    executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
+                        scrollBehavior = scrollBehavior,
+                        onExecuteScreenStopButtonClick = {
+                            currentExecuteViewModel.abortPluginProcess(currentDestination.pluginID)
+                        },
+                        onExecuteScreenBackButtonClick = {
+                            navigationBackStack.removeLastOrNull()
+                        },
+                        onExecuteScreenShareButtonClick = {
+                            val executeLog = currentExecuteViewModel?.exportExecuteLog()
+                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                putExtra(Intent.EXTRA_TEXT, executeLog)
 
+                            }
+                            context.startActivity(Intent.createChooser(shareIntent, "Share"))
                         }
-                        context.startActivity(Intent.createChooser(shareIntent, "Share"))
-                    }
-                )
-                "MarketScreen" -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
+                    )
+                }
+                MarketScreenKey -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
                     sourceName = currentPluginSource!!.sourceName,
                     scrollBehavior = scrollBehavior
                 )
-                "ShellScreen" -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
+                ShellScreenKey -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
                     onTopIconClick = {
                         lazyColumnState.scrollToItem(0)
                     },
@@ -171,10 +195,10 @@ fun RootlessStoreStartScreenContainer(
                         shellScreenViewModel.cleanShellOutputList()
                     }
                 )
-                "SettingScreen" -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
+                SettingScreenKey -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
                     scrollBehavior = scrollBehavior
                 )
-                "ThirdPartyNotificationScreen" -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
+                ThirdPartyNotificationScreenKey -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
                     scrollBehavior = scrollBehavior,
                     onSaveButtonClick = {
                         thirdPartyNotificationScreenViewModel.onSubmitClick()
@@ -182,14 +206,23 @@ fun RootlessStoreStartScreenContainer(
                 )
                 else -> StartScreenNecessaryComponents.StartScreenTopAppBar(
                     scrollBehavior = scrollBehavior,
-                    onSettingClick = { navController.navigate("SettingScreen") }
+                    onSettingClick = {
+                        navigationBackStack.add(SettingScreenKey)
+                    }
                 )
             }
         },
-        bottomBar = { StartScreenNecessaryComponents.StartScreenNavigationBar(navController)},
+        bottomBar = {
+            StartScreenNecessaryComponents
+                .StartScreenNavigationBar(
+                    currentDestination = navigationBackStack.last() as RootlessNavigationKey,
+                ){ rootlessNavigationKey ->
+                    navigationBackStack.add(rootlessNavigationKey)
+                }
+        },
         floatingActionButton = {
             when(currentDestination){
-                "PluginScreen" -> {
+                PluginScreenKey -> {
                     PluginScreenNecessaryComponents.PluginScreenFloatingButton{
                         openDocumentLauncher.launch(
                             arrayOf(
@@ -198,9 +231,9 @@ fun RootlessStoreStartScreenContainer(
                         )
                     }
                 }
-                "HomeScreen" -> {
+                HomeScreenKey -> {
                     StartScreenNecessaryComponents.StartScreenFloatingButton {
-                        navController.navigate("ShellScreen")
+                        navigationBackStack.add(ShellScreenKey)
                     }
                 }
                 else -> {}
@@ -234,98 +267,95 @@ fun RootlessStoreStartScreenContainer(
         if (sharedEvent is RootlessStoreError){
             StartScreenErrorDialog(sourceScreenViewModel, sharedEvent)
         }
-        NavHost(
-            navController = navController,
-            startDestination = "HomeScreen"
-        ){
-            composable(
-                route = "HomeScreen"
-            ){
-                HomeScreen(
-                    contentPadding = contentPadding,
-                    onChipClick = {
-                        context.startActivity(Intent(context, ShizukuActivity::class.java))
+
+        NavDisplay(
+            backStack = navigationBackStack,
+            entryProvider = entryProvider {
+                entry<HomeScreenKey>{
+                    HomeScreen(
+                        contentPadding = contentPadding,
+                        onChipClick = {
+                            context.startActivity(Intent(context, ShizukuActivity::class.java))
+                        }
+                    )
+                }
+                entry<PluginScreenKey> {
+                    RootlessStorePluginScreenContainer(
+                        contentPadding = contentPadding,
+                        pluginScreenViewModel = pluginScreenViewModel,
+                        navigateToExecuteScreen = { pluginID, isExecutePlugin ->
+                            navigationBackStack
+                                .add(ExecuteScreenKey(pluginID,isExecutePlugin))
+                        },
+                        onAbortOnePlugin = { pluginID ->
+                            currentExecuteViewModel.abortPluginProcess(pluginID)
+                        }
+                    )
+                }
+                entry<SourceScreenKey> {
+                    SourceScreen(
+                        contentPadding = contentPadding,
+                        sourceScreenViewModel = sourceScreenViewModel
+                    ){ pluginSourceLocal ->
+                        marketScreenViewModel.updatePluginSourceUri(pluginSourceLocal.sourceRemoteEndpoint)
+                        marketScreenViewModel.updateCurrentPluginSource(pluginSourceLocal)
+                        navigationBackStack.add(MarketScreenKey)
                     }
-                )
-            }
-            composable(
-                route = "PluginScreen"
-            ){
-                RootlessStorePluginScreenContainer(
-                    contentPadding = contentPadding,
-                    navController = navController,
-                    pluginScreenViewModel = pluginScreenViewModel,
-                    executeScreenViewModel = executeScreenViewModel
-                )
-            }
-            composable(
-                route = "SourcesScreen"
-            ){
-                SourceScreen(
-                    contentPadding = contentPadding,
-                    sourceScreenViewModel = sourceScreenViewModel
-                ){ pluginSourceLocal ->
-                    marketScreenViewModel.updatePluginSourceUri(pluginSourceLocal.sourceRemoteEndpoint)
-                    marketScreenViewModel.updateCurrentPluginSource(pluginSourceLocal)
-                    navController.navigate("MarketScreen")
+                }
+                entry<MarketScreenKey> {
+                    MarketScreen(
+                        contentPadding = contentPadding,
+                        marketScreenViewModel = marketScreenViewModel
+                    ){
+                        navigationBackStack.add(PluginScreenKey)
+                    }
+                }
+                entry<ShellScreenKey> {
+                    ShellScreen(
+                        contentPaddingValues = contentPadding,
+                        shellScreenViewModel = shellScreenViewModel,
+                        lazyColumnState = lazyColumnState
+                    )
+                }
+                entry<ExecuteScreenKey> { executeScreenKey ->
+
+                    // The overall constructor of ExecuteScreenViewModel
+                    val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginID, viewModelStoreOwner = viewModelStoreOwner)
+
+                    val pluginID = executeScreenKey.pluginID
+                    val isExecutePlugin = executeScreenKey.isExecutePlugin
+
+                    Log.d("ExecuteScreenKey.pluginID",pluginID)
+                    Log.d("ExecuteScreenKey.isExecutePlugin",isExecutePlugin.toString())
+
+                    // Function debouncing
+                    LaunchedEffect(pluginID, isExecutePlugin) {
+                        if (isExecutePlugin) {
+                            executeScreenViewModel.executeOnePlugin(pluginID)
+                        }
+                    }
+
+                    ExecuteScreen(
+                        contentPaddingValues = contentPadding,
+                        executeScreenViewModel = executeScreenViewModel
+                    )
+                }
+                entry<SettingScreenKey> {
+                    SettingScreen(
+                        contentPaddingValues = contentPadding,
+                        onThirdPartyNotificationSettingClick = {
+                            navigationBackStack.add(ThirdPartyNotificationScreenKey)
+                        }
+                    )
+                }
+                entry<ThirdPartyNotificationScreenKey> {
+                    ThirdPartyNotificationScreen(
+                        contentPaddingValues = contentPadding,
+                        thirdPartyNotificationScreenViewModel = thirdPartyNotificationScreenViewModel
+                    )
                 }
             }
-            composable(
-                route = "MarketScreen"
-            ){
-                MarketScreen(
-                    contentPadding = contentPadding,
-                    marketScreenViewModel = marketScreenViewModel,
-                    navController = navController
-                )
-            }
-            composable(
-                route = "ShellScreen"
-            ){
-                ShellScreen(
-                    contentPaddingValues = contentPadding,
-                    shellScreenViewModel = shellScreenViewModel,
-                    lazyColumnState = lazyColumnState
-                )
-            }
-            composable(
-                route = "ExecuteScreen"
-            ){
-                ExecuteScreen(
-                    contentPaddingValues = contentPadding,
-                    executeScreenViewModel = executeScreenViewModel
-                )
-            }
-            composable(
-                route = "SettingScreen"
-            ){
-                SettingScreen(
-                    contentPaddingValues = contentPadding,
-                    onThirdPartyNotificationSettingClick = {
-                        navController.navigate("ThirdPartyNotificationScreen")
-                    }
-                )
-            }
-            composable(
-                route = "ThirdPartyNotificationScreen"
-            ){
-                ThirdPartyNotificationScreen(
-                    contentPaddingValues = contentPadding,
-                    thirdPartyNotificationScreenViewModel = thirdPartyNotificationScreenViewModel
-                )
-            }
-        }
+        )
+
     }
 }
-
-
-
-//@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-//@PreviewLightDark
-//@Composable
-//private fun _RootlessStoreStratScreenContainerPrevierer_(){
-//    RootlessStoreTheme() {
-//        RootlessStoreStartScreenContainer()
-//    }
-//}
