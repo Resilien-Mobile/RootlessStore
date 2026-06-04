@@ -22,26 +22,21 @@ class RootLessStoreExecuteScreenViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _executeLog = MutableStateFlow<List<ExecuteResult>>(emptyList())
-    private var _currentPlugin: PluginManifestRoom? by mutableStateOf(null)
     val executeLog = _executeLog.asStateFlow()
 
-    fun executeOnePlugin(pluginManifestRoom: PluginManifestRoom){
+    fun executeOnePlugin(pluginID: String){
         _executeLog.value = emptyList()
-        _currentPlugin = pluginManifestRoom
         viewModelScope.launch {
-            executeOnePluginUseCase(pluginManifestRoom)
+            executeOnePluginUseCase(pluginID)
                 .collect {
                     _executeLog.value += it
                 }
         }
     }
 
-    fun abortPluginProcess(pluginManifestRoom: PluginManifestRoom? = _currentPlugin) {
-        if (pluginManifestRoom != null){
-            viewModelScope.launch{
-                abortPluginProcessUseCase(pluginManifestRoom)
-                _currentPlugin = null
-            }
+    fun abortPluginProcess(pluginID: String) {
+        viewModelScope.launch{
+            abortPluginProcessUseCase(pluginID)
         }
     }
 

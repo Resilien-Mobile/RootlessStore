@@ -22,18 +22,21 @@ import com.baidaidai.rootless_store.components.pluginsScreen.PluginInfoContainer
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun RootlessStorePluginScreenContainer(
     contentPadding: PaddingValues,
-    navController: NavController,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
-    executeScreenViewModel: RootLessStoreExecuteScreenViewModel
+//    executeScreenViewModel: RootLessStoreExecuteScreenViewModel,
+    navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
+    onAbortOnePlugin:suspend (pluginID: String) -> Unit
 ){
     val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
     val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
@@ -76,9 +79,10 @@ fun RootlessStorePluginScreenContainer(
                 PluginScreen(
                     badgeShowState = badgeShowState,
                     renderingList = pluginInfoList,
-                    navController = navController,
-                    executeScreenViewModel = executeScreenViewModel,
-                    pluginScreenViewModel = pluginScreenViewModel
+//                    executeScreenViewModel = executeScreenViewModel,
+                    pluginScreenViewModel = pluginScreenViewModel,
+                    navigateToExecuteScreen = navigateToExecuteScreen,
+                    onAbortOnePlugin = onAbortOnePlugin
                 )
             }
             1 -> {
@@ -96,10 +100,13 @@ fun RootlessStorePluginScreenContainer(
 fun PluginScreen(
     badgeShowState: Boolean,
     renderingList: List<PluginManifestRoom>,
-    navController: NavController,
-    executeScreenViewModel: RootLessStoreExecuteScreenViewModel,
+//    executeScreenViewModel: RootLessStoreExecuteScreenViewModel,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
+    navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
+    onAbortOnePlugin: suspend (pluginID: String) -> Unit
 ){
+    val coroutineScope = rememberCoroutineScope()
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
@@ -119,10 +126,11 @@ fun PluginScreen(
                     )
 
                     if (!it.enabled){
-                        navController.navigate("ExecuteScreen")
-                        executeScreenViewModel.executeOnePlugin(it)
+                        navigateToExecuteScreen(it.pluginID,true)
                     }else{
-                        executeScreenViewModel.abortPluginProcess(it)
+                        coroutineScope.launch {
+                            onAbortOnePlugin(it.pluginID)
+                        }
                     }
                 },
                 onBadgeClick = {
@@ -130,7 +138,7 @@ fun PluginScreen(
                 },
                 onCardClick = {
                     if (it.enabled){
-                        navController.navigate("ExecuteScreen")
+                        navigateToExecuteScreen(it.pluginID,false)
                     }
                 },
                 badgeShowState = badgeShowState

@@ -17,7 +17,7 @@ interface PluginCoreRepository {
     suspend fun insertOneEnvironmentInfo(environmentInfoEntity: EnvironmentInfoEntity)
 
     // Read
-    suspend fun getOnePluginInfo(pluginID: String): PluginManifestLocal?
+    suspend fun getOnePluginInfo(pluginID: String): PluginManifestRoom?
     suspend fun getOneEnvironmentInfo(environmentID: String): EnvironmentManifestLocal?
     fun getWholePluginInfo(): Flow<List<PluginManifestRoom>?>
     fun getWholeEnvironmentInfo(): Flow<List<EnvironmentManifestRoom>?>
@@ -32,6 +32,7 @@ interface PluginCoreRepository {
     // Update
     suspend fun enablePluginByID(pluginID: String)
     suspend fun disablePluginByID(pluginID: String)
+    suspend fun disableAllPlugin()
     suspend fun enableEnvironmentByID(environmentID: String)
     suspend fun disableEnvironmentByID(environmentID: String)
 

@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+    alias(libs.plugins.jetbrains.kotlin.serialization)
+
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
@@ -10,7 +11,7 @@ plugins {
 android {
     namespace = "com.baidaidai.rootless_store"
     compileSdk {
-        version = release(36)
+        version = release(37)
     }
 
     signingConfigs {
@@ -27,7 +28,7 @@ android {
         minSdk = 26
         targetSdk = 28
         versionCode = 1
-        versionName = "1.3.2"
+        versionName = "1.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -115,4 +116,11 @@ dependencies {
     // Coil Libs
     implementation("io.coil-kt.coil3:coil-compose:3.0.4")
     implementation("io.coil-kt.coil3:coil-network-ktor2:3.0.4")
+
+    // Navigation3
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.material3.adaptive.navigation3)
+    implementation(libs.kotlinx.serialization.core)
 }

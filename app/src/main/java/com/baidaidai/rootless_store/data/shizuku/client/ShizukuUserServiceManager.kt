@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShizukuEndpointManager @Inject constructor() {
+class ShizukuUserServiceManager @Inject constructor() {
 
     var shizukuEndpoint: IShellService? = null
         private set
@@ -40,7 +40,9 @@ class ShizukuEndpointManager @Inject constructor() {
                 .daemon(true)
 
             Shizuku.bindUserService(args, connection)
-            return true
+            Log.d("ShizukuEndpointManager","Start to BindUserService")
+            Log.d("ShizukuEndpointManager","shizukuEndpoint != null: ${shizukuEndpoint != null}")
+            return shizukuEndpoint != null
         }catch (e: Throwable){
             Log.d("errorMessage",e.message.toString())
             Log.d("errorMessage","void")

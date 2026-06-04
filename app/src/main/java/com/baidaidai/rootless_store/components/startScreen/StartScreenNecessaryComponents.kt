@@ -10,13 +10,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.plugin.model.NavBarItemSpec
+import com.baidaidai.rootless_store.domain.navigation.`interface`.RootlessNavigationKey
+import com.baidaidai.rootless_store.domain.navigation.model.ExecuteScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.HomeScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.MarketScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.PluginScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.SettingScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.ShellScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.NavBarItemSpec
+import com.baidaidai.rootless_store.domain.navigation.model.SourceScreenKey
 
 object StartScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -45,46 +50,48 @@ object StartScreenNecessaryComponents {
 
     @Composable
     fun StartScreenNavigationBar(
-        navigatorController: NavController
+        currentDestination: RootlessNavigationKey,
+        onNavigate:(RootlessNavigationKey)-> Unit
     ) {
         val NavigationBarRenderingList = listOf(
             NavBarItemSpec(
                 number = 0,
                 pattern = painterResource(R.drawable.outline_home_24),
                 contentDeprecated = stringResource(R.string.start_screen_navigation_bar_home_label),
+                targetDestination = HomeScreenKey,
                 compatibleDestinationList = listOf(
-                    "HomeScreen",
-                    "ShellScreen",
-                    "SettingScreen"
+                    HomeScreenKey::class,
+                    ShellScreenKey::class,
+                    SettingScreenKey::class
                 )
             ),
             NavBarItemSpec(
                 number = 1,
                 pattern = painterResource(R.drawable.outline_extension_24),
                 contentDeprecated = stringResource(R.string.start_screen_navigation_bar_plugin_label),
+                targetDestination = PluginScreenKey,
                 compatibleDestinationList = listOf(
-                    "PluginScreen",
-                    "ExecuteScreen"
+                    PluginScreenKey::class,
+                    ExecuteScreenKey("abcde")::class
                 )
             ),
             NavBarItemSpec(
                 number = 2,
                 pattern = painterResource(R.drawable.outline_list_alt_24),
                 contentDeprecated = stringResource(R.string.start_screen_navigation_bar_sources_label),
+                targetDestination = SourceScreenKey,
                 compatibleDestinationList = listOf(
-                    "SourcesScreen",
-                    "MarketScreen"
+                    SourceScreenKey::class,
+                    MarketScreenKey::class
                 )
             )
         )
-        val navBackStackEntry by navigatorController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination?.route ?: "HomeScreen"
         NavigationBar {
             NavigationBarRenderingList.forEachIndexed { index, spec ->
                 NavigationBarItem(
-                    selected = currentDestination in spec.compatibleDestinationList,
+                    selected = currentDestination::class in spec.compatibleDestinationList,
                     onClick = {
-                        navigatorController.navigate(spec.compatibleDestinationList.first())
+                        onNavigate(spec.targetDestination)
                     },
                     icon = { Icon(spec.pattern, contentDescription = spec.contentDeprecated) },
                     label = { Text(spec.contentDeprecated) }

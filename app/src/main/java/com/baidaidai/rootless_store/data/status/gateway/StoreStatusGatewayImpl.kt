@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.client.ShizukuAuthManager
-import com.baidaidai.rootless_store.data.shizuku.client.ShizukuEndpointManager
+import com.baidaidai.rootless_store.data.shizuku.client.ShizukuUserServiceManager
 import com.baidaidai.rootless_store.data.status.datasource.AndroidAndAPIVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
@@ -38,7 +38,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val kernelStatusDataSource: KernelStatusDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
     private val androidAndAPIVersionDataSource: AndroidAndAPIVersionDataSource,
-    private val shizukuEndpointManager: ShizukuEndpointManager,
+    private val shizukuUserServiceManager: ShizukuUserServiceManager,
     @ApplicationContext context: Context
 ) {
 
@@ -74,30 +74,40 @@ class StoreStatusGatewayImpl @Inject constructor(
         return AndroidAndAPIStatus(androidVersion,apiVersion)
     }
 
-    fun getHosterOverallStatus(): HosterOverallStatus {
-        if (Shell.getShell().isRoot) {
-            Log.d("HosterOverallStatus", "Root")
-            return HosterOverallStatus.ROOTD
-        }
+    fun getHosterOverallStatus():Flow<HosterOverallStatus> = flow {
+        while (true){
+            val isRoot = Shell.getShell().isRoot
+            val isShizukuAvailable =
+                if (!isRoot && ShizukuAuthManager.pingShizuku() && ShizukuAuthManager.checkShizukuPermission()) {
+                    Log.d("HosterOverallStatus", "Attempt bind Shizuku Endpoint")
+                    val ok = shizukuUserServiceManager.bind()
+                    Log.d("HosterOverallStatus", "Bind result: $ok")
+                    ok
+                } else {
+                    false
+                }
 
-        if (ShizukuAuthManager.pingShizuku() && ShizukuAuthManager.checkShizukuPermission()) {
-            Log.d("HosterOverallStatus", "Attempt bind Shizuku Endpoint")
-            val ok = shizukuEndpointManager.bind()
-            Log.d("HosterOverallStatus", "Bind result: $ok")
-
-            if (ok) {
-                Log.d("HosterOverallStatus", "Shizuku")
-                return HosterOverallStatus.ADB
+            val status = when {
+                isRoot -> {
+                    Log.d("HosterOverallStatus", "Root")
+                    HosterOverallStatus.ROOTD
+                }
+                isShizukuAvailable -> {
+                    Log.d("HosterOverallStatus", "Shizuku")
+                    HosterOverallStatus.ADB
+                }
+                getSELinuxStatus() == SELinuxStatus.Permissive -> {
+                    Log.d("HosterOverallStatus", "Permissive")
+                    HosterOverallStatus.PERMISSIVE
+                }
+                else -> {
+                    Log.d("HosterOverallStatus", "Limited")
+                    HosterOverallStatus.LIMITED
+                }
             }
-            // bind 失败：什么都不 return，直接落下去继续判断
-        }
 
-        return if (getSELinuxStatus() == SELinuxStatus.Permissive) {
-            Log.d("HosterOverallStatus", "Permissive")
-            HosterOverallStatus.PERMISSIVE
-        } else {
-            Log.d("HosterOverallStatus", "Limited")
-            HosterOverallStatus.LIMITED
+            emit(status)
+            delay(3000)
         }
     }
 
@@ -106,7 +116,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     fun getShizukuStatus(): Boolean {
-        return shizukuEndpointManager.bind()
+        return shizukuUserServiceManager.bind()
     }
 
     fun getExecuteContextPreference(): Flow<HosterOverallStatus> {

@@ -5,7 +5,8 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
 
     // Add the ksp support
-    id("com.google.devtools.ksp") version "2.0.21-1.0.27" apply false
+    // Kotlin Symbol Processing
+    id("com.google.devtools.ksp") version "2.2.21-2.0.5" apply false
 
     // Add the Hilt(DI) support
     id("com.google.dagger.hilt.android") version "2.57.1" apply false

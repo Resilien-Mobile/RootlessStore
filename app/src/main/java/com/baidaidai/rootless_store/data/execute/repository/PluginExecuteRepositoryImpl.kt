@@ -3,9 +3,12 @@ package com.baidaidai.rootless_store.data.execute.repository
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusEntry
 import com.baidaidai.rootless_store.data.execute.gateway.PluginExecuteGatewayImpl
+import com.baidaidai.rootless_store.data.execute.mapper.PluginExecuteMapper.toPluginExecuteStatus
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
+import com.baidaidai.rootless_store.domain.execute.model.PluginExecuteStatus
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -16,6 +19,7 @@ class PluginExecuteRepositoryImpl @Inject constructor(
     private val rootlessStoreDatabase: RootlessStoreDatabase
 ) {
     private val pidRegex = Regex("""^\s*-\s*PID:(\d+)\s*$""")
+    private val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
 
     fun parsePid(line: String): Int? =
         pidRegex.find(line)?.groupValues?.get(1)?.toIntOrNull()
@@ -66,8 +70,7 @@ class PluginExecuteRepositoryImpl @Inject constructor(
                     val pid = parsePid(content)
                     if (pid != null) {
                         pidSaved = true
-                        val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
-                        val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
+                        val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid).copy(executeContext = HosterOverallStatus.ADB)
                         pluginExecuteStatusDao.insertOnePluginExecuteStatus(pluginExecuteStatusEntry) // 写 DAO
                 }
             }
@@ -85,5 +88,27 @@ class PluginExecuteRepositoryImpl @Inject constructor(
         val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
         val pidSaved = pluginExecuteStatusDao.getPluginExecutePIDByPluginID(pluginManifestRoom.pluginID)
         pluginExecuteGatewayImpl.abortPluginProcessByShizuku(pidSaved)
+    }
+
+    // Create
+    // Update
+    // Read
+    suspend fun getPluginExecuteStatusList(): List<PluginExecuteStatus> {
+        val pluginExecuteStatusEntityList = pluginExecuteStatusDao.getAllExecutingPluginEntity()
+        val pluginExecuteStatusList = pluginExecuteStatusEntityList
+            .map { pluginExecuteStatusEntry ->
+                pluginExecuteStatusEntry.toPluginExecuteStatus()
+            }
+        return pluginExecuteStatusList
+    }
+
+    // Delete
+    suspend fun deleteExecuteRecordByPluginID(pluginID: String) {
+        pluginExecuteStatusDao.deleteExecuteRecordByPluginID(pluginID)
+    }
+
+    suspend fun deleteAllExecuteRecord() {
+        val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
+        pluginExecuteStatusDao.deleteAllExecuteRecord()
     }
 }

@@ -158,8 +158,8 @@ class PluginExecuteGatewayImpl @Inject constructor(
         }
     }
 
-    fun abortPluginProcessByShizuku(pluginProcessPID: Int?){
-        if (pluginProcessPID != null){
+    fun abortPluginProcessByShizuku(pluginProcessPID: Int?): Boolean{
+        return if (pluginProcessPID != null){
             Log.d("exam","shizuku ${shizukuAdbRepositoryImpl.getShizukuEndpoint() == null}")
             Log.d("pid","$pluginProcessPID")
 
@@ -167,6 +167,10 @@ class PluginExecuteGatewayImpl @Inject constructor(
                 ?.kill(pluginProcessPID)
 
             Log.d("kill pid result",result.toString())
+
+            result != null
+        }else{
+            false
         }
     }
 }

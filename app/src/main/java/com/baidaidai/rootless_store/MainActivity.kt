@@ -13,6 +13,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +24,16 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import coil3.request.crossfade
+import com.baidaidai.rootless_store.domain.runtime.usecase.SetUpRuntimeUseCase
 import com.baidaidai.rootless_store.ui.screens.RootlessStoreStartScreenContainer
 import com.baidaidai.rootless_store.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import io.ktor.client.HttpClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.jvm.java
 
@@ -38,8 +44,13 @@ val RootLessStoreLocalContext = compositionLocalOf<Context>{
 @HiltAndroidApp
 class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
 
+
     @Inject
     lateinit var ktorClient: HttpClient
+    @Inject
+    lateinit var setUpRuntimeUseCase: SetUpRuntimeUseCase
+
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun newImageLoader(context: PlatformContext): ImageLoader {
         return ImageLoader.Builder(context)
@@ -52,6 +63,13 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
             }
             .crossfade(true)
             .build()
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        applicationScope.launch {
+            setUpRuntimeUseCase()
+        }
     }
 }
 

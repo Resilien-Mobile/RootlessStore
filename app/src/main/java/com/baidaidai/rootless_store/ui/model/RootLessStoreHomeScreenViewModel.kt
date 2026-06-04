@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.data.status.repository.GetOverallStatusUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.GetEnableAutoUpdatePreferenceUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
@@ -44,13 +45,13 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     getKernelStatusUseCase: GetKernelStatusUseCase,
     getAndroidAndAPIStatusUseCase: GetAndroidAndAPIStatusUseCase,
     getExecuteContextPreferenceUseCase: GetExecuteContextPreferenceUseCase,
-    private val getADBStatusUseCase: GetADBStatusUseCase,
     private val getRootStatusUseCase: GetRootStatusUseCase,
     private val getOverallStatusUseCase: GetOverallStatusUseCase,
     private val setExecuteContextPreferenceUseCase: SetExecuteContextPreferenceUseCase,
     private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
     private val getEnableAutoUpdatePreferenceUseCase: GetEnableAutoUpdatePreferenceUseCase,
-    private val getLatestVersionUseCase: GetLatestVersionUseCase
+    private val getLatestVersionUseCase: GetLatestVersionUseCase,
+    private val getADBShellStatusUseCase: GetADBShellStatusUseCase
 ) : ViewModel() {
 
     init {
@@ -117,8 +118,12 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
         initialValue = HosterOverallStatus.LIMITED
     )
 
-    private val _adbStatus = MutableStateFlow(getADBStatusUseCase())
-    val adbStatus = _adbStatus.asStateFlow()
+    val adbStatus = getADBShellStatusUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
     private val _rootStatus = MutableStateFlow(getRootStatusUseCase())
     val rootStatus = _rootStatus.asStateFlow()

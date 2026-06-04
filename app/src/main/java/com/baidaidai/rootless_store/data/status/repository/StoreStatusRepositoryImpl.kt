@@ -26,7 +26,7 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun getAndroidAndAPIStatus(): AndroidAndAPIStatus = storeStatusGatewayImpl.getAndroidAndAPIStatus()
 
-    fun getOverallStatus(): HosterOverallStatus = storeStatusGatewayImpl.getHosterOverallStatus()
+    fun getOverallStatus(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.getHosterOverallStatus()
 
     fun getRootStatus(): Boolean = storeStatusGatewayImpl.getRootStatus()
 
