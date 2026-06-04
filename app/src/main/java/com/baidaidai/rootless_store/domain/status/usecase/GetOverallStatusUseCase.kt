@@ -16,9 +16,7 @@ class GetOverallStatusUseCase @Inject constructor(
                 if (enableChooser) {
                     storeStatusRepositoryImpl.getExecuteContextPreference()
                 } else {
-                    flow {
-                        emit(storeStatusRepositoryImpl.getOverallStatus())
-                    }
+                    storeStatusRepositoryImpl.getOverallStatus()
                 }
             }
             .distinctUntilChanged()  // remove duplication, prevent jitter

@@ -31,7 +31,6 @@ class RootLessStoreShellScreenViewModel @Inject constructor(
 
     private var _shellOutputList = MutableStateFlow(emptyList<ShellResult>())
     private val _rootShellStatus = MutableStateFlow(getRootShellStatusUseCase())
-    private val _adbShellStatus = MutableStateFlow(getADBShellStatusUseCase())
     private var _lastCommandContent = MutableStateFlow("")
     val shellContextPreferences = getShellContextPreferencesUseCase()
         .stateIn(
@@ -41,7 +40,12 @@ class RootLessStoreShellScreenViewModel @Inject constructor(
         )
     val shellOutputList = _shellOutputList.asStateFlow()
     val rootShellStatus = _rootShellStatus.asStateFlow()
-    val adbShellStatus = _adbShellStatus.asStateFlow()
+    val adbShellStatus = getADBShellStatusUseCase()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
     val lastCommandContent = _lastCommandContent.asStateFlow()
 
     fun runCommand(shellCommandContainer: ShellCommandContainer){
