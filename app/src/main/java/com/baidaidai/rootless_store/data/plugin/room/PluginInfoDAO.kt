@@ -23,9 +23,12 @@ interface PluginInfoDAO {
     @Query("UPDATE pluginInfo SET enabled = :enabled WHERE pluginID = :pluginID")
     suspend fun updateEnabled(pluginID: String, enabled: Boolean)
 
+    @Query("UPDATE pluginInfo SET enabled = 0 WHERE enabled = 1")
+    suspend fun disableAllPlugin()
+
     // Read
     @Query("SELECT * FROM pluginInfo WHERE pluginID = :pluginID LIMIT 1")
-    suspend fun getOneEntirePluginInfoByPluginID(pluginID: String): PluginManifestLocal?
+    suspend fun getOneEntirePluginInfoByPluginID(pluginID: String): PluginManifestRoom?
 
     @Query(value = "SELECT * FROM pluginInfo")
     fun getEntirePluginManifest(): Flow<List<PluginManifestRoom>>

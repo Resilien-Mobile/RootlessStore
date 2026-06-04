@@ -52,6 +52,10 @@ class PluginCoreRepositoryImpl @Inject constructor(
         pluginInfoDAO.updateEnabled(pluginID = pluginID, enabled = false)
     }
 
+    override suspend fun disableAllPlugin() {
+        pluginInfoDAO.disableAllPlugin()
+    }
+
     override suspend fun enableEnvironmentByID(environmentID: String) {
         environmentInfoDAO.updateEnabled(environmentID = environmentID, enabled = true)
     }
@@ -63,7 +67,7 @@ class PluginCoreRepositoryImpl @Inject constructor(
     // READ
     override suspend fun getOnePluginInfo(
         pluginID: String
-    ): PluginManifestLocal? {
+    ): PluginManifestRoom? {
         val pluginInfo = pluginInfoDAO.getOneEntirePluginInfoByPluginID(pluginID)
         return pluginInfo
     }
