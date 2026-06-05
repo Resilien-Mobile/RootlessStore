@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RootLessStore" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar">
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/ic_launcher_background</item>
+    </style>
+</resources>
