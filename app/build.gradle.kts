@@ -28,7 +28,7 @@ android {
         minSdk = 26
         targetSdk = 28
         versionCode = 1
-        versionName = "1.4.0"
+        versionName = "1.4.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -60,6 +60,8 @@ android {
 }
 
 dependencies {
+
+    // Basic JitPack AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -74,7 +76,6 @@ dependencies {
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.runtime.saveable)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -84,15 +85,21 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.4.0")
     implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.5.0-alpha11")
-    implementation("com.github.topjohnwu.libsu:core:6.0.0")
-    implementation("dev.rikka.shizuku:api:13.1.5")
-    implementation("dev.rikka.shizuku:provider:13.1.5")
     implementation("androidx.compose.material:material-icons-core:1.7.6")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
-    implementation("androidx.navigation:navigation-compose:2.9.6")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
     implementation("androidx.datastore:datastore-preferences:1.2.1")
+    implementation("androidx.navigation:navigation-compose:2.9.6")
+    implementation("androidx.core:core-splashscreen:1.0.0") // Only MDC For SplashScreen
+
+    // Other
+    testImplementation(libs.junit)
+    implementation("com.github.topjohnwu.libsu:core:6.0.0")
+    implementation("dev.rikka.shizuku:api:13.1.5")
+    implementation("dev.rikka.shizuku:provider:13.1.5")
+    implementation("com.google.android.material:material:1.14.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // Room Libs
     implementation("androidx.room:room-runtime:2.8.4")

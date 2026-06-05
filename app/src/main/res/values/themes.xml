@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="Theme.RootLessStore" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.RootLessStore" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar"/>
 </resources>
