@@ -3,6 +3,8 @@
     <string name="home_screen_version_checker_container_icon_content_description">终端图标</string>
     <string name="home_screen_version_checker_container_headline">Rootless Store 正运行</string>
     <string name="home_screen_version_checker_container_supporting">版本 {version}</string>
+    <string name="home_screen_version_checker_container_new_version_icon_content_description">新版本</string>
+    <string name="home_screen_version_checker_container_new_version_headline">新版本可用</string>
 
     <string name="home_screen_hoster_status_board_icon_content_description">宿主状态</string>
     <string name="home_screen_hoster_status_board_title">宿主状态</string>
@@ -42,6 +44,8 @@
 
     <!-- Shell Screen Strings -->
     <string name="shell_screen_command_input_label">Shell 命令</string>
+    <string name="shell_screen_enable_run_as_label">启用 run-as</string>
+    <string name="shell_screen_jump_to_directory_label">跳转到目录</string>
 
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">插件页</string>
@@ -140,4 +144,21 @@
 
     <!-- Setting Screen: About -->
     <string name="setting_screen_about_rootless_store_headline">关于 Rootless Store</string>
+
+    <!-- Third Party Notification Screen: Top App Bar -->
+    <string name="third_party_notification_screen_top_app_bar_title">第三方通知</string>
+    <string name="third_party_notification_screen_top_app_bar_save_content_description">保存</string>
+
+    <!-- Third Party Notification Screen: Inputs -->
+    <string name="third_party_notification_screen_bark_api_key_input_label">Bark APP API Key</string>
+    <string name="third_party_notification_screen_api_key_visibility_content_description">显示 API Key</string>
+    <string name="third_party_notification_screen_api_key_visibility_off_content_description">隐藏 API Key</string>
+    <string name="third_party_notification_screen_notification_title_input_label">通知标题（可选）</string>
+    <string name="third_party_notification_screen_self_built_server_input_label">自建服务器（可选）</string>
+    <string name="third_party_notification_screen_clear_content_description">清除</string>
+
+    <!-- Third Party Notification Screen: Warning -->
+    <string name="third_party_notification_screen_warning_notification_headline">警告通知</string>
+    <string name="third_party_notification_screen_warning_notification_supporting">启用警告通知</string>
+    <string name="third_party_notification_screen_warning_notification_icon_content_description">警告</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
 
 object ThirdPartyNotificationScreenNecessaryComponents {
@@ -20,7 +21,7 @@ object ThirdPartyNotificationScreenNecessaryComponents {
     ) {
         CenterAlignedTopAppBar(
             title = {
-                Text("Third-Party Notification")
+                Text(stringResource(R.string.third_party_notification_screen_top_app_bar_title))
             },
             scrollBehavior = scrollBehavior,
             actions = {
@@ -29,7 +30,7 @@ object ThirdPartyNotificationScreenNecessaryComponents {
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_save),
-                        contentDescription = "save"
+                        contentDescription = stringResource(R.string.third_party_notification_screen_top_app_bar_save_content_description)
                     )
                 }
             }

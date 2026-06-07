@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.baidaidai.rootless_store.R
@@ -59,7 +60,7 @@ fun RootLessStoreVersionCheckerContainer(
             ){
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_bottom),
-                    contentDescription = "new version",
+                    contentDescription = stringResource(R.string.home_screen_version_checker_container_new_version_icon_content_description),
                     modifier = Modifier
                         .size(30.dp)
                 )
@@ -69,7 +70,7 @@ fun RootLessStoreVersionCheckerContainer(
                 )
                 Column{
                     Text(
-                        text = "New Version Available",
+                        text = stringResource(R.string.home_screen_version_checker_container_new_version_headline),
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(

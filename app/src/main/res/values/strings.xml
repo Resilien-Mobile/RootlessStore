@@ -7,6 +7,8 @@
     <string name="home_screen_version_checker_container_icon_content_description">Terminal Icon</string>
     <string name="home_screen_version_checker_container_headline">Rootless Store is Running</string>
     <string name="home_screen_version_checker_container_supporting">Version {version}</string>
+    <string name="home_screen_version_checker_container_new_version_icon_content_description">New version</string>
+    <string name="home_screen_version_checker_container_new_version_headline">New Version Available</string>
 
     <string name="home_screen_hoster_status_board_icon_content_description">Hoster Status</string>
     <string name="home_screen_hoster_status_board_title">Hoster Status</string>
@@ -46,6 +48,8 @@
 
     <!-- Shell Screen Strings -->
     <string name="shell_screen_command_input_label">Shell Command</string>
+    <string name="shell_screen_enable_run_as_label">Enable run-as</string>
+    <string name="shell_screen_jump_to_directory_label">Jump to directory</string>
 
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">Plugin</string>
@@ -144,4 +148,21 @@
 
     <!-- Setting Screen: About -->
     <string name="setting_screen_about_rootless_store_headline">About Rootless Store</string>
+
+    <!-- Third Party Notification Screen: Top App Bar -->
+    <string name="third_party_notification_screen_top_app_bar_title">Third-Party Notification</string>
+    <string name="third_party_notification_screen_top_app_bar_save_content_description">Save</string>
+
+    <!-- Third Party Notification Screen: Inputs -->
+    <string name="third_party_notification_screen_bark_api_key_input_label">Bark APP API Key</string>
+    <string name="third_party_notification_screen_api_key_visibility_content_description">Show API Key</string>
+    <string name="third_party_notification_screen_api_key_visibility_off_content_description">Hide API Key</string>
+    <string name="third_party_notification_screen_notification_title_input_label">Notification Title (Optional)</string>
+    <string name="third_party_notification_screen_self_built_server_input_label">Self-built server (Optional)</string>
+    <string name="third_party_notification_screen_clear_content_description">Clear</string>
+
+    <!-- Third Party Notification Screen: Warning -->
+    <string name="third_party_notification_screen_warning_notification_headline">Warning Notification</string>
+    <string name="third_party_notification_screen_warning_notification_supporting">Enable warning notification</string>
+    <string name="third_party_notification_screen_warning_notification_icon_content_description">Warning</string>
 </resources>

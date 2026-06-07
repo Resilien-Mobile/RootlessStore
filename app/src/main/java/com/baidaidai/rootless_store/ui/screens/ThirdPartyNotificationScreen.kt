@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -22,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -51,7 +50,7 @@ fun ThirdPartyNotificationScreen(
             value = thirdPartyNotificationScreenUiState.barkApiKey,
             onValueChange = thirdPartyNotificationScreenViewModel::onBarkApiKeyChanged,
             label = {
-                Text("Bark APP API KEY")
+                Text(stringResource(R.string.third_party_notification_screen_bark_api_key_input_label))
             },
             trailingIcon = {
                 IconButton(
@@ -62,12 +61,12 @@ fun ThirdPartyNotificationScreen(
                     if (apiKeyVisibility){
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_visibility),
-                            contentDescription = "visibility"
+                            contentDescription = stringResource(R.string.third_party_notification_screen_api_key_visibility_content_description)
                         )
                     }else{
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_visibility_off),
-                            contentDescription = "visibility off"
+                            contentDescription = stringResource(R.string.third_party_notification_screen_api_key_visibility_off_content_description)
                         )
                     }
                 }
@@ -84,7 +83,7 @@ fun ThirdPartyNotificationScreen(
             value = thirdPartyNotificationScreenUiState.notificationTitle ?: "",
             onValueChange = thirdPartyNotificationScreenViewModel::onNotificationTitleChanged,
             label = {
-                Text("Notification Title (Optional)")
+                Text(stringResource(R.string.third_party_notification_screen_notification_title_input_label))
             },
             trailingIcon = {
                 IconButton(
@@ -94,7 +93,7 @@ fun ThirdPartyNotificationScreen(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.outline_close_24),
-                        contentDescription = "clear"
+                        contentDescription = stringResource(R.string.third_party_notification_screen_clear_content_description)
                     )
                 }
             },
@@ -105,7 +104,7 @@ fun ThirdPartyNotificationScreen(
             value = thirdPartyNotificationScreenUiState.selfBuiltServer ?: "",
             onValueChange = thirdPartyNotificationScreenViewModel::onSelfBuiltServerChanged,
             label = {
-                Text("Self-built server (Optional)")
+                Text(stringResource(R.string.third_party_notification_screen_self_built_server_input_label))
             },
             trailingIcon = {
                 IconButton(
@@ -115,7 +114,7 @@ fun ThirdPartyNotificationScreen(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.outline_close_24),
-                        contentDescription = "clear"
+                        contentDescription = stringResource(R.string.third_party_notification_screen_clear_content_description)
                     )
                 }
             },
@@ -127,8 +126,8 @@ fun ThirdPartyNotificationScreen(
                 .clip(RoundedCornerShape(16.dp))
         ) {
             ThirdPartyNotificationScreenListItemDefault(
-                headlineText = "Warning Notification",
-                supportingText = "Enable warning notification",
+                headlineText = stringResource(R.string.third_party_notification_screen_warning_notification_headline),
+                supportingText = stringResource(R.string.third_party_notification_screen_warning_notification_supporting),
                 trailingContent = {
                     Switch(
                         checked = thirdPartyNotificationScreenUiState.warningNotificationEnabled,
@@ -138,7 +137,7 @@ fun ThirdPartyNotificationScreen(
                 leadingContent = {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_warning),
-                        contentDescription = "Warning"
+                        contentDescription = stringResource(R.string.third_party_notification_screen_warning_notification_icon_content_description)
                     )
                 }
             )
