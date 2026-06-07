@@ -13,6 +13,7 @@ coreKtx = "1.19.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
+kotlinMetadataJvm = "2.4.0"
 kotlinxSerializationJson = "1.11.0"
 ktorClientAndroid = "3.5.0"
 ktorClientContentNegotiation = "3.5.0"
@@ -91,6 +92,7 @@ androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", vers
 
 # Optional add-on Navigation 3 libraries
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
+kotlin-metadata-jvm = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlinMetadataJvm" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
 androidx-material3-adaptive-navigation3 = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation3", version.ref = "material3AdaptiveNav3" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
