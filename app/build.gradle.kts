@@ -115,7 +115,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     // Paging Libs
-    implementation("androidx.paging:paging-runtime:3.5.0")
+    implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose) // Optional
 
     // Ktor Libs
@@ -125,7 +125,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
 
     // Coil Libs
-    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation(libs.coil.compose)
     implementation(libs.coil.network.ktor2)
 
     // Navigation3
