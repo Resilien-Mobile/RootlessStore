@@ -1,6 +1,6 @@
 # Local version variables
 [versions]
-agp = "9.2.1"
+agp = "9.1.1"
 api = "13.1.5"
 coilNetworkKtor2 = "3.4.0"
 core = "6.0.0"
