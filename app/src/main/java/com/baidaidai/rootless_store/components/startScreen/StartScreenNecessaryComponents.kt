@@ -22,6 +22,7 @@ import com.baidaidai.rootless_store.domain.navigation.model.SettingScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ShellScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.NavBarItemSpec
 import com.baidaidai.rootless_store.domain.navigation.model.SourceScreenKey
+import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificationScreenKey
 
 object StartScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +63,8 @@ object StartScreenNecessaryComponents {
                 compatibleDestinationList = listOf(
                     HomeScreenKey::class,
                     ShellScreenKey::class,
-                    SettingScreenKey::class
+                    SettingScreenKey::class,
+                    ThirdPartyNotificationScreenKey::class
                 )
             ),
             NavBarItemSpec(

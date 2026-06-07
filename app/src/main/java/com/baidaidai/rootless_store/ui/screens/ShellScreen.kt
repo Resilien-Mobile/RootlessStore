@@ -169,7 +169,7 @@ fun ShellScreen(
                                     .fillMaxHeight()
                                     .weight(1f)
                             ){
-                                Text("Enable run-as")
+                                Text(stringResource(R.string.shell_screen_enable_run_as_label))
                                 Checkbox(
                                     checked = shellContextPreferences.enableRunAs,
                                     onCheckedChange = shellScreenViewModel::setEnableRunAs
@@ -184,7 +184,7 @@ fun ShellScreen(
                                     .fillMaxHeight()
                                     .weight(1f)
                             ){
-                                Text("Jump to directory")
+                                Text(stringResource(R.string.shell_screen_jump_to_directory_label))
                                 Checkbox(
                                     checked = shellContextPreferences.jumpToDirectory,
                                     onCheckedChange = shellScreenViewModel::setJumpToDirectory
@@ -353,15 +353,3 @@ fun ShellScreen(
         }
     }
 }
-
-//@Composable
-//@PreviewLightDark
-//private fun GreetingScreenPreview(){
-//    Scaffold(
-//        topBar = {
-//            ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar()
-//        }
-//    ) { contentPadding->
-//        ShellScreen(contentPaddingValues = contentPadding)
-//    }
-//}
