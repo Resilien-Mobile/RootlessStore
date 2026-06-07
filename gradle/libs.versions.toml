@@ -1,6 +1,6 @@
 # Local version variables
 [versions]
-agp = "9.1.1"
+agp = "9.0.0"
 kotlin = "2.2.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
