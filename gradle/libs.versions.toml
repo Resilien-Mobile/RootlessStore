@@ -1,27 +1,27 @@
 # Local version variables
 [versions]
-agp = "9.0.0"
-kotlin = "2.2.21"
-coreKtx = "1.17.0"
+agp = "9.0.1"
+kotlin = "2.4.0"
+coreKtx = "1.19.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.2"
-composeBom = "2024.09.00"
+activityCompose = "1.13.0"
+composeBom = "2026.05.01"
 material3 = "1.4.0"
 appcompat = "1.7.1"
 documentfile = "1.1.0"
-foundationLayout = "1.10.6"
-foundation = "1.11.1"
+foundationLayout = "1.11.2"
+foundation = "1.11.2"
 runtimeSaveable = "1.11.2"
 compileSdk = "37"
 
 # Navigation3
 nav3Core = "1.1.2"
-lifecycleViewmodelNav3 = "2.11.0-beta02"
-kotlinSerialization = "2.2.21"
-kotlinxSerializationCore = "1.9.0"
+lifecycleViewmodelNav3 = "2.11.0-rc01"
+kotlinSerialization = "2.4.0"
+kotlinxSerializationCore = "1.11.0"
 material3AdaptiveNav3 = "1.3.0-beta02"
 
 # project libraries
