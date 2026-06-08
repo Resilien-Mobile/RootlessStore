@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.components.pluginsScreen.PluginInfoContainerLocal
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
