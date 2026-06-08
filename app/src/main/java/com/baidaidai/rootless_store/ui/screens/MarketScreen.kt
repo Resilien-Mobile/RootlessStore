@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.baidaidai.rootless_store.components.marketScreen.PluginInfoContainerRemote
+import com.baidaidai.rootless_store.ui.components.marketScreen.PluginInfoContainerRemote
 import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 
 @Composable

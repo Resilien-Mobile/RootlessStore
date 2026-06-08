@@ -28,8 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.components.settingScreen.SettingScreenListItemDefault
-import com.baidaidai.rootless_store.components.settingScreen.SettingScreenListItemPermission
+import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenListItemDefault
+import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenListItemPermission
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSettingScreenViewModel
 import androidx.core.net.toUri
 

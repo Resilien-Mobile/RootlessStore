@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.components.shellScreen.ShellScreenNecessaryComponents
+import com.baidaidai.rootless_store.ui.components.shellScreen.ShellScreenNecessaryComponents
 import com.baidaidai.rootless_store.domain.execute.model.ResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
