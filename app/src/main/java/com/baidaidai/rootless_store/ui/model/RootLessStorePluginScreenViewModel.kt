@@ -3,18 +3,18 @@ package com.baidaidai.rootless_store.ui.model
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baidaidai.rootless_store.application.module.InstallModuleUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.usecase.GetWholePluginInfoUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.InstallOnePluginUseCase
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.application.plugin.GetWholePluginInfoUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.usecase.AbortPluginProcessUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.UninstallOnePluginUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.GetPluginInfoCountUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.GetWholeEnvironmentInfoUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.SetEnvironmentEnabledUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.SetPluginEnabledUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.UninstallOneEnvironmentUseCase
+import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
+import com.baidaidai.rootless_store.application.plugin.UninstallOnePluginUseCase
+import com.baidaidai.rootless_store.application.plugin.GetPluginInfoCountUseCase
+import com.baidaidai.rootless_store.application.environment.GetWholeEnvironmentInfoUseCase
+import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnabledUseCase
+import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
+import com.baidaidai.rootless_store.application.environment.UninstallOneEnvironmentUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +31,7 @@ import kotlin.collections.emptyList
 class RootLessStorePluginScreenViewModel @Inject constructor(
     private val getWholePluginInfoUseCase: GetWholePluginInfoUseCase,
     private val getWholeEnvironmentInfoUseCase: GetWholeEnvironmentInfoUseCase,
-    private val installOnePluginUseCase: InstallOnePluginUseCase,
+    private val installModuleUseCase: InstallModuleUseCase,
     private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
     private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
     private val uninstallOnePluginUseCase: UninstallOnePluginUseCase,
@@ -74,7 +74,7 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
 
     fun installPlugin(){
         viewModelScope.launch {
-            val result = installOnePluginUseCase(fileURI.value)
+            val result = installModuleUseCase(fileURI.value)
             if (result is PluginError){
                 _pluginEvent.emit(result)
             }else{
@@ -123,12 +123,6 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     fun changeBadgeShowStatus(){
         _badgeShowState.update { !it }
     }
-
-//    private fun getAllPlugins() {
-//        return viewModelScope.launch{
-//            return@launch  = getWholePluginInfoUseCase().stateIn()
-//        }.await()
-//    }
 
 
 }

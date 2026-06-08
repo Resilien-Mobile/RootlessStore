@@ -25,7 +25,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenListItemDefault
+import com.baidaidai.rootless_store.ui.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenListItemDefault
 import com.baidaidai.rootless_store.ui.model.RootLessStoreThirdPartyNotificationScreenViewModel
 
 @Composable

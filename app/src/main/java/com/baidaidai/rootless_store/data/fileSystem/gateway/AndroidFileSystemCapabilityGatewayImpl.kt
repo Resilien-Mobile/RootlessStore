@@ -3,8 +3,10 @@ package com.baidaidai.rootless_store.data.fileSystem.gateway
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
@@ -397,17 +399,17 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Chmod FS Operator
-    fun setPluginEntryPointExecutable(pluginManifestRoom: PluginManifestRoom): Boolean{
+    fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Boolean{
         val pluginRootDirectory = getInternalPluginRootDirectory()
-        val pluginPackageName = pluginManifestRoom.pluginPackageName
-        val pluginEntryPoint = pluginManifestRoom.entryPoint
+        val pluginPackageName = pluginManifest.pluginPackageName
+        val pluginEntryPoint = pluginManifest.entryPoint
         val _child = "$pluginPackageName/$pluginEntryPoint"
         return File(pluginRootDirectory,_child).setExecutable(true)
     }
-    fun setEnvironmentEntryPointExecutable(environmentManifestRoom: EnvironmentManifestRoom): Boolean{
+    fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean{
         val environmentRootDirectory = getInternalEnvironmentRootDirectory()
-        val environmentPackageName = environmentManifestRoom.environmentPackageName
-        val environmentEntryPoint = environmentManifestRoom.entryPoint
+        val environmentPackageName = environmentManifest.environmentPackageName
+        val environmentEntryPoint = environmentManifest.entryPoint
         val _child = "$environmentPackageName/$environmentEntryPoint"
         return File(environmentRootDirectory,_child).setExecutable(true)
     }

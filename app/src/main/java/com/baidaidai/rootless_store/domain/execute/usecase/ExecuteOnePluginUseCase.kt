@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.domain.execute.usecase
 
 import com.baidaidai.rootless_store.data.execute.repository.PluginExecuteRepositoryImpl
-import com.baidaidai.rootless_store.data.plugin.repository.PluginCoreRepositoryImpl
+import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRepositoryImpl
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class ExecuteOnePluginUseCase @Inject constructor(
     private val pluginExecuteRepositoryImpl: PluginExecuteRepositoryImpl,
-    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl,
+    private val pluginRepositoryImpl: PluginRepositoryImpl,
     val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
     val settingPreferenceRepositoryImpl: SettingPreferenceRepositoryImpl
 ) {
@@ -48,7 +48,7 @@ class ExecuteOnePluginUseCase @Inject constructor(
     suspend operator fun invoke(
         pluginID: String
     ): Flow<ExecuteResult> {
-        val pluginManifestRoom = pluginCoreRepositoryImpl.getOnePluginInfo(pluginID)!!
+        val pluginManifestRoom = pluginRepositoryImpl.getOnePluginInfo(pluginID)!!
 
         val hosterOverallStatus = storeStatusRepositoryImpl.getOverallStatus().first()
         val enableChooser = storeStatusRepositoryImpl

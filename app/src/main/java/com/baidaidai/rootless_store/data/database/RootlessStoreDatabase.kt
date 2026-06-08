@@ -8,10 +8,10 @@ import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusDAO
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusEntry
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceDAO
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceEntity
-import com.baidaidai.rootless_store.data.plugin.room.EnvironmentInfoDAO
-import com.baidaidai.rootless_store.data.plugin.room.EnvironmentInfoEntity
-import com.baidaidai.rootless_store.data.plugin.room.PluginInfoDAO
-import com.baidaidai.rootless_store.data.plugin.room.PluginInfoEntity
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentInfoDAO
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentInfoEntity
+import com.baidaidai.rootless_store.data.plugin.database.PluginInfoDAO
+import com.baidaidai.rootless_store.data.plugin.database.PluginInfoEntity
 import com.baidaidai.rootless_store.data.source.database.PluginSourceDAO
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 

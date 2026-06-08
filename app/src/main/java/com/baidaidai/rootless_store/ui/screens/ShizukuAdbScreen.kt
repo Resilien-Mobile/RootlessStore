@@ -25,9 +25,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenActionCard
-import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModelSheet
-import com.baidaidai.rootless_store.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenOverviewCard
+import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenActionCard
+import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModelSheet
+import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenOverviewCard
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 import kotlinx.coroutines.delay
 
@@ -125,14 +125,3 @@ fun ShizukuAdbScreen(
         }
     }
 }
-
-//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-//@Composable
-//@PreviewLightDark
-//private fun _ShizukuAdbScreenPreview_(){
-//    RootlessStoreTheme {
-//        Scaffold { contentPadding ->
-//            ShizukuAdbScreen(contentPaddingValues = contentPadding)
-//        }
-//    }
-//}
