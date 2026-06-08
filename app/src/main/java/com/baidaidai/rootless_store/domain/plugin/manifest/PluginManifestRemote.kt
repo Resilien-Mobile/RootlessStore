@@ -38,20 +38,4 @@ data class PluginManifestRemote(
             pluginRunModel = PluginRunModel.OneTime
         )
     }
-    fun toManifestRoom(): PluginManifestRoom{
-        return PluginManifestRoom(
-            enabled = false,
-            state = PluginState.Great,
-            source = PluginSource.Official,
-            installedVersion = installedVersion,
-            pluginRenderingName = pluginRenderingName,
-            pluginPackageName = pluginPackageName,
-            pluginID = pluginID,
-            iconURI = iconURI,
-            author = author,
-            pluginDescription = pluginDescription,
-            requiredEnvironment = requiredEnvironment,
-            entryPoint = entryPoint
-        )
-    }
 }

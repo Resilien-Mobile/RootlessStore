@@ -7,26 +7,24 @@ import com.baidaidai.rootless_store.data.market.mapper.PluginMarketMapper.toPlug
 import com.baidaidai.rootless_store.data.market.remote.api.PluginMarketAPI
 import com.baidaidai.rootless_store.data.market.remote.dto.PluginPageResponseDTO
 import com.baidaidai.rootless_store.domain.market.error.MarketError
-import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
+import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import io.ktor.client.call.body
-import kotlinx.serialization.json.Json
 
 class PluginPagingSource (
     private val api: PluginMarketAPI,
     private val pluginSourceUri: String,
     private val onError: suspend (MarketError)-> Unit
-) : PagingSource<Int, RootlessStoreManifestCollection>() {
+) : PagingSource<Int, ModuleManifestCollection>() {
 
     // Core Suspend Method for Paging fetching Data
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RootlessStoreManifestCollection> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ModuleManifestCollection> {
         try{
+
+            // Initial the page key curser
             val page = params.key ?: 0
 
-            val response = api.getPlugins(
-                pageNumber = page,
-                pluginSourceUri
-            )
-
+            // HTTP Request
+            val response = api.getPlugins(pageNumber = page, pluginSourceUri)
             val pluginPageResponseDTO = response.body<PluginPageResponseDTO>()
             val pluginPageResponse = pluginPageResponseDTO.toPluginPageResponse()
 
@@ -37,6 +35,7 @@ class PluginPagingSource (
                 prevKey = if (page == 0) null else page - 1,
                 nextKey = nextKey
             )
+
         }catch (error: Throwable){
             onError(
                 MarketError(
@@ -48,7 +47,7 @@ class PluginPagingSource (
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, RootlessStoreManifestCollection>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, ModuleManifestCollection>): Int? {
         TODO("Not yet implemented")
     }
 }
