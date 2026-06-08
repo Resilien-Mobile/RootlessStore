@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -30,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SplitButtonDefaults
 import androidx.compose.material3.SplitButtonLayout
 import androidx.compose.material3.Text
@@ -45,19 +43,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.ui.components.shellScreen.ShellScreenNecessaryComponents
 import com.baidaidai.rootless_store.domain.execute.model.ResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.stringResource
-import com.topjohnwu.superuser.Shell
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable

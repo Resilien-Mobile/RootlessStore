@@ -125,14 +125,3 @@ fun ShizukuAdbScreen(
         }
     }
 }
-
-//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-//@Composable
-//@PreviewLightDark
-//private fun _ShizukuAdbScreenPreview_(){
-//    RootlessStoreTheme {
-//        Scaffold { contentPadding ->
-//            ShizukuAdbScreen(contentPaddingValues = contentPadding)
-//        }
-//    }
-//}
