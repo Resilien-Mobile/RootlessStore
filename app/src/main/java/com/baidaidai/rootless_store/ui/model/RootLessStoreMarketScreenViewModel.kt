@@ -7,10 +7,10 @@ import androidx.paging.cachedIn
 import com.baidaidai.rootless_store.domain.market.error.MarketError
 import com.baidaidai.rootless_store.domain.market.usecase.GetRemotePluginListUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRemote
-import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
-import com.baidaidai.rootless_store.domain.plugin.usecase.InstallEnvironmentFromMarketUseCase
-import com.baidaidai.rootless_store.domain.plugin.usecase.InstallPluginFromMarketUseCase
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
+import com.baidaidai.rootless_store.application.environment.InstallEnvironmentFromMarketUseCase
+import com.baidaidai.rootless_store.application.plugin.InstallPluginFromMarketUseCase
+import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,15 +53,17 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
     val currentPluginSource = _currentPluginSourceInfo.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val remotePluginList = _pluginSourceUri
+    val remoteModuleList = _pluginSourceUri
         .filterNotNull()
-        .flatMapLatest { uri ->
-            Log.d("null1",uri)
-            getRemotePluginListUseCase(
-                pluginSourceUri = uri
-            ){ MarketError ->
-                _marketEvent.emit(MarketError)
+        .flatMapLatest { pluginSourceUri ->  // Use the latest One
+
+            Log.d("RootlessStoreMarketScreenViewModel._pluginSourceUri",pluginSourceUri)
+
+            getRemotePluginListUseCase(pluginSourceUri){ marketError ->
+                // Error Callback Lambda
+                _marketEvent.emit(marketError)
             }
+
         }
         // cachedIn 一般放最后，缓存 PagingData 以及其上游变换结果
         .cachedIn(viewModelScope)
@@ -88,14 +90,14 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
 
     }
 
-    fun installPlugin(manifest: RootlessStoreManifestCollection){
+    fun installModule(moduleManifest: ModuleManifestCollection){
         viewModelScope.launch {
-            when(manifest){
+            when(moduleManifest){
                 is PluginManifestRemote -> {
-                    installPluginFromMarketUseCase(manifest.pluginURI,manifest)
+                    installPluginFromMarketUseCase(moduleManifest.pluginURI,moduleManifest)
                 }
                 is EnvironmentManifestRemote -> {
-                    installEnvironmentFromMarketUseCase(manifest.environmentURI,manifest)
+                    installEnvironmentFromMarketUseCase(moduleManifest.environmentURI,moduleManifest)
                 }
                 else -> Unit
             }

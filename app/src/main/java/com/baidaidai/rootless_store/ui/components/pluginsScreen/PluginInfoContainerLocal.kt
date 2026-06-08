@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.core.i18n.icuString
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 
 @Composable

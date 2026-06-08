@@ -25,16 +25,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifest
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRemote
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
+import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
-import com.baidaidai.rootless_store.domain.plugin.manifest.RootlessStoreManifestCollection
 import com.baidaidai.rootless_store.domain.plugin.model.PluginType
 
 @Composable
 fun PluginInfoContainerRemote(
-    manifest: RootlessStoreManifestCollection,
+    manifest: ModuleManifestCollection,
     modifier: Modifier = Modifier,
     onClick: ()-> Unit
 ){
