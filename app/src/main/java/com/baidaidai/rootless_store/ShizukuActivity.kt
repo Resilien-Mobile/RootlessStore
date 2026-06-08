@@ -47,7 +47,10 @@ class ShizukuActivity: ComponentActivity() {
                     }
                 ) { contentPadding ->
                     if (sharedEvent is RootlessStoreError){
-                        StartScreenErrorDialog(shizukuAdbScreenViewModel, sharedEvent)
+                        StartScreenErrorDialog(
+                            shizukuAdbScreenViewModel,
+                            sharedEvent
+                        )
                     }
                     ShizukuAdbScreen(
                         contentPaddingValues = contentPadding,

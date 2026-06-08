@@ -18,11 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAlertDialog
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenListItem
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAlertDialog
 import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAuthenticationModalBottomSheet
+import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenListItem
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -84,32 +84,4 @@ fun SourceScreen(
             }
         }
     }
-
-
-//    val renderingList = sourcesScreenViewModel.plugins.collectAsLazyPagingItems()
-//    LazyColumn(
-//        modifier = Modifier
-//            .padding(contentPadding)
-//            .fillMaxSize()
-//            .padding(vertical = 15.dp)
-//            .padding(horizontal = 15.dp),
-//        verticalArrangement = Arrangement.spacedBy(12.dp)
-//    ) {
-//        items(
-//            count = renderingList.itemCount
-//        ){ plugin ->
-//            val items = renderingList[plugin]
-//            PluginInfoContainer(pluginManifest = items!!){}
-//        }
-//    }
 }
-
-//@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-//@Composable
-//@PreviewLightDark
-//private fun _SourcesScreenPreview_(){
-//    ListItem(
-//        headlineContent = { Text("1") },
-//        supportingContent = {Text("2")}
-//    )
-//}

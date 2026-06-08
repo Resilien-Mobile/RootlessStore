@@ -18,16 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.navigation.NavController
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
 import kotlinx.coroutines.launch
 
 @Composable
