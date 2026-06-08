@@ -1,0 +1,3 @@
+package com.baidaidai.rootless_store.domain.module.model
+
+interface ModuleManifestCollection

@@ -1,8 +1,9 @@
 package com.baidaidai.rootless_store.data.execute.gateway
 
 import android.util.Log
+import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.data.monitor.ProcessMonitor
-import com.baidaidai.rootless_store.data.plugin.repository.PluginCoreRepositoryImpl
+import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
@@ -19,7 +20,7 @@ import javax.inject.Inject
 
 class PluginExecuteGatewayImpl @Inject constructor(
     private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
-    private val pluginCoreRepositoryImpl: PluginCoreRepositoryImpl,
+    private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val processMonitor: ProcessMonitor
 ) {
 
@@ -53,9 +54,9 @@ class PluginExecuteGatewayImpl @Inject constructor(
         val oldPATH = environment["PATH"].orEmpty()
         val oldLDPATH = environment["LD_LIBRARY_PATH"].orEmpty()
 
-        val environmentPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentPath()
-        val environmentLDPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentLDPATH()
-        val environmentConfig = pluginCoreRepositoryImpl.getAvailableEnvironmentConfig()
+        val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
+        val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
+        val environmentConfig = environmentRepositoryImpl.getAvailableEnvironmentConfig()
 
         environment["PATH"] = "$environmentPATH:$oldPATH"
         environment["LD_LIBRARY_PATH"] = "$environmentLDPATH:$oldLDPATH"
@@ -130,10 +131,10 @@ class PluginExecuteGatewayImpl @Inject constructor(
 
                 Log.d("exam",(shizukuAdbRepositoryImpl.getShizukuEndpoint()==null).toString())
 
-                val environmentPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentPath()
-                val environmentLDPATH = pluginCoreRepositoryImpl.getAvailableEnvironmentLDPATH()
-                val environmentConfigKeyList = pluginCoreRepositoryImpl.getEnvironmentConfigKeyList()
-                val environmentConfigValueList = pluginCoreRepositoryImpl.getEnvironmentConfigValueList()
+                val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
+                val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
+                val environmentConfigKeyList = environmentRepositoryImpl.getEnvironmentConfigKeyList()
+                val environmentConfigValueList = environmentRepositoryImpl.getEnvironmentConfigValueList()
 
                 shizukuAdbRepositoryImpl.getShizukuEndpoint()
                     ?.exec(

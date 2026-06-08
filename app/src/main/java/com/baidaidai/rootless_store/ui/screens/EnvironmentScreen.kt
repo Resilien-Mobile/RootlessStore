@@ -8,8 +8,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.components.pluginsScreen.PluginInfoContainerLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 
 @Composable

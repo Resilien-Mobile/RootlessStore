@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.baidaidai.rootless_store.components.marketScreen.PluginInfoContainerRemote
+import com.baidaidai.rootless_store.ui.components.marketScreen.PluginInfoContainerRemote
 import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
 
 @Composable
@@ -21,7 +21,7 @@ fun MarketScreen(
 
     val _contentPadding = PaddingValues(vertical = 15.dp)
 
-    val remotePluginList = marketScreenViewModel.remotePluginList.collectAsLazyPagingItems()
+    val remoteModuleList = marketScreenViewModel.remoteModuleList.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = Modifier
@@ -31,15 +31,17 @@ fun MarketScreen(
         contentPadding = _contentPadding
     ) {
         items(
-            count = remotePluginList.itemCount
-        ){ pluginIndex ->
-            val remotePluginListContent = remotePluginList[pluginIndex]
+            count = remoteModuleList.itemCount
+        ){ moduleIndex ->
+
+            val remoteModuleListContent = remoteModuleList[moduleIndex]
             PluginInfoContainerRemote(
-                manifest = remotePluginListContent!!
+                manifest = remoteModuleListContent!!
             ) {
-                marketScreenViewModel.installPlugin(remotePluginListContent)
+                marketScreenViewModel.installModule(remoteModuleListContent)
                 navigateToPluginScreen()
             }
+
         }
     }
 }

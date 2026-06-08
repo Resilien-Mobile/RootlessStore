@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.baidaidai.rootless_store.components.startScreen.StartScreenErrorDialog
+import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenErrorDialog
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 import com.baidaidai.rootless_store.ui.screens.ShizukuAdbScreen
@@ -47,7 +47,10 @@ class ShizukuActivity: ComponentActivity() {
                     }
                 ) { contentPadding ->
                     if (sharedEvent is RootlessStoreError){
-                        StartScreenErrorDialog(shizukuAdbScreenViewModel, sharedEvent)
+                        StartScreenErrorDialog(
+                            shizukuAdbScreenViewModel,
+                            sharedEvent
+                        )
                     }
                     ShizukuAdbScreen(
                         contentPaddingValues = contentPadding,

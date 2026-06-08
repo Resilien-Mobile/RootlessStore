@@ -1,3 +1,0 @@
-package com.baidaidai.rootless_store.domain.plugin.manifest
-
-sealed interface RootlessStoreManifestCollection

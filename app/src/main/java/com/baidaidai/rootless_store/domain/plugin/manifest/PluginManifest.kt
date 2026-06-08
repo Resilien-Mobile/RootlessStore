@@ -1,11 +1,12 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
+import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
-sealed interface PluginManifest: RootlessStoreManifestCollection {
+sealed interface PluginManifest: ModuleManifestCollection {
 
     // ─────────────────────────────────────────────────────────────
     // Plugin Basic Infos
