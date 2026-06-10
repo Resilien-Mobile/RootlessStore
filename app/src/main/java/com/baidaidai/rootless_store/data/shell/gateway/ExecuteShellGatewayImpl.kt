@@ -1,10 +1,8 @@
 package com.baidaidai.rootless_store.data.shell.gateway
 
 import android.util.Log
-import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.shell.repository.ShellPreferencesRepositoryImpl
+import com.baidaidai.rootless_store.data.shell.provider.ShellExecuteContextProviderImpl
 import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ResultTag
@@ -13,47 +11,51 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 import kotlin.text.orEmpty
 
 class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
-    private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
-    private val shellPreferencesRepositoryImpl: ShellPreferencesRepositoryImpl
+    private val shellExecuteContextProviderImpl: ShellExecuteContextProviderImpl
 ) {
 
+    private var currentDirectory: String = "/sdcard"
+
     fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+        var commandContent = commandContent
 
-        val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
+        val appShellContextConfig = shellExecuteContextProviderImpl.getAppShellContext()
 
-        val changeDirectory = if (preferences.jumpToDirectory) "cd ${androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath()} &&" else ""
+        if(appShellContextConfig.jumpToDirectory){
+            changeDirectoryHandler(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
+        }
+        if(commandContent.startsWith("cd ")){
+            val targetDirectory = commandContent.removePrefix("cd ").trim()
+            changeDirectoryHandler(targetDirectory)
+            commandContent = "exit"
+        }
 
-        val processBuilder = ProcessBuilder("sh", "-c", "$changeDirectory$commandContent")
+        val appShellProcessBuilder = ProcessBuilder("sh","-c", "${changeDirectoryHandler()}$commandContent")
 
-        val environment = processBuilder.environment()
-
+        val environment = appShellProcessBuilder.environment()
         val oldPATH = environment["PATH"].orEmpty()
         val oldLDPATH = environment["LD_LIBRARY_PATH"].orEmpty()
 
-        val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
-        val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
-        val environmentConfig = environmentRepositoryImpl.getAvailableEnvironmentConfig()
+        environment["PATH"] = "${appShellContextConfig.environmentPATH}:$oldPATH"
+        environment["LD_LIBRARY_PATH"] = "${appShellContextConfig.environmentLDPATH}:$oldLDPATH"
+        environment.putAll(appShellContextConfig.environmentConfig)
 
-        environment["PATH"] = "$environmentPATH:$oldPATH"
-        environment["LD_LIBRARY_PATH"] = "$environmentLDPATH:$oldLDPATH"
-        environment.putAll(environmentConfig)
+        Log.d("executePluginEntryPoint","environmentPATH: ${appShellContextConfig.environmentPATH}")
+        Log.d("executePluginEntryPoint","environmentLDPATH: ${appShellContextConfig.environmentLDPATH}")
 
-        Log.d("executePluginEntryPoint","environmentPATH: $environmentPATH")
-        Log.d("executePluginEntryPoint","environmentLDPATH: $environmentLDPATH")
-
-        val process = processBuilder.start()
+        val appShellProcess = appShellProcessBuilder.start()
 
         launch(Dispatchers.IO) {
-            process.inputStream.bufferedReader().useLines { lines ->
+            appShellProcess.inputStream.bufferedReader().useLines { lines ->
                 lines.forEach { result ->
                     send(
                         ShellResult(
@@ -64,7 +66,9 @@ class ExecuteShellGatewayImpl @Inject constructor(
                     )
                 }
             }
-            process.errorStream.bufferedReader().useLines { lines ->
+        }
+        launch(Dispatchers.IO){
+            appShellProcess.errorStream.bufferedReader().useLines { lines ->
                 lines.forEach { error ->
                     send(
                         ShellResult(
@@ -83,8 +87,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     fun runCommandByADBShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
-        val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
-        val useRunAs = preferences.enableRunAs
+        val adbShellContextConfig = shellExecuteContextProviderImpl.getAdbShellContext()
 
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
@@ -111,20 +114,15 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
             Log.d("exam",(shizukuAdbRepositoryImpl.getShizukuEndpoint()==null).toString())
 
-            val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
-            val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
-            val environmentConfigKeyList = environmentRepositoryImpl.getEnvironmentConfigKeyList()
-            val environmentConfigValueList = environmentRepositoryImpl.getEnvironmentConfigValueList()
-
             shizukuAdbRepositoryImpl.getShizukuEndpoint()
                 ?.command(
                     commandContent,
-                    environmentPATH,
-                    environmentLDPATH,
-                    environmentConfigKeyList,
-                    environmentConfigValueList,
+                    adbShellContextConfig.environmentPATH,
+                    adbShellContextConfig.environmentLDPATH,
+                    adbShellContextConfig.environmentConfigKeyList,
+                    adbShellContextConfig.environmentConfigValueList,
                     callback,
-                    useRunAs
+                    adbShellContextConfig.useRunAs
                 )
         }
         awaitClose {  }
@@ -161,5 +159,20 @@ class ExecuteShellGatewayImpl @Inject constructor(
         awaitClose {}
 
     }.flowOn(Dispatchers.IO)
+
+    private fun changeDirectoryHandler(directory: String = currentDirectory): String{
+
+        currentDirectory = when {
+            directory.startsWith("/") -> {
+                File(directory).canonicalPath
+            }
+            else -> {
+                File(currentDirectory, directory).canonicalPath
+            }
+        }
+
+        return "cd $currentDirectory &&"
+
+    }
 
 }

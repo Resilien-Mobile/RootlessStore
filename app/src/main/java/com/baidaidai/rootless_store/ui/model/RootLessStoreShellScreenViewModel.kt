@@ -8,7 +8,7 @@ import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetShellContextPreferencesUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.RunCommandUseCase
+import com.baidaidai.rootless_store.application.shell.RunCommandUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.SetShellEnableRunAsUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.SetShellJumpToDirectoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
