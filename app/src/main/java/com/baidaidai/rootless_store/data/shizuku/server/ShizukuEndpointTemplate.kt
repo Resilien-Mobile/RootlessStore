@@ -6,8 +6,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.io.File
 
 internal class ShizukuEndpointTemplate : IShellService.Stub() {
+
+    private var currentDirectory: String = "/sdcard"
 
     override fun exec(
         pluginExecuteEntryPoint: String,
@@ -89,6 +92,15 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         callback: IShellCallback,
         useRunAs: Boolean
     ) {
+
+        var commandContent = commandContent
+
+        if(commandContent.startsWith("cd ")){
+            val targetDirectory = commandContent.removePrefix("cd ").trim()
+            changeDirectoryHandler(targetDirectory)
+            commandContent = "exit"
+        }
+
         val processBuilder = ProcessBuilder(
             buildList {
                 if (useRunAs) {
@@ -105,7 +117,7 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
                             environmentConfigKeyList = environmentConfigKeyList,
                             environmentConfigValueList = environmentConfigValueList
                     )}
-                    $commandContent
+                    ${changeDirectoryHandler()}$commandContent
                 """.trimIndent()
                 )
             }
@@ -153,6 +165,21 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
 
     private fun String.shellQuote(): String {
         return "'${replace("'", "'\"'\"'")}'"
+    }
+
+    private fun changeDirectoryHandler(directory: String = currentDirectory): String{
+
+        currentDirectory = when {
+            directory.startsWith("/") -> {
+                File(directory).canonicalPath
+            }
+            else -> {
+                File(currentDirectory, directory).canonicalPath
+            }
+        }
+
+        return "cd $currentDirectory &&"
+
     }
 
 }
