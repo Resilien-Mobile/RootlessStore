@@ -129,7 +129,16 @@ class ExecuteShellGatewayImpl @Inject constructor(
     }
 
     fun runCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
-        val process = ProcessBuilder("su", "-c", commandContent).start()
+
+        var commandContent = commandContent
+
+        if(commandContent.startsWith("cd ")){
+            val targetDirectory = commandContent.removePrefix("cd ").trim()
+            changeDirectoryHandler(targetDirectory)
+            commandContent = "exit"
+        }
+
+        val process = ProcessBuilder("su", "-c", "${changeDirectoryHandler()}$commandContent").start()
 
         launch(Dispatchers.IO) {
             process.inputStream.bufferedReader().useLines { lines ->
