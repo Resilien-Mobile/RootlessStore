@@ -97,6 +97,7 @@
     <!-- Start Screen: Navigation Bar -->
     <string name="start_screen_navigation_bar_home_label">主页</string>
     <string name="start_screen_navigation_bar_plugin_label">插件页</string>
+    <string name="start_screen_navigation_bar_brick_label">代码块</string>
     <string name="start_screen_navigation_bar_sources_label">插件源</string>
 
     <!-- Setting Screen: Top App Bar -->
