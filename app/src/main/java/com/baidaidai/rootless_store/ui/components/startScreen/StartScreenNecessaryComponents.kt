@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.navigation.`interface`.RootlessNavigationKey
+import com.baidaidai.rootless_store.domain.navigation.model.CodeBrickScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ExecuteScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.HomeScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.MarketScreenKey
@@ -79,6 +80,15 @@ object StartScreenNecessaryComponents {
             ),
             NavBarItemSpec(
                 number = 2,
+                pattern = painterResource(R.drawable.material_symbols_data_object),
+                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_brick_label),
+                targetDestination = CodeBrickScreenKey,
+                compatibleDestinationList = listOf(
+                    CodeBrickScreenKey::class,
+                )
+            ),
+            NavBarItemSpec(
+                number = 3,
                 pattern = painterResource(R.drawable.outline_list_alt_24),
                 contentDeprecated = stringResource(R.string.start_screen_navigation_bar_sources_label),
                 targetDestination = SourceScreenKey,

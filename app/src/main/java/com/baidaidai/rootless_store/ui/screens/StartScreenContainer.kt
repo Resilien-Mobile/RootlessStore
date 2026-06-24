@@ -29,6 +29,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.baidaidai.rootless_store.ShizukuActivity
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.domain.navigation.`interface`.RootlessNavigationKey
+import com.baidaidai.rootless_store.domain.navigation.model.CodeBrickScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ExecuteScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.HomeScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.MarketScreenKey
@@ -37,6 +38,7 @@ import com.baidaidai.rootless_store.domain.navigation.model.SettingScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ShellScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.SourceScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificationScreenKey
+import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.executeScreen.executeScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.marketScreen.MarketScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginScreenNecessaryComponents
@@ -53,6 +55,7 @@ import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootLessStoreThirdPartyNotificationScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,6 +70,7 @@ fun RootlessStoreStartScreenContainer(
     val marketScreenViewModel = hiltViewModel<RootLessStoreMarketScreenViewModel>()
     val shellScreenViewModel = hiltViewModel<RootLessStoreShellScreenViewModel>()
     val thirdPartyNotificationScreenViewModel = hiltViewModel<RootLessStoreThirdPartyNotificationScreenViewModel>()
+    val codeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>()
     val pluginInfoCount by pluginScreenViewModel.pluginInfoCount.collectAsState()
     val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
 
@@ -97,7 +101,7 @@ fun RootlessStoreStartScreenContainer(
     val context = LocalContext.current
     val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     val scrollBehavior = when(currentDestination){
-        PluginScreenKey, MarketScreenKey, SettingScreenKey, ThirdPartyNotificationScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        PluginScreenKey, CodeBrickScreenKey, MarketScreenKey, SettingScreenKey, ThirdPartyNotificationScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
     }
 
@@ -148,6 +152,9 @@ fun RootlessStoreStartScreenContainer(
                     textButtonOnClick = {
                         pluginScreenViewModel.changeBadgeShowStatus()
                     },
+                    scrollBehavior = scrollBehavior
+                )
+                CodeBrickScreenKey -> CodeBrickScreenNecessaryComponents.CodeBrickScreenTopAppBar(
                     scrollBehavior = scrollBehavior
                 )
                 SourceScreenKey -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
@@ -222,6 +229,7 @@ fun RootlessStoreStartScreenContainer(
         },
         floatingActionButton = {
             when(currentDestination){
+
                 PluginScreenKey -> {
                     PluginScreenNecessaryComponents.PluginScreenFloatingButton{
                         openDocumentLauncher.launch(
@@ -231,12 +239,21 @@ fun RootlessStoreStartScreenContainer(
                         )
                     }
                 }
+
                 HomeScreenKey -> {
                     StartScreenNecessaryComponents.StartScreenFloatingButton {
                         navigationBackStack.add(ShellScreenKey)
                     }
                 }
+
+                CodeBrickScreenKey -> {
+                    CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton {
+                        codeBrickViewModel.changeEditorShowStatus(true)
+                    }
+                }
+
                 else -> {}
+
             }
         },
         modifier = Modifier
@@ -290,6 +307,12 @@ fun RootlessStoreStartScreenContainer(
                         onAbortOnePlugin = { pluginID ->
                             currentExecuteViewModel.abortPluginProcess(pluginID)
                         }
+                    )
+                }
+                entry<CodeBrickScreenKey>{
+                    CodeBrickScreen(
+                        contentPaddingValues = contentPadding,
+                        codeBrickViewModel = codeBrickViewModel
                     )
                 }
                 entry<SourceScreenKey> {
