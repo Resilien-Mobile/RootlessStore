@@ -6,6 +6,7 @@ import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.database.migration.MIGRATION_1_2
 import com.baidaidai.rootless_store.data.database.migration.MIGRATION_2_3
 import com.baidaidai.rootless_store.data.database.migration.MIGRATION_3_4
+import com.baidaidai.rootless_store.data.database.migration.MIGRATION_4_5
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +28,7 @@ object DataBaseHiltModule {
             klass = RootlessStoreDatabase::class.java,
             name = "RootlessStoreDataBase"
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
             .build()
     }
 

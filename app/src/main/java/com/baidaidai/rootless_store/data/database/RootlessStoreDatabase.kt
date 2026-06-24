@@ -3,6 +3,8 @@ package com.baidaidai.rootless_store.data.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.baidaidai.rootless_store.data.codebrick.database.CodeBrickDAO
+import com.baidaidai.rootless_store.data.codebrick.database.CodeBrickEntity
 import com.baidaidai.rootless_store.data.database.repository.RoomConvertRepositoryImpl
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusDAO
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusEntry
@@ -21,10 +23,11 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         PluginSourceEntity::class,
         PluginExecuteStatusEntry::class,
         EnvironmentInfoEntity::class,
-        NotificationPreferenceEntity::class
+        NotificationPreferenceEntity::class,
+        CodeBrickEntity::class
         // 其它表也一起加进来
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 @TypeConverters(RoomConvertRepositoryImpl::class)
@@ -34,6 +37,7 @@ abstract class RootlessStoreDatabase : RoomDatabase() {
     abstract fun pluginSourceDao(): PluginSourceDAO
     abstract fun pluginExecuteStatusDao(): PluginExecuteStatusDAO
     abstract fun notificationPreferenceDao(): NotificationPreferenceDAO
+    abstract fun codeBrickDao(): CodeBrickDAO
 
     // 其它 DAO 也在这里暴露
 }
