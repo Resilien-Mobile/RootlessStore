@@ -2,14 +2,26 @@ package com.baidaidai.rootless_store.application.codebrick
 
 import com.baidaidai.rootless_store.data.codebrick.repository.CodeBrickRepositoryImpl
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
+import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import javax.inject.Inject
 
 class UpdateOneCodeBrickUseCase @Inject constructor(
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
     suspend operator fun invoke(
-        codeBrickConfig: CodeBrickConfig
-    ){
+        codeBrickTitle: String,
+        codeBrickContent: String,
+        codeBrickContext: HosterOverallStatus,
+        oldCodeBrickConfig: CodeBrickConfig
+    ) {
+
+        val codeBrickConfig = CodeBrickConfig(
+            unixTimeStamp = oldCodeBrickConfig.unixTimeStamp,
+            codeBrickTitle = codeBrickTitle,
+            codeBrickContent = codeBrickContent,
+            codeBrickEnvironment = codeBrickContext
+        )
+
         codeBrickRepositoryImpl.updateOneCodeBrickConfig(codeBrickConfig)
     }
 }
