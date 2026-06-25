@@ -19,6 +19,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,16 +30,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickContextConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-private fun CodeBrickEditorContent(
+private fun CodeBrickSettingContent(
     modifier: Modifier = Modifier,
     titleContent: String,
     codeContent: String,
+    brickContext: HosterOverallStatus,
     onCodeBrickTitleValueChange: (value: String)-> Unit,
     onCodeBrickContentValueChange: (value: String)-> Unit,
     onCodeBrickContextValueChange: (hosterOverallStatus: HosterOverallStatus) -> Unit
@@ -114,10 +117,11 @@ private fun CodeBrickEditorContent(
             contextIcon = R.drawable.material_symbols_cyclone
         )
     )
-    var currentSelectedContext by remember { mutableStateOf(brickContextConfigList[0]) }
+
+
 
     fun listItemColors(index: Int): ListItemColors{
-        return if (brickContextConfigList[index] == currentSelectedContext){
+        return if (brickContextConfigList[index].contextType == brickContext){
             focusedListItemStyle
         }else{
             unfocusedListItemStyle
@@ -157,20 +161,19 @@ private fun CodeBrickEditorContent(
 
             ListItem(
                 onClick = {
-                    currentSelectedContext = codeBrickContextConfig
                     onCodeBrickContextValueChange(codeBrickContextConfig.contextType)
                 },
                 leadingContent = {
                     Icon(
                         painter = painterResource(codeBrickContextConfig .contextIcon),
-                        contentDescription = codeBrickContextConfig.contextText
+                        contentDescription = codeBrickContextConfig .contextText
                     )
                 },
                 colors = listItemColors(index),
                 modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
             ) {
-                Text(codeBrickContextConfig.contextText)
+                Text(codeBrickContextConfig .contextText)
             }
 
             if (index != 2){
@@ -183,15 +186,22 @@ private fun CodeBrickEditorContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CodeBrickEditor(
+fun CodeBrickSetting(
+    codeBrickConfig: CodeBrickConfig,
     onDismissRequest: () -> Unit,
     onDismissButtonClick: ()-> Unit,
-    onConfirmButtonClick: (title: String,content: String,context: HosterOverallStatus)-> Unit
+    onConfirmButtonClick: (title: String,content: String,context: HosterOverallStatus,oldCodeBrickConfig: CodeBrickConfig)-> Unit
 ){
 
     var titleContent by remember { mutableStateOf("") }
     var codeContent by remember { mutableStateOf("") }
     var selectedContext by remember { mutableStateOf(HosterOverallStatus.LIMITED) }
+
+    LaunchedEffect(codeBrickConfig) {
+        titleContent = codeBrickConfig.codeBrickTitle
+        codeContent = codeBrickConfig.codeBrickContent
+        selectedContext = codeBrickConfig.codeBrickEnvironment
+    }
 
     AlertDialog(
         title = {
@@ -207,15 +217,18 @@ fun CodeBrickEditor(
         },
         confirmButton = {
             Button(
-                onClick = { onConfirmButtonClick(titleContent,codeContent, selectedContext) }
+                onClick = {
+                    onConfirmButtonClick(titleContent, codeContent, selectedContext, codeBrickConfig)
+                }
             ) {
                 Text("Confirm")
             }
         },
         text = {
-            CodeBrickEditorContent(
+            CodeBrickSettingContent(
                 titleContent = titleContent,
                 codeContent = codeContent,
+                brickContext = selectedContext,
                 onCodeBrickTitleValueChange = { titleContent = it },
                 onCodeBrickContentValueChange = { codeContent = it },
                 onCodeBrickContextValueChange = { selectedContext = it }
@@ -228,7 +241,7 @@ fun CodeBrickEditor(
 @PreviewLightDark
 @Composable
 private fun _preview_(){
-    CodeBrickEditorContent(
+    CodeBrickSettingContent(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.surface)
             .width(280.dp)
@@ -236,6 +249,7 @@ private fun _preview_(){
         ,
         titleContent = "a",
         codeContent =  "b",
+        brickContext = HosterOverallStatus.ADB,
         onCodeBrickTitleValueChange =  {},
         onCodeBrickContentValueChange = {},
         onCodeBrickContextValueChange = {}
