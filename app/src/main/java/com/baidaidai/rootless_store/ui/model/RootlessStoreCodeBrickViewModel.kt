@@ -7,6 +7,7 @@ import com.baidaidai.rootless_store.application.codebrick.AddOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.DeleteOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.GetAllCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.UpdateOneCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,6 +24,7 @@ data class CodeBrickScreenUIState(
     val executeResultCanShow: Boolean = false,
     val brickSettingCanShow: Boolean = false,
     val executeResultContent: List<String> = emptyList(),
+    val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimeStamp = 1L,"", HosterOverallStatus.LIMITED,"")
 )
 
 @HiltViewModel
@@ -30,7 +32,8 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val addOneCodeBrickUseCase: AddOneCodeBrickUseCase,
     private val getAllCodeBrickUseCase: GetAllCodeBrickUseCase,
     private val executeOneCodeBrickUseCase: ExecuteOneCodeBrickUseCase,
-    private val deleteOneCodeBrickUseCase: DeleteOneCodeBrickUseCase
+    private val deleteOneCodeBrickUseCase: DeleteOneCodeBrickUseCase,
+    private val updateOneCodeBrickUseCase: UpdateOneCodeBrickUseCase
 ): ViewModel() {
 
     private val _codeBrickScreenUIState = MutableStateFlow(CodeBrickScreenUIState())
@@ -57,6 +60,26 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             )
         }
     }
+    fun openSettingShowStatus(
+        codeBrickConfig: CodeBrickConfig,
+        settingShowStatus: Boolean = true,
+    ){
+        _codeBrickScreenUIState.update {
+            it.copy(
+                brickSettingCanShow = settingShowStatus,
+                handlingCodeBrickConfig = codeBrickConfig
+            )
+        }
+    }
+    fun closeSettingShowStatus(
+        settingShowStatus: Boolean = false,
+    ){
+        _codeBrickScreenUIState.update {
+            it.copy(
+                brickSettingCanShow = settingShowStatus,
+            )
+        }
+    }
     fun changeResultShowStatus(
         showStatus: Boolean = false
     ){
@@ -68,18 +91,35 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     }
 
     // CUDE
+
     // Create
     fun createOneCodeBrick(
         codeBrickTitle: String,
-        codeBrickContent: String
+        codeBrickContent: String,
+        codeBrickContext: HosterOverallStatus
     ){
         viewModelScope.launch {
-            addOneCodeBrickUseCase(
-                codeBrickTitle,codeBrickContent, HosterOverallStatus.LIMITED
+            addOneCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext)
+        }
+    }
+
+    // Update
+    fun updateOneCodeBrick(
+        codeBrickTitle: String,
+        codeBrickContent: String,
+        codeBrickContext: HosterOverallStatus,
+        oldCodeBrickConfig: CodeBrickConfig
+    ){
+        viewModelScope.launch {
+            updateOneCodeBrickUseCase(
+                codeBrickTitle = codeBrickTitle,
+                codeBrickContent = codeBrickContent,
+                codeBrickContext = codeBrickContext,
+                oldCodeBrickConfig = oldCodeBrickConfig
             )
         }
     }
-    // Update
+
     // Delete
     fun deleteOneCodeBrick(
         codeBrickConfig: CodeBrickConfig
@@ -88,6 +128,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             deleteOneCodeBrickUseCase(codeBrickConfig)
         }
     }
+
     // Execute
     fun executeOneCodeBrick(
         codeBrickConfig: CodeBrickConfig
