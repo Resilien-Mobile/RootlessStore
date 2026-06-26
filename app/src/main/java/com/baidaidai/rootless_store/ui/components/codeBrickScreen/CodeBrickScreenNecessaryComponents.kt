@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
 
 object CodeBrickScreenNecessaryComponents {
@@ -20,7 +21,7 @@ object CodeBrickScreenNecessaryComponents {
     ) {
         MediumFlexibleTopAppBar(
             title = {
-                Text("Code Brick")
+                Text(stringResource(R.string.code_brick_screen_top_app_bar_title))
             },
             scrollBehavior = scrollBehavior
         )
@@ -35,7 +36,7 @@ object CodeBrickScreenNecessaryComponents {
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_add),
-                contentDescription = "add"
+                contentDescription = stringResource(R.string.code_brick_screen_floating_button_add_content_description)
             )
         }
     }

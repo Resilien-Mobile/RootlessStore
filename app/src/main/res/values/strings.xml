@@ -104,6 +104,33 @@
     <string name="start_screen_navigation_bar_brick_label">Brick</string>
     <string name="start_screen_navigation_bar_sources_label">Sources</string>
 
+    <!-- Code Brick Screen: Top App Bar -->
+    <string name="code_brick_screen_top_app_bar_title">Code Brick</string>
+    <string name="code_brick_screen_top_app_bar_subtitle">Flexible DIY customization</string>
+
+    <!-- Code Brick Screen: Floating Button -->
+    <string name="code_brick_screen_floating_button_add_content_description">Add</string>
+
+    <!-- Code Brick Screen: Editor -->
+    <string name="code_brick_screen_editor_title">Code Brick</string>
+    <string name="code_brick_screen_editor_cancel_button">Cancel</string>
+    <string name="code_brick_screen_editor_confirm_button">Confirm</string>
+    <string name="code_brick_screen_editor_brick_name_label">Brick Name</string>
+    <string name="code_brick_screen_editor_shell_script_label">Shell Script</string>
+    <string name="code_brick_screen_editor_brick_context_title">Brick Context</string>
+    <string name="code_brick_screen_editor_context_app_shell_label">App Shell</string>
+    <string name="code_brick_screen_editor_context_adb_shell_label">ADB Shell</string>
+    <string name="code_brick_screen_editor_context_root_shell_label">Root Shell</string>
+
+    <!-- Code Brick Screen: Previewer -->
+    <string name="code_brick_screen_previewer_play_content_description">Play</string>
+    <string name="code_brick_screen_previewer_setting_content_description">Settings</string>
+    <string name="code_brick_screen_previewer_delete_content_description">Delete</string>
+
+    <!-- Code Brick Screen: Result -->
+    <string name="code_brick_screen_result_title">Result</string>
+    <string name="code_brick_screen_result_confirm_button">Confirm</string>
+
     <!-- Setting Screen: Top App Bar -->
     <string name="setting_screen_top_app_bar_title">Settings</string>
 
