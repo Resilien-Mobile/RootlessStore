@@ -1,11 +1,12 @@
 package com.baidaidai.rootless_store.domain.codebrick.model
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
 data class CodeBrickContextConfig(
     val contextType: HosterOverallStatus,
-    val contextText: String,
+    @StringRes val contextTextResource: Int,
 
     @DrawableRes
     val contextIcon: Int

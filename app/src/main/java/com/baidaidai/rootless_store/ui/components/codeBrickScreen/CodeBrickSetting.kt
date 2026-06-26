@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
@@ -103,17 +104,17 @@ private fun CodeBrickSettingContent(
     val brickContextConfigList = listOf(
         CodeBrickContextConfig(
             contextType = HosterOverallStatus.LIMITED,
-            contextText = "App Shell",
+            contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
             contextIcon = R.drawable.material_symbols_applicaitons
         ),
         CodeBrickContextConfig(
             contextType = HosterOverallStatus.ADB,
-            contextText = "ADB Shell",
+            contextTextResource = R.string.code_brick_screen_editor_context_adb_shell_label,
             contextIcon = R.drawable.material_symbols_adb
         ),
         CodeBrickContextConfig(
             contextType = HosterOverallStatus.ROOTD,
-            contextText = "Root Shell",
+            contextTextResource = R.string.code_brick_screen_editor_context_root_shell_label,
             contextIcon = R.drawable.material_symbols_cyclone
         )
     )
@@ -134,7 +135,7 @@ private fun CodeBrickSettingContent(
             value = titleContent,
             onValueChange = onCodeBrickTitleValueChange,
             label = {
-                Text("Brick Name")
+                Text(stringResource(R.string.code_brick_screen_editor_brick_name_label))
             }
         )
 
@@ -144,20 +145,21 @@ private fun CodeBrickSettingContent(
             value = codeContent,
             onValueChange = onCodeBrickContentValueChange,
             label = {
-                Text("Shell Script")
+                Text(stringResource(R.string.code_brick_screen_editor_shell_script_label))
             }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "Brick Context",
+            text = stringResource(R.string.code_brick_screen_editor_brick_context_title),
             style = MaterialTheme.typography.titleMedium
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         brickContextConfigList.forEachIndexed { index, codeBrickContextConfig ->
+            val contextText = stringResource(codeBrickContextConfig.contextTextResource)
 
             ListItem(
                 onClick = {
@@ -166,14 +168,14 @@ private fun CodeBrickSettingContent(
                 leadingContent = {
                     Icon(
                         painter = painterResource(codeBrickContextConfig .contextIcon),
-                        contentDescription = codeBrickContextConfig .contextText
+                        contentDescription = contextText
                     )
                 },
                 colors = listItemColors(index),
                 modifier = Modifier
                     .clip(RoundedCornerShape(16.dp))
             ) {
-                Text(codeBrickContextConfig .contextText)
+                Text(contextText)
             }
 
             if (index != 2){
@@ -205,14 +207,14 @@ fun CodeBrickSetting(
 
     AlertDialog(
         title = {
-            Text("Code Brick")
+            Text(stringResource(R.string.code_brick_screen_editor_title))
         },
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(
                 onClick = onDismissButtonClick
             ) {
-                Text("Cancel")
+                Text(stringResource(R.string.code_brick_screen_editor_cancel_button))
             }
         },
         confirmButton = {
@@ -221,7 +223,7 @@ fun CodeBrickSetting(
                     onConfirmButtonClick(titleContent, codeContent, selectedContext, codeBrickConfig)
                 }
             ) {
-                Text("Confirm")
+                Text(stringResource(R.string.code_brick_screen_editor_confirm_button))
             }
         },
         text = {
