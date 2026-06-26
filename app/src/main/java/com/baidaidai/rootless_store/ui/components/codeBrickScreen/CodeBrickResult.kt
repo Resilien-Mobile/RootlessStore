@@ -9,8 +9,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.R
 
 @Composable
 fun CodeBrickResult(
@@ -20,13 +22,13 @@ fun CodeBrickResult(
 ) {
     AlertDialog(
         title = {
-            Text("Result")
+            Text(stringResource(R.string.code_brick_screen_result_title))
         },
         confirmButton = {
             Button(
                 onClick = onConfirmButtonClick
             ) {
-                Text("Confirm")
+                Text(stringResource(R.string.code_brick_screen_result_confirm_button))
             }
         },
         onDismissRequest = onDismissRequest,
