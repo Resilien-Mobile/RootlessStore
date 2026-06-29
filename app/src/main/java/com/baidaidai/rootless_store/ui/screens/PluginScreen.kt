@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SecondaryTabRow
@@ -15,16 +16,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.IntSize
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
 import kotlinx.coroutines.launch
 
@@ -32,7 +38,6 @@ import kotlinx.coroutines.launch
 fun RootlessStorePluginScreenContainer(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
-//    executeScreenViewModel: RootLessStoreExecuteScreenViewModel,
     navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
     onAbortOnePlugin:suspend (pluginID: String) -> Unit
 ){
@@ -77,7 +82,6 @@ fun RootlessStorePluginScreenContainer(
                 PluginScreen(
                     badgeShowState = badgeShowState,
                     renderingList = pluginInfoList,
-//                    executeScreenViewModel = executeScreenViewModel,
                     pluginScreenViewModel = pluginScreenViewModel,
                     navigateToExecuteScreen = navigateToExecuteScreen,
                     onAbortOnePlugin = onAbortOnePlugin
@@ -98,12 +102,12 @@ fun RootlessStorePluginScreenContainer(
 fun PluginScreen(
     badgeShowState: Boolean,
     renderingList: List<PluginManifestRoom>,
-//    executeScreenViewModel: RootLessStoreExecuteScreenViewModel,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
     onAbortOnePlugin: suspend (pluginID: String) -> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
 
     LazyColumn(
         modifier = Modifier
@@ -114,33 +118,56 @@ fun PluginScreen(
             horizontal = 15.dp
         )
     ) {
-        items(renderingList){
-            PluginInfoContainerLocal(
-                pluginManifest = it,
-                onSwitchClick = {
-                    pluginScreenViewModel.setPluginEnabled(
-                        pluginID = it.pluginID,
-                        pluginEnabledStatus = !it.enabled
-                    )
 
-                    if (!it.enabled){
-                        navigateToExecuteScreen(it.pluginID,true)
-                    }else{
-                        coroutineScope.launch {
-                            onAbortOnePlugin(it.pluginID)
+        items(
+            items = renderingList,
+            key = { pluginManifestRoom -> pluginManifestRoom.pluginID }
+        ){ pluginManifestRoom ->
+
+            var actionCanSee by remember { mutableStateOf(false) }
+            var cardSize by remember { mutableStateOf(IntSize.Zero) }
+
+            if (actionCanSee){
+
+                PluginActionContainer(
+                    onShareButtonClick = {},
+                    onDeleteButtonClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
+                    onBackButtonClick = { actionCanSee = !actionCanSee },
+                    modifier = Modifier
+                        .size(
+                            width = with(density) { cardSize.width.toDp() },
+                            height = with(density) { cardSize.height.toDp() }
+                        )
+                )
+
+            }else{
+
+                PluginInfoContainerLocal(
+                    pluginManifest = pluginManifestRoom,
+                    onSwitchClick = {
+                        pluginScreenViewModel.setPluginEnabled(
+                            pluginID = pluginManifestRoom.pluginID,
+                            pluginEnabledStatus = !pluginManifestRoom.enabled
+                        )
+
+                        if (!pluginManifestRoom.enabled){
+                            navigateToExecuteScreen(pluginManifestRoom.pluginID,true)
+                        }else{
+                            coroutineScope.launch {
+                                onAbortOnePlugin(pluginManifestRoom.pluginID)
+                            }
                         }
-                    }
-                },
-                onBadgeClick = {
-                    pluginScreenViewModel.uninstallPlugin(it)
-                },
-                onCardClick = {
-                    if (it.enabled){
-                        navigateToExecuteScreen(it.pluginID,false)
-                    }
-                },
-                badgeShowState = badgeShowState
-            )
+                    },
+                    onCardClick = {
+                        if (pluginManifestRoom.enabled){
+                            navigateToExecuteScreen(pluginManifestRoom.pluginID,false)
+                        }
+                    },
+                    onCardLongClick = { actionCanSee = !actionCanSee },
+                    onCardSizeChanged = { cardSize = it },
+                )
+
+            }
         }
     }
 }
