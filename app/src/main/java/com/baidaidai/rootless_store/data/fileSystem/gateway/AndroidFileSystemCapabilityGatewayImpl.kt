@@ -3,6 +3,7 @@ package com.baidaidai.rootless_store.data.fileSystem.gateway
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.core.content.FileProvider
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
@@ -16,7 +17,9 @@ import kotlinx.serialization.json.Json
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 
 class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
@@ -32,8 +35,14 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     private fun getInternalPluginRootDirectory(): File {
         return File(context.filesDir, PLUGIN_DIR_NAME)
     }
+    private fun getInternalPluginCacheDirectory(): File {
+        return File(context.cacheDir, PLUGIN_DIR_NAME)
+    }
     private fun getInternalEnvironmentRootDirectory(): File {
         return File(context.filesDir, ENVIRONMENT_DIR_NAME)
+    }
+    private fun getEnvironmentCacheDirectory(): File {
+        return File( context.cacheDir,ENVIRONMENT_DIR_NAME)
     }
     private fun ensureInternalPluginRootDirectory(): File {
         return getInternalPluginRootDirectory().apply { mkdirs() }
@@ -46,6 +55,12 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun getDefaultPluginDirectoryPath(): String{
         return getInternalPluginRootDirectory().path
     } // /File/Plugin
+    fun getCachePluginDirectoryPath(): String{
+        return getInternalPluginCacheDirectory().path
+    } // /Cache/Plugin: String
+    fun getCachePluginDirectoryFile(): File{
+        return getInternalPluginCacheDirectory()
+    } // /Cache/Plugin: File
     fun getPluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String{
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
@@ -62,6 +77,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun getDefaultEnvironmentDirectoryPath(): String{
         return getInternalEnvironmentRootDirectory().path
     } // /File/Environment
+    fun getCacheEnvironmentDirectoryFile(): File{
+        return getEnvironmentCacheDirectory()
+    } // /Cache/Environment: File
     fun getEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
         val environmentPackageName = environmentManifestRoom.environmentPackageName
@@ -72,14 +90,25 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun confirmPluginPathExists(): Boolean{
         return confirmPathExists(PLUGIN_DIR_NAME)
     }  // /File/Plugin?
+    fun confirmPluginCacheExists(): Boolean{
+        return confirmCacheExists(PLUGIN_DIR_NAME)  // Cache Directory's name is same
+    }  // /Cache/Plugin?
     fun confirmEnvironmentPathExists(): Boolean{
         return confirmPathExists(ENVIRONMENT_DIR_NAME)
     }  // /File/Environment?
+    fun confirmEnvironmentCacheExists(): Boolean{
+        return confirmCacheExists(ENVIRONMENT_DIR_NAME)
+    }  // /Cache/Environment?
     private fun confirmPathExists(path: String): Boolean{
         val targetFile = File(context.filesDir, path)
         Log.d("confirmPathExists", targetFile.exists().toString())
         return targetFile.exists()
     }  // /File/?
+    private fun confirmCacheExists(path: String): Boolean{
+        val targetFile = File(context.cacheDir, path)
+        Log.d("confirmCacheExists", targetFile.exists().toString())
+        return targetFile.exists()
+    }  // /Cache/?
 
     // Create FS Operator
     fun createFileDir(path: String){
@@ -87,6 +116,11 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
             File(context.filesDir, path).mkdirs()
         }
     }  // /File
+    fun createCacheDir(path: String){
+        if (!confirmCacheExists(path)){
+            File(context.cacheDir, path).mkdirs()
+        }
+    }  // /Cache/path  e.g. /Cache/Plugin
     @Deprecated(
         message = "Not Longer Recommended",
         replaceWith = ReplaceWith("createVoidFileDirectory(pluginRootDirectory, directoryName)")
@@ -314,6 +348,44 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
 
+    // Re-Zip FS Operator
+    fun rezipFromFile(originPluginFile: File, targetZipFile: File){
+        targetZipFile.parentFile?.mkdirs()
+
+        ZipOutputStream(FileOutputStream(targetZipFile)).use { zipOutputStream ->
+            fun writeZipEntry(file: File, entryName: String) {
+                if (file.canonicalFile == targetZipFile.canonicalFile) {
+                    return
+                }
+
+                if (file.isDirectory) {
+                    val directoryEntryName = entryName.trimEnd('/') + "/"
+                    if (directoryEntryName != "/") {
+                        zipOutputStream.putNextEntry(ZipEntry(directoryEntryName))
+                        zipOutputStream.closeEntry()
+                    }
+                    file.listFiles()?.forEach { childFile ->
+                        writeZipEntry(childFile, "$directoryEntryName${childFile.name}")
+                    }
+                } else {
+                    zipOutputStream.putNextEntry(ZipEntry(entryName))
+                    file.inputStream().use { inputStream ->
+                        inputStream.copyTo(zipOutputStream)
+                    }
+                    zipOutputStream.closeEntry()
+                }
+            }
+
+            if (originPluginFile.isDirectory) {
+                originPluginFile.listFiles()?.forEach { childFile ->
+                    writeZipEntry(childFile, childFile.name)
+                }
+            } else {
+                writeZipEntry(originPluginFile, originPluginFile.name)
+            }
+        }
+    }
+
     // Read FS Operator
     private fun readRawManifest(uri: Uri, manifestFileName: String): String? {
         context.contentResolver.openInputStream(uri).use { inputStream ->
@@ -413,4 +485,10 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val _child = "$environmentPackageName/$environmentEntryPoint"
         return File(environmentRootDirectory,_child).setExecutable(true)
     }
+
+    // Share FS Operator
+    fun getShareUriFromFile(file: File): Uri{
+        return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+    }
+
 }

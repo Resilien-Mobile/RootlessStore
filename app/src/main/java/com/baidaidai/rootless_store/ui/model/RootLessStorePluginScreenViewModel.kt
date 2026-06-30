@@ -3,6 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baidaidai.rootless_store.application.environment.GetEnvironmentShareLinkUseCase
 import com.baidaidai.rootless_store.application.module.InstallModuleUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
@@ -15,6 +16,8 @@ import com.baidaidai.rootless_store.application.environment.GetWholeEnvironmentI
 import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnabledUseCase
 import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
 import com.baidaidai.rootless_store.application.environment.UninstallOneEnvironmentUseCase
+import com.baidaidai.rootless_store.application.plugin.GetPluginShareLinkUseCase
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +40,8 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     private val uninstallOnePluginUseCase: UninstallOnePluginUseCase,
     private val uninstallOneEnvironmentUseCase: UninstallOneEnvironmentUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
+    private val getPluginShareLinkUseCase: GetPluginShareLinkUseCase,
+    private val getEnvironmentShareLinkUseCase: GetEnvironmentShareLinkUseCase,
     pluginInfoCountUseCase: GetPluginInfoCountUseCase
 ): ViewModel() {
 
@@ -122,6 +127,20 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
 
     fun changeBadgeShowStatus(){
         _badgeShowState.update { !it }
+    }
+
+    fun getPluginShareLink(
+        pluginManifestRoom: PluginManifestRoom
+    ): Uri {
+        val shareLink = getPluginShareLinkUseCase(pluginManifestRoom)
+        return shareLink
+    }
+
+    fun getEnvironmentShareLink(
+        environmentManifestRoom: EnvironmentManifestRoom
+    ): Uri {
+        val shareLink = getEnvironmentShareLinkUseCase(environmentManifestRoom)
+        return shareLink
     }
 
 
