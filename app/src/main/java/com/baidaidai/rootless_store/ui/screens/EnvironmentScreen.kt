@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -28,6 +30,7 @@ fun EnvironmentScreen(
 ){
 
     val density = LocalDensity.current
+    val context = LocalContext.current
 
     LazyColumn(
         modifier = Modifier
@@ -49,7 +52,19 @@ fun EnvironmentScreen(
             if (actionCanSee){
 
                 PluginActionContainer(
-                    onShareButtonClick = {},
+                    onShareButtonClick = {
+
+                        val shareLink = pluginScreenViewModel.getEnvironmentShareLink(environmentManifestRoom)
+
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "application/zip"
+                            putExtra(Intent.EXTRA_STREAM, shareLink)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+
+                        context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
+
+                    },
                     onDeleteButtonClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
                     onBackButtonClick = { actionCanSee = !actionCanSee },
                     modifier = Modifier
