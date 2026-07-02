@@ -11,5 +11,6 @@ data class CodeBrickEntity(
 
     val codeBrickTitle: String,
     val codeBrickEnvironment: HosterOverallStatus,
-    val codeBrickContent: String
+    val codeBrickContent: String,
+    val bindTileIndex: Int? = null
 )

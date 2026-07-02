@@ -96,10 +96,11 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun createOneCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
-        codeBrickContext: HosterOverallStatus
+        codeBrickContext: HosterOverallStatus,
+        bindTileIndex: Int?
     ){
         viewModelScope.launch {
-            addOneCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext)
+            addOneCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,bindTileIndex)
         }
     }
 
@@ -108,6 +109,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
+        bindTileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
@@ -115,6 +117,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
                 codeBrickTitle = codeBrickTitle,
                 codeBrickContent = codeBrickContent,
                 codeBrickContext = codeBrickContext,
+                bindTileIndex = bindTileIndex,
                 oldCodeBrickConfig = oldCodeBrickConfig
             )
         }
