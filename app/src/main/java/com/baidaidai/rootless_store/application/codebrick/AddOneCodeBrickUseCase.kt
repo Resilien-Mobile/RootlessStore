@@ -12,13 +12,15 @@ class AddOneCodeBrickUseCase @Inject constructor(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
+        bindTileIndex: Int?
     ) {
 
         val codeBrickConfig = CodeBrickConfig(
             unixTimeStamp = System.currentTimeMillis(),
             codeBrickTitle = codeBrickTitle,
             codeBrickContent = codeBrickContent,
-            codeBrickEnvironment = codeBrickContext
+            codeBrickEnvironment = codeBrickContext,
+            bindTileIndex = bindTileIndex
         )
 
         codeBrickRepositoryImpl.createOneCodeBrickConfig(codeBrickConfig)

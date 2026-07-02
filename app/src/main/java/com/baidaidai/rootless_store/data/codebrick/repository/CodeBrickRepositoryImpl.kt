@@ -48,6 +48,11 @@ class CodeBrickRepositoryImpl @Inject constructor(
             }
     }
 
+    suspend fun getCodeBrickConfigByTileIndex(tileIndex: Int): CodeBrickConfig?{
+        val codeBrickConfig = codeBrickDAO.getCodeBrickEntityByTileIndex(tileIndex)?.toCodeBrickConfig()
+        return codeBrickConfig
+    }
+
     // Delete
     suspend fun deleteOneCodeBrickConfig(
         codeBrickConfig: CodeBrickConfig

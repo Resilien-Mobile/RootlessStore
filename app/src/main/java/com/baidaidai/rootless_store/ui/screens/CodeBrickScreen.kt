@@ -36,11 +36,12 @@ fun CodeBrickScreen(
             onDismissButtonClick = {
                 codeBrickViewModel.changeEditorShowStatus(false)
             },
-            onConfirmButtonClick = { title, content, context ->
+            onConfirmButtonClick = { title, content, context, tileIndex ->
                 codeBrickViewModel.createOneCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,
-                    codeBrickContext = context
+                    codeBrickContext = context,
+                    bindTileIndex = tileIndex
                 )
                 codeBrickViewModel.changeEditorShowStatus(false)
             },
@@ -61,11 +62,12 @@ fun CodeBrickScreen(
             onDismissButtonClick = {
                 codeBrickViewModel.closeSettingShowStatus(false)
             },
-            onConfirmButtonClick = { title, content, context, oldCodeBrickConfig ->
+            onConfirmButtonClick = { title, content, context, tileIndex, oldCodeBrickConfig ->
                 codeBrickViewModel.updateOneCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,
                     codeBrickContext = context,
+                    bindTileIndex = tileIndex,
                     oldCodeBrickConfig = oldCodeBrickConfig
                 )
                 codeBrickViewModel.closeSettingShowStatus(false)
