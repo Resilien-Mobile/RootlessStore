@@ -6,7 +6,8 @@ import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
 data class CodeBrickContextConfig(
     val contextType: HosterOverallStatus,
-    @StringRes val contextTextResource: Int,
+    @StringRes
+    val contextTextResource: Int,
 
     @DrawableRes
     val contextIcon: Int

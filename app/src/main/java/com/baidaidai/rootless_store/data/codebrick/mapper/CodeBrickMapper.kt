@@ -11,7 +11,8 @@ object CodeBrickMapper {
             unixTimeStamp = unixTimeStamp,
             codeBrickTitle = codeBrickTitle,
             codeBrickEnvironment = codeBrickEnvironment,
-            codeBrickContent = codeBrickContent
+            codeBrickContent = codeBrickContent,
+            bindTileIndex = bindTileIndex
         )
     }
 
@@ -21,7 +22,8 @@ object CodeBrickMapper {
             unixTimeStamp = unixTimeStamp,
             codeBrickTitle = codeBrickTitle,
             codeBrickEnvironment = codeBrickEnvironment,
-            codeBrickContent = codeBrickContent
+            codeBrickContent = codeBrickContent,
+            bindTileIndex = bindTileIndex
         )
     }
 

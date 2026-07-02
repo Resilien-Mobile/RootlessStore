@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -28,6 +29,9 @@ interface CodeBrickDAO {
 
     @Query("SELECT * FROM CodeBrickEntity")
     fun getAllCodeBrickConfig(): Flow<List<CodeBrickEntity>>
+
+    @Query("SELECT * FROM CodeBrickEntity WHERE bindTileIndex = :tileIndex LIMIT 1")
+    suspend fun getCodeBrickEntityByTileIndex(tileIndex: Int): CodeBrickEntity?
 
     // Delete
     @Delete

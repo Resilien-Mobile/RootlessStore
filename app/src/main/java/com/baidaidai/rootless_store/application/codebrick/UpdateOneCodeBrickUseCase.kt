@@ -12,6 +12,7 @@ class UpdateOneCodeBrickUseCase @Inject constructor(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
+        bindTileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     ) {
 
@@ -19,7 +20,8 @@ class UpdateOneCodeBrickUseCase @Inject constructor(
             unixTimeStamp = oldCodeBrickConfig.unixTimeStamp,
             codeBrickTitle = codeBrickTitle,
             codeBrickContent = codeBrickContent,
-            codeBrickEnvironment = codeBrickContext
+            codeBrickEnvironment = codeBrickContext,
+            bindTileIndex = bindTileIndex
         )
 
         codeBrickRepositoryImpl.updateOneCodeBrickConfig(codeBrickConfig)
