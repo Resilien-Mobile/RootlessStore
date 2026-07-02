@@ -102,7 +102,7 @@ fun RootlessStoreStartScreenContainer(
     val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     val scrollBehavior = when(currentDestination){
         PluginScreenKey, CodeBrickScreenKey, MarketScreenKey, SettingScreenKey, ThirdPartyNotificationScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-        else -> TopAppBarDefaults.enterAlwaysScrollBehavior()
+        else -> TopAppBarDefaults.pinnedScrollBehavior()
     }
 
     // Effects
