@@ -1,21 +1,22 @@
 package com.baidaidai.rootless_store.ui.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenContextSwitchDialog
+import com.baidaidai.rootless_store.ui.components.homeScreen.HosterStatusCircularProgressRow
 import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootlessStorePlugin
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionCheckerContainer
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionTagContainer
@@ -50,11 +51,6 @@ fun HomeScreen(
         tempStatus = temperatureStatus
     )
 
-
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    // A Listener about Maintaining OverallStatus fresh
-
     if (dialogStats){
         HomeScreenContextSwitchDialog(
             onDismissButtonClick = homeScreenViewModel::changeDialogStatus,
@@ -64,42 +60,43 @@ fun HomeScreen(
         )
     }
 
-    Column(
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
         modifier = Modifier
+            .fillMaxSize()
             .padding(contentPadding)
-            .padding(horizontal = 15.dp)
-            .padding(top = 15.dp)
     ) {
-        /* Version Tag */
-        RootLessStoreVersionTagContainer()
-        Spacer(
-            modifier = Modifier
-                .height(12.dp)
-        )
+        item {
 
-        /* Version Checker */
-        if (latestVersionNumber != null && latestVersionNumber != stringResource(R.string.app_version)){
-            RootLessStoreVersionCheckerContainer(
-                latestVersionNumber = latestVersionNumber!!
+            /* Version Tag */
+            RootLessStoreVersionTagContainer()
+            Spacer(modifier = Modifier.height(12.dp))
+
+            /* Version Checker */
+            if (latestVersionNumber != null && latestVersionNumber != stringResource(R.string.app_version)) {
+                RootLessStoreVersionCheckerContainer(
+                    latestVersionNumber = latestVersionNumber!!
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            /* Hoster Circular Progress */
+            HosterStatusCircularProgressRow(
+                hosterStatus = rootlessStoreHosterStatus,
+                onChipClick = onChipClick,
+                onChipLongClick = homeScreenViewModel::changeDialogStatus
             )
-            Spacer(
-                modifier = Modifier
-                    .height(12.dp)
+            Spacer(modifier = Modifier.height(12.dp))
+
+            /* Hoster Status */
+            RootlessStoreHosterStatusBoard(
+                hosterStatus = rootlessStoreHosterStatus
             )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            /* How to Make Plugin */
+            HowToDevelopRootlessStorePlugin()
+
         }
-
-        /* Hoster Status */
-        RootlessStoreHosterStatusBoard(
-            hosterStatus = rootlessStoreHosterStatus,
-            onChipClick = onChipClick,
-            onChipLongClick = homeScreenViewModel::changeDialogStatus
-        )
-        Spacer(
-            modifier = Modifier
-                .height(12.dp)
-        )
-
-        /* How to Make Plugin */
-        HowToDevelopRootlessStorePlugin()
     }
 }
