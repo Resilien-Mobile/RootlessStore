@@ -1,41 +1,27 @@
 package com.baidaidai.rootless_store.ui.components.homeScreen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
 
 @Composable
 fun RootlessStoreHosterStatusBoard(
-    hosterStatus: RootlessStoreHosterStatus,
-    onChipClick:()-> Unit,
-    onChipLongClick: () -> Unit
+    modifier: Modifier = Modifier,
+    hosterStatus: RootlessStoreHosterStatus
 ){
     val cardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -43,83 +29,12 @@ fun RootlessStoreHosterStatusBoard(
     )
     Card(
         colors = cardColors,
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation()
     ) {
         Surface(
             color = MaterialTheme.colorScheme.surfaceContainer,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.extraSmall)
-        ){
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .padding(start = 30.dp, top = 20.dp, bottom = 10.dp, end = 25.dp)
-            ){
-                Column(
-                    modifier = Modifier
-                        .weight(1f),
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.monitor_heart_24px),
-                            contentDescription = stringResource(R.string.home_screen_hoster_status_board_icon_content_description),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier
-                                .size(24.dp)
-                        )
-                        Spacer(
-                            modifier = Modifier
-                                .width(10.dp)
-                        )
-                        Text(
-                            text = stringResource(R.string.home_screen_hoster_status_board_title),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier
-                            .height(4.dp)
-                    )
-                    OverallStatusChip(
-                        hosterStatus = hosterStatus,
-                        onLongClick = onChipLongClick,
-                        onClick = onChipClick,
-                    )
-                }
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(1f)
-                    ,
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    HosterStatusCircularProgressRow(
-                        label = stringResource(R.string.home_screen_hoster_status_board_memory_label),
-                        currentValue = hosterStatus.memoryStatus.usedMemory,
-                        maxValue = hosterStatus.memoryStatus.totalMemory
-                    )
-                    HosterStatusCircularProgressRow(
-                        label = stringResource(R.string.home_screen_hoster_status_board_storage_label),
-                        currentValue = hosterStatus.storageStatus.usedStorage,
-                        maxValue = hosterStatus.storageStatus.totalStorage
-                    )
-                }
-            }
-        }
-        Spacer(
-            modifier = Modifier
-                .height(2.dp)
-        )
-        Surface(
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            modifier = Modifier
-                .clip(MaterialTheme.shapes.extraSmall)
+            modifier = Modifier.clip(MaterialTheme.shapes.medium)
         ) {
             Column(
                 modifier = Modifier
@@ -166,42 +81,10 @@ fun RootlessStoreHosterStatusBoard(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-
+@PreviewLightDark
 @Composable
-
-fun OverallStatusChip(
-    hosterStatus: RootlessStoreHosterStatus,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Surface(
-        modifier = modifier
-            .scale(0.95f)
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick
-            ),
-        shape = AssistChipDefaults.shape,
-        color = MaterialTheme.colorScheme.primaryContainer,
-        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        tonalElevation = 0.dp,
-        shadowElevation = 0.dp,
-        ) {
-        Row(
-            modifier = Modifier
-                .height(32.dp)
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Overall: ${hosterStatus.hosterOverallStatus}",
-                maxLines = 1,
-                softWrap = false,
-                style = MaterialTheme.typography.labelLarge,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
+private fun _preview_() {
+    RootlessStoreHosterStatusBoard(
+        hosterStatus = RootlessStoreHosterStatus()
+    )
 }

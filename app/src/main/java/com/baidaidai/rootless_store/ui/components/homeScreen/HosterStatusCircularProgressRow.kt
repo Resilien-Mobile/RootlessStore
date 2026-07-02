@@ -1,60 +1,132 @@
 package com.baidaidai.rootless_store.ui.components.homeScreen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
+import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
+import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 
 @Composable
-fun HosterStatusCircularProgressRow(label: String, currentValue: Double, maxValue: Double){
-    val currentValueProgress = (currentValue / maxValue).toFloat()
-    val currentValuePercentage = (currentValueProgress * 100).toInt()
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                progress = {
-                    currentValueProgress
-                },
+fun HosterStatusCircularProgressRow(
+    modifier: Modifier = Modifier,
+    hosterStatus: RootlessStoreHosterStatus,
+    onChipClick: ()-> Unit = {},
+    onChipLongClick: ()-> Unit = {}
+){
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        modifier = modifier
+            .clip(MaterialTheme.shapes.extraLarge)
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ){
+            Row(
                 modifier = Modifier
-                    .size(45.dp)
-            )
-            Text(
-                text = "${currentValuePercentage.toString()}%",
-                style = MaterialTheme.typography.labelSmall
-            )
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .height(IntrinsicSize.Min)
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.material_symbols_monitoring),
+                            contentDescription = stringResource(R.string.home_screen_hoster_status_board_icon_content_description),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .width(10.dp)
+                        )
+                        Text(
+                            text = stringResource(R.string.home_screen_hoster_status_board_title),
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .wrapContentHeight(Alignment.CenterVertically)
+                        )
+                    }
+                    Spacer(
+                        modifier = Modifier
+                            .height(4.dp)
+                    )
+                    Row {
+                        OverallStatusChip(
+                            hosterStatus = hosterStatus,
+                            onLongClick = onChipLongClick,
+                            onClick = onChipClick,
+                        )
+                    }
+                }
+
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                HosterStatusCircularProgress(
+                    label = stringResource(R.string.home_screen_hoster_status_board_memory_label),
+                    currentValue = hosterStatus.memoryStatus.usedMemory,
+                    maxValue = hosterStatus.memoryStatus.totalMemory
+                )
+                HosterStatusCircularProgress(
+                    label = stringResource(R.string.home_screen_hoster_status_board_storage_label),
+                    currentValue = hosterStatus.storageStatus.usedStorage,
+                    maxValue = hosterStatus.storageStatus.totalStorage
+                )
+            }
         }
-        Text(
-            text = label,
-            style = MaterialTheme.typography.titleSmall
-        )
     }
 }
 
-@Composable
 @PreviewLightDark
-private fun _HosterStatusCircularProgressRowPreview_(){
-    Box(
-        modifier = Modifier
-            .background(color = Color.White)
-    ) {
-        HosterStatusCircularProgressRow(
-            label = "RAM",
-            currentValue = 139.32,
-            maxValue = 512.00
-        )
-    }
+@Composable
+private fun _preview_() {
+    HosterStatusCircularProgressRow(
+        hosterStatus = RootlessStoreHosterStatus()
+            .copy(
+                hosterOverallStatus = HosterOverallStatus.LIMITED,
+                memoryStatus = MemoryStatus(totalMemory = 256.01, usedMemory = 128.64),
+                storageStatus = StorageStatus(totalStorage = 512.10, usedStorage = 128.64)
+            )
+    )
 }
