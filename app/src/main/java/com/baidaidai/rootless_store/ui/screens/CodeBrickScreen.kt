@@ -46,14 +46,13 @@ fun CodeBrickScreen(
                 codeBrickViewModel.changeEditorShowStatus(false)
             },
         )
-    }else if (codeBrickScreenUIState.executeResultCanShow){
+    } else if (codeBrickScreenUIState.executeResultCanShow) {
         CodeBrickResult(
             resultContent = codeBrickScreenUIState.executeResultContent,
             onDismissRequest = codeBrickViewModel::changeResultShowStatus,
             onConfirmButtonClick = codeBrickViewModel::changeResultShowStatus
         )
-    }
-    else if (codeBrickScreenUIState.brickSettingCanShow){
+    } else if (codeBrickScreenUIState.brickSettingCanShow) {
         CodeBrickSetting(
             codeBrickConfig = codeBrickScreenUIState.handlingCodeBrickConfig,
             onDismissRequest = {
@@ -72,6 +71,7 @@ fun CodeBrickScreen(
                 )
                 codeBrickViewModel.closeSettingShowStatus(false)
             },
+            onCodeBrickToPluginButtonClick = { codeBrickConfig -> codeBrickViewModel.convertOneCodeBrickToPlugin(codeBrickConfig) }
         )
     }
 
