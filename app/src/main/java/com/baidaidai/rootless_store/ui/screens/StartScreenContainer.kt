@@ -121,6 +121,11 @@ fun RootlessStoreStartScreenContainer(
             sharedEvent = event
         }
     }
+    LaunchedEffect(3) {
+        codeBrickViewModel.codeBrickEvent.collect { event ->
+            sharedEvent = event
+        }
+    }
     LaunchedEffect(fileIntentUri) {
         val uri = fileIntentUri ?: return@LaunchedEffect
         /* TODO("navController") */
@@ -247,9 +252,10 @@ fun RootlessStoreStartScreenContainer(
                 }
 
                 CodeBrickScreenKey -> {
-                    CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton {
-                        codeBrickViewModel.changeEditorShowStatus(true)
-                    }
+                    CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
+                        onHandMenuItemClick = { codeBrickViewModel.changeEditorShowStatus(true) },
+                        onJsonMenuItemClick = codeBrickViewModel::createOneCodeBrickByJson
+                    )
                 }
 
                 else -> {}
