@@ -4,15 +4,19 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.codebrick.AddOneCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.AddOneJsonCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.DeleteOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.GetAllCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.UpdateOneCodeBrickUseCase
+import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -33,12 +37,15 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val getAllCodeBrickUseCase: GetAllCodeBrickUseCase,
     private val executeOneCodeBrickUseCase: ExecuteOneCodeBrickUseCase,
     private val deleteOneCodeBrickUseCase: DeleteOneCodeBrickUseCase,
-    private val updateOneCodeBrickUseCase: UpdateOneCodeBrickUseCase
+    private val updateOneCodeBrickUseCase: UpdateOneCodeBrickUseCase,
+    private val addOneJsonCodeBrickUseCase: AddOneJsonCodeBrickUseCase
 ): ViewModel() {
 
     private val _codeBrickScreenUIState = MutableStateFlow(CodeBrickScreenUIState())
-
     val codeBrickScreenUIState = _codeBrickScreenUIState.asStateFlow()
+
+    private val _codeBrickEvent = MutableSharedFlow<CodeBrickError?>()
+    val codeBrickEvent = _codeBrickEvent.asSharedFlow()
 
     val codeBrickConfigList = getAllCodeBrickUseCase()
         .stateIn(
@@ -46,10 +53,6 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(1000),
             initialValue = emptyList()
         )
-
-    private val _editorShowStatus = MutableStateFlow(false)
-    val editorShowStatus = _editorShowStatus.asStateFlow()
-
 
     fun changeEditorShowStatus(
         showStatus: Boolean = false
@@ -101,6 +104,15 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             addOneCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,bindTileIndex)
+        }
+    }
+
+    fun createOneCodeBrickByJson(){
+        viewModelScope.launch {
+            val codeBrickError = addOneJsonCodeBrickUseCase()
+            if (codeBrickError != null){
+                _codeBrickEvent.emit(codeBrickError)
+            }
         }
     }
 
