@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.codebrick.AddOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.AddOneJsonCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ConvertOneCodeBrickToPluginUseCase
 import com.baidaidai.rootless_store.application.codebrick.DeleteOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteOneCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.GetAllCodeBrickUseCase
@@ -38,7 +39,8 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val executeOneCodeBrickUseCase: ExecuteOneCodeBrickUseCase,
     private val deleteOneCodeBrickUseCase: DeleteOneCodeBrickUseCase,
     private val updateOneCodeBrickUseCase: UpdateOneCodeBrickUseCase,
-    private val addOneJsonCodeBrickUseCase: AddOneJsonCodeBrickUseCase
+    private val addOneJsonCodeBrickUseCase: AddOneJsonCodeBrickUseCase,
+    private val convertOneCodeBrickToPluginUseCase: ConvertOneCodeBrickToPluginUseCase
 ): ViewModel() {
 
     private val _codeBrickScreenUIState = MutableStateFlow(CodeBrickScreenUIState())
@@ -90,6 +92,14 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             it.copy(
                 executeResultCanShow = showStatus
             )
+        }
+    }
+
+    fun convertOneCodeBrickToPlugin(
+        codeBrickConfig: CodeBrickConfig
+    ){
+        viewModelScope.launch {
+            convertOneCodeBrickToPluginUseCase(codeBrickConfig)
         }
     }
 
