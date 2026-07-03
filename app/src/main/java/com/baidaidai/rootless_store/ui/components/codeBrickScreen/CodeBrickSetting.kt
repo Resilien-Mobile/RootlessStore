@@ -29,7 +29,8 @@ fun CodeBrickSetting(
         context: HosterOverallStatus,
         tileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
-    )-> Unit
+    )-> Unit,
+    onCodeBrickToPluginButtonClick: (codeBrickConfig: CodeBrickConfig)-> Unit
 ){
 
     var titleContent by remember { mutableStateOf("") }
@@ -80,7 +81,8 @@ fun CodeBrickSetting(
                 onCodeBrickTitleValueChange = { titleContent = it },
                 onCodeBrickContentValueChange = { codeContent = it },
                 onCodeBrickContextValueChange = { selectedContext = it },
-                onCodeBrickTileValueChange = { tileIndex = it }
+                onCodeBrickTileValueChange = { tileIndex = it },
+                onCodeBrickToPluginButtonClick = { onCodeBrickToPluginButtonClick(codeBrickConfig) }
             )
         },
         containerColor = MaterialTheme.colorScheme.surface
