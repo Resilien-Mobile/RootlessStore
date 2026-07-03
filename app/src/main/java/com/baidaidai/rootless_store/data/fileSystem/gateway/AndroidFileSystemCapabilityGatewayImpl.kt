@@ -132,6 +132,11 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun createVoidFileDirectory(pluginRootDirectory: File, directoryName: String): File {
         return File(pluginRootDirectory, directoryName) // 创建文件夹
     }  // /File/Plugin/PLUGIN
+    fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
+        val targetFile = File(parentDirectory, fileName)
+        targetFile.writeText(content)
+        return targetFile
+    }
 
     // Deprecated FS Operator
     @Deprecated(
