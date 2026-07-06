@@ -102,16 +102,57 @@ sealed interface PluginManifest: ModuleManifestCollection {
      */
     val requiredEnvironment: HosterOverallStatus
 
+    /**
+     * The runtime model used when executing the plugin.
+     *
+     * Recommendations:
+     * - Choose `OneTime` for scripts that produce no output, run once, or emit only a small amount of logs.
+     * - Choose `Daemon` for long-running tasks, continuous output, or anything that needs persistent monitoring.
+     *
+     * Important:
+     * - If the plugin is not clearly one-shot, you must choose `Daemon`.
+     */
+    val pluginRunModel: PluginRunModel
+
     val entryPoint: String
+
+    /**
+     * The optional Web UI entry point of the plugin.
+     *
+     * We follow the KernelSU-style `webroot` convention, while still allowing
+     * plugin authors to choose a custom layout when needed.
+     *
+     * Usage:
+     * - Set this to `null` if the plugin does not provide a Web UI.
+     * - If the plugin provides a Web UI, set this to the relative path of
+     *   `index.html` from the plugin package root.
+     *
+     * Example:
+     * - `null`
+     * - `"webroot/index.html"`
+     * - `"ui/index.html"`
+     */
+    val webUIEntryPoint: String?
 
     // Runtime state such as `enabled`, `state`, `source` should NOT belong here:
     // - enabled: Boolean
     // - state: PluginState
     // - source: PluginSource
-    interface PluginManifestLocal: PluginManifest
+    interface PluginManifestLocal: PluginManifest {
+
+        /**
+         * Additional files that should be restored/marked as executable after extraction.
+         *
+         * Android packaging/extraction may not preserve Unix executable bits,
+         * so the host should chmod these paths before running the plugin.
+         *
+         * Paths are relative to the plugin package root.
+         */
+        val executableFiles: List<String>?
+
+    }
     interface PluginManifestRemote: PluginManifest {
         val pluginURI: String
-        val pluginRunModel: PluginRunModel
     }
     interface PluginManifestRoom: PluginManifest {
         val enabled: Boolean
