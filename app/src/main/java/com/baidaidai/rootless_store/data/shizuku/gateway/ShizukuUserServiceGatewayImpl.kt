@@ -38,7 +38,7 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         )
             .processNameSuffix("shell")
             .tag("shell_service")
-            .version(2)
+            .version(3)
             .daemon(true)
 
         Shizuku.bindUserService(args, connection)
