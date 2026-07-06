@@ -8,17 +8,27 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.IntSize
@@ -28,15 +38,27 @@ import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.core.i18n.icuString
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 
 @Composable
 fun PluginInfoContainerLocal(
-    pluginManifest: PluginManifestRoom,
+    pluginManifestRoom: PluginManifestRoom,
     onCardSizeChanged: (intSize: IntSize)-> Unit = {},
     onSwitchClick: ()-> Unit,
+    onButtonClick: ()-> Unit,
     onCardClick: ()-> Unit,
     onCardLongClick: ()-> Unit = {}
 ){
+
+    var iconButtonClickStatus by remember { mutableStateOf(false) }
+    val iconButtonColors = IconButtonColors(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+        disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    )
+
+
     Column(
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
@@ -60,7 +82,7 @@ fun PluginInfoContainerLocal(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 DynamicPluginIcon(
-                    iconUri = pluginManifest.iconURI?.toUri(),
+                    iconUri = pluginManifestRoom.iconURI?.toUri(),
                     contentDescription = "Plugin Icon",
                     modifier = Modifier
                         .clip(CircleShape)
@@ -74,21 +96,46 @@ fun PluginInfoContainerLocal(
                         .weight(1f)
                 ){
                     Text(
-                        text = pluginManifest.pluginRenderingName,
+                        text = pluginManifestRoom.pluginRenderingName,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
                         text = icuString(
                             R.string.plugin_screen_info_container_local_version,
-                            mapOf("version" to pluginManifest.installedVersion)
+                            mapOf("version" to pluginManifestRoom.installedVersion)
                         ),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
-                Switch(
-                    checked = pluginManifest.enabled,
-                    onCheckedChange = { onSwitchClick() }
-                )
+                if (pluginManifestRoom.pluginRunModel == PluginRunModel.Daemon){
+                    Switch(
+                        checked = pluginManifestRoom.enabled,
+                        onCheckedChange = { onSwitchClick() }
+                    )
+                }else{
+                    IconButton(
+                        onClick = {
+                            onButtonClick()
+                            iconButtonClickStatus = !iconButtonClickStatus
+                        },
+                        colors = iconButtonColors,
+                        shape = RoundedCornerShape(16.dp),
+                        modifier = Modifier
+                            .size(56.dp)
+                    ) {
+                        if (iconButtonClickStatus){
+                            Icon(
+                                painterResource(R.drawable.material_symbols_check),
+                                contentDescription = "started"
+                            )
+                        }else{
+                            Icon(
+                                painter = painterResource(R.drawable.material_symbols_play_arrow),
+                                contentDescription = "start"
+                            )
+                        }
+                    }
+                }
             }
         }
         Spacer(
@@ -107,19 +154,19 @@ fun PluginInfoContainerLocal(
             ) {
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_author_label),
-                    value = pluginManifest.author
+                    value = pluginManifestRoom.author
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
-                    value = pluginManifest.source.toString()
+                    value = pluginManifestRoom.source.toString()
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),
-                    value = pluginManifest.state.toString()
+                    value = pluginManifestRoom.state.toString()
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_required_label),
-                    value = pluginManifest.requiredEnvironment.toString()
+                    value = pluginManifestRoom.requiredEnvironment.toString()
                 )
             }
         }
@@ -258,8 +305,9 @@ private fun PluginInfoRow(
 @PreviewLightDark
 private fun _PluginInfosContainerPreview_(){
     PluginInfoContainerLocal(
-        pluginManifest = PluginManifestRoom._testOnly_,
+        pluginManifestRoom = PluginManifestRoom._testOnly_,
         onSwitchClick = {},
+        onButtonClick = {},
         onCardClick = {},
         onCardLongClick = {}
     )
