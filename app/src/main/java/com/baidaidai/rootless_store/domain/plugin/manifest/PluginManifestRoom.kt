@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
@@ -16,8 +17,11 @@ data class PluginManifestRoom(
     override val author: String,
     override val pluginDescription: String,
     override val requiredEnvironment: HosterOverallStatus,
-    override val entryPoint: String
+    override val entryPoint: String,
+    override val pluginRunModel: PluginRunModel,
+    override val webUIEntryPoint: String? = null
 ): PluginManifest.PluginManifestRoom{
+
     companion object {
         val _testOnly_ = PluginManifestRoom(
             installedVersion = "x.x.x",
@@ -31,7 +35,8 @@ data class PluginManifestRoom(
             enabled = false,
             state = PluginState.PermissionProblems,
             source = PluginSource.Local,
-            entryPoint = "./index.sh"
+            entryPoint = "./index.sh",
+            pluginRunModel = PluginRunModel.OneTime
         )
     }
 }
