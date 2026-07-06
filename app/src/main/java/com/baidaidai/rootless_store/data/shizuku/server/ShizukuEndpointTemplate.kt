@@ -24,13 +24,13 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
     ) {
 
         val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-
-        val processBuilder = ProcessBuilder(
-            "run-as",
-            "com.baidaidai.rootless_store",
-            "sh",
-            "-c",
-            """
+        coroutineScope.launch {
+            val processBuilder = ProcessBuilder(
+                "run-as",
+                "com.baidaidai.rootless_store",
+                "sh",
+                "-c",
+                """
                 cd ${pluginPackageDirectory.shellQuote()}
                 export PATH="$environmentPATH:${'$'}PATH"
                 export LD_LIBRARY_PATH="$environmentLDPATH:${'$'}LD_LIBRARY_PATH"
@@ -41,32 +41,33 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
                 echo PID:${'$'}$
                 exec $pluginExecuteEntryPoint
             """.trimIndent()
-        )
+            )
 
-        val process = processBuilder.start()
+            val process = processBuilder.start()
 
-        process
-            .inputStream
-            .bufferedReader()
-            .useLines{ line ->
-                line.forEach {
-                    callback.onExecute(it)
+            process
+                .inputStream
+                .bufferedReader()
+                .useLines{ line ->
+                    line.forEach {
+                        callback.onExecute(it)
+                    }
                 }
-            }
 
-        process
-            .errorStream
-            .bufferedReader()
-            .useLines{ line ->
-                line.forEach {
-                    callback.onError(it)
+            process
+                .errorStream
+                .bufferedReader()
+                .useLines{ line ->
+                    line.forEach {
+                        callback.onError(it)
+                    }
                 }
-            }
 
-        if (enableMonitor){
-            coroutineScope.launch {
-                val exitCode = process.waitFor()
-                callback.onProcessExited(exitCode)
+            if (enableMonitor){
+                coroutineScope.launch {
+                    val exitCode = process.waitFor()
+                    callback.onProcessExited(exitCode)
+                }
             }
         }
 
