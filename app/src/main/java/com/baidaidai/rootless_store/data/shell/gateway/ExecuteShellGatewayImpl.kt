@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.shell.gateway
 import android.util.Log
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.shell.provider.ShellExecuteContextProviderImpl
-import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
@@ -18,7 +18,7 @@ import javax.inject.Inject
 import kotlin.text.orEmpty
 
 class ExecuteShellGatewayImpl @Inject constructor(
-    private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
+    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val shellExecuteContextProviderImpl: ShellExecuteContextProviderImpl
 ) {
@@ -112,9 +112,9 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 onProcessExitedCallback = {}
             )
 
-            Log.d("exam",(shizukuAdbRepositoryImpl.getShizukuEndpoint()==null).toString())
+            Log.d("exam",(shizukuUserServiceGatewayImpl.getShizukuUserService()==null).toString())
 
-            shizukuAdbRepositoryImpl.getShizukuEndpoint()
+            shizukuUserServiceGatewayImpl.getShizukuUserService()
                 ?.command(
                     commandContent,
                     adbShellContextConfig.environmentPATH,
