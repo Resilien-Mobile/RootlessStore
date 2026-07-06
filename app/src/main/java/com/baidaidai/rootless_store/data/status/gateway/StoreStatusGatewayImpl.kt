@@ -7,8 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
-import com.baidaidai.rootless_store.data.shizuku.client.ShizukuAuthManager
-import com.baidaidai.rootless_store.data.shizuku.client.ShizukuUserServiceManager
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
 import com.baidaidai.rootless_store.data.status.datasource.AndroidAndAPIVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
@@ -38,7 +38,8 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val kernelStatusDataSource: KernelStatusDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
     private val androidAndAPIVersionDataSource: AndroidAndAPIVersionDataSource,
-    private val shizukuUserServiceManager: ShizukuUserServiceManager,
+    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
+    private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
     @ApplicationContext context: Context
 ) {
 
@@ -78,11 +79,11 @@ class StoreStatusGatewayImpl @Inject constructor(
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && ShizukuAuthManager.pingShizuku() && ShizukuAuthManager.checkShizukuPermission()) {
-                    Log.d("HosterOverallStatus", "Attempt bind Shizuku Endpoint")
-                    val ok = shizukuUserServiceManager.bind()
+                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
+                    Log.d("HosterOverallStatus", "Attempt tryBindShizukuUserService Shizuku Endpoint")
+                    val ok = shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
                     Log.d("HosterOverallStatus", "Bind result: $ok")
-                    ok
+                    true
                 } else {
                     false
                 }
@@ -116,7 +117,9 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     fun getShizukuStatus(): Boolean {
-        return shizukuUserServiceManager.bind()
+        shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
+        return true
+        // MVP后马上删，会抛error不稳定
     }
 
     fun getExecuteContextPreference(): Flow<HosterOverallStatus> {

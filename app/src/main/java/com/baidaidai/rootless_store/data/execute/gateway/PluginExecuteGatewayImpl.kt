@@ -3,8 +3,7 @@ package com.baidaidai.rootless_store.data.execute.gateway
 import android.util.Log
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.data.monitor.ProcessMonitor
-import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.shizuku.repository.ShizukuAdbRepositoryImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
 import com.baidaidai.rootless_store.domain.execute.model.ResultTag
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PluginExecuteGatewayImpl @Inject constructor(
-    private val shizukuAdbRepositoryImpl: ShizukuAdbRepositoryImpl,
+    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val processMonitor: ProcessMonitor
 ) {
@@ -129,14 +128,14 @@ class PluginExecuteGatewayImpl @Inject constructor(
                     }
                 )
 
-                Log.d("exam",(shizukuAdbRepositoryImpl.getShizukuEndpoint()==null).toString())
+                Log.d("exam",(shizukuUserServiceGatewayImpl.getShizukuUserService() != null).toString())
 
                 val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
                 val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
                 val environmentConfigKeyList = environmentRepositoryImpl.getEnvironmentConfigKeyList()
                 val environmentConfigValueList = environmentRepositoryImpl.getEnvironmentConfigValueList()
 
-                shizukuAdbRepositoryImpl.getShizukuEndpoint()
+                shizukuUserServiceGatewayImpl.getShizukuUserService()
                     ?.exec(
                         pluginExecuteEntryPoint,
                         pluginPackageDirectory,
@@ -161,10 +160,10 @@ class PluginExecuteGatewayImpl @Inject constructor(
 
     fun abortPluginProcessByShizuku(pluginProcessPID: Int?): Boolean{
         return if (pluginProcessPID != null){
-            Log.d("exam","shizuku ${shizukuAdbRepositoryImpl.getShizukuEndpoint() == null}")
+            Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.getShizukuUserService() == null}")
             Log.d("pid","$pluginProcessPID")
 
-            val result = shizukuAdbRepositoryImpl.getShizukuEndpoint()
+            val result = shizukuUserServiceGatewayImpl.getShizukuUserService()
                 ?.kill(pluginProcessPID)
 
             Log.d("kill pid result",result.toString())
