@@ -107,7 +107,7 @@ fun ShizukuAdbScreen(
                     description = stringResource(R.string.shizuku_adb_screen_action_card_step_1_description),
                     targetStatus = shizukuActived,
                     onClick = {
-                        shizukuAdbScreenViewModel.activeShizuku()
+                        shizukuAdbScreenViewModel.authShizukuPermission()
                     }
                 )
             }
@@ -118,7 +118,7 @@ fun ShizukuAdbScreen(
                     description = stringResource(R.string.shizuku_adb_screen_action_card_step_2_description),
                     targetStatus = endpointActived,
                     onClick = {
-                        shizukuAdbScreenViewModel.activeShizukuEndpoint()
+                        shizukuAdbScreenViewModel.activeShizukuUserService()
                     }
                 )
             }
