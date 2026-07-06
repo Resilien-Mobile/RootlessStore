@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.plugin.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
@@ -32,36 +32,7 @@ data class PluginInfoEntity(
     val requiredEnvironment: HosterOverallStatus,
     val state: PluginState,
     val source: PluginSource,
-    val entryPoint: String
-){
-    companion object {
-
-        /**
-         * Create a PluginInfoEntity from PluginManiFest.
-         *
-         * This is the single source of truth for mapping
-         * manifest data into database entity.
-         */
-        fun fromPluginManifestRoom(
-            pluginManifestRoom: PluginManifestRoom
-        ): PluginInfoEntity =
-            PluginInfoEntity(
-                pluginID = pluginManifestRoom.pluginID,
-
-                // Basic Infos
-                installedVersion = pluginManifestRoom.installedVersion,
-                pluginRenderingName = pluginManifestRoom.pluginRenderingName,
-                pluginPackageName = pluginManifestRoom.pluginPackageName,
-                iconURI = pluginManifestRoom.iconURI,
-                author = pluginManifestRoom.author,
-                pluginDescription = pluginManifestRoom.pluginDescription,
-
-                // Runtime Infos
-                enabled = false,
-                requiredEnvironment = pluginManifestRoom.requiredEnvironment,
-                state = pluginManifestRoom.state,
-                source = pluginManifestRoom.source,
-                entryPoint = pluginManifestRoom.entryPoint
-            )
-    }
-}
+    val entryPoint: String,
+    val pluginRunModel: PluginRunModel,
+    val webUIEntryPoint: String?
+)

@@ -5,7 +5,7 @@ import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
-import kotlinx.serialization.encodeToString
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
@@ -35,7 +35,8 @@ class ConvertOneCodeBrickToPluginUseCase @Inject constructor(
             author = "CodeBrick",
             pluginDescription = "Generated from CodeBrick",
             requiredEnvironment = codeBrickConfig.codeBrickEnvironment,
-            entryPoint = "index.sh"
+            entryPoint = "index.sh",
+            pluginRunModel = PluginRunModel.OneTime
         )
         val pluginManifestJson = json.encodeToString(pluginManifestLocal)
 

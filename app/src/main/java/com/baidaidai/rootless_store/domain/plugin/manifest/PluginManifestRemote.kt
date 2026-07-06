@@ -21,7 +21,8 @@ data class PluginManifestRemote(
     override val pluginURI: String,
     override val entryPoint: String,
 
-    override val pluginRunModel: PluginRunModel
+    override val pluginRunModel: PluginRunModel,
+    override val webUIEntryPoint: String? = null
 ): PluginManifest.PluginManifestRemote {
     companion object {
         val _testOnly_ = PluginManifestRemote(

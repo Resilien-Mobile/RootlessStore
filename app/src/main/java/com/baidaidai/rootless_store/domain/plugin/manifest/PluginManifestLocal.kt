@@ -1,7 +1,6 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
-import com.baidaidai.rootless_store.domain.plugin.model.PluginState
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import kotlinx.serialization.Serializable
 
@@ -30,7 +29,10 @@ data class PluginManifestLocal(
     override val author: String,
     override val pluginDescription: String,
     override val requiredEnvironment: HosterOverallStatus,
-    override val entryPoint: String
+    override val entryPoint: String,
+    override val pluginRunModel: PluginRunModel,
+    override val webUIEntryPoint: String? = null,
+    override val executableFiles: List<String>? = null
 ): PluginManifest.PluginManifestLocal{
     companion object {
         val _testOnly_ = PluginManifestLocal(
@@ -42,23 +44,8 @@ data class PluginManifestLocal(
             author = "Rootless Store(Creater. Bai)",
             requiredEnvironment = HosterOverallStatus.LIMITED,
             pluginDescription = "Tested by Creater. Bai",
-            entryPoint = "./index.sh"
-        )
-    }
-    fun toManifestRoom(): PluginManifestRoom{
-        return PluginManifestRoom(
-            enabled = false,
-            state = PluginState.Great,
-            source = PluginSource.Local,
-            installedVersion = installedVersion,
-            pluginRenderingName = pluginRenderingName,
-            pluginPackageName = pluginPackageName,
-            pluginID = pluginID,
-            iconURI = iconURI,
-            author = author,
-            pluginDescription = pluginDescription,
-            requiredEnvironment = requiredEnvironment,
-            entryPoint = entryPoint
+            entryPoint = "./index.sh",
+            pluginRunModel = PluginRunModel.OneTime
         )
     }
 }

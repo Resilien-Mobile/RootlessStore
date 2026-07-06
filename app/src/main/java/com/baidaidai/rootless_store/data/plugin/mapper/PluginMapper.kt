@@ -21,7 +21,9 @@ object PluginMapper {
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
             source = PluginSource.Local,
-            entryPoint = entryPoint
+            entryPoint = entryPoint,
+            pluginRunModel = pluginRunModel,
+            webUIEntryPoint = webUIEntryPoint
         )
     }
     fun PluginManifestRemote.toPluginInfoEntity(): PluginInfoEntity {
@@ -37,7 +39,9 @@ object PluginMapper {
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
             source = PluginSource.Official,
-            entryPoint = entryPoint
+            entryPoint = entryPoint,
+            pluginRunModel = pluginRunModel,
+            webUIEntryPoint = webUIEntryPoint,
         )
     }
 
