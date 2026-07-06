@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.data.status.repository.GetOverallStatusUseCase
+import com.baidaidai.rootless_store.application.status.GetOverallStatusUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.GetEnableAutoUpdatePreferenceUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
@@ -11,7 +11,6 @@ import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
-import com.baidaidai.rootless_store.domain.status.usecase.GetADBStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndAPIStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetExecuteContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetKernelStatusUseCase
