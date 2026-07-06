@@ -312,6 +312,9 @@ fun RootlessStoreStartScreenContainer(
                         },
                         onAbortOnePlugin = { pluginID ->
                             currentExecuteViewModel.abortPluginProcess(pluginID)
+                        },
+                        onActiveOneTimePlugin = { pluginID ->
+                            currentExecuteViewModel.executeOnePlugin(pluginID)
                         }
                     )
                 }

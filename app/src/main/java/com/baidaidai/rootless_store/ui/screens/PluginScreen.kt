@@ -41,7 +41,8 @@ fun RootlessStorePluginScreenContainer(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
-    onAbortOnePlugin:suspend (pluginID: String) -> Unit
+    onAbortOnePlugin:suspend (pluginID: String) -> Unit,
+    onActiveOneTimePlugin: (pluginID: String)-> Unit
 ){
     val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
     val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
@@ -86,7 +87,8 @@ fun RootlessStorePluginScreenContainer(
                     renderingList = pluginInfoList,
                     pluginScreenViewModel = pluginScreenViewModel,
                     navigateToExecuteScreen = navigateToExecuteScreen,
-                    onAbortOnePlugin = onAbortOnePlugin
+                    onAbortOnePlugin = onAbortOnePlugin,
+                    onButtonClick = onActiveOneTimePlugin
                 )
             }
             1 -> {
@@ -106,7 +108,8 @@ fun PluginScreen(
     renderingList: List<PluginManifestRoom>,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
-    onAbortOnePlugin: suspend (pluginID: String) -> Unit
+    onAbortOnePlugin: suspend (pluginID: String) -> Unit,
+    onButtonClick: (pluginID: String)-> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -156,7 +159,7 @@ fun PluginScreen(
             }else{
 
                 PluginInfoContainerLocal(
-                    pluginManifest = pluginManifestRoom,
+                    pluginManifestRoom = pluginManifestRoom,
                     onSwitchClick = {
                         pluginScreenViewModel.setPluginEnabled(
                             pluginID = pluginManifestRoom.pluginID,
@@ -171,6 +174,7 @@ fun PluginScreen(
                             }
                         }
                     },
+                    onButtonClick = { onButtonClick(pluginManifestRoom.pluginID) },
                     onCardClick = {
                         if (pluginManifestRoom.enabled){
                             navigateToExecuteScreen(pluginManifestRoom.pluginID,false)
