@@ -8,7 +8,7 @@ An open-source, rootless plugin management and runtime platform for the Android 
 <p>
     <img src="/asset/picture/HomeScreen.png" width="32%" />
     <img src="/asset/picture/PluginScreen.png" width="32%" />
-    <img src="/asset/picture/MarketScreen.png" width="32%" />
+    <img src="/asset/picture/CodeBrickScreen.png" width="32%" />
     <img src="/asset/picture/SettingScreen.png" width="32%" />
     <img src="/asset/picture/ExecuteScreen.png" width="32%" />
     <img src="/asset/picture/ShellScreen.png" width="32%" />
@@ -31,11 +31,13 @@ It stands on three core principles:
 
 ## Features
 
-- Plugin management and execution
-- Source management and market integration
-- Multiple execution environments: Shizuku, Shell, Root
-- Device status dashboard: Memory, Storage, Kernel, SELinux, Plugins, Temp
-- GUI-first design to lower the barrier of traditional TUI / TTY workflows
+- Manage, execute, share, and install plugins from configurable sources
+- Build quick automations with CodeBrick, then promote them into full plugins when they grow
+- Run both one-shot scripts and daemon-style plugins designed for long-running workflows
+- Choose the right execution context: limited app shell, Shizuku / ADB, or Root
+- Receive remote notifications for plugin status changes and warning events
+- Monitor device status, including Memory, Storage, Kernel, SELinux, Plugin state, and temperature
+- Use a GUI-first workflow instead of wrestling with traditional TUI / TTY tooling
 
 ## Roadmap
 
@@ -50,9 +52,9 @@ It stands on three core principles:
 - [x] Plugin status transition cleaning
 - [x] Support Preference Panel
 - [x] Support private sources, invisible sources, and paid sources
-- [ ] Shell code snippet support
+- [x] Shell code snippet support
 - [ ] Magisk Plugin Compatibility Layer
-- [ ] Quick launch tile of the Android Control Center
+- [x] Quick launch tile of the Android Control Center
 - [ ] Host status panel， More Expressive
 - [ ] A more intuitive demonstration of plugin execution methods
 - [ ] Improve filtering, state feedback, and permission boundaries
