@@ -70,7 +70,7 @@ fun HomeScreenContextSwitchDialog(
         HomeScreenContextSwitchDialogSpec(
             option = HosterOverallStatus.ROOTD,
             iconResource = R.drawable.material_symbols_cyclone,
-            content = "ROOT",
+            content = "ROOTD",
             canUse = rootStatus
         )
     )
