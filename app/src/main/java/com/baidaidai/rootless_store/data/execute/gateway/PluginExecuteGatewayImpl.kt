@@ -7,7 +7,6 @@ import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatew
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
 import com.baidaidai.rootless_store.domain.execute.model.ResultTag
-import com.topjohnwu.superuser.CallbackList
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -22,14 +21,6 @@ class PluginExecuteGatewayImpl @Inject constructor(
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val processMonitor: ProcessMonitor
 ) {
-
-    internal fun createCallbackList(
-        onAddingElement: (String) -> Unit
-    ): CallbackList<String> {
-        return object : CallbackList<String>() {
-            override fun onAddElement(s: String) = onAddingElement(s)
-        }
-    }
 
     internal fun rootEnvironmentSwitch(): String{
         val shell = Shell.getShell()
@@ -102,9 +93,7 @@ class PluginExecuteGatewayImpl @Inject constructor(
         pluginExecuteEntryPoint: String,
         pluginPackageDirectory: String,
         enableMonitor: Boolean
-    ): Flow<ExecuteResult> =
-
-        callbackFlow {
+    ): Flow<ExecuteResult> = callbackFlow {
             launch(Dispatchers.IO) {
                 val callback = ShizukuEndpointCallback(
                     onExecuteCallback = { session ->
@@ -150,6 +139,39 @@ class PluginExecuteGatewayImpl @Inject constructor(
             awaitClose {  }
         }
 
+    fun executePluginWithoutEnvironmentByShizuku(
+        pluginContent: String,
+        enableMonitor: Boolean
+    ): Flow<ExecuteResult> = callbackFlow {
+        launch(Dispatchers.IO) {
+            val callback = ShizukuEndpointCallback(
+                onExecuteCallback = { session ->
+                    trySend(
+                        ExecuteResult(
+                            resulTag = ResultTag.Normal,
+                            content = "- ${session.toString()}"
+                        )
+                    )
+                },
+                onErrorCallback = { error ->
+                    trySend(
+                        ExecuteResult(
+                            resulTag = ResultTag.RedLine,
+                            content = "- ${error.toString()}"
+                        )
+                    )
+                },
+                onProcessExitedCallback = { exitCode ->
+                    processMonitor(exitCode)
+                }
+            )
+
+            shizukuUserServiceGatewayImpl.getShizukuUserService()
+                ?.execWithoutEnvironment(pluginContent, enableMonitor, callback)
+        }
+        awaitClose {  }
+    }
+
     fun abortPluginProcess(pluginProcessPID: Int?){
         if (pluginProcessPID != null){
             ProcessBuilder(
@@ -173,4 +195,5 @@ class PluginExecuteGatewayImpl @Inject constructor(
             false
         }
     }
+
 }

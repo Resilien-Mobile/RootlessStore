@@ -36,7 +36,8 @@ class ConvertOneCodeBrickToPluginUseCase @Inject constructor(
             pluginDescription = "Generated from CodeBrick",
             requiredEnvironment = codeBrickConfig.codeBrickEnvironment,
             entryPoint = "index.sh",
-            pluginRunModel = PluginRunModel.OneTime
+            pluginRunModel = PluginRunModel.OneTime,
+            bypassEnvironment = true
         )
         val pluginManifestJson = json.encodeToString(pluginManifestLocal)
 
