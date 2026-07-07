@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.domain.execute.usecase
+package com.baidaidai.rootless_store.application.execute
 
 import com.baidaidai.rootless_store.data.execute.repository.PluginExecuteRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
@@ -14,41 +14,29 @@ import javax.inject.Inject
 class ExecuteOnePluginUseCase @Inject constructor(
     private val pluginExecuteRepositoryImpl: PluginExecuteRepositoryImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
+    private val executePluginWithoutEnvironmentByShizukuUseCase: ExecutePluginWithoutEnvironmentByShizukuUseCase,
     val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
     val settingPreferenceRepositoryImpl: SettingPreferenceRepositoryImpl
 ) {
     suspend operator fun invoke(
-        pluginManifestRoom: PluginManifestRoom
+        pluginID: String
     ): Flow<ExecuteResult> {
-        val hosterOverallStatus = storeStatusRepositoryImpl.getOverallStatus().first()
-        val enableChooser = storeStatusRepositoryImpl
-            .getEnableChooserPreference()
-            .first()
-        val selectedExecuteContext = if (enableChooser) {
-            storeStatusRepositoryImpl
-                .getExecuteContextPreference()
-                .first()
-        } else {
-            null
-        }
 
-        val shouldUseShizuku =
-            hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!enableChooser || selectedExecuteContext == HosterOverallStatus.ADB)
-
+        val pluginManifestRoom = pluginRepositoryImpl.getOnePluginInfo(pluginID)!!
+        val shouldUseShizuku = judgeShouldUseShizuku()
         val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
 
-        // Judge if needs use shizuku
-        return if (shouldUseShizuku) {
+        // Judge if needs use Shizuku
+        return if (shouldUseShizuku && pluginManifestRoom.bypassEnvironment) {
+            executePluginWithoutEnvironmentByShizukuUseCase(pluginID)
+        } else if (shouldUseShizuku) {
             pluginExecuteRepositoryImpl.executeOnePluginByShizuku(pluginManifestRoom,enableMonitor)
         } else {
             pluginExecuteRepositoryImpl.executeOnePlugin(pluginManifestRoom,enableMonitor)
         }
     }
-    suspend operator fun invoke(
-        pluginID: String
-    ): Flow<ExecuteResult> {
-        val pluginManifestRoom = pluginRepositoryImpl.getOnePluginInfo(pluginID)!!
+
+    private suspend fun judgeShouldUseShizuku(): Boolean{
 
         val hosterOverallStatus = storeStatusRepositoryImpl.getOverallStatus().first()
         val enableChooser = storeStatusRepositoryImpl
@@ -62,17 +50,7 @@ class ExecuteOnePluginUseCase @Inject constructor(
             null
         }
 
-        val shouldUseShizuku =
-            hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!enableChooser || selectedExecuteContext == HosterOverallStatus.ADB)
 
-        val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
-
-        // Judge if needs use shizuku
-        return if (shouldUseShizuku) {
-            pluginExecuteRepositoryImpl.executeOnePluginByShizuku(pluginManifestRoom,enableMonitor)
-        } else {
-            pluginExecuteRepositoryImpl.executeOnePlugin(pluginManifestRoom,enableMonitor)
-        }
+        return hosterOverallStatus == HosterOverallStatus.ADB && (!enableChooser || selectedExecuteContext == HosterOverallStatus.ADB)
     }
 }

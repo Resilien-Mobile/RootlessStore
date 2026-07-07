@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
-import com.baidaidai.rootless_store.domain.execute.usecase.ExecuteOnePluginUseCase
+import com.baidaidai.rootless_store.application.execute.ExecuteOnePluginUseCase
 import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

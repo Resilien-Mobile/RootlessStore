@@ -114,6 +114,18 @@ sealed interface PluginManifest: ModuleManifestCollection {
      */
     val pluginRunModel: PluginRunModel
 
+    /**
+     * Whether to bypass the app-scoped environment wrapper when running in ADB mode.
+     *
+     * In the ADB environment, the host may rely on `run-as` to enter the app sandbox.
+     * If this is disabled, some original ADB shell commands may fail because the shell
+     * has been downgraded into the app user context.
+     *
+     * Set this to `true` to bypass the `run-as` downgrade and execute commands as a
+     * normal ADB shell. In that mode, the plugin cannot use the injected Environment variables.
+     */
+    val bypassEnvironment: Boolean
+
     val entryPoint: String
 
     /**

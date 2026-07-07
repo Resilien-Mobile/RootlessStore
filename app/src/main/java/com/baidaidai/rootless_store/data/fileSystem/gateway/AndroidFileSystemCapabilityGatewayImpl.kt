@@ -138,57 +138,6 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         return targetFile
     }
 
-    // Deprecated FS Operator
-    @Deprecated(
-        message = "Recommended to use unZipFromFile method, instead of the copyFile method",
-        replaceWith = ReplaceWith("unzipFromFile(originFileURI, pluginRootDirectory, directoryName)")
-    )
-    fun copyFile(originFileURI: Uri, destination: File, destinationFileName: String? = null) {
-
-        // Get file's name, always powered by readManiFestJsonContent
-        val fileName = when {
-            !destinationFileName.isNullOrBlank() -> destinationFileName.trim()  // 只有destinationFilName显式指定，否则不走
-            else -> {
-                readRawPluginManifest(originFileURI).let { json ->
-                    readManifestJsonContent(json).pluginPackageName
-                }.trim()
-            }
-        }
-
-        // Provide void file, for copy use
-        val internalDestination = ensureInternalPluginRootDirectory()
-        createOneVoidFile(internalDestination,fileName)  // needs prevent override files
-        val operationFile = File(internalDestination, "$fileName.zip")
-
-        // The core of copy operator
-        context.contentResolver.openInputStream(originFileURI).use { input ->
-            FileOutputStream(operationFile).use { output ->
-                input!!.copyTo(output)
-            }
-        }
-    }
-    @Deprecated(
-        message = "Recommended to use unZipFromURI method, instead of the copyFile method",
-        replaceWith = ReplaceWith("unZipFromURI(originFileByteChannel, pluginRootDirectory, directoryName)")
-    )
-    fun copyFile(originFileByteChannel: ByteReadChannel, destination: File, destinationFileName: String) {
-
-        // Get file's name, always powered by readManiFestJsonContent
-
-
-        // Provide void file, for copy use
-        val internalDestination = ensureInternalPluginRootDirectory()
-        createOneVoidFile(internalDestination, destinationFileName)  // needs prevent override files
-        val operationFile = File(internalDestination, "$destinationFileName.zip")
-
-        // The core of copy operator
-        FileOutputStream(operationFile).use { out ->
-            originFileByteChannel.toInputStream().use { input ->
-                input.copyTo(out)
-            }
-        }
-    }
-
     // Un-Zip FS Operator
     @Suppress("UNUSED_PARAMETER")
     fun unzipFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
@@ -394,11 +343,6 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     // Read FS Operator
     private fun readRawManifest(uri: Uri, manifestFileName: String): String? {
         context.contentResolver.openInputStream(uri).use { inputStream ->
-//            if (inputStream == null) {
-//                Log.e("readZipContent", "openInputStream returned null, uri=$uri")
-//                return
-//            }
-
             ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
                 /**
                  * The entry is like relative path, but root path is zipFile/...
@@ -435,6 +379,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun readRawEnvironmentManifest(uri: Uri): String{
         return readRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
+    fun readFileContent(filePath: String): String {
+        return File(filePath).readText()
+    }
 
     fun readManifestJsonContent(jsonContent: String): PluginManifestLocal {
         val json = Json {
