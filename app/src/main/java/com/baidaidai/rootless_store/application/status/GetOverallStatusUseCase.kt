@@ -16,11 +16,14 @@ import kotlin.time.Duration.Companion.milliseconds
 class GetOverallStatusUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
     private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
-    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
+    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
     operator fun invoke(): Flow<HosterOverallStatus> = flow {
+
         while (true){
+
+            val enableChooserPreference = storeStatusRepositoryImpl.getEnableChooserPreference().first()
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
                 if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
@@ -31,7 +34,14 @@ class GetOverallStatusUseCase @Inject constructor(
                 }
             val seLinuxStatus = storeStatusRepositoryImpl.getSELinuxStatus()
 
+            val executeContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.getExecuteContextPreference().first() else null
+
             val status = when {
+                (executeContextPreference != null) -> {
+                    Log.d("HosterOverallStatus", "Now At ContextPreference")
+                    Log.d("HosterOverallStatus", executeContextPreference.toString())
+                    executeContextPreference
+                }
                 isRoot -> {
                     Log.d("HosterOverallStatus", "Root")
                     HosterOverallStatus.ROOTD
