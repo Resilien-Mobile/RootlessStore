@@ -435,6 +435,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun readRawEnvironmentManifest(uri: Uri): String{
         return readRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
+    fun readFileContent(filePath: String): String {
+        return File(filePath).readText()
+    }
 
     fun readManifestJsonContent(jsonContent: String): PluginManifestLocal {
         val json = Json {

@@ -11,6 +11,11 @@ interface IShellService {
         in List<String> environmentConfigValueList,
         boolean enableMonitor
     );
+    void execWithoutEnvironment(
+        String fileContent,
+        boolean enableMonitor,
+        IShellCallback callback
+    );
     boolean kill(int progressPid);
     void command(
         String commandContent,
