@@ -73,6 +73,46 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
 
     }
 
+    override fun execWithoutEnvironment(
+        pluginContent: String,
+        enableMonitor: Boolean,
+        callback: IShellCallback,
+    ) {
+
+        val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        coroutineScope.launch {
+            val processBuilder = ProcessBuilder("sh","-c","echo PID:$$;$pluginContent")
+
+            val process = processBuilder.start()
+
+            process
+                .inputStream
+                .bufferedReader()
+                .useLines{ line ->
+                    line.forEach {
+                        callback.onExecute(it)
+                    }
+                }
+
+            process
+                .errorStream
+                .bufferedReader()
+                .useLines{ line ->
+                    line.forEach {
+                        callback.onError(it)
+                    }
+                }
+
+            if (enableMonitor){
+                coroutineScope.launch {
+                    val exitCode = process.waitFor()
+                    callback.onProcessExited(exitCode)
+                }
+            }
+        }
+
+    }
+
     override fun kill(progressPid: Int): Boolean {
 
         val process = ProcessBuilder(
