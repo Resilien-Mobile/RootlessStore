@@ -43,7 +43,7 @@ class NotificationManagerGatewayImpl @Inject constructor(
             return
         }
         val notification = NotificationCompat.Builder(context, channel_id)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.material_symbols_directions_run)
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
