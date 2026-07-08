@@ -56,7 +56,7 @@
         <service
             android:name=".service.tile.CustomTileService_0"
             android:label="Reverse Tile 0"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/material_symbols_directions_run"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">
             <intent-filter>
@@ -69,7 +69,7 @@
         <service
             android:name=".service.tile.CustomTileService_1"
             android:label="Reverse Tile 1"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/material_symbols_directions_run"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">
             <intent-filter>
@@ -82,7 +82,7 @@
         <service
             android:name=".service.tile.CustomTileService_2"
             android:label="Reverse Tile 2"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/material_symbols_directions_run"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">
             <intent-filter>
@@ -95,7 +95,7 @@
         <service
             android:name=".service.tile.CustomTileService_3"
             android:label="Reverse Tile 3"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/material_symbols_directions_run"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">
             <intent-filter>
@@ -108,7 +108,7 @@
         <service
             android:name=".service.tile.CustomTileService_4"
             android:label="Reverse Tile 4"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/material_symbols_directions_run"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
             android:exported="true">
             <intent-filter>
