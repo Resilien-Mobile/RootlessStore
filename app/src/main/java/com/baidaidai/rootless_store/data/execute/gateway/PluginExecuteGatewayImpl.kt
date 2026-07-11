@@ -89,58 +89,9 @@ class PluginExecuteGatewayImpl @Inject constructor(
     }
         .flowOn(Dispatchers.IO)
 
-    fun executePluginEntryPointByShizuku(
-        pluginExecuteEntryPoint: String,
-        pluginPackageDirectory: String,
-        enableMonitor: Boolean
-    ): Flow<ExecuteResult> = callbackFlow {
-            launch(Dispatchers.IO) {
-                val callback = ShizukuEndpointCallback(
-                    onExecuteCallback = { session ->
-                        trySend(
-                            ExecuteResult(
-                                resulTag = ResultTag.Normal,
-                                content = "- ${session.toString()}"
-                            )
-                        )
-                    },
-                    onErrorCallback = { error ->
-                        trySend(
-                            ExecuteResult(
-                                resulTag = ResultTag.RedLine,
-                                content = "- ${error.toString()}"
-                            )
-                        )
-                    },
-                    onProcessExitedCallback = { exitCode ->
-                        processMonitor(exitCode)
-                    }
-                )
-
-                Log.d("exam",(shizukuUserServiceGatewayImpl.getShizukuUserService() != null).toString())
-
-                val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
-                val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
-                val environmentConfigKeyList = environmentRepositoryImpl.getEnvironmentConfigKeyList()
-                val environmentConfigValueList = environmentRepositoryImpl.getEnvironmentConfigValueList()
-
-                shizukuUserServiceGatewayImpl.getShizukuUserService()
-                    ?.exec(
-                        pluginExecuteEntryPoint,
-                        pluginPackageDirectory,
-                        callback,
-                        environmentPATH,
-                        environmentLDPATH,
-                        environmentConfigKeyList,
-                        environmentConfigValueList,
-                        enableMonitor
-                    )
-            }
-            awaitClose {  }
-        }
-
     fun executePluginWithoutEnvironmentByShizuku(
-        pluginContent: String,
+        pluginDirectory: String,
+        pluginEntryPoint: String,
         enableMonitor: Boolean
     ): Flow<ExecuteResult> = callbackFlow {
         launch(Dispatchers.IO) {
@@ -166,8 +117,9 @@ class PluginExecuteGatewayImpl @Inject constructor(
                 }
             )
 
-            shizukuUserServiceGatewayImpl.getShizukuUserService()
-                ?.execWithoutEnvironment(pluginContent, enableMonitor, callback)
+            shizukuUserServiceGatewayImpl
+                .getShizukuUserService()
+                ?.exec(pluginDirectory,pluginEntryPoint,enableMonitor,callback)
         }
         awaitClose {  }
     }
