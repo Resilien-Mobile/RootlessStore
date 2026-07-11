@@ -61,6 +61,10 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun getCachePluginDirectoryFile(): File{
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
+    fun getShellPluginStagingDirectoryFile(): File {
+        val shellPluginStagingDirectory = File("/sdcard/RootlessStore")
+        return shellPluginStagingDirectory
+    } // /sdcard/RootlessStore
     fun getPluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String{
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
@@ -135,6 +139,17 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
         val targetFile = File(parentDirectory, fileName)
         targetFile.writeText(content)
+        return targetFile
+    }
+    fun copyUriToFile(originFileURI: Uri, targetFile: File): File {
+        targetFile.parentFile?.mkdirs()
+
+        context.contentResolver.openInputStream(originFileURI).use { originInputStream ->
+            FileOutputStream(targetFile).use { targetOutputStream ->
+                originInputStream!!.copyTo(targetOutputStream)
+            }
+        }
+
         return targetFile
     }
 
@@ -420,6 +435,10 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val targetFile = File(getInternalEnvironmentRootDirectory(), environmentPackageName)
 
         return targetFile.deleteRecursively()
+    }
+    fun deleteFileOrDirectory(filePath: String): Boolean {
+        val targetFileOrDirectory = File(filePath)
+        return targetFileOrDirectory.deleteRecursively()
     }
 
     // Chmod FS Operator
