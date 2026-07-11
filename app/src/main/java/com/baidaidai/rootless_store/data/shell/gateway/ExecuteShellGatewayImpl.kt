@@ -117,12 +117,8 @@ class ExecuteShellGatewayImpl @Inject constructor(
             shizukuUserServiceGatewayImpl.getShizukuUserService()
                 ?.command(
                     commandContent,
-                    adbShellContextConfig.environmentPATH,
-                    adbShellContextConfig.environmentLDPATH,
-                    adbShellContextConfig.environmentConfigKeyList,
-                    adbShellContextConfig.environmentConfigValueList,
                     callback,
-                    adbShellContextConfig.useRunAs
+                    adbShellContextConfig.jumpToDirectory
                 )
         }
         awaitClose {  }

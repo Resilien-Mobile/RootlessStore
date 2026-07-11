@@ -1,7 +1,6 @@
 package com.baidaidai.rootless_store.data.plugin.repository
 
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.mapper.PluginMapper.toPluginInfoEntity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
@@ -12,7 +11,6 @@ import javax.inject.Inject
 
 class PluginRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase,
-    private val pluginGatewayImpl: PluginGatewayImpl
 ): PluginCoreRepository {
 
     private val pluginInfoDAO = rootlessStoreDatabase.pluginInfoDao()

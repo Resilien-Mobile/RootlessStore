@@ -3,7 +3,6 @@ package com.baidaidai.rootless_store.application.execute
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusEntry
 import com.baidaidai.rootless_store.data.execute.gateway.PluginExecuteGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRepositoryImpl
 import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
@@ -13,8 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class ExecutePluginWithoutEnvironmentByShizukuUseCase @Inject constructor(
-    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
+class ExecuteOnePluginByShizukuUseCase @Inject constructor(
     private val pluginExecuteGatewayImpl: PluginExecuteGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val settingPreferenceRepositoryImpl: SettingPreferenceRepositoryImpl,
@@ -29,17 +27,11 @@ class ExecutePluginWithoutEnvironmentByShizukuUseCase @Inject constructor(
         val pluginManifestRoom = pluginRepositoryImpl.getOnePluginInfo(pluginID)!!
         val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
 
-        // Get absolute path for entry.sh
-        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
-        val pluginEntryPointFilePath = "$pluginPackageDirectory/${pluginManifestRoom.entryPoint}"
-
-        // Read Raw file, Convert it to String
-        val pluginContent = androidFileSystemCapabilityGatewayImpl.readFileContent(pluginEntryPointFilePath)
-
         // Dispatch to PluginExecuteGateway.executePluginWithoutEnvironmentByShizuku
         var pidSaved = false
         val pluginExecuteResult = pluginExecuteGatewayImpl.executePluginWithoutEnvironmentByShizuku(
-            pluginContent = pluginContent,
+            pluginEntryPoint = pluginManifestRoom.entryPoint,
+            pluginDirectory = pluginManifestRoom.pluginPackageName,
             enableMonitor = enableMonitor
         )
 
