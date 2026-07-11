@@ -13,7 +13,6 @@ import java.io.IOException
 import javax.inject.Inject
 
 data class ShellContextPreferences(
-    val enableRunAs: Boolean = false,
     val jumpToDirectory: Boolean = false
 )
 
@@ -31,16 +30,9 @@ class ShellPreferencesRepositoryImpl @Inject constructor(
             }
             .map { preferences ->
                 ShellContextPreferences(
-                    enableRunAs = preferences[ENABLE_RUN_AS] ?: false,
                     jumpToDirectory = preferences[JUMP_TO_DIRECTORY] ?: false
                 )
             }
-
-    suspend fun setEnableRunAs(enabled: Boolean) {
-        context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[ENABLE_RUN_AS] = enabled
-        }
-    }
 
     suspend fun setJumpToDirectory(enabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
@@ -49,7 +41,6 @@ class ShellPreferencesRepositoryImpl @Inject constructor(
     }
 
     private companion object {
-        val ENABLE_RUN_AS = booleanPreferencesKey("shell_enable_run_as")
         val JUMP_TO_DIRECTORY = booleanPreferencesKey("shell_jump_to_directory")
     }
 }

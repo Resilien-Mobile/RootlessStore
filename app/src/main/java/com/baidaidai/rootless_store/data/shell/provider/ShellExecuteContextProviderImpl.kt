@@ -35,7 +35,7 @@ class ShellExecuteContextProviderImpl @Inject constructor(
         val environmentConfigValueList = environmentRepositoryImpl.getEnvironmentConfigValueList()
 
         return AdbShellContextConfig(
-            useRunAs = preferences.enableRunAs,
+            jumpToDirectory = preferences.jumpToDirectory,
             environmentPATH = environmentPATH,
             environmentLDPATH = environmentLDPATH,
             environmentConfig = environmentConfig,
