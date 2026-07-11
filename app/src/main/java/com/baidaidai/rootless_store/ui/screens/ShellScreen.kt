@@ -165,8 +165,8 @@ fun ShellScreen(
                             ){
                                 Text(stringResource(R.string.shell_screen_enable_run_as_label))
                                 Checkbox(
-                                    checked = shellContextPreferences.enableRunAs,
-                                    onCheckedChange = shellScreenViewModel::setEnableRunAs
+                                    checked = shellContextPreferences.jumpToDirectory,
+                                    onCheckedChange = shellScreenViewModel::setJumpToDirectory
                                 )
                             }
                         }
