@@ -47,7 +47,7 @@ class PluginGatewayImpl @Inject constructor(
         androidFileSystemCapabilityGatewayImpl.deleteDirectoryByPackageName(pluginPackageName)
     }
 
-    internal fun parsePluginManifest(originFileURI: Uri): PluginManifestLocal {
+    fun parsePluginManifest(originFileURI: Uri): PluginManifestLocal {
         return androidFileSystemCapabilityGatewayImpl.readRawPluginManifest(uri = originFileURI).let {
             androidFileSystemCapabilityGatewayImpl.readManifestJsonContent(it)
         }

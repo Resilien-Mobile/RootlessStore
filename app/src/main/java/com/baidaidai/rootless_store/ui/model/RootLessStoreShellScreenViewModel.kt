@@ -9,7 +9,6 @@ import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCas
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetShellContextPreferencesUseCase
 import com.baidaidai.rootless_store.application.shell.RunCommandUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.SetShellEnableRunAsUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.SetShellJumpToDirectoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +24,6 @@ class RootLessStoreShellScreenViewModel @Inject constructor(
     private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
     private val getADBShellStatusUseCase: GetADBShellStatusUseCase,
     getShellContextPreferencesUseCase: GetShellContextPreferencesUseCase,
-    private val setShellEnableRunAsUseCase: SetShellEnableRunAsUseCase,
     private val setShellJumpToDirectoryUseCase: SetShellJumpToDirectoryUseCase
 ) : ViewModel(){
 
@@ -77,12 +75,6 @@ class RootLessStoreShellScreenViewModel @Inject constructor(
 
     fun cleanShellOutputList() {
         _shellOutputList.value =  emptyList()
-    }
-
-    fun setEnableRunAs(enabled: Boolean) {
-        viewModelScope.launch {
-            setShellEnableRunAsUseCase(enabled)
-        }
     }
 
     fun setJumpToDirectory(enabled: Boolean) {
