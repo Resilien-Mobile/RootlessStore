@@ -31,6 +31,31 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return File(context.cacheDir, ENVIRONMENT_DIR_NAME)
     }
 
+    private fun getExternalAppRootDirectory(): File {
+        return context.getExternalFilesDir(null)!!
+    }
+
+    private fun getExternalAppCacheRootDirectory(): File {
+        return context.externalCacheDir!!
+    }
+
+    // Default FS Operator (External)
+    fun getExternalAppDirectoryPath(): String {
+        return getExternalAppRootDirectory().path
+    } // /sdcard/Android/data/APP_PACKAGE/files
+
+    fun getExternalAppDirectoryFile(): File {
+        return getExternalAppRootDirectory()
+    } // /sdcard/Android/data/APP_PACKAGE/files
+
+    fun getExternalAppCacheDirectoryPath(): String {
+        return getExternalAppCacheRootDirectory().path
+    } // /sdcard/Android/data/APP_PACKAGE/cache
+
+    fun getExternalAppCacheDirectoryFile(): File {
+        return getExternalAppCacheRootDirectory()
+    } // /sdcard/Android/data/APP_PACKAGE/cache
+
     // Default FS Operator (Plugin)
     fun getDefaultPluginDirectoryPath(): String {
         return getInternalPluginRootDirectory().path
@@ -43,11 +68,6 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     fun getCachePluginDirectoryFile(): File {
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
-
-    fun getShellPluginStagingDirectoryFile(): File {
-        val shellPluginStagingDirectory = File("/sdcard/RootlessStore")
-        return shellPluginStagingDirectory
-    } // /sdcard/RootlessStore
 
     fun getPluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
