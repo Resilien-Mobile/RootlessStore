@@ -3,4 +3,7 @@
     <cache-path
         name="shared_cache"
         path="." />
+    <external-cache-path
+        name="shared_external_cache"
+        path="." />
 </paths>
