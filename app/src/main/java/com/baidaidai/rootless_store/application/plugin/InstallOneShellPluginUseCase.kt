@@ -2,7 +2,9 @@ package com.baidaidai.rootless_store.application.plugin
 
 import android.net.Uri
 import com.baidaidai.rootless_store.core.util.OutOfStringLike
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
@@ -11,7 +13,9 @@ import java.io.File
 import javax.inject.Inject
 
 class InstallOneShellPluginUseCase @Inject constructor(
-    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
+    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
+    private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
@@ -22,11 +26,11 @@ class InstallOneShellPluginUseCase @Inject constructor(
             // Parse PluginManifestLocal
             val pluginManifestLocal = pluginGatewayImpl.parsePluginManifest(uri)
 
-            // Copy to /sdcard/RootlessStore
-            val shellPluginStagingDirectory = androidFileSystemCapabilityGatewayImpl.getShellPluginStagingDirectoryFile()
+            // Copy to /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
+            val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppDirectoryPath()
             val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
 
-            androidFileSystemCapabilityGatewayImpl.copyUriToFile(
+            androidFileSystemCreateOperatorGatewayImpl.copyUriToFile(
                 originFileURI = uri,
                 targetFile = shellPluginStagingFile
             )
@@ -34,13 +38,14 @@ class InstallOneShellPluginUseCase @Inject constructor(
             // Shizuku File Flow
             val shellPluginInstallResult = shizukuUserServiceGatewayImpl.getShizukuUserService()
                 ?.installShellPlugin(
+                    shellPluginStagingFile.path,
                     pluginManifestLocal.pluginPackageName,
                     pluginManifestLocal.entryPoint
                 ) ?: false
 
-            // Delete /sdcard/RootlessStore
-            val deleteShellPluginStagingDirectoryResult = androidFileSystemCapabilityGatewayImpl.deleteFileOrDirectory(
-                shellPluginStagingDirectory.path
+            // Delete /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
+            val deleteShellPluginStagingFileResult = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+                shellPluginStagingFile.path
             )
 
             if (!shellPluginInstallResult) {
@@ -50,10 +55,10 @@ class InstallOneShellPluginUseCase @Inject constructor(
                 )
             }
 
-            if (!deleteShellPluginStagingDirectoryResult) {
+            if (!deleteShellPluginStagingFileResult) {
                 return PluginError(
-                    errorMessage = "Delete shell plugin staging directory failed",
-                    errorCause = "Failed to delete ${shellPluginStagingDirectory.path}"
+                    errorMessage = "Delete shell plugin staging file failed",
+                    errorCause = "Failed to delete ${shellPluginStagingFile.path}"
                 )
             }
 
