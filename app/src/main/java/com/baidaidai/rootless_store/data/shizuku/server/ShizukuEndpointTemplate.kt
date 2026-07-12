@@ -10,7 +10,9 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
 
 internal class ShizukuEndpointTemplate : IShellService.Stub() {
 
@@ -108,10 +110,14 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
     }
 
     override fun installShellPlugin(
+        shellPluginStagingFilePath: String,
         pluginPackageName: String,
         entryPoint: String
     ): Boolean {
         // Validate shell plugin install arguments
+        if (shellPluginStagingFilePath.isBlank()) {
+            return false
+        }
         if (!pluginPackageName.isSafeFileName()) {
             return false
         }
@@ -120,9 +126,12 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         }
 
         // Get shell plugin staging zip
-        val shellPluginStagingRootDirectory = File("/sdcard/RootlessStore")
         val pluginZipName = "_template_.zip"
-        val shellPluginZipFile = File(shellPluginStagingRootDirectory, pluginZipName)
+        val shellPluginZipFile = File(shellPluginStagingFilePath)
+
+        if (shellPluginZipFile.name != pluginZipName) {
+            return false
+        }
 
         if (!shellPluginZipFile.isFile) {
             return false
@@ -134,8 +143,7 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         val shellPluginPackageDirectory = File(shellPluginRootDirectory, pluginPackageName)
 
         return try {
-            // Create void shell plugin package directory
-            shellPluginPackageDirectory.deleteRecursively() // Update Plugin Need
+            // Create shell plugin package directory
             shellPluginPackageDirectory.mkdirs()
 
             // Unzip shell plugin zip stream to package directory
@@ -157,6 +165,56 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         } catch (throwable: Throwable) {
             Log.e("ShizukuEndpointTemplate", "installShellPlugin failed", throwable)
             shellPluginPackageDirectory.deleteRecursively()
+            false
+        }
+    }
+
+    override fun uninstallShellPlugin(
+        pluginPackageName: String
+    ): Boolean {
+        // Get shell private plugin package directory
+        val shellPrivateRootDirectory = File("/data/user_de/0/com.android.shell")
+        val shellPluginRootDirectory = File(shellPrivateRootDirectory, "RootlessStore/Plugin")
+        val shellPluginPackageDirectory = File(shellPluginRootDirectory, pluginPackageName)
+
+        // Delete shell plugin package directory
+        return shellPluginPackageDirectory.deleteRecursively()
+    }
+
+    override fun exportShellPlugin(
+        pluginPackageName: String,
+        shellPluginExportZipPath: String
+    ): Boolean {
+        // Validate shell plugin export arguments
+        if (!pluginPackageName.isSafeFileName()) {
+            return false
+        }
+        if (shellPluginExportZipPath.isBlank()) {
+            return false
+        }
+
+        // Get shell private plugin package directory
+        val shellPrivateRootDirectory = File("/data/user_de/0/com.android.shell")
+        val shellPluginRootDirectory = File(shellPrivateRootDirectory, "RootlessStore/Plugin")
+        val shellPluginPackageDirectory = File(shellPluginRootDirectory, pluginPackageName)
+
+        if (!shellPluginPackageDirectory.isDirectory) {
+            return false
+        }
+
+        // Get shell plugin export zip
+        val shellPluginExportZipFile = File(shellPluginExportZipPath)
+
+        return try {
+            // Re-Zip shell plugin package directory to app external cache
+            rezipShellPluginPackage(
+                shellPluginPackageDirectory = shellPluginPackageDirectory,
+                shellPluginExportZipFile = shellPluginExportZipFile
+            )
+
+            shellPluginExportZipFile.isFile
+        } catch (throwable: Throwable) {
+            Log.e("ShizukuEndpointTemplate", "exportShellPlugin failed", throwable)
             false
         }
     }
@@ -238,6 +296,42 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
                     zipInputStream.closeEntry()
                     zipEntry = zipInputStream.nextEntry
                 }
+            }
+        }
+    }
+
+    private fun rezipShellPluginPackage(
+        shellPluginPackageDirectory: File,
+        shellPluginExportZipFile: File
+    ) {
+        shellPluginExportZipFile.parentFile?.mkdirs()
+
+        ZipOutputStream(FileOutputStream(shellPluginExportZipFile)).use { zipOutputStream ->
+            fun writeZipEntry(file: File, entryName: String) {
+                if (file.canonicalFile == shellPluginExportZipFile.canonicalFile) {
+                    return
+                }
+
+                if (file.isDirectory) {
+                    val directoryEntryName = entryName.trimEnd('/') + "/"
+                    if (directoryEntryName != "/") {
+                        zipOutputStream.putNextEntry(ZipEntry(directoryEntryName))
+                        zipOutputStream.closeEntry()
+                    }
+                    file.listFiles()?.forEach { childFile ->
+                        writeZipEntry(childFile, "$directoryEntryName${childFile.name}")
+                    }
+                } else {
+                    zipOutputStream.putNextEntry(ZipEntry(entryName))
+                    file.inputStream().use { inputStream ->
+                        inputStream.copyTo(zipOutputStream)
+                    }
+                    zipOutputStream.closeEntry()
+                }
+            }
+
+            shellPluginPackageDirectory.listFiles()?.forEach { childFile ->
+                writeZipEntry(childFile, childFile.name)
             }
         }
     }

@@ -1,36 +1,51 @@
 package com.baidaidai.rootless_store.application.plugin
 
 import android.net.Uri
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReZipOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemSearchOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import java.io.File
 import javax.inject.Inject
 
 class GetPluginShareLinkUseCase @Inject constructor(
-    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
+    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemSearchOperatorGatewayImpl: AndroidFileSystemSearchOperatorGatewayImpl,
+    private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
+    private val androidFileSystemReZipOperatorGatewayImpl: AndroidFileSystemReZipOperatorGatewayImpl,
+    private val androidFileSystemShareOperatorGatewayImpl: AndroidFileSystemShareOperatorGatewayImpl,
+    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
     operator fun invoke(
         pluginManifestRoom: PluginManifestRoom
     ): Uri {
 
-        val defaultPluginCacheDirectory = androidFileSystemCapabilityGatewayImpl.getCachePluginDirectoryFile()
+        if (pluginManifestRoom.requiredEnvironment == HosterOverallStatus.ADB) {
+            return getShellPluginShareLink(pluginManifestRoom)
+        }
+
+        val defaultPluginCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getCachePluginDirectoryFile()
 
         // Get plugin package directory -> /file/Plugin/PLUGIN_DIRECTORY
-        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
+        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
 
         // Detect if cache/plugin available -> /cache/Plugin
-        val pluginCacheDirectoryAvailable = androidFileSystemCapabilityGatewayImpl.confirmPluginCacheExists()
+        val pluginCacheDirectoryAvailable = androidFileSystemSearchOperatorGatewayImpl.confirmPluginCacheExists()
 
         if (!pluginCacheDirectoryAvailable){
-            androidFileSystemCapabilityGatewayImpl.createCacheDir("Plugin")
+            androidFileSystemCreateOperatorGatewayImpl.createCacheDir("Plugin")
         }
 
         // Zip to cache/plugin
         // Create void zip content -> /cache/Plugin/PLUGIN.zip
-        val zipFile = androidFileSystemCapabilityGatewayImpl.createVoidFileDirectory(defaultPluginCacheDirectory,"${pluginManifestRoom.pluginPackageName}.zip")
+        val zipFile = androidFileSystemCreateOperatorGatewayImpl.createVoidFileDirectory(defaultPluginCacheDirectory,"${pluginManifestRoom.pluginPackageName}.zip")
 
         // Write Zip Byte
-        androidFileSystemCapabilityGatewayImpl.rezipFromFile(
+        androidFileSystemReZipOperatorGatewayImpl.rezipFromFile(
             originPluginFile = File(pluginPackageDirectory),
             targetZipFile = zipFile
         )
@@ -39,7 +54,39 @@ class GetPluginShareLinkUseCase @Inject constructor(
 //      TODO("Check Zip integrity")
 
         // Convert from zip to ShareLink
-        val shareLink = androidFileSystemCapabilityGatewayImpl.getShareUriFromFile(zipFile)
+        val shareLink = androidFileSystemShareOperatorGatewayImpl.getShareUriFromFile(zipFile)
+
+        return shareLink
+
+    }
+
+    private fun getShellPluginShareLink(
+        pluginManifestRoom: PluginManifestRoom
+    ): Uri {
+
+        // Get shell plugin export cache zip -> /storage/emulated/0/Android/data/com.baidaidai.rootless_store/cache/PLUGIN.zip
+        val shellPluginExportCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppCacheDirectoryFile()
+        val shellPluginExportZipFile = File(
+            shellPluginExportCacheDirectory,
+            "${pluginManifestRoom.pluginPackageName}.zip"
+        )
+
+        // Shizuku File Flow
+        val shellPluginExportResult = shizukuUserServiceGatewayImpl.getShizukuUserService()
+            ?.exportShellPlugin(
+                pluginManifestRoom.pluginPackageName,
+                shellPluginExportZipFile.path
+            ) ?: false
+
+        if (!shellPluginExportResult) {
+            throw IllegalStateException("Failed to export shell plugin. pluginPackageName=${pluginManifestRoom.pluginPackageName}")
+        }
+
+        // Check if Zip is really available (option)
+//      TODO("Check Zip integrity")
+
+        // Convert from zip to ShareLink
+        val shareLink = androidFileSystemShareOperatorGatewayImpl.getShareUriFromFile(shellPluginExportZipFile)
 
         return shareLink
 

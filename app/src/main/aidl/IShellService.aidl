@@ -14,7 +14,15 @@ interface IShellService {
     );
     boolean kill(int progressPid);
     boolean installShellPlugin(
+        String shellPluginStagingFilePath,
         String pluginPackageName,
         String entryPoint
+    );
+    boolean uninstallShellPlugin(
+        String pluginPackageName
+    );
+    boolean exportShellPlugin(
+        String pluginPackageName,
+        String shellPluginExportZipPath
     );
 }
