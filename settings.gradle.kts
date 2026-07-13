@@ -25,4 +25,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "RootLess Store"
 include(":app")
- 
+include(":illusioncube")
