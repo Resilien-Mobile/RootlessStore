@@ -15,6 +15,11 @@ kotlin {
     }
 }
 android {
+
+    lint {
+        disable += "ExpiredTargetSdkVersion"
+    }
+
     namespace = "com.baidaidai.rootless_store"
     compileSdk {
         version = release(37)
@@ -135,5 +140,8 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.navigation3)
     implementation(libs.kotlinx.serialization.core)
     ksp(libs.kotlin.metadata.jvm)
+
+    // Illusion Cube
+    implementation(project(":illusioncube"))
 
 }
