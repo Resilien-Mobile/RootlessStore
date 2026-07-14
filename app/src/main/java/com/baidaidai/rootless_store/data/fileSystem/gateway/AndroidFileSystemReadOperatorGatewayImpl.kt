@@ -18,6 +18,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
     private companion object {
         private const val PLUGIN_MANIFEST_FILE_NAME = "PluginManifest.json"
         private const val ENVIRONMENT_MANIFEST_FILE_NAME = "EnvironmentManifest.json"
+        private const val MAGISK_MODULE_PROP_FILE_NAME = "module.prop"
     }
 
     // Read FS Operator
@@ -51,6 +52,34 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
             }
         }
     }
+
+    fun confirmFileExistsInZip(uri: Uri, fileName: String): Boolean {
+        context.contentResolver.openInputStream(uri).use { inputStream ->
+            ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+                var zipEntry = zipInputStream.nextEntry
+                while (zipEntry != null) {
+                    val entryPath = zipEntry.name
+                    val fileNameOnly = entryPath.substringAfterLast('/')
+                    val isTarget = !zipEntry.isDirectory &&
+                            fileNameOnly.equals(fileName, ignoreCase = true)
+
+                    if (isTarget) {
+                        zipInputStream.closeEntry()
+                        return true
+                    }
+
+                    zipInputStream.closeEntry()
+                    zipEntry = zipInputStream.nextEntry
+                }
+
+                return false
+            }
+        }
+    } // Confirm File Exists in Zip
+
+    fun readRawMagiskModuleProp(uri: Uri): String {
+        return readRawManifest(uri, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
+    } // Get Magisk module.prop File
 
     fun readRawPluginManifest(uri: Uri): String {
         return readRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
