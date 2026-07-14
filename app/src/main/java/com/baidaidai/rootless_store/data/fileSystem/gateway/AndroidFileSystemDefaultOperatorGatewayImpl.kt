@@ -13,6 +13,8 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
+        private const val MAGISK_DIR_NAME = "Magisk"
+        private const val MAGISK_TEMPLATE_DIR_NAME = "template"
     }
 
     private fun getInternalPluginRootDirectory(): File {
@@ -55,6 +57,14 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     fun getExternalAppCacheDirectoryFile(): File {
         return getExternalAppCacheRootDirectory()
     } // /sdcard/Android/data/APP_PACKAGE/cache
+
+    fun getExternalAppMagiskDirectoryFile(): File {
+        return File(getExternalAppRootDirectory(), MAGISK_DIR_NAME)
+    } // /sdcard/Android/data/APP_PACKAGE/files/magisk
+
+    fun getExternalAppMagiskTemplateDirectoryFile(): File {
+        return File(getExternalAppMagiskDirectoryFile(), MAGISK_TEMPLATE_DIR_NAME)
+    } // /sdcard/Android/data/APP_PACKAGE/files/magisk/template
 
     // Default FS Operator (Plugin)
     fun getDefaultPluginDirectoryPath(): String {
