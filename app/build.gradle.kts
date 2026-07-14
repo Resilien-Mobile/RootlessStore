@@ -15,6 +15,11 @@ kotlin {
     }
 }
 android {
+
+    lint {
+        disable += "ExpiredTargetSdkVersion"
+    }
+
     namespace = "com.baidaidai.rootless_store"
     compileSdk {
         version = release(37)
