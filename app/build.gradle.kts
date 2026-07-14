@@ -53,7 +53,7 @@ android {
             )
         }
         create("github") {
-            initWith(getByName("debug"))
+            initWith(getByName("release"))
             signingConfig = signingConfigs.getByName("github")
         }
     }
