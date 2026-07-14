@@ -141,4 +141,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     ksp(libs.kotlin.metadata.jvm)
 
+    // Illusion Cube
+    implementation(project(":illusioncube"))
+
 }
