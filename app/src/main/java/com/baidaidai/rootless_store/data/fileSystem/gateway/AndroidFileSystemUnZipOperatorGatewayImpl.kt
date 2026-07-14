@@ -41,6 +41,37 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     } // /File/Plugin/PLUGIN
 
     // Un-Zip FS Operator
+    fun unzipFromFileToDirectory(originFileURI: Uri, targetDirectory: File) {
+        targetDirectory.mkdirs()
+        val canonicalTargetDirectory = targetDirectory.canonicalFile
+
+        context.contentResolver.openInputStream(originFileURI).use { inputStream ->
+            ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+                var zipEntry = zipInputStream.nextEntry
+                while (zipEntry != null) {
+                    val targetFile = File(targetDirectory, zipEntry.name).canonicalFile
+                    if (!targetFile.path.startsWith(canonicalTargetDirectory.path + File.separator)) {
+                        zipInputStream.closeEntry()
+                        zipEntry = zipInputStream.nextEntry
+                        continue
+                    }
+
+                    if (zipEntry.isDirectory) {
+                        targetFile.mkdirs()
+                    } else {
+                        targetFile.parentFile?.mkdirs()
+                        FileOutputStream(targetFile).use { outputStream ->
+                            zipInputStream.copyTo(outputStream)
+                        }
+                    }
+
+                    zipInputStream.closeEntry()
+                    zipEntry = zipInputStream.nextEntry
+                }
+            }
+        }
+    }
+
     @Suppress("UNUSED_PARAMETER")
     fun unzipFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
