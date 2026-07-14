@@ -1,4 +1,4 @@
-name: Rootless-Store Debuggable-App CD
+name: Rootless-Store Release CD
 
 on:
   push:
@@ -28,8 +28,8 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x ./gradlew
 
-      # 构建 debug APK
-      - name: Build debug APK
+      # 构建 release APK
+      - name: Build release APK
         run: ./gradlew assembleGithub
         env:
           DEBUG_STORE_PASSWORD: ${{ secrets.DEBUG_STORE_PASSWORD }}
