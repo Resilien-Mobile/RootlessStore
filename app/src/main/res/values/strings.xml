@@ -110,6 +110,8 @@
 
     <!-- Code Brick Screen: Floating Button -->
     <string name="code_brick_screen_floating_button_add_content_description">Add</string>
+    <string name="code_brick_screen_floating_button_by_token_label">By Token</string>
+    <string name="code_brick_screen_floating_button_by_writing_label">By Writing</string>
 
     <!-- Code Brick Screen: Editor -->
     <string name="code_brick_screen_editor_title">Code Brick</string>
@@ -126,6 +128,14 @@
     <string name="code_brick_screen_previewer_play_content_description">Play</string>
     <string name="code_brick_screen_previewer_setting_content_description">Settings</string>
     <string name="code_brick_screen_previewer_delete_content_description">Delete</string>
+
+    <!-- Code Brick Screen: Tile List -->
+    <string name="code_brick_screen_tile_list_binder_new_title">Tile Binder (New)</string>
+    <string name="code_brick_screen_tile_list_binder_input_placeholder">Input tile binder: 0-4</string>
+
+    <!-- Code Brick Screen: To Plugin Button -->
+    <string name="code_brick_screen_to_plugin_button_label">Convert To Plugin</string>
+    <string name="code_brick_screen_to_plugin_button_content_description">Convert To Plugin</string>
 
     <!-- Code Brick Screen: Result -->
     <string name="code_brick_screen_result_title">Result</string>
