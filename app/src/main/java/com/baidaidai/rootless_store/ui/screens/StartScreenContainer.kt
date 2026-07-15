@@ -252,9 +252,20 @@ fun RootlessStoreStartScreenContainer(
                 }
 
                 CodeBrickScreenKey -> {
+                    val codeBrickScreenUIState by codeBrickViewModel.codeBrickScreenUIState.collectAsState()
                     CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
-                        onHandMenuItemClick = { codeBrickViewModel.changeEditorShowStatus(true) },
-                        onJsonMenuItemClick = codeBrickViewModel::createOneCodeBrickByJson
+                        buttonMenuExpandStatus = codeBrickScreenUIState.buttonMenuExpandStatus,
+                        onHandMenuItemClick = {
+                            codeBrickViewModel.changeEditorShowStatus(true)
+                            codeBrickViewModel.changeButtonMenuStatus()
+                        },
+                        onJsonMenuItemClick = {
+                            codeBrickViewModel.createOneCodeBrickByJson()
+                            codeBrickViewModel.changeButtonMenuStatus()
+                        },
+                        onButtonMenuClick = {
+                            codeBrickViewModel.changeButtonMenuStatus(it)
+                        }
                     )
                 }
 
@@ -321,7 +332,10 @@ fun RootlessStoreStartScreenContainer(
                 entry<CodeBrickScreenKey>{
                     CodeBrickScreen(
                         contentPaddingValues = contentPadding,
-                        codeBrickViewModel = codeBrickViewModel
+                        codeBrickViewModel = codeBrickViewModel,
+                        onBackgroundClick = {
+                            codeBrickViewModel.changeButtonMenuStatus()
+                        }
                     )
                 }
                 entry<SourceScreenKey> {

@@ -28,6 +28,7 @@ data class CodeBrickScreenUIState(
     val brickEditorCanShow: Boolean = false,
     val executeResultCanShow: Boolean = false,
     val brickSettingCanShow: Boolean = false,
+    val buttonMenuExpandStatus: Boolean = false,
     val executeResultContent: List<String> = emptyList(),
     val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimeStamp = 1L,"", HosterOverallStatus.LIMITED,"")
 )
@@ -91,6 +92,15 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         _codeBrickScreenUIState.update {
             it.copy(
                 executeResultCanShow = showStatus
+            )
+        }
+    }
+    fun changeButtonMenuStatus(
+        showStatus: Boolean = false
+    ){
+        _codeBrickScreenUIState.update {
+            it.copy(
+                buttonMenuExpandStatus = showStatus
             )
         }
     }
