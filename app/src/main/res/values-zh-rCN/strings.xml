@@ -106,6 +106,8 @@
 
     <!-- Code Brick Screen: Floating Button -->
     <string name="code_brick_screen_floating_button_add_content_description">添加</string>
+    <string name="code_brick_screen_floating_button_by_token_label">口令导入</string>
+    <string name="code_brick_screen_floating_button_by_writing_label">手写键入</string>
 
     <!-- Code Brick Screen: Editor -->
     <string name="code_brick_screen_editor_title">代码块</string>
@@ -122,6 +124,14 @@
     <string name="code_brick_screen_previewer_play_content_description">运行</string>
     <string name="code_brick_screen_previewer_setting_content_description">设置</string>
     <string name="code_brick_screen_previewer_delete_content_description">删除</string>
+
+    <!-- Code Brick Screen: Tile List -->
+    <string name="code_brick_screen_tile_list_binder_new_title">磁贴绑定器（新增）</string>
+    <string name="code_brick_screen_tile_list_binder_input_placeholder">输入磁贴绑定编号：0-4</string>
+
+    <!-- Code Brick Screen: To Plugin Button -->
+    <string name="code_brick_screen_to_plugin_button_label">转换为插件</string>
+    <string name="code_brick_screen_to_plugin_button_content_description">转换为插件</string>
 
     <!-- Code Brick Screen: Result -->
     <string name="code_brick_screen_result_title">执行结果</string>
