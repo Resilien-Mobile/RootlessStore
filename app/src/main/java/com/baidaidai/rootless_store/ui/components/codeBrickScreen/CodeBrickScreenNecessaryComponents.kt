@@ -88,7 +88,7 @@ object CodeBrickScreenNecessaryComponents {
         FloatingActionButtonMenuItem(
             onClick = onClick,
             text = {
-                Text("By Token")
+                Text(stringResource(R.string.code_brick_screen_floating_button_by_token_label))
             },
             icon = {
                 Text("\uD83D\uDDE3\uFE0F")
@@ -103,7 +103,7 @@ object CodeBrickScreenNecessaryComponents {
         FloatingActionButtonMenuItem(
             onClick = onClick,
             text = {
-                Text("By Writing")
+                Text(stringResource(R.string.code_brick_screen_floating_button_by_writing_label))
             },
             icon = {
                 Text("✏\uFE0F")
