@@ -8,14 +8,11 @@ import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.FloatingActionButtonMenuScope
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFlexibleTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ToggleFloatingActionButton
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,25 +41,24 @@ object CodeBrickScreenNecessaryComponents {
 
     @Composable
     fun CodeBrickScreenFloatingButton(
+        buttonMenuExpandStatus: Boolean,
         onHandMenuItemClick: ()-> Unit = {},
         onJsonMenuItemClick: ()-> Unit = {},
+        onButtonMenuClick:(Boolean)-> Unit = {}
     ) {
-
-        var buttonMenuExpandStatus by remember { mutableStateOf(false) }
 
         FloatingActionButtonMenu(
             expanded = buttonMenuExpandStatus,
             button = {
                 ToggleFloatingActionButton(
                     checked = buttonMenuExpandStatus,
-                    onCheckedChange = {
-                        buttonMenuExpandStatus = it
-                    }
+                    onCheckedChange = onButtonMenuClick
                 ) {
                     if (buttonMenuExpandStatus){
                         Icon(
                             painter = painterResource(R.drawable.outline_close_24),
-                            contentDescription = stringResource(R.string.code_brick_screen_floating_button_add_content_description)
+                            contentDescription = stringResource(R.string.code_brick_screen_floating_button_add_content_description),
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }else{
                         Icon(
@@ -75,8 +71,12 @@ object CodeBrickScreenNecessaryComponents {
             modifier = Modifier
                 .offset(16.dp,16.dp)
         ) {
-            InputByJsonMenuItem { onJsonMenuItemClick() }
-            InputByHandMenuItem { onHandMenuItemClick() }
+            InputByJsonMenuItem {
+                onJsonMenuItemClick()
+            }
+            InputByHandMenuItem {
+                onHandMenuItemClick()
+            }
 
         }
     }
@@ -115,5 +115,5 @@ object CodeBrickScreenNecessaryComponents {
 @PreviewLightDark
 @Composable
 private fun _CodeBrickScreenFloatingButtonPreview_() {
-    CodeBrickScreenFloatingButton()
+    CodeBrickScreenFloatingButton(false)
 }
