@@ -38,8 +38,8 @@ android {
         applicationId = "com.baidaidai.rootless_store"
         minSdk = 26
         targetSdk = 28
-        versionCode = 2
-        versionName = "2.0.0-beta"
+        versionCode = 3
+        versionName = "2.0.0-gamma"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
