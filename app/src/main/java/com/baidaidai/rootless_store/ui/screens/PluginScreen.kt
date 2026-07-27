@@ -31,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
+import com.baidaidai.rootless_store.WebViewActivity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
@@ -136,6 +137,7 @@ fun PluginScreen(
             if (actionCanSee){
 
                 PluginActionContainer(
+                    pluginManifestRoom = pluginManifestRoom,
                     onShareButtonClick = {
                         val shareLink = pluginScreenViewModel.getPluginShareLink(pluginManifestRoom)
 
@@ -146,6 +148,15 @@ fun PluginScreen(
                         }
 
                         context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
+                    },
+                    onWebUiButtonClick = {
+
+                        val webUiUri = pluginScreenViewModel.getPluginWebUiUri(pluginManifestRoom)
+
+                        val webUiIntent = Intent(context, WebViewActivity::class.java).apply {
+                            putExtra("webUri",webUiUri)
+                        }
+                        context.startActivity(webUiIntent)
                     },
                     onDeleteButtonClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
                     onBackButtonClick = { actionCanSee = !actionCanSee },
