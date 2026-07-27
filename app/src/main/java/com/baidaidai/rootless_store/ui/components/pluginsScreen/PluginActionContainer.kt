@@ -18,11 +18,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 
 @Composable
 fun PluginActionContainer(
     modifier: Modifier = Modifier,
+    pluginManifestRoom: PluginManifestRoom? = null,
     onShareButtonClick: ()-> Unit = {},
+    onWebUiButtonClick: ()-> Unit = {},
     onBackButtonClick: ()-> Unit = {},
     onDeleteButtonClick: ()-> Unit = {},
 ){
@@ -39,6 +42,13 @@ fun PluginActionContainer(
         contentColor = MaterialTheme.colorScheme.onSecondary,
         disabledContainerColor = MaterialTheme.colorScheme.secondary,
         disabledContentColor = MaterialTheme.colorScheme.onSecondary
+    )
+
+    val webUiButtonColors = IconButtonColors(
+        containerColor = MaterialTheme.colorScheme.tertiary,
+        contentColor = MaterialTheme.colorScheme.onTertiary,
+        disabledContainerColor = MaterialTheme.colorScheme.tertiary,
+        disabledContentColor = MaterialTheme.colorScheme.onTertiary
     )
 
     val deleteButtonColors = IconButtonColors(
@@ -74,6 +84,20 @@ fun PluginActionContainer(
                 )
             }
 
+            if (!pluginManifestRoom?.webUIEntryPoint.isNullOrEmpty()){
+                IconButton(
+                    onClick = onWebUiButtonClick,
+                    colors = webUiButtonColors,
+                    modifier = Modifier
+                        .size(56.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.material_symbols_globe_asia),
+                        contentDescription = "Share"
+                    )
+                }
+            }
+
             IconButton(
                 onClick = onBackButtonClick,
                 colors = backButtonColors,
@@ -107,6 +131,7 @@ fun PluginActionContainer(
 @Composable
 private fun _preview_() {
     PluginActionContainer(
+        pluginManifestRoom = PluginManifestRoom._testOnly_.copy(webUIEntryPoint = "akjfjdkdjskf"),
         modifier = Modifier
             .size(
                 width = 300.dp,

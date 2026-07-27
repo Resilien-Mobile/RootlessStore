@@ -17,6 +17,7 @@ import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnable
 import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
 import com.baidaidai.rootless_store.application.environment.UninstallOneEnvironmentUseCase
 import com.baidaidai.rootless_store.application.plugin.GetPluginShareLinkUseCase
+import com.baidaidai.rootless_store.application.plugin.GetPluginWebUiUriUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,6 +42,7 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     private val uninstallOneEnvironmentUseCase: UninstallOneEnvironmentUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
     private val getPluginShareLinkUseCase: GetPluginShareLinkUseCase,
+    private val getPluginWebUiUriUseCase: GetPluginWebUiUriUseCase,
     private val getEnvironmentShareLinkUseCase: GetEnvironmentShareLinkUseCase,
     pluginInfoCountUseCase: GetPluginInfoCountUseCase
 ): ViewModel() {
@@ -134,6 +136,13 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     ): Uri {
         val shareLink = getPluginShareLinkUseCase(pluginManifestRoom)
         return shareLink
+    }
+
+    fun getPluginWebUiUri(
+        pluginManifestRoom: PluginManifestRoom
+    ): String {
+        val webUiUri = getPluginWebUiUriUseCase(pluginManifestRoom)
+        return webUiUri
     }
 
     fun getEnvironmentShareLink(

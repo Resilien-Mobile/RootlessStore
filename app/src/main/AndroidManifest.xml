@@ -35,6 +35,9 @@
                 <data android:mimeType="application/zip" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".WebViewActivity"
+            android:exported="false" />
         <activity android:name=".ShizukuActivity"/>
         <provider
             android:name="rikka.shizuku.ShizukuProvider"
