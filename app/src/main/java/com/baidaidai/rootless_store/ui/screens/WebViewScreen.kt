@@ -1,15 +1,20 @@
 package com.baidaidai.rootless_store.ui.screens
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.view.ViewGroup
 import android.webkit.WebView
+import android.webkit.WebView.setWebContentsDebuggingEnabled
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.webkit.WebViewCompat.addWebMessageListener
 import com.baidaidai.rootless_store.ui.model.RootLessStoreWebViewScreenViewModel
+import kotlinx.coroutines.launch
 
 private val kernelSuCompatibleScript = """
     (function() {
@@ -25,6 +30,7 @@ private val kernelSuCompatibleScript = """
     })();
 """.trimIndent()
 
+@SuppressLint("RequiresFeature")
 @Composable
 fun RootlessStoreWebViewScreen(
     modifier: Modifier = Modifier,
@@ -33,6 +39,8 @@ fun RootlessStoreWebViewScreen(
 ) {
 
     if (webUri == null) return
+
+    val coroutineScope = rememberCoroutineScope()
 
     AndroidView(
         modifier = modifier.fillMaxSize(),
@@ -46,12 +54,20 @@ fun RootlessStoreWebViewScreen(
 
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
-                WebView.setWebContentsDebuggingEnabled(true)
+                setWebContentsDebuggingEnabled(true)
+
+                addWebMessageListener(this, "AppShell",setOf("*")){ _, message, _, _, proxy ->
+                    coroutineScope.launch {
+                        webViewScreenViewModel.executeAppShellUseCase(message.data).collect { ShellResult->
+                            proxy.postMessage(ShellResult.content)
+                        }
+                    }
+                } // Newest JavaScript Native Bridge
 
                 addJavascriptInterface(
                     webViewScreenViewModel.createKernelSuCompatible(),
                     "__rootless_ksu"
-                ) // Inject JavaScript Native Bridge
+                ) // Oldest Inject JavaScript Native Bridge
 
                 webViewClient = object : WebViewClient() {
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {

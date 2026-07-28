@@ -144,4 +144,7 @@ dependencies {
     // Illusion Cube
     implementation(project(":illusioncube"))
 
+    // WebView
+    implementation("androidx.webkit:webkit:1.16.0")
+
 }
