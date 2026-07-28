@@ -86,16 +86,6 @@ object StartScreenNecessaryComponents {
                 compatibleDestinationList = listOf(
                     CodeBrickScreenKey::class,
                 )
-            ),
-            NavBarItemSpec(
-                number = 3,
-                pattern = painterResource(R.drawable.outline_list_alt_24),
-                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_sources_label),
-                targetDestination = SourceScreenKey,
-                compatibleDestinationList = listOf(
-                    SourceScreenKey::class,
-                    MarketScreenKey::class
-                )
             )
         )
         NavigationBar {
