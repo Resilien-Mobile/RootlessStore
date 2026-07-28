@@ -72,7 +72,8 @@ fun CodeBrickSettingContent(
             onValueChange = onCodeBrickContentValueChange,
             label = {
                 Text(stringResource(R.string.code_brick_screen_editor_shell_script_label))
-            }
+            },
+            modifier = Modifier.heightIn(max = 300.dp),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
