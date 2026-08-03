@@ -27,7 +27,7 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         CodeBrickEntity::class
         // 其它表也一起加进来
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(RoomConvertRepositoryImpl::class)
