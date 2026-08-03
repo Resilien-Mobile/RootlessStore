@@ -22,7 +22,6 @@ data class PluginManifestRemote(
     override val entryPoint: String,
 
     override val pluginRunModel: PluginRunModel,
-    override val bypassEnvironment: Boolean = false,
     override val webUIEntryPoint: String? = null
 ): PluginManifest.PluginManifestRemote {
     companion object {

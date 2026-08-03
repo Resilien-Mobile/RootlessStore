@@ -31,7 +31,6 @@ data class PluginManifestLocal(
     override val requiredEnvironment: HosterOverallStatus,
     override val entryPoint: String,
     override val pluginRunModel: PluginRunModel,
-    override val bypassEnvironment: Boolean = false,
     override val webUIEntryPoint: String? = null,
     override val executableFiles: List<String>? = null
 ): PluginManifest.PluginManifestLocal{
