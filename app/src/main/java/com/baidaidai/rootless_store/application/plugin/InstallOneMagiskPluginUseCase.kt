@@ -170,7 +170,6 @@ class InstallOneMagiskPluginUseCase @Inject constructor(
             requiredEnvironment = HosterOverallStatus.ADB,
             entryPoint = entryPoint,
             pluginRunModel = PluginRunModel.Daemon,
-            bypassEnvironment = true,
             executableFiles = null
         )
     }
