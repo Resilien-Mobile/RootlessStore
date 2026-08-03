@@ -34,6 +34,5 @@ data class PluginInfoEntity(
     val source: PluginSource,
     val entryPoint: String,
     val pluginRunModel: PluginRunModel,
-    val bypassEnvironment: Boolean,
     val webUIEntryPoint: String?
 )
