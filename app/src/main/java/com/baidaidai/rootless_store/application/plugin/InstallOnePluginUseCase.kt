@@ -16,7 +16,7 @@ class InstallOnePluginUseCase @Inject constructor(
         return try {
             val pluginManiFestLocal = pluginGatewayImpl.parsePluginManifest(uri)
 
-            if (pluginManiFestLocal.requiredEnvironment == HosterOverallStatus.ADB && pluginManiFestLocal.bypassEnvironment){
+            if (pluginManiFestLocal.requiredEnvironment == HosterOverallStatus.ADB){
                 installOneShellPluginUseCase(uri)
             }else{
                 // Un-Zip, Install Plugin
