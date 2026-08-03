@@ -23,7 +23,6 @@ object PluginMapper {
             source = PluginSource.Local,
             entryPoint = entryPoint,
             pluginRunModel = pluginRunModel,
-            bypassEnvironment = bypassEnvironment,
             webUIEntryPoint = webUIEntryPoint
         )
     }
@@ -42,7 +41,6 @@ object PluginMapper {
             source = PluginSource.Official,
             entryPoint = entryPoint,
             pluginRunModel = pluginRunModel,
-            bypassEnvironment = bypassEnvironment,
             webUIEntryPoint = webUIEntryPoint,
         )
     }
