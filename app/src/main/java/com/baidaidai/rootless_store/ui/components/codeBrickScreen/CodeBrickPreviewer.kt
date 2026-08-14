@@ -64,7 +64,7 @@ fun CodeBrickPreviewer(
     Box{
         Column(
             modifier = modifier
-                .fillMaxWidth()
+                .widthIn(min = 150.dp, max = 200.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
                 .padding(16.dp),

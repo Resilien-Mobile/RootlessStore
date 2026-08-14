@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickEditor
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickPreviewer
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickResult
@@ -26,12 +27,14 @@ import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 fun CodeBrickScreen(
     contentPaddingValues: PaddingValues,
     codeBrickViewModel: RootlessStoreCodeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>(),
+    rootlessStoreWindowSize: RootlessStoreWindowSize,
     onBackgroundClick: ()-> Unit = {}
 ){
 
     val codeBrickConfigList by codeBrickViewModel.codeBrickConfigList.collectAsState()
     val codeBrickScreenUIState by codeBrickViewModel.codeBrickScreenUIState.collectAsState()
 
+    // Editor show status
     if (codeBrickScreenUIState.brickEditorCanShow){
         CodeBrickEditor(
             onDismissRequest = {
@@ -79,10 +82,17 @@ fun CodeBrickScreen(
         )
     }
 
+    // Brick Reactive Style Status
+    val columns = if (rootlessStoreWindowSize != RootlessStoreWindowSize.Compact){
+        StaggeredGridCells.Adaptive(200.dp)
+    }else{
+        StaggeredGridCells.Fixed(2)
+    }
+
     LazyVerticalStaggeredGrid(
         verticalItemSpacing = 10.dp,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        columns = StaggeredGridCells.Fixed(2),
+        columns = columns,
         contentPadding = PaddingValues(10.dp),
         modifier = Modifier
             .padding(contentPaddingValues)
@@ -91,7 +101,6 @@ fun CodeBrickScreen(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ){ onBackgroundClick() }
-        ,
     ) {
         itemsIndexed(
             items = codeBrickConfigList
