@@ -7,10 +7,13 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import androidx.window.core.layout.WindowSizeClass
 import com.baidaidai.rootless_store.ShizukuActivity
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.domain.navigation.`interface`.RootlessNavigationKey
@@ -38,6 +42,7 @@ import com.baidaidai.rootless_store.domain.navigation.model.SettingScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ShellScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.SourceScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificationScreenKey
+import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.executeScreen.executeScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.marketScreen.MarketScreenNecessaryComponents
@@ -105,6 +110,20 @@ fun RootlessStoreStartScreenContainer(
         else -> TopAppBarDefaults.pinnedScrollBehavior()
     }
 
+    // Reactive Style
+    val _windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
+    val isExpanded = _windowSizeClass.isWidthAtLeastBreakpoint(
+        WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
+    )
+    val isMedium = _windowSizeClass.isWidthAtLeastBreakpoint(
+        WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
+    )
+    val rootlessStoreWindowSize = when {
+        isExpanded -> RootlessStoreWindowSize.Expanded
+        isMedium -> RootlessStoreWindowSize.Medium
+        else -> RootlessStoreWindowSize.Compact
+    }
+
     // Effects
     LaunchedEffect(0) {
         sourceScreenViewModel.sourceEvent.collect { event ->
@@ -128,7 +147,7 @@ fun RootlessStoreStartScreenContainer(
     }
     LaunchedEffect(fileIntentUri) {
         val uri = fileIntentUri ?: return@LaunchedEffect
-        /* TODO("navController") */
+
         navigationBackStack.add(PluginScreenKey)
         pluginScreenViewModel.updateFileURI(uri)
         pluginScreenViewModel.installPlugin()
@@ -149,259 +168,279 @@ fun RootlessStoreStartScreenContainer(
             executeViewModelBuilder("abc")
         }
 
-    Scaffold(
-        topBar = {
-            when(currentDestination){
-                PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
-                    pluginInfoCount = pluginInfoCount,
-                    textButtonOnClick = {
-                        pluginScreenViewModel.changeBadgeShowStatus()
-                    },
-                    scrollBehavior = scrollBehavior
-                )
-                CodeBrickScreenKey -> CodeBrickScreenNecessaryComponents.CodeBrickScreenTopAppBar(
-                    scrollBehavior = scrollBehavior
-                )
-                SourceScreenKey -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
-                    iconButtonOnClick = {
-                        alertDialogStatus = !alertDialogStatus
-                    },
-                    textButtonOnClick = {
-                        sourceScreenViewModel.changeDeleterShowStatus()
-                    },
-                    sourceCount = sourceCount
-                )
-                is ExecuteScreenKey -> {
-                    executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
-                        scrollBehavior = scrollBehavior,
-                        onExecuteScreenStopButtonClick = {
-                            currentExecuteViewModel.abortPluginProcess(currentDestination.pluginID)
-                        },
-                        onExecuteScreenBackButtonClick = {
-                            navigationBackStack.removeLastOrNull()
-                        },
-                        onExecuteScreenShareButtonClick = {
-                            val executeLog = currentExecuteViewModel?.exportExecuteLog()
-                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                type = "text/plain"
-                                putExtra(Intent.EXTRA_TEXT, executeLog)
+    Row(modifier = Modifier.fillMaxSize()) {
+        if(rootlessStoreWindowSize == RootlessStoreWindowSize.Expanded){
+            StartScreenNecessaryComponents.StartScreenExpressiveNavigationRail(
+                currentDestination = navigationBackStack.last() as RootlessNavigationKey,
+            ) { rootlessNavigationKey ->
+                navigationBackStack.add(rootlessNavigationKey)
+            }
+        }else if(rootlessStoreWindowSize == RootlessStoreWindowSize.Medium){
+            StartScreenNecessaryComponents.StartScreenNavigationRail(
+                currentDestination = navigationBackStack.last() as RootlessNavigationKey,
+            ) { rootlessNavigationKey ->
+                navigationBackStack.add(rootlessNavigationKey)
+            }
+        }
 
+        Scaffold(
+            topBar = {
+                when(currentDestination){
+                    PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
+                        pluginInfoCount = pluginInfoCount,
+                        textButtonOnClick = {
+                            pluginScreenViewModel.changeBadgeShowStatus()
+                        },
+                        scrollBehavior = scrollBehavior
+                    )
+                    CodeBrickScreenKey -> CodeBrickScreenNecessaryComponents.CodeBrickScreenTopAppBar(
+                        scrollBehavior = scrollBehavior
+                    )
+                    SourceScreenKey -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
+                        iconButtonOnClick = {
+                            alertDialogStatus = !alertDialogStatus
+                        },
+                        textButtonOnClick = {
+                            sourceScreenViewModel.changeDeleterShowStatus()
+                        },
+                        sourceCount = sourceCount
+                    )
+                    is ExecuteScreenKey -> {
+                        executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
+                            scrollBehavior = scrollBehavior,
+                            onExecuteScreenStopButtonClick = {
+                                currentExecuteViewModel.abortPluginProcess(currentDestination.pluginID)
+                            },
+                            onExecuteScreenBackButtonClick = {
+                                navigationBackStack.removeLastOrNull()
+                            },
+                            onExecuteScreenShareButtonClick = {
+                                val executeLog = currentExecuteViewModel?.exportExecuteLog()
+                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, executeLog)
+
+                                }
+                                context.startActivity(Intent.createChooser(shareIntent, "Share"))
                             }
-                            context.startActivity(Intent.createChooser(shareIntent, "Share"))
+                        )
+                    }
+                    MarketScreenKey -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
+                        sourceName = currentPluginSource!!.sourceName,
+                        scrollBehavior = scrollBehavior
+                    )
+                    ShellScreenKey -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
+                        onTopIconClick = {
+                            lazyColumnState.scrollToItem(0)
+                        },
+                        onBottomIconClick = {
+
+                            lazyColumnState.scrollToItem(totalListLength)
+                        },
+                        onDeleteIconClick = {
+                            shellScreenViewModel.cleanShellOutputList()
+                        }
+                    )
+                    SettingScreenKey -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
+                        scrollBehavior = scrollBehavior
+                    )
+                    ThirdPartyNotificationScreenKey -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
+                        scrollBehavior = scrollBehavior,
+                        onSaveButtonClick = {
+                            thirdPartyNotificationScreenViewModel.onSubmitClick()
+                        }
+                    )
+                    else -> StartScreenNecessaryComponents.StartScreenTopAppBar(
+                        scrollBehavior = scrollBehavior,
+                        onSettingClick = {
+                            navigationBackStack.add(SettingScreenKey)
                         }
                     )
                 }
-                MarketScreenKey -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
-                    sourceName = currentPluginSource!!.sourceName,
-                    scrollBehavior = scrollBehavior
-                )
-                ShellScreenKey -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
-                    onTopIconClick = {
-                        lazyColumnState.scrollToItem(0)
-                    },
-                    onBottomIconClick = {
+            },
+            bottomBar = {
+                if (rootlessStoreWindowSize == RootlessStoreWindowSize.Compact){
+                    StartScreenNecessaryComponents.StartScreenNavigationBar(
+                        currentDestination = navigationBackStack.last() as RootlessNavigationKey
+                    ){ rootlessNavigationKey ->
+                        navigationBackStack.add(rootlessNavigationKey)
+                    }
+                }
+            },
+            floatingActionButton = {
+                when(currentDestination){
 
-                        lazyColumnState.scrollToItem(totalListLength)
+                    PluginScreenKey -> {
+                        PluginScreenNecessaryComponents.PluginScreenFloatingButton{
+                            openDocumentLauncher.launch(
+                                arrayOf(
+                                    "application/zip",
+                                )
+                            )
+                        }
+                    }
+
+                    HomeScreenKey -> {
+                        StartScreenNecessaryComponents.StartScreenFloatingButton {
+                            navigationBackStack.add(ShellScreenKey)
+                        }
+                    }
+
+                    CodeBrickScreenKey -> {
+                        val codeBrickScreenUIState by codeBrickViewModel.codeBrickScreenUIState.collectAsState()
+                        CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
+                            buttonMenuExpandStatus = codeBrickScreenUIState.buttonMenuExpandStatus,
+                            onHandMenuItemClick = {
+                                codeBrickViewModel.changeEditorShowStatus(true)
+                                codeBrickViewModel.changeButtonMenuStatus()
+                            },
+                            onJsonMenuItemClick = {
+                                codeBrickViewModel.createOneCodeBrickByJson()
+                                codeBrickViewModel.changeButtonMenuStatus()
+                            },
+                            onButtonMenuClick = {
+                                codeBrickViewModel.changeButtonMenuStatus(it)
+                            }
+                        )
+                    }
+
+                    else -> {}
+
+                }
+            },
+            modifier = Modifier
+                .nestedScroll(
+                    connection = scrollBehavior.nestedScrollConnection
+                )
+                .weight(1f)
+        ) { contentPadding->
+
+            // Source Adding Dialog
+            if (alertDialogStatus){
+                StartScreenRepositoryDialog(
+                    sourceDomainContent,
+                    onDismissRequest =  {
+                        alertDialogStatus = !alertDialogStatus
                     },
-                    onDeleteIconClick = {
-                        shellScreenViewModel.cleanShellOutputList()
-                    }
-                )
-                SettingScreenKey -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
-                    scrollBehavior = scrollBehavior
-                )
-                ThirdPartyNotificationScreenKey -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
-                    scrollBehavior = scrollBehavior,
-                    onSaveButtonClick = {
-                        thirdPartyNotificationScreenViewModel.onSubmitClick()
-                    }
-                )
-                else -> StartScreenNecessaryComponents.StartScreenTopAppBar(
-                    scrollBehavior = scrollBehavior,
-                    onSettingClick = {
-                        navigationBackStack.add(SettingScreenKey)
-                    }
+                    onConfirmButtonClick = {
+                        sourceScreenViewModel.addOneSourceByDefault(sourceURI = sourceDomainContent)
+                        alertDialogStatus = !alertDialogStatus
+                    },
+                    onDismissButtonClick = {
+                        alertDialogStatus = !alertDialogStatus
+                    },
+                    onTextFieldValueChange = { newValue -> sourceDomainContent = newValue }
                 )
             }
-        },
-        bottomBar = {
-            StartScreenNecessaryComponents
-                .StartScreenNavigationBar(
-                    currentDestination = navigationBackStack.last() as RootlessNavigationKey,
-                ){ rootlessNavigationKey ->
-                    navigationBackStack.add(rootlessNavigationKey)
-                }
-        },
-        floatingActionButton = {
-            when(currentDestination){
 
-                PluginScreenKey -> {
-                    PluginScreenNecessaryComponents.PluginScreenFloatingButton{
-                        openDocumentLauncher.launch(
-                            arrayOf(
-                                "application/zip",
-                            )
+            // Application Error Dialog
+            if (sharedEvent is RootlessStoreError){
+                StartScreenErrorDialog(sourceScreenViewModel, sharedEvent)
+            }
+
+            NavDisplay(
+                backStack = navigationBackStack,
+                entryProvider = entryProvider {
+                    entry<HomeScreenKey>{
+                        HomeScreen(
+                            contentPadding = contentPadding,
+                            rootlessStoreWindowSize = rootlessStoreWindowSize,
+                            onChipClick = {
+                                context.startActivity(Intent(context, ShizukuActivity::class.java))
+                            }
+                        )
+                    }
+                    entry<PluginScreenKey> {
+                        RootlessStorePluginScreenContainer(
+                            contentPadding = contentPadding,
+                            pluginScreenViewModel = pluginScreenViewModel,
+                            navigateToExecuteScreen = { pluginID, isExecutePlugin ->
+                                navigationBackStack
+                                    .add(ExecuteScreenKey(pluginID,isExecutePlugin))
+                            },
+                            onAbortOnePlugin = { pluginID ->
+                                currentExecuteViewModel.abortPluginProcess(pluginID)
+                            },
+                            onActiveOneTimePlugin = { pluginID ->
+                                currentExecuteViewModel.executeOnePlugin(pluginID)
+                            }
+                        )
+                    }
+                    entry<CodeBrickScreenKey>{
+                        CodeBrickScreen(
+                            contentPaddingValues = contentPadding,
+                            codeBrickViewModel = codeBrickViewModel,
+                            rootlessStoreWindowSize = rootlessStoreWindowSize,
+                            onBackgroundClick = {
+                                codeBrickViewModel.changeButtonMenuStatus()
+                            }
+                        )
+                    }
+                    entry<SourceScreenKey> {
+                        SourceScreen(
+                            contentPadding = contentPadding,
+                            sourceScreenViewModel = sourceScreenViewModel
+                        ){ pluginSourceLocal ->
+                            marketScreenViewModel.updatePluginSourceUri(pluginSourceLocal.sourceRemoteEndpoint)
+                            marketScreenViewModel.updateCurrentPluginSource(pluginSourceLocal)
+                            navigationBackStack.add(MarketScreenKey)
+                        }
+                    }
+                    entry<MarketScreenKey> {
+                        MarketScreen(
+                            contentPadding = contentPadding,
+                            marketScreenViewModel = marketScreenViewModel
+                        ){
+                            navigationBackStack.add(PluginScreenKey)
+                        }
+                    }
+                    entry<ShellScreenKey> {
+                        ShellScreen(
+                            contentPaddingValues = contentPadding,
+                            shellScreenViewModel = shellScreenViewModel,
+                            lazyColumnState = lazyColumnState
+                        )
+                    }
+                    entry<ExecuteScreenKey> { executeScreenKey ->
+
+                        // The overall constructor of ExecuteScreenViewModel
+                        val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginID, viewModelStoreOwner = viewModelStoreOwner)
+
+                        val pluginID = executeScreenKey.pluginID
+                        val isExecutePlugin = executeScreenKey.isExecutePlugin
+
+                        Log.d("ExecuteScreenKey.pluginID",pluginID)
+                        Log.d("ExecuteScreenKey.isExecutePlugin",isExecutePlugin.toString())
+
+                        // Function debouncing
+                        LaunchedEffect(pluginID, isExecutePlugin) {
+                            if (isExecutePlugin) {
+                                executeScreenViewModel.executeOnePlugin(pluginID)
+                            }
+                        }
+
+                        ExecuteScreen(
+                            contentPaddingValues = contentPadding,
+                            executeScreenViewModel = executeScreenViewModel
+                        )
+                    }
+                    entry<SettingScreenKey> {
+                        SettingScreen(
+                            contentPaddingValues = contentPadding,
+                            onThirdPartyNotificationSettingClick = {
+                                navigationBackStack.add(ThirdPartyNotificationScreenKey)
+                            }
+                        )
+                    }
+                    entry<ThirdPartyNotificationScreenKey> {
+                        ThirdPartyNotificationScreen(
+                            contentPaddingValues = contentPadding,
+                            thirdPartyNotificationScreenViewModel = thirdPartyNotificationScreenViewModel
                         )
                     }
                 }
-
-                HomeScreenKey -> {
-                    StartScreenNecessaryComponents.StartScreenFloatingButton {
-                        navigationBackStack.add(ShellScreenKey)
-                    }
-                }
-
-                CodeBrickScreenKey -> {
-                    val codeBrickScreenUIState by codeBrickViewModel.codeBrickScreenUIState.collectAsState()
-                    CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
-                        buttonMenuExpandStatus = codeBrickScreenUIState.buttonMenuExpandStatus,
-                        onHandMenuItemClick = {
-                            codeBrickViewModel.changeEditorShowStatus(true)
-                            codeBrickViewModel.changeButtonMenuStatus()
-                        },
-                        onJsonMenuItemClick = {
-                            codeBrickViewModel.createOneCodeBrickByJson()
-                            codeBrickViewModel.changeButtonMenuStatus()
-                        },
-                        onButtonMenuClick = {
-                            codeBrickViewModel.changeButtonMenuStatus(it)
-                        }
-                    )
-                }
-
-                else -> {}
-
-            }
-        },
-        modifier = Modifier
-            .nestedScroll(
-                connection = scrollBehavior.nestedScrollConnection
             )
-    ) { contentPadding->
 
-        // Source Adding Dialog
-        if (alertDialogStatus){
-            StartScreenRepositoryDialog(
-                sourceDomainContent,
-                onDismissRequest =  {
-                    alertDialogStatus = !alertDialogStatus
-                },
-                onConfirmButtonClick = {
-                    sourceScreenViewModel.addOneSourceByDefault(sourceURI = sourceDomainContent)
-                    alertDialogStatus = !alertDialogStatus
-                },
-                onDismissButtonClick = {
-                    alertDialogStatus = !alertDialogStatus
-                },
-                onTextFieldValueChange = { newValue -> sourceDomainContent = newValue }
-            )
         }
-
-        // Application Error Dialog
-        if (sharedEvent is RootlessStoreError){
-            StartScreenErrorDialog(sourceScreenViewModel, sharedEvent)
-        }
-
-        NavDisplay(
-            backStack = navigationBackStack,
-            entryProvider = entryProvider {
-                entry<HomeScreenKey>{
-                    HomeScreen(
-                        contentPadding = contentPadding,
-                        onChipClick = {
-                            context.startActivity(Intent(context, ShizukuActivity::class.java))
-                        }
-                    )
-                }
-                entry<PluginScreenKey> {
-                    RootlessStorePluginScreenContainer(
-                        contentPadding = contentPadding,
-                        pluginScreenViewModel = pluginScreenViewModel,
-                        navigateToExecuteScreen = { pluginID, isExecutePlugin ->
-                            navigationBackStack
-                                .add(ExecuteScreenKey(pluginID,isExecutePlugin))
-                        },
-                        onAbortOnePlugin = { pluginID ->
-                            currentExecuteViewModel.abortPluginProcess(pluginID)
-                        },
-                        onActiveOneTimePlugin = { pluginID ->
-                            currentExecuteViewModel.executeOnePlugin(pluginID)
-                        }
-                    )
-                }
-                entry<CodeBrickScreenKey>{
-                    CodeBrickScreen(
-                        contentPaddingValues = contentPadding,
-                        codeBrickViewModel = codeBrickViewModel,
-                        onBackgroundClick = {
-                            codeBrickViewModel.changeButtonMenuStatus()
-                        }
-                    )
-                }
-                entry<SourceScreenKey> {
-                    SourceScreen(
-                        contentPadding = contentPadding,
-                        sourceScreenViewModel = sourceScreenViewModel
-                    ){ pluginSourceLocal ->
-                        marketScreenViewModel.updatePluginSourceUri(pluginSourceLocal.sourceRemoteEndpoint)
-                        marketScreenViewModel.updateCurrentPluginSource(pluginSourceLocal)
-                        navigationBackStack.add(MarketScreenKey)
-                    }
-                }
-                entry<MarketScreenKey> {
-                    MarketScreen(
-                        contentPadding = contentPadding,
-                        marketScreenViewModel = marketScreenViewModel
-                    ){
-                        navigationBackStack.add(PluginScreenKey)
-                    }
-                }
-                entry<ShellScreenKey> {
-                    ShellScreen(
-                        contentPaddingValues = contentPadding,
-                        shellScreenViewModel = shellScreenViewModel,
-                        lazyColumnState = lazyColumnState
-                    )
-                }
-                entry<ExecuteScreenKey> { executeScreenKey ->
-
-                    // The overall constructor of ExecuteScreenViewModel
-                    val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginID, viewModelStoreOwner = viewModelStoreOwner)
-
-                    val pluginID = executeScreenKey.pluginID
-                    val isExecutePlugin = executeScreenKey.isExecutePlugin
-
-                    Log.d("ExecuteScreenKey.pluginID",pluginID)
-                    Log.d("ExecuteScreenKey.isExecutePlugin",isExecutePlugin.toString())
-
-                    // Function debouncing
-                    LaunchedEffect(pluginID, isExecutePlugin) {
-                        if (isExecutePlugin) {
-                            executeScreenViewModel.executeOnePlugin(pluginID)
-                        }
-                    }
-
-                    ExecuteScreen(
-                        contentPaddingValues = contentPadding,
-                        executeScreenViewModel = executeScreenViewModel
-                    )
-                }
-                entry<SettingScreenKey> {
-                    SettingScreen(
-                        contentPaddingValues = contentPadding,
-                        onThirdPartyNotificationSettingClick = {
-                            navigationBackStack.add(ThirdPartyNotificationScreenKey)
-                        }
-                    )
-                }
-                entry<ThirdPartyNotificationScreenKey> {
-                    ThirdPartyNotificationScreen(
-                        contentPaddingValues = contentPadding,
-                        thirdPartyNotificationScreenViewModel = thirdPartyNotificationScreenViewModel
-                    )
-                }
-            }
-        )
-
     }
 }
