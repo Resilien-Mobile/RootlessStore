@@ -48,6 +48,29 @@ fun HosterStatusCircularProgress(label: String, currentValue: Double, maxValue: 
 }
 
 @Composable
+fun HosterStatusCircularProgress(label: String, percentage: Float){
+    val currentValuePercentage = (percentage * 100).toInt()
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(
+                progress = {percentage},
+                modifier = Modifier
+                    .size(45.dp)
+            )
+            Text(
+                text = "${currentValuePercentage.toString()}%",
+                style = MaterialTheme.typography.labelSmall
+            )
+        }
+    }
+}
+
+@Composable
 @PreviewLightDark
 private fun _HosterStatusCircularProgressRowPreview_(){
     Box(

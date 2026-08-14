@@ -79,7 +79,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.documentfile)
     implementation(libs.androidx.compose.foundation.layout)
@@ -146,5 +145,8 @@ dependencies {
 
     // WebView
     implementation("androidx.webkit:webkit:1.16.0")
+
+    // Adaptive
+    implementation("androidx.compose.material3.adaptive:adaptive:1.3.0-rc01")
 
 }
