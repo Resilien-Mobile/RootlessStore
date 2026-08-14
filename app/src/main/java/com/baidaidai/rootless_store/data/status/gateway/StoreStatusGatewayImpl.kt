@@ -10,14 +10,19 @@ import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataS
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
 import com.baidaidai.rootless_store.data.status.datasource.AndroidAndAPIVersionDataSource
+import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.NetStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.SELinuxStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.StorageStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.TemperatureStatusDataSource
 import com.baidaidai.rootless_store.domain.status.model.AndroidAndAPIStatus
+import com.baidaidai.rootless_store.domain.status.model.CoreInfo
+import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
+import com.baidaidai.rootless_store.domain.status.model.PortInfo
 import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
@@ -30,6 +35,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 import javax.inject.Inject
+import kotlin.time.Duration
 
 class StoreStatusGatewayImpl @Inject constructor(
     private val memoryStatusDataSource: MemoryStatusDataSource,
@@ -40,11 +46,14 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val androidAndAPIVersionDataSource: AndroidAndAPIVersionDataSource,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
+    private val cpuStatusDataSource: CpuStatusDataSource,
+    private val netStatusDataSource: NetStatusDataSource,
     @ApplicationContext context: Context
 ) {
 
     private val dataStore = context.rootlessStorePreferencesDataStore
 
+    // Status
     fun getMemoryStatus(): Flow<MemoryStatus> = flow {
         while (true){
             val totalMemory = memoryStatusDataSource.getTotalMemory()
@@ -122,6 +131,43 @@ class StoreStatusGatewayImpl @Inject constructor(
         // MVP后马上删，会抛error不稳定
     }
 
+    // CPU Status
+    suspend fun getCoreInfo(cpuCoreIndex: Int? = null): CoreInfo? {
+        return cpuStatusDataSource(cpuCoreIndex)
+    }
+
+    suspend fun getCpuCoreCount(): Int? {
+        return cpuStatusDataSource.getCpuCoreCount()
+    }
+
+    suspend fun getSystemUptime(): Duration? {
+        return cpuStatusDataSource.getSystemUptime()
+    }
+
+    // Network Status
+    suspend fun getPortInfo(
+        networkInterfaceName: String = "wlan0"
+    ): PortInfo? {
+        return netStatusDataSource(networkInterfaceName)
+    }
+
+    fun isCarrierAvailable(): Boolean {
+        return netStatusDataSource.isCarrierAvailable()
+    }
+
+    fun isVpnAvailable(): Boolean {
+        return netStatusDataSource.isVpnAvailable()
+    }
+
+    fun getCarrierNetworkInterfaceName(): String? {
+        return netStatusDataSource.getCarrierNetworkInterfaceName()
+    }
+
+    fun getVpnNetworkInterfaceName(): String? {
+        return netStatusDataSource.getVpnNetworkInterfaceName()
+    }
+
+    // Preference
     fun getExecuteContextPreference(): Flow<HosterOverallStatus> {
         return dataStore.data
             .catch { error ->
