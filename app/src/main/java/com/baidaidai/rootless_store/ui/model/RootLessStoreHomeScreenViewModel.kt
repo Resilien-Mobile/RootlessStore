@@ -3,11 +3,15 @@ package com.baidaidai.rootless_store.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baidaidai.rootless_store.application.status.GetCpuDashboardConfigUseCase
+import com.baidaidai.rootless_store.application.status.GetNetDashboardConfigUseCase
 import com.baidaidai.rootless_store.application.status.GetOverallStatusUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.GetEnableAutoUpdatePreferenceUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCase
+import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
+import com.baidaidai.rootless_store.domain.status.model.NetDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
@@ -50,7 +54,9 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
     private val getEnableAutoUpdatePreferenceUseCase: GetEnableAutoUpdatePreferenceUseCase,
     private val getLatestVersionUseCase: GetLatestVersionUseCase,
-    private val getADBShellStatusUseCase: GetADBShellStatusUseCase
+    private val getADBShellStatusUseCase: GetADBShellStatusUseCase,
+    private val getCpuDashboardConfigUseCase: GetCpuDashboardConfigUseCase,
+    private val getNetDashboardConfigUseCase: GetNetDashboardConfigUseCase
 ) : ViewModel() {
 
     init {
@@ -140,6 +146,18 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
         initialValue = HosterOverallStatus.LIMITED
+    )
+
+    val cpuStatus = getCpuDashboardConfigUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(1_000),
+        initialValue = CpuDashboardConfig._testOnly_
+    )
+
+    val netStatus = getNetDashboardConfigUseCase().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(1_000),
+        initialValue = NetDashboardConfig._testOnly_
     )
 
     // Saves the user's selected execute context for now.
