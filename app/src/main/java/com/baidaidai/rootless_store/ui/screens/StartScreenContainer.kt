@@ -112,15 +112,26 @@ fun RootlessStoreStartScreenContainer(
 
     // Reactive Style
     val _windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
-    val isExpanded = _windowSizeClass.isWidthAtLeastBreakpoint(
+    val isExpandedWidth = _windowSizeClass.isWidthAtLeastBreakpoint(
         WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
     )
-    val isMedium = _windowSizeClass.isWidthAtLeastBreakpoint(
+    val isExpandedHeight = _windowSizeClass.isHeightAtLeastBreakpoint(
+        WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
+    )
+    val isMediumWidth = _windowSizeClass.isWidthAtLeastBreakpoint(
         WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
     )
-    val rootlessStoreWindowSize = when {
-        isExpanded -> RootlessStoreWindowSize.Expanded
-        isMedium -> RootlessStoreWindowSize.Medium
+    val isMediumHeight = _windowSizeClass.isHeightAtLeastBreakpoint(
+        WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND
+    )
+    val rootlessStoreWidthWindowSize = when {
+        isExpandedWidth -> RootlessStoreWindowSize.Expanded
+        isMediumWidth -> RootlessStoreWindowSize.Medium
+        else -> RootlessStoreWindowSize.Compact
+    }
+    val rootlessStoreHeightWindowSize = when {
+        isExpandedHeight -> RootlessStoreWindowSize.Expanded
+        isMediumHeight -> RootlessStoreWindowSize.Medium
         else -> RootlessStoreWindowSize.Compact
     }
 
@@ -169,13 +180,13 @@ fun RootlessStoreStartScreenContainer(
         }
 
     Row(modifier = Modifier.fillMaxSize()) {
-        if(rootlessStoreWindowSize == RootlessStoreWindowSize.Expanded){
+        if(rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Expanded){
             StartScreenNecessaryComponents.StartScreenExpressiveNavigationRail(
                 currentDestination = navigationBackStack.last() as RootlessNavigationKey,
             ) { rootlessNavigationKey ->
                 navigationBackStack.add(rootlessNavigationKey)
             }
-        }else if(rootlessStoreWindowSize == RootlessStoreWindowSize.Medium){
+        }else if(rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Medium){
             StartScreenNecessaryComponents.StartScreenNavigationRail(
                 currentDestination = navigationBackStack.last() as RootlessNavigationKey,
             ) { rootlessNavigationKey ->
@@ -259,7 +270,7 @@ fun RootlessStoreStartScreenContainer(
                 }
             },
             bottomBar = {
-                if (rootlessStoreWindowSize == RootlessStoreWindowSize.Compact){
+                if (rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Compact){
                     StartScreenNecessaryComponents.StartScreenNavigationBar(
                         currentDestination = navigationBackStack.last() as RootlessNavigationKey
                     ){ rootlessNavigationKey ->
@@ -344,7 +355,8 @@ fun RootlessStoreStartScreenContainer(
                     entry<HomeScreenKey>{
                         HomeScreen(
                             contentPadding = contentPadding,
-                            rootlessStoreWindowSize = rootlessStoreWindowSize,
+                            rootlessStoreHeightWindowSize = rootlessStoreHeightWindowSize,
+                            rootlessStoreWidthWindowSize = rootlessStoreWidthWindowSize,
                             onChipClick = {
                                 context.startActivity(Intent(context, ShizukuActivity::class.java))
                             }
@@ -370,7 +382,7 @@ fun RootlessStoreStartScreenContainer(
                         CodeBrickScreen(
                             contentPaddingValues = contentPadding,
                             codeBrickViewModel = codeBrickViewModel,
-                            rootlessStoreWindowSize = rootlessStoreWindowSize,
+                            rootlessStoreWindowSize = rootlessStoreWidthWindowSize,
                             onBackgroundClick = {
                                 codeBrickViewModel.changeButtonMenuStatus()
                             }

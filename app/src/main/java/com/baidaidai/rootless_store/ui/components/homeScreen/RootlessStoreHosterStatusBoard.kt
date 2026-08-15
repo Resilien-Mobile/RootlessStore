@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +30,7 @@ fun RootlessStoreHosterStatusBoard(
     )
     Card(
         colors = cardColors,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         elevation = CardDefaults.cardElevation()
     ) {
         Surface(
@@ -84,7 +85,10 @@ fun RootlessStoreHosterStatusBoard(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    RootlessStoreHosterStatusBoard(
-        hosterStatus = RootlessStoreHosterStatus()
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        RootlessStoreHosterStatusBoard(
+            hosterStatus = RootlessStoreHosterStatus(),
+            modifier = Modifier.width(200.dp)
+        )
+    }
 }

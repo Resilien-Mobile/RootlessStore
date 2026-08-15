@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.ui.components.homeScreen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -111,10 +111,13 @@ fun HomeScreenCpuInfoCard(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    HomeScreenCpuInfoCard(
-        cpuDashboardConfig = CpuDashboardConfig._testOnly_,
-        modifier = Modifier
-            .height(280.dp)
-            .background(MaterialTheme.colorScheme.surface)
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        HomeScreenCpuInfoCard(
+            cpuDashboardConfig = CpuDashboardConfig._testOnly_,
+            modifier = Modifier
+                .width(200.dp)
+                .height(280.dp)
+                .background(MaterialTheme.colorScheme.surface)
+        )
+    }
 }
