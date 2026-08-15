@@ -121,12 +121,15 @@ fun HosterStatusCircularProgressRow(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    HosterStatusCircularProgressRow(
-        hosterStatus = RootlessStoreHosterStatus()
-            .copy(
-                hosterOverallStatus = HosterOverallStatus.LIMITED,
-                memoryStatus = MemoryStatus(totalMemory = 256.01, usedMemory = 128.64),
-                storageStatus = StorageStatus(totalStorage = 512.10, usedStorage = 128.64)
-            )
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        HosterStatusCircularProgressRow(
+            modifier = Modifier.width(300.dp),
+            hosterStatus = RootlessStoreHosterStatus()
+                .copy(
+                    hosterOverallStatus = HosterOverallStatus.LIMITED,
+                    memoryStatus = MemoryStatus(totalMemory = 256.01, usedMemory = 128.64),
+                    storageStatus = StorageStatus(totalStorage = 512.10, usedStorage = 128.64)
+                )
+        )
+    }
 }

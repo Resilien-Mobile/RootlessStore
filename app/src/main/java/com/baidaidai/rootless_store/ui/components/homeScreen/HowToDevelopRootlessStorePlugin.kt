@@ -1,7 +1,6 @@
 package com.baidaidai.rootless_store.ui.components.homeScreen
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -24,32 +23,33 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import com.baidaidai.rootless_store.R
 import androidx.core.net.toUri
 
 @Composable
-fun HowToDevelopRootlessStorePlugin(){
+fun HowToDevelopRootlessStorePlugin(
+    modifier: Modifier = Modifier
+){
     val context = LocalContext.current
     val cardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         contentColor = MaterialTheme.colorScheme.onSurface,
     )
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
+        elevation = CardDefaults.cardElevation(),
+        colors = cardColors,
+        modifier = modifier
             .clickable(
                 enabled = true,
                 onClick = {
-                    val url = "https://resilien-mobile.github.io/RootlessStore_WiKi/plugin-development/"
+                    val url =
+                        "https://resilien-mobile.github.io/RootlessStore_WiKi/plugin-development/"
                     val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                     context.startActivity(intent)
                 }
             )
-        ,
-        elevation = CardDefaults.cardElevation(),
-        colors = cardColors
     ){
         Column(
             modifier = Modifier
@@ -87,4 +87,13 @@ fun HowToDevelopRootlessStorePlugin(){
             }
         }
     }
+}
+
+@PreviewLightDark
+@Composable
+private fun _preview_() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        HowToDevelopRootlessStorePlugin(Modifier.width(200.dp))
+    }
+
 }
