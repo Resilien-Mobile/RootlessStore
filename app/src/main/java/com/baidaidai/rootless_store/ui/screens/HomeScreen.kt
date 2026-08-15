@@ -179,6 +179,7 @@ fun HomeScreen(
 
             HomeScreenNetDashboard(
                 netDashboardConfig = netStatus,
+                rootlessStoreHeightWindowSize = rootlessStoreHeightWindowSize,
                 modifier = if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
                     Modifier.fillMaxHeight()
                 }else{
