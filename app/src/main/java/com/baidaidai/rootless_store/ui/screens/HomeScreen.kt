@@ -1,15 +1,15 @@
 package com.baidaidai.rootless_store.ui.screens
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,6 +28,7 @@ import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootles
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionCheckerContainer
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionTagContainer
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreHosterStatusBoard
+import com.baidaidai.rootless_store.ui.layout.homeScreen.HomeScreenExpandedLayout
 import com.baidaidai.rootless_store.ui.model.RootLessStoreHomeScreenViewModel
 
 @Composable
@@ -49,6 +50,7 @@ fun HomeScreen(
     val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
     val cpuStatus by homeScreenViewModel.cpuStatus.collectAsState()
     val netStatus by homeScreenViewModel.netStatus.collectAsState()
+    val appVersion = stringResource(R.string.app_version)
 
     val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
         hosterOverallStatus = hosterOverallStatus,
@@ -70,110 +72,99 @@ fun HomeScreen(
         )
     }
 
-    val modifier = if (rootlessStoreWindowSize == RootlessStoreWindowSize.Compact) {
-        Modifier
-            .fillMaxSize()
-            .padding(contentPadding)
-    } else {
-        Modifier
-            .width(345.dp)
-            .fillMaxHeight()
-    }
-
     if(rootlessStoreWindowSize == RootlessStoreWindowSize.Compact){
         LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            modifier = modifier
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(
+                top = contentPadding.calculateTopPadding() + 16.dp,
+                bottom = contentPadding.calculateBottomPadding() + 16.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+            modifier = Modifier.fillMaxSize()
         ) {
             item {
-
                 /* Version Tag */
                 RootLessStoreVersionTagContainer()
-                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-                /* Version Checker */
-                if (latestVersionNumber != null && latestVersionNumber != stringResource(R.string.app_version)) {
+            if (latestVersionNumber != null && latestVersionNumber != appVersion) {
+                item {
+                    /* Version Checker */
                     RootLessStoreVersionCheckerContainer(
                         latestVersionNumber = latestVersionNumber!!
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
                 }
+            }
 
+            item {
                 /* Hoster Circular Progress */
                 HosterStatusCircularProgressRow(
                     hosterStatus = rootlessStoreHosterStatus,
                     onChipClick = onChipClick,
                     onChipLongClick = homeScreenViewModel::changeDialogStatus
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+            }
 
+            item {
                 /* Hoster Status */
                 RootlessStoreHosterStatusBoard(
                     hosterStatus = rootlessStoreHosterStatus
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+            }
 
+            item {
                 /* How to Make Plugin */
                 HowToDevelopRootlessStorePlugin()
-
             }
         }
     }else{
-        LazyRow(
-            contentPadding = PaddingValues(16.dp),
+        HomeScreenExpandedLayout(
+            preferWidth = 345.dp,
             modifier = Modifier
+                .fillMaxHeight()
                 .padding(contentPadding)
-                .fillMaxSize()
-        ) {
-            item {
-                Column(
-                    modifier = modifier
-                ) {
-                    /* Version Tag */
-                    RootLessStoreVersionTagContainer()
-                    Spacer(modifier = Modifier.height(10.dp))
+                .horizontalScroll(rememberScrollState())
+        ){
 
-                    /* Version Checker */
-                    if (latestVersionNumber != null && latestVersionNumber != stringResource(R.string.app_version)) {
-                        RootLessStoreVersionCheckerContainer(
-                            latestVersionNumber = latestVersionNumber!!
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
-                    }
+            // Version Tag && Info Flag
+            RootLessStoreVersionTagContainer(Modifier.width(preferWidth))
 
-                    /* Hoster Circular Progress */
-                    HosterStatusCircularProgressRow(
-                        hosterStatus = rootlessStoreHosterStatus,
-                        onChipClick = onChipClick,
-                        onChipLongClick = homeScreenViewModel::changeDialogStatus
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    /* Hoster Status */
-                    RootlessStoreHosterStatusBoard(
-                        hosterStatus = rootlessStoreHosterStatus
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    /* How to Make Plugin */
-                    HowToDevelopRootlessStorePlugin()
-                }
+            if (latestVersionNumber != null && latestVersionNumber != appVersion) {
+                RootLessStoreVersionCheckerContainer(
+                    latestVersionNumber = latestVersionNumber!!,
+                    modifier = getBasicWidthModifier()
+                )
             }
-            item { Spacer(modifier = Modifier.width(10.dp)) }
-            item {
-                Column(
-                    modifier = modifier
-                ) {
-                    HomeScreenCpuInfoCard(
-                        cpuDashboardConfig = cpuStatus,
-                        modifier = Modifier.height(280.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    HomeScreenNetDashboard(
-                        netDashboardConfig = netStatus
-                    )
-                }
-            }
+
+            /* Hoster Circular Progress */
+            HosterStatusCircularProgressRow(
+                hosterStatus = rootlessStoreHosterStatus,
+                onChipClick = onChipClick,
+                onChipLongClick = homeScreenViewModel::changeDialogStatus,
+                modifier = getBasicWidthModifier()
+            )
+
+            /* Hoster Status */
+            RootlessStoreHosterStatusBoard(
+                hosterStatus = rootlessStoreHosterStatus,
+                modifier = getBasicWidthModifier()
+            )
+
+            /* How to Make Plugin */
+            HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+
+
+            HomeScreenCpuInfoCard(
+                cpuDashboardConfig = cpuStatus,
+                modifier = getBasicWidthModifier(Modifier.height(280.dp))
+            )
+
+            HomeScreenNetDashboard(
+                netDashboardConfig = netStatus,
+                modifier = getBasicWidthModifier()
+            )
+
         }
     }
 }
