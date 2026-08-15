@@ -34,7 +34,8 @@ import com.baidaidai.rootless_store.ui.model.RootLessStoreHomeScreenViewModel
 @Composable
 fun HomeScreen(
     contentPadding: PaddingValues,
-    rootlessStoreWindowSize: RootlessStoreWindowSize,
+    rootlessStoreHeightWindowSize: RootlessStoreWindowSize,
+    rootlessStoreWidthWindowSize: RootlessStoreWindowSize,
     onChipClick:()-> Unit,
     homeScreenViewModel: RootLessStoreHomeScreenViewModel = hiltViewModel()
 ){
@@ -72,7 +73,7 @@ fun HomeScreen(
         )
     }
 
-    if(rootlessStoreWindowSize == RootlessStoreWindowSize.Compact){
+    if(rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Compact){
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             contentPadding = PaddingValues(
@@ -130,7 +131,7 @@ fun HomeScreen(
             // Version Tag && Info Flag
             RootLessStoreVersionTagContainer(Modifier.width(preferWidth))
 
-            if (latestVersionNumber != null && latestVersionNumber != appVersion) {
+            if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
                 RootLessStoreVersionCheckerContainer(
                     latestVersionNumber = latestVersionNumber!!,
                     modifier = getBasicWidthModifier()
@@ -145,14 +146,30 @@ fun HomeScreen(
                 modifier = getBasicWidthModifier()
             )
 
+            /* Version Checker */
+            // 如果height紧凑，则可用此布局，反之不可使用
+            if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
+                RootLessStoreVersionCheckerContainer(
+                    latestVersionNumber = latestVersionNumber!!,
+                    modifier = getBasicWidthModifier()
+                )
+            }
+            // 如果height紧凑，则可用此布局，反之不可使用
+            if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
+                /* How to Make Plugin */
+                HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+            }
+
             /* Hoster Status */
             RootlessStoreHosterStatusBoard(
                 hosterStatus = rootlessStoreHosterStatus,
                 modifier = getBasicWidthModifier()
             )
 
-            /* How to Make Plugin */
-            HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+            if (rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact){
+                /* How to Make Plugin */
+                HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+            }
 
 
             HomeScreenCpuInfoCard(
@@ -162,7 +179,11 @@ fun HomeScreen(
 
             HomeScreenNetDashboard(
                 netDashboardConfig = netStatus,
-                modifier = getBasicWidthModifier()
+                modifier = if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
+                    Modifier.fillMaxHeight()
+                }else{
+                    getBasicWidthModifier()
+                }
             )
 
         }
