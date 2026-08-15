@@ -21,12 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.baidaidai.rootless_store.R
 
 @Composable
 fun RootLessStoreVersionCheckerContainer(
+    modifier: Modifier = Modifier,
     latestVersionNumber: String
 ){
 
@@ -36,8 +38,7 @@ fun RootLessStoreVersionCheckerContainer(
         contentColor = colorScheme.onSecondaryContainer,
     )
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .clickable(
                 enabled = true,
                 onClick = {
@@ -80,5 +81,13 @@ fun RootLessStoreVersionCheckerContainer(
                 }
             }
         }
+    }
+}
+
+@PreviewLightDark
+@Composable
+private fun _preview_() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        RootLessStoreVersionCheckerContainer(latestVersionNumber = "v2.2.0", modifier = Modifier.width(200.dp))
     }
 }
