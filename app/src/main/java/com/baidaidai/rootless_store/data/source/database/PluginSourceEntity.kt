@@ -4,10 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceAuthenticationMeta
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDto
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMeta
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceAuthenticationMetadata
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceDto
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMetadata
 
 @Entity(tableName = "pluginSource")
 data class PluginSourceEntity(
@@ -19,34 +19,34 @@ data class PluginSourceEntity(
     val userAccessToken: String?,
 
     @Embedded
-    val pluginSourceAuthenticationMeta: PluginSourceAuthenticationMeta,
+    val pluginSourceAuthenticationMetadata: PluginSourceAuthenticationMetadata,
 
 ){
     companion object {
 
         // Work best for Adding PluginSource
         fun fromPluginSourceDto(
-            pluginSourceInfoDto: PluginSourceInfoDto
+            pluginSourceDto: PluginSourceDto
         ): PluginSourceEntity{
             return PluginSourceEntity(
-                sourceId = pluginSourceInfoDto.sourceId,
-                sourceName = pluginSourceInfoDto.sourceName,
-                sourceRemoteEndpoint = pluginSourceInfoDto.sourceRemoteEndpoint,
+                sourceId = pluginSourceDto.sourceId,
+                sourceName = pluginSourceDto.sourceName,
+                sourceRemoteEndpoint = pluginSourceDto.sourceRemoteEndpoint,
                 userAccessToken = null,
-                pluginSourceAuthenticationMeta = pluginSourceInfoDto.sourceAuthenticationInfo.toPluginSourceAuthenticationMeta(),
+                pluginSourceAuthenticationMetadata = pluginSourceDto.authenticationMetadata.toPluginSourceAuthenticationMetadata(),
             )
         }
 
         // Work best for Delete PluginSource
-        fun fromPluginSourceLocal(
-            pluginSourceInfo: PluginSourceInfo
+        fun fromPluginSource(
+            pluginSource: PluginSource
         ): PluginSourceEntity{
             return PluginSourceEntity(
-                sourceId = pluginSourceInfo.sourceId,
-                sourceName = pluginSourceInfo.sourceName,
-                sourceRemoteEndpoint = pluginSourceInfo.sourceRemoteEndpoint,
+                sourceId = pluginSource.sourceId,
+                sourceName = pluginSource.sourceName,
+                sourceRemoteEndpoint = pluginSource.sourceRemoteEndpoint,
                 userAccessToken = null,
-                pluginSourceAuthenticationMeta = pluginSourceInfo.pluginSourceAuthenticationMeta,
+                pluginSourceAuthenticationMetadata = pluginSource.pluginSourceAuthenticationMetadata,
             )
         }
 

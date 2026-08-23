@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
 @Entity(tableName = "pluginInfo")
@@ -35,7 +35,8 @@ data class PluginEntity(
     val isEnabled: Boolean,
     val requiredEnvironment: HosterOverallStatus,
     val state: PluginState,
-    val source: PluginSource,
+    @ColumnInfo(name = "source")
+    val origin: PluginOrigin,
     val entryPoint: String,
     val pluginRunModel: PluginRunModel,
     @ColumnInfo(name = "webUIEntryPoint")

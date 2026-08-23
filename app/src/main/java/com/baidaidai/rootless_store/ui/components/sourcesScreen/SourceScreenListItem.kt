@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.theme.colorscheme.SourceListItemColor
 
@@ -25,16 +25,16 @@ import com.baidaidai.rootless_store.ui.theme.colorscheme.SourceListItemColor
 @Composable
 fun SourceScreenListItem(
     isDeleteActionVisible: Boolean,
-    pluginSourceInfo: PluginSourceInfo,
+    pluginSource: PluginSource,
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     onListItemClick:(pluginSourceUri: String)-> Unit
 ){
     ListItem(
         onClick = {
-            onListItemClick(pluginSourceInfo.sourceRemoteEndpoint)
+            onListItemClick(pluginSource.sourceRemoteEndpoint)
         },
         supportingContent = {
-            Text(pluginSourceInfo.sourceRemoteEndpoint)
+            Text(pluginSource.sourceRemoteEndpoint)
         },
         trailingContent = {
             Icon(
@@ -49,7 +49,7 @@ fun SourceScreenListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 if (isDeleteActionVisible){
-                    SourceScreenLeadingDeleteButton(sourceScreenViewModel,pluginSourceInfo)
+                    SourceScreenLeadingDeleteButton(sourceScreenViewModel,pluginSource)
                 }
                 // Should Change Intro Compatible Source
                 Image(
@@ -62,6 +62,6 @@ fun SourceScreenListItem(
             }
         }
     ) {
-        Text(pluginSourceInfo.sourceName)
+        Text(pluginSource.sourceName)
     }
 }

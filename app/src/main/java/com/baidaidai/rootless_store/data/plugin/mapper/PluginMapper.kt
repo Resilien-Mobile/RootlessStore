@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.plugin.mapper
 import com.baidaidai.rootless_store.data.plugin.database.PluginEntity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
 object PluginMapper {
@@ -20,7 +20,7 @@ object PluginMapper {
             isEnabled = false,
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
-            source = PluginSource.Local,
+            origin = PluginOrigin.Local,
             entryPoint = entryPoint,
             pluginRunModel = pluginRunModel,
             webUiEntryPoint = webUiEntryPoint
@@ -38,7 +38,7 @@ object PluginMapper {
             isEnabled = false,
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
-            source = PluginSource.Official,
+            origin = PluginOrigin.Official,
             entryPoint = entryPoint,
             pluginRunModel = pluginRunModel,
             webUiEntryPoint = webUiEntryPoint,
