@@ -19,7 +19,7 @@ class UninstallPluginUseCase @Inject constructor(
             uninstallShellPlugin(pluginManifestRoom) ; return
         }
         pluginFileSystemGateway.uninstallPlugin(pluginManifestRoom.pluginPackageName)
-        pluginRepositoryImpl.deletePluginInfoById(pluginManifestRoom.pluginId)
+        pluginRepositoryImpl.deletePluginById(pluginManifestRoom.pluginId)
     }
     private suspend fun uninstallShellPlugin(
         pluginManifestRoom: PluginManifestRoom
@@ -30,6 +30,6 @@ class UninstallPluginUseCase @Inject constructor(
 
         if (!shellPluginUninstallResult) return
 
-        pluginRepositoryImpl.deletePluginInfoById(pluginManifestRoom.pluginId)
+        pluginRepositoryImpl.deletePluginById(pluginManifestRoom.pluginId)
     }
 }

@@ -7,7 +7,7 @@ Room 是基于 SQLite 的 Jetpack 持久化层，主要提供：
 本模块中，Room 用于在本地保存 RootlessStore 的插件元数据。
 
 ## Entity
-`PluginInfoEntity` 定义了 `pluginInfo` 表，并使用 `pluginID` 作为主键。
+`PluginEntity` 定义了 `pluginInfo` 表，并使用 `pluginID` 作为主键。
 字段与 `PluginManiFest` 一一对应，Room 可以直接把查询结果映射为该数据类。
 
 如果后续加入更复杂的字段类型，需要提供 `@TypeConverter` 来保证可持久化。
@@ -26,7 +26,7 @@ Room 是基于 SQLite 的 Jetpack 持久化层，主要提供：
 
 ## DataBase
 `AppDatabase` 是 Room 数据库定义：
-- 包含 `PluginInfoEntity`
+- 包含 `PluginEntity`
 - 版本号为 1，`exportSchema = true`
 - 通过 `pluginDao()` 暴露 DAO
 

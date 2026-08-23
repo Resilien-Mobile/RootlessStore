@@ -63,7 +63,7 @@ class InstallShellPluginUseCase @Inject constructor(
             }
 
             // Add Data, Register Plugin
-            pluginRepositoryImpl.insertPluginInfo(pluginManifestLocal)
+            pluginRepositoryImpl.insertPlugin(pluginManifestLocal)
 
             null
         } catch (error: Throwable) {

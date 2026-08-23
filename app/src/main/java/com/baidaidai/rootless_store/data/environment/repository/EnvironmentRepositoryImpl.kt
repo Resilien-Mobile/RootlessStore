@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.data.environment.repository
 
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.environment.gateway.EnvironmentGatewayImpl
-import com.baidaidai.rootless_store.data.environment.mapper.EnvironmentMapper.toEnvironmentInfoEntity
+import com.baidaidai.rootless_store.data.environment.mapper.EnvironmentMapper.toEnvironmentEntity
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
@@ -17,17 +17,17 @@ class EnvironmentRepositoryImpl @Inject constructor(
     private val environmentDao = rootlessStoreDatabase.environmentDao()
 
     // Create
-    suspend fun insertEnvironmentInfo(
+    suspend fun insertEnvironment(
         environmentManifestLocal: EnvironmentManifestLocal
     ) {
-        val environmentInfoEntity = environmentManifestLocal.toEnvironmentInfoEntity()
-        environmentDao.insertEnvironment(environmentInfoEntity)
+        val environmentEntity = environmentManifestLocal.toEnvironmentEntity()
+        environmentDao.insertEnvironment(environmentEntity)
     }
-    suspend fun insertEnvironmentInfo(
+    suspend fun insertEnvironment(
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
-        val environmentInfoEntity = environmentManifestRemote.toEnvironmentInfoEntity()
-        environmentDao.insertEnvironment(environmentInfoEntity)
+        val environmentEntity = environmentManifestRemote.toEnvironmentEntity()
+        environmentDao.insertEnvironment(environmentEntity)
     }
 
     // Update
@@ -40,7 +40,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Read
-    suspend fun findEnvironmentInfoRoomById(
+    suspend fun findEnvironmentById(
         environmentId: String
     ): EnvironmentManifestRoom? {
         val environmentInfoRoom = environmentDao.findEnvironmentById(environmentId)
@@ -87,7 +87,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    suspend fun deleteEnvironmentInfoById(environmentId: String) {
+    suspend fun deleteEnvironmentById(environmentId: String) {
         environmentDao.deleteEnvironmentById(environmentId)
     }
 }

@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.data.environment.mapper
 
-import com.baidaidai.rootless_store.data.environment.database.EnvironmentInfoEntity
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentEntity
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
@@ -9,7 +9,7 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
 object EnvironmentMapper {
 
-    fun EnvironmentInfoEntity.toEnvironmentManifestRoom (): EnvironmentManifestRoom{
+    fun EnvironmentEntity.toEnvironmentManifestRoom (): EnvironmentManifestRoom{
         return EnvironmentManifestRoom(
             isEnabled = isEnabled,
             state = state,
@@ -28,8 +28,8 @@ object EnvironmentMapper {
         )
     }
 
-    fun EnvironmentManifestLocal.toEnvironmentInfoEntity(): EnvironmentInfoEntity{
-        return EnvironmentInfoEntity(
+    fun EnvironmentManifestLocal.toEnvironmentEntity(): EnvironmentEntity{
+        return EnvironmentEntity(
             environmentId = environmentId,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
@@ -47,8 +47,8 @@ object EnvironmentMapper {
         )
     }
 
-    fun EnvironmentManifestRemote.toEnvironmentInfoEntity(): EnvironmentInfoEntity {
-        return EnvironmentInfoEntity(
+    fun EnvironmentManifestRemote.toEnvironmentEntity(): EnvironmentEntity {
+        return EnvironmentEntity(
             environmentId = environmentId,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,

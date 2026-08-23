@@ -24,7 +24,7 @@ class InstallPluginUseCase @Inject constructor(
                 // Set Execute-able, Made it can call and use
                 pluginGatewayImpl.setPluginEntryPointExecutable(pluginManiFestLocal)
                 // Add Data, Register Plugin
-                pluginRepositoryImpl.insertPluginInfo(pluginManiFestLocal)
+                pluginRepositoryImpl.insertPlugin(pluginManiFestLocal)
 
                 null
             }

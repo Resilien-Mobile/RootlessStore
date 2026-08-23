@@ -15,7 +15,7 @@ interface PluginDao {
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPlugin(pluginInfoEntity: PluginInfoEntity)
+    suspend fun insertPlugin(pluginEntity: PluginEntity)
 
     // Update
     @Query("UPDATE pluginInfo SET enabled = :isEnabled WHERE pluginID = :pluginId")

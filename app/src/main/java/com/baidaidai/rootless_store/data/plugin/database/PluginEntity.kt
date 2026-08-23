@@ -9,7 +9,7 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
 @Entity(tableName = "pluginInfo")
-data class PluginInfoEntity(
+data class PluginEntity(
 
     /**
      * pluginId is primaryKey

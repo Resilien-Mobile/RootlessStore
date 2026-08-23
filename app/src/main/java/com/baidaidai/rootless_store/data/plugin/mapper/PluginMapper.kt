@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.data.plugin.mapper
 
-import com.baidaidai.rootless_store.data.plugin.database.PluginInfoEntity
+import com.baidaidai.rootless_store.data.plugin.database.PluginEntity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
@@ -8,8 +8,8 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
 object PluginMapper {
 
-    fun PluginManifestLocal.toPluginInfoEntity(): PluginInfoEntity {
-        return PluginInfoEntity(
+    fun PluginManifestLocal.toPluginEntity(): PluginEntity {
+        return PluginEntity(
             pluginId = pluginId,
             installedVersion = installedVersion,
             pluginRenderingName = pluginRenderingName,
@@ -26,8 +26,8 @@ object PluginMapper {
             webUiEntryPoint = webUiEntryPoint
         )
     }
-    fun PluginManifestRemote.toPluginInfoEntity(): PluginInfoEntity {
-        return PluginInfoEntity(
+    fun PluginManifestRemote.toPluginEntity(): PluginEntity {
+        return PluginEntity(
             pluginId = pluginId,
             installedVersion = installedVersion,
             pluginRenderingName = pluginRenderingName,

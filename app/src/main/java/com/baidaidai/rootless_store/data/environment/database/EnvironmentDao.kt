@@ -15,7 +15,7 @@ interface EnvironmentDao {
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertEnvironment(environmentInfoEntity: EnvironmentInfoEntity)
+    suspend fun insertEnvironment(environmentEntity: EnvironmentEntity)
 
     // Update
     @Query("UPDATE environmentInfo SET enabled = :isEnabled WHERE environmentID = :environmentId")
