@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.domain.source.repository
 
 import androidx.room.RoomDatabase
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEndpointInput
@@ -28,7 +28,7 @@ interface PluginSourceRepository {
     // Read
     suspend fun findPluginSource(sourceId: String): PluginSourceEntity?
 
-    fun observePluginSources(): Flow<List<PluginSourceInfo>?>
+    fun observePluginSources(): Flow<List<PluginSource>?>
 
     fun observePluginSourceCount(): Flow<Int>
 

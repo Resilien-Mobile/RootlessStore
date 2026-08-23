@@ -18,7 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAlertDialog
 import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAuthenticationModalBottomSheet
@@ -29,7 +29,7 @@ import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenList
 fun SourceScreen(
     contentPadding: PaddingValues,
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
-    onListItemClick: (pluginSourceInfo: PluginSourceInfo)-> Unit
+    onListItemClick: (pluginSource: PluginSource)-> Unit
 ){
     val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()
     val isDeleteActionVisible by sourceScreenViewModel.isDeleteActionVisible.collectAsState()
@@ -71,7 +71,7 @@ fun SourceScreen(
                     Column {
                         SourceScreenListItem(
                             isDeleteActionVisible,
-                            pluginSourceInfo = pluginSource,
+                            pluginSource = pluginSource,
                             sourceScreenViewModel
                         ) {
                             onListItemClick(pluginSource)

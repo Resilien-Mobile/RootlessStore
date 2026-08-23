@@ -5,14 +5,14 @@ import com.baidaidai.rootless_store.core.util.OutOfStringLike
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 import com.baidaidai.rootless_store.data.source.gateway.PluginSourceGatewayImpl
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEndpointInput
 import com.baidaidai.rootless_store.domain.source.repository.PluginSourceRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceInfo
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import kotlinx.coroutines.flow.map
@@ -33,17 +33,17 @@ class PluginSourceRepositoryImpl @Inject constructor(
     ): PluginSourceEvent {
         try{
             val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceEndpointInput.sourceRemoteEndpoint)
-            val sourceAuthenticationInfo = pluginSource.pluginSourceAuthenticationMeta
+            val authenticationMetadata = pluginSource.pluginSourceAuthenticationMetadata
 
             /**
              * 验证，拉起WebView
              */
-            if (sourceAuthenticationInfo.needsAuthentication){
+            if (authenticationMetadata.needsAuthentication){
                 return PluginSourceEvent.SourceAuthentication
             }
 
 
-            val newPluginSourceEntity = PluginSourceEntity.fromPluginSourceLocal(pluginSource)
+            val newPluginSourceEntity = PluginSourceEntity.fromPluginSource(pluginSource)
 
             pluginSourceDao.insertPluginSource(newPluginSourceEntity)
 
@@ -73,7 +73,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
             return when(sourceAuthenticationResult){
                 is PluginSourceAuthenticationResult.Success -> {
                     val pluginSourceEntity = PluginSourceEntity
-                        .fromPluginSourceLocal(pluginSource)
+                        .fromPluginSource(pluginSource)
                         .copy(userAccessToken = sourceAuthenticationResult.userAccessToken)
 
                     pluginSourceDao.insertPluginSource(pluginSourceEntity)
@@ -136,12 +136,12 @@ class PluginSourceRepositoryImpl @Inject constructor(
         return pluginSourceDao.findPluginSourceById(sourceId)
     }
 
-    override fun observePluginSources(): Flow<List<PluginSourceInfo>?> {
+    override fun observePluginSources(): Flow<List<PluginSource>?> {
         val pluginSourceEntry = pluginSourceDao.observePluginSources()
 
         val pluginSource = pluginSourceEntry.map { list ->
             list?.map { content ->
-               content.toPluginSourceInfo()
+               content.toPluginSource()
             }
         }
 

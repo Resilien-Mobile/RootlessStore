@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.usecase.AddSourceByAuthenticationUseCase
@@ -112,10 +112,10 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
     }
 
     fun deleteSource(
-        pluginSourceInfo: PluginSourceInfo
+        pluginSource: PluginSource
     ){
         viewModelScope.launch {
-            deleteSourceUseCase(pluginSourceInfo)
+            deleteSourceUseCase(pluginSource)
         }
     }
 

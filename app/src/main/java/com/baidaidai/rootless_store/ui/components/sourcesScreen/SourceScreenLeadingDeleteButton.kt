@@ -15,18 +15,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 
 @Composable
 fun SourceScreenLeadingDeleteButton(
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
-    pluginSourceInfo: PluginSourceInfo
+    pluginSource: PluginSource
 ){
     Row {
         IconButton(
             onClick = {
-                sourceScreenViewModel.deleteSource(pluginSourceInfo)
+                sourceScreenViewModel.deleteSource(pluginSource)
             },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = BadgeDefaults.containerColor,

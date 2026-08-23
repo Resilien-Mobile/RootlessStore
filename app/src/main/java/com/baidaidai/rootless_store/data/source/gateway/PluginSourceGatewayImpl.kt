@@ -1,12 +1,12 @@
 package com.baidaidai.rootless_store.data.source.gateway
 
-import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceAuthenticationInfo
-import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceInfo
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceAuthentication
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSource
 import com.baidaidai.rootless_store.data.source.remote.api.PluginSourceApi
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationInfoDto
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceDto
 import com.baidaidai.rootless_store.domain.source.gateway.PluginSourceGateway
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import io.ktor.client.call.body
@@ -16,27 +16,27 @@ class PluginSourceGatewayImpl @Inject constructor(
     private val pluginSourceApi: PluginSourceApi
 ): PluginSourceGateway  {
 
-    override suspend fun fetchPluginSource(sourceRemoteEndpoint: String): PluginSourceInfo {
-        val ktorResponse = pluginSourceApi.fetchPluginSourceInfo(sourceRemoteEndpoint)
-        val pluginSourceInfoDto = ktorResponse.body<PluginSourceInfoDto>()  // Convert JSON to DTO
+    override suspend fun fetchPluginSource(sourceRemoteEndpoint: String): PluginSource {
+        val ktorResponse = pluginSourceApi.fetchPluginSource(sourceRemoteEndpoint)
+        val pluginSourceDto = ktorResponse.body<PluginSourceDto>()  // Convert JSON to DTO
 
-        val pluginSource = pluginSourceInfoDto.toPluginSourceInfo()
+        val pluginSource = pluginSourceDto.toPluginSource()
         return pluginSource
     }
 
     suspend fun fetchPluginSourceAuthenticationResult(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceAuthenticationResult {
         return try {
-            val ktorResponse = pluginSourceApi.fetchPluginSourceAuthenticationInfo(pluginSourceAuthFormInput)
+            val ktorResponse = pluginSourceApi.fetchPluginSourceAuthentication(pluginSourceAuthFormInput)
             val httpStatusCode = ktorResponse.status.value
 
             when(httpStatusCode){
                 200 -> {
-                    val pluginSourceAuthenticationInfoDto = ktorResponse.body<PluginSourceAuthenticationInfoDto>()  // Convert JSON to DTO
-                    val pluginSourceAuthenticationInfo = pluginSourceAuthenticationInfoDto.toPluginSourceAuthenticationInfo()
+                    val pluginSourceAuthenticationDto = ktorResponse.body<PluginSourceAuthenticationDto>()  // Convert JSON to DTO
+                    val pluginSourceAuthentication = pluginSourceAuthenticationDto.toPluginSourceAuthentication()
 
                     PluginSourceAuthenticationResult.Success(
-                        userName = pluginSourceAuthenticationInfo.userName,
-                        userAccessToken = pluginSourceAuthenticationInfo.userAccessToken
+                        userName = pluginSourceAuthentication.userName,
+                        userAccessToken = pluginSourceAuthentication.userAccessToken
                     )
                 }
 

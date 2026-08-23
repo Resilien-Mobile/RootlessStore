@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
@@ -35,7 +35,8 @@ data class EnvironmentEntity(
     val isEnabled: Boolean,
     val requiredEnvironment: HosterOverallStatus,
     val state: PluginState,
-    val source: PluginSource,
+    @ColumnInfo(name = "source")
+    val origin: PluginOrigin,
     val entryPoint: String,
     val ldLibraryPath: List<String>,
     val env: Map<String, String>
@@ -66,7 +67,7 @@ data class EnvironmentEntity(
                 isEnabled = false,
                 requiredEnvironment = environmentManifestRoom.requiredEnvironment,
                 state = environmentManifestRoom.state,
-                source = environmentManifestRoom.source,
+                origin = environmentManifestRoom.origin,
                 entryPoint = environmentManifestRoom.entryPoint,
                 ldLibraryPath = environmentManifestRoom.ldLibraryPath,
                 env = environmentManifestRoom.env

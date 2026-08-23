@@ -4,10 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PluginSourceInfoDto(
+data class PluginSourceDto(
     @SerialName("sourceID")
     val sourceId: String,
     val sourceName: String,
     val sourceRemoteEndpoint: String,
-    val sourceAuthenticationInfo: SourceAuthenticationInfoMetaDto
+    @SerialName("sourceAuthenticationInfo")
+    val authenticationMetadata: PluginSourceAuthenticationMetadataDto
 )

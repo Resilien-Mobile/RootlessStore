@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
 import androidx.room.ColumnInfo
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
@@ -9,7 +9,8 @@ data class EnvironmentManifestRoom(
     @ColumnInfo(name = "enabled")
     override val isEnabled: Boolean,
     override val state: PluginState,
-    override val source: PluginSource,
+    @ColumnInfo(name = "source")
+    override val origin: PluginOrigin,
     override val installedVersion: String,
     override val environmentRenderingName: String,
     override val environmentPackageName: String,
@@ -36,7 +37,7 @@ data class EnvironmentManifestRoom(
             environmentDescription = "Tested by Creater. Bai",
             isEnabled = false,
             state = PluginState.PermissionProblems,
-            source = PluginSource.Local,
+            origin = PluginOrigin.Local,
             entryPoint = "./index.sh",
             ldLibraryPath = emptyList(),
             env = emptyMap()

@@ -1,7 +1,5 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
-import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

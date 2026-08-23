@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.domain.plugin.manifest
 
 import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
@@ -134,10 +134,10 @@ sealed interface PluginManifest: ModuleManifestCollection {
      */
     val webUiEntryPoint: String?
 
-    // Runtime state such as `isEnabled`, `state`, `source` should NOT belong here:
+    // Runtime state such as `isEnabled`, `state`, `origin` should NOT belong here:
     // - isEnabled: Boolean
     // - state: PluginState
-    // - source: PluginSource
+    // - origin: PluginOrigin
     interface PluginManifestLocal: PluginManifest {
 
         /**
@@ -157,6 +157,6 @@ sealed interface PluginManifest: ModuleManifestCollection {
     interface PluginManifestRoom: PluginManifest {
         val isEnabled: Boolean
         val state: PluginState
-        val source: PluginSource
+        val origin: PluginOrigin
     }
 }

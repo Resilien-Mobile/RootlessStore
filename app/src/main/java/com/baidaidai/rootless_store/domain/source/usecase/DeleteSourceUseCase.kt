@@ -2,16 +2,16 @@ package com.baidaidai.rootless_store.domain.source.usecase
 
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 import com.baidaidai.rootless_store.data.source.repository.PluginSourceRepositoryImpl
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import javax.inject.Inject
 
 class DeleteSourceUseCase @Inject constructor(
     val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ) {
     suspend operator fun invoke(
-        pluginSourceInfo: PluginSourceInfo
+        pluginSource: PluginSource
     ){
-        val pluginSourceEntity = PluginSourceEntity.fromPluginSourceLocal(pluginSourceInfo)
+        val pluginSourceEntity = PluginSourceEntity.fromPluginSource(pluginSource)
         pluginSourceRepositoryImpl.deletePluginSource(pluginSourceEntity)
     }
 }

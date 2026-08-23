@@ -158,7 +158,7 @@ fun PluginInfoContainerLocal(
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
-                    value = pluginManifestRoom.source.toString()
+                    value = pluginManifestRoom.origin.toString()
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),
@@ -255,7 +255,7 @@ fun PluginInfoContainerLocal(
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
-                    value = environmentManifest.source.toString()
+                    value = environmentManifest.origin.toString()
                 )
                 PluginInfoRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),

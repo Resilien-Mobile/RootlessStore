@@ -1,41 +1,41 @@
 package com.baidaidai.rootless_store.data.source.mapper
 
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationInfoDto
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDto
-import com.baidaidai.rootless_store.data.source.remote.dto.SourceAuthenticationInfoMetaDto
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInfo
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMeta
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationMetadataDto
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthentication
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMetadata
 
 object PluginSourceMapper {
 
-    fun SourceAuthenticationInfoMetaDto.toPluginSourceAuthenticationMeta(): PluginSourceAuthenticationMeta {
-        return PluginSourceAuthenticationMeta(
+    fun PluginSourceAuthenticationMetadataDto.toPluginSourceAuthenticationMetadata(): PluginSourceAuthenticationMetadata {
+        return PluginSourceAuthenticationMetadata(
             needsAuthentication = needsAuthentication
         )
     }
 
-    fun PluginSourceInfoDto.toPluginSourceInfo(): PluginSourceInfo{
-        return PluginSourceInfo(
+    fun PluginSourceDto.toPluginSource(): PluginSource{
+        return PluginSource(
             sourceId = sourceId,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint,
-            pluginSourceAuthenticationMeta = sourceAuthenticationInfo.toPluginSourceAuthenticationMeta()
+            pluginSourceAuthenticationMetadata = authenticationMetadata.toPluginSourceAuthenticationMetadata()
         )
     }
 
-    fun PluginSourceEntity.toPluginSourceInfo(): PluginSourceInfo{
-        return PluginSourceInfo(
+    fun PluginSourceEntity.toPluginSource(): PluginSource{
+        return PluginSource(
             sourceId = sourceId,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint,
-            pluginSourceAuthenticationMeta = pluginSourceAuthenticationMeta
+            pluginSourceAuthenticationMetadata = pluginSourceAuthenticationMetadata
         )
     }
 
-    fun PluginSourceAuthenticationInfoDto.toPluginSourceAuthenticationInfo(): PluginSourceAuthenticationInfo {
-        return PluginSourceAuthenticationInfo(
+    fun PluginSourceAuthenticationDto.toPluginSourceAuthentication(): PluginSourceAuthentication {
+        return PluginSourceAuthentication(
             userName = userName,
             userAccessToken = userAccessToken
         )
