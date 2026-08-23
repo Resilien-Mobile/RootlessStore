@@ -43,13 +43,13 @@ fun ShizukuAdbScreen(
     val context = LocalContext.current
     val activity = context as? Activity
 
-    var sheetState by remember { mutableStateOf(false) }
+    var isCompletionSheetVisible by remember { mutableStateOf(false) }
     var remainderTime by remember { mutableIntStateOf(6) }
 
 
     LaunchedEffect(isEndpointActive) {
         if (isEndpointActive) {
-            sheetState = true
+            isCompletionSheetVisible = true
             while (remainderTime > 0){
                 delay(1000)
                 remainderTime--
@@ -58,11 +58,11 @@ fun ShizukuAdbScreen(
         }
     }
 
-    if (sheetState){
+    if (isCompletionSheetVisible){
         ShizukuAdbScreenModelSheet(
             remainderTime = remainderTime,
-            onDismissRequest = { sheetState = false},
-            onCloseButtonClick = { sheetState = false },
+            onDismissRequest = { isCompletionSheetVisible = false},
+            onCloseButtonClick = { isCompletionSheetVisible = false },
             onReturnButtonClick = { activity?.finish() }
         )
     }else{

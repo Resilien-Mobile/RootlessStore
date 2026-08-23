@@ -70,10 +70,10 @@ fun CodeBrickTileList(
             .clip(RoundedCornerShape(16.dp))
     ) {
 
-        var tileListContentCanSee by remember { mutableStateOf(false) }
+        var isTileListExpanded by remember { mutableStateOf(false) }
 
         ListItem(
-            onClick = { tileListContentCanSee = !tileListContentCanSee },
+            onClick = { isTileListExpanded = !isTileListExpanded },
             trailingContent = {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
@@ -89,7 +89,7 @@ fun CodeBrickTileList(
             )
 
         }
-        if (tileListContentCanSee) {
+        if (isTileListExpanded) {
 
             Spacer(modifier = Modifier.height(2.dp))
 

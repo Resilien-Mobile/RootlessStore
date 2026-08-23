@@ -36,7 +36,7 @@ fun ThirdPartyNotificationScreen(
 
     val thirdPartyNotificationScreenUiState by thirdPartyNotificationScreenViewModel.thirdPartyNotificationScreenUiState.collectAsState()
 
-    var apiKeyVisibility by rememberSaveable { mutableStateOf(false) }
+    var isApiKeyVisible by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -55,10 +55,10 @@ fun ThirdPartyNotificationScreen(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        apiKeyVisibility = !apiKeyVisibility
+                        isApiKeyVisible = !isApiKeyVisible
                     }
                 ) {
-                    if (apiKeyVisibility){
+                    if (isApiKeyVisible){
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_visibility),
                             contentDescription = stringResource(R.string.third_party_notification_screen_api_key_visibility_content_description)
@@ -71,7 +71,7 @@ fun ThirdPartyNotificationScreen(
                     }
                 }
             },
-            visualTransformation = if (apiKeyVisibility) {
+            visualTransformation = if (isApiKeyVisible) {
                 VisualTransformation.None
             } else {
                 PasswordVisualTransformation()

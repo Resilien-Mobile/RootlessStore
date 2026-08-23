@@ -62,11 +62,11 @@ fun ShellScreen(
 ){
     var commandContent by remember { mutableStateOf("") }
     var shellEnvironment by remember { mutableStateOf(ShellEnvironment.AppShell) }
-    var trailingButtonStatus by remember { mutableStateOf(false) }
+    var isEnvironmentMenuExpanded by remember { mutableStateOf(false) }
 
     val shellOutputList by shellScreenViewModel.shellOutputList.collectAsState()
-    val rootShellStatus by shellScreenViewModel.rootShellStatus.collectAsState()
-    val adbShellStatus by shellScreenViewModel.adbShellStatus.collectAsState()
+    val isRootShellAvailable by shellScreenViewModel.isRootShellAvailable.collectAsState()
+    val isAdbShellAvailable by shellScreenViewModel.isAdbShellAvailable.collectAsState()
     val shellContextPreferences by shellScreenViewModel.shellContextPreferences.collectAsState()
 
     LaunchedEffect(shellOutputList.size) {
@@ -93,16 +93,16 @@ fun ShellScreen(
         val trailingButtonContentPaddingBeforeClick = PaddingValues(start = 13.dp, end = 17.dp)
         val trailingButtonSizeBeforeClick = SplitButtonDefaults.trailingButtonShapesFor(56.dp).shape
 
-        val trailingButtonContentPadding = remember(trailingButtonStatus) {
-            if (trailingButtonStatus){
+        val trailingButtonContentPadding = remember(isEnvironmentMenuExpanded) {
+            if (isEnvironmentMenuExpanded){
                 trailingButtonContentPaddingAfterClick
             }else{
                 trailingButtonContentPaddingBeforeClick
             }
         }
 
-        val trailingButtonSize = remember(trailingButtonStatus) {
-            if (trailingButtonStatus){
+        val trailingButtonSize = remember(isEnvironmentMenuExpanded) {
+            if (isEnvironmentMenuExpanded){
                 CircleShape
             }else{
                 trailingButtonSizeBeforeClick
@@ -222,7 +222,7 @@ fun ShellScreen(
                                 Column{
                                     Button(
                                         onClick = {
-                                            trailingButtonStatus = !trailingButtonStatus
+                                            isEnvironmentMenuExpanded = !isEnvironmentMenuExpanded
                                         },
                                         shape = trailingButtonSize,
                                         contentPadding = trailingButtonContentPadding,
@@ -234,13 +234,13 @@ fun ShellScreen(
                                             contentDescription = "Expand More",
                                             modifier = Modifier
                                                 .size(26.dp)
-                                                .rotate(if (trailingButtonStatus) 0f else -90f )
+                                                .rotate(if (isEnvironmentMenuExpanded) 0f else -90f )
                                         )
                                     }
 
                                     DropdownMenuPopup(
-                                        expanded = trailingButtonStatus,
-                                        onDismissRequest = { trailingButtonStatus = !trailingButtonStatus},
+                                        expanded = isEnvironmentMenuExpanded,
+                                        onDismissRequest = { isEnvironmentMenuExpanded = !isEnvironmentMenuExpanded},
                                         offset = DpOffset(x = 0.dp, y = 8.dp)
                                     ) {
                                         DropdownMenuGroup(
@@ -265,7 +265,7 @@ fun ShellScreen(
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
                                             DropdownMenuItem(
-                                                enabled = adbShellStatus,
+                                                enabled = isAdbShellAvailable,
                                                 selected = shellEnvironment == ShellEnvironment.AdbShell,
                                                 shapes = MenuDefaults.itemShape(2,4),
                                                 leadingIcon = {
@@ -283,7 +283,7 @@ fun ShellScreen(
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
                                             DropdownMenuItem(
-                                                enabled = rootShellStatus,
+                                                enabled = isRootShellAvailable,
                                                 selected = shellEnvironment == ShellEnvironment.RootShell,
                                                 shapes = MenuDefaults.itemShape(3,4),
                                                 leadingIcon = {

@@ -8,5 +8,6 @@ import kotlinx.serialization.Serializable
 data class ExecuteScreenKey(
     @SerialName("pluginID")
     val pluginId: String,
-    val isExecutePlugin: Boolean = false
+    @SerialName("isExecutePlugin")
+    val shouldExecutePlugin: Boolean = false
 ): RootlessNavigationKey

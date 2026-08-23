@@ -47,7 +47,7 @@ fun HomeScreen(
     val kernelStatus by homeScreenViewModel.kernelStatus.collectAsState()
     val androidAndApiStatus by homeScreenViewModel.androidAndApiStatus.collectAsState()
     val hosterOverallStatus by homeScreenViewModel.overallStatus.collectAsState()
-    val dialogStats by homeScreenViewModel.dialogStatus.collectAsState()
+    val isContextDialogVisible by homeScreenViewModel.isContextDialogVisible.collectAsState()
     val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
     val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
     val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
@@ -64,9 +64,9 @@ fun HomeScreen(
         tempStatus = temperatureStatus
     )
 
-    if (dialogStats){
+    if (isContextDialogVisible){
         HomeScreenContextSwitchDialog(
-            onDismissButtonClick = homeScreenViewModel::changeDialogStatus,
+            onDismissButtonClick = homeScreenViewModel::toggleContextDialogVisibility,
             homeScreenViewModel = homeScreenViewModel,
             onConfirmButtonClick = homeScreenViewModel::setExecutionContextPreference,
             onRevertButtonClick = homeScreenViewModel::revertExecutionContextPreference
@@ -103,7 +103,7 @@ fun HomeScreen(
                 HosterStatusCircularProgressRow(
                     hosterStatus = rootlessStoreHosterStatus,
                     onChipClick = onChipClick,
-                    onChipLongClick = homeScreenViewModel::changeDialogStatus
+                    onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility
                 )
             }
 
@@ -142,7 +142,7 @@ fun HomeScreen(
             HosterStatusCircularProgressRow(
                 hosterStatus = rootlessStoreHosterStatus,
                 onChipClick = onChipClick,
-                onChipLongClick = homeScreenViewModel::changeDialogStatus,
+                onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility,
                 modifier = getBasicWidthModifier()
             )
 

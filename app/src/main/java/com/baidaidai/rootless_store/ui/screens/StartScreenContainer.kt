@@ -100,7 +100,7 @@ fun RootlessStoreStartScreenContainer(
     val totalListLength = shellScreenViewModel.shellOutputList.collectAsState().value.size
 
     // Local Data
-    var alertDialogStatus by rememberSaveable{ mutableStateOf(false) }
+    var isSourceDialogVisible by rememberSaveable{ mutableStateOf(false) }
     var sourceDomainContent by rememberSaveable{ mutableStateOf("") }
     var sharedEvent by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
     val context = LocalContext.current
@@ -209,7 +209,7 @@ fun RootlessStoreStartScreenContainer(
                     )
                     SourceScreenKey -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
                         iconButtonOnClick = {
-                            alertDialogStatus = !alertDialogStatus
+                            isSourceDialogVisible = !isSourceDialogVisible
                         },
                         textButtonOnClick = {
                             sourceScreenViewModel.toggleDeleteActionVisibility()
@@ -327,18 +327,18 @@ fun RootlessStoreStartScreenContainer(
         ) { contentPadding->
 
             // Source Adding Dialog
-            if (alertDialogStatus){
+            if (isSourceDialogVisible){
                 StartScreenRepositoryDialog(
                     sourceDomainContent,
                     onDismissRequest =  {
-                        alertDialogStatus = !alertDialogStatus
+                        isSourceDialogVisible = !isSourceDialogVisible
                     },
                     onConfirmButtonClick = {
                         sourceScreenViewModel.addPluginSource(sourceRemoteEndpoint = sourceDomainContent)
-                        alertDialogStatus = !alertDialogStatus
+                        isSourceDialogVisible = !isSourceDialogVisible
                     },
                     onDismissButtonClick = {
-                        alertDialogStatus = !alertDialogStatus
+                        isSourceDialogVisible = !isSourceDialogVisible
                     },
                     onTextFieldValueChange = { newValue -> sourceDomainContent = newValue }
                 )
@@ -366,9 +366,9 @@ fun RootlessStoreStartScreenContainer(
                         RootlessStorePluginScreenContainer(
                             contentPadding = contentPadding,
                             pluginScreenViewModel = pluginScreenViewModel,
-                            navigateToExecuteScreen = { pluginId, isExecutePlugin ->
+                            navigateToExecuteScreen = { pluginId, shouldExecutePlugin ->
                                 navigationBackStack
-                                    .add(ExecuteScreenKey(pluginId,isExecutePlugin))
+                                    .add(ExecuteScreenKey(pluginId,shouldExecutePlugin))
                             },
                             onAbortPlugin = { pluginId ->
                                 currentExecuteViewModel.abortPluginProcess(pluginId)
@@ -419,14 +419,14 @@ fun RootlessStoreStartScreenContainer(
                         val executeScreenViewModel = hiltViewModel<RootlessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginId, viewModelStoreOwner = viewModelStoreOwner)
 
                         val pluginId = executeScreenKey.pluginId
-                        val isExecutePlugin = executeScreenKey.isExecutePlugin
+                        val shouldExecutePlugin = executeScreenKey.shouldExecutePlugin
 
                         Log.d("ExecuteScreenKey.pluginId",pluginId)
-                        Log.d("ExecuteScreenKey.isExecutePlugin",isExecutePlugin.toString())
+                        Log.d("ExecuteScreenKey.shouldExecutePlugin",shouldExecutePlugin.toString())
 
                         // Function debouncing
-                        LaunchedEffect(pluginId, isExecutePlugin) {
-                            if (isExecutePlugin) {
+                        LaunchedEffect(pluginId, shouldExecutePlugin) {
+                            if (shouldExecutePlugin) {
                                 executeScreenViewModel.executePlugin(pluginId)
                             }
                         }
