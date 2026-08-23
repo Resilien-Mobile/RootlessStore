@@ -23,9 +23,9 @@ import com.baidaidai.rootless_store.ui.components.pluginsScreen.InstalledManifes
 import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 
 @Composable
-fun EnvironmentScreen(
+fun InstalledEnvironmentList(
     isBadgeVisible: Boolean,
-    renderingList: List<EnvironmentManifestRoom>,
+    environments: List<EnvironmentManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
 ){
 
@@ -42,7 +42,7 @@ fun EnvironmentScreen(
         )
     ) {
         items(
-            items = renderingList,
+            items = environments,
             key = { environmentManifestRoom -> environmentManifestRoom.environmentId }
         ){ environmentManifestRoom ->
 

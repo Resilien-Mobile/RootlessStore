@@ -373,7 +373,7 @@ fun RootlessStoreNavigationScaffold(
                             onAbortPlugin = { pluginId ->
                                 currentExecuteViewModel.abortPluginProcess(pluginId)
                             },
-                            onActiveOneTimePlugin = { pluginId ->
+                            onActivateOneTimePlugin = { pluginId ->
                                 currentExecuteViewModel.executePlugin(pluginId)
                             }
                         )
