@@ -31,15 +31,15 @@ class ExecuteShellGatewayImpl @Inject constructor(
         val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
 
         if(appShellContextConfig.shouldJumpToDirectory){
-            changeDirectoryHandler(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
+            prepareWorkingDirectoryCommand(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
         }
         if(commandContent.startsWith("cd ")){
             val targetDirectory = commandContent.removePrefix("cd ").trim()
-            changeDirectoryHandler(targetDirectory)
+            prepareWorkingDirectoryCommand(targetDirectory)
             commandContent = "exit"
         }
 
-        val appShellProcessBuilder = ProcessBuilder("sh","-c", "${changeDirectoryHandler()}$commandContent")
+        val appShellProcessBuilder = ProcessBuilder("sh","-c", "${prepareWorkingDirectoryCommand()}$commandContent")
 
         val environment = appShellProcessBuilder.environment()
         val oldPath = environment["PATH"].orEmpty()
@@ -130,11 +130,11 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
         if(commandContent.startsWith("cd ")){
             val targetDirectory = commandContent.removePrefix("cd ").trim()
-            changeDirectoryHandler(targetDirectory)
+            prepareWorkingDirectoryCommand(targetDirectory)
             commandContent = "exit"
         }
 
-        val process = ProcessBuilder("su", "-c", "${changeDirectoryHandler()}$commandContent").start()
+        val process = ProcessBuilder("su", "-c", "${prepareWorkingDirectoryCommand()}$commandContent").start()
 
         launch(Dispatchers.IO) {
             process.inputStream.bufferedReader().useLines { lines ->
@@ -165,7 +165,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    private fun changeDirectoryHandler(directory: String = currentDirectory): String{
+    private fun prepareWorkingDirectoryCommand(directory: String = currentDirectory): String{
 
         currentDirectory = when {
             directory.startsWith("/") -> {

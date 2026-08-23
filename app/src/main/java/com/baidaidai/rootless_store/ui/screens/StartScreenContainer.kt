@@ -249,7 +249,7 @@ fun RootlessStoreStartScreenContainer(
                             lazyColumnState.scrollToItem(totalListLength)
                         },
                         onDeleteIconClick = {
-                            shellScreenViewModel.cleanShellOutputList()
+                            shellScreenViewModel.resetShellOutput()
                         }
                     )
                     SettingScreenKey -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
