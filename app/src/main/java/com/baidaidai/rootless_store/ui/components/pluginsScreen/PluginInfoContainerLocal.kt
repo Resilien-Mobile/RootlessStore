@@ -50,7 +50,7 @@ fun PluginInfoContainerLocal(
     onCardLongClick: ()-> Unit = {}
 ){
 
-    var iconButtonClickStatus by remember { mutableStateOf(false) }
+    var isExecutionIndicatorActive by remember { mutableStateOf(false) }
     val iconButtonColors = IconButtonColors(
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -116,14 +116,14 @@ fun PluginInfoContainerLocal(
                     IconButton(
                         onClick = {
                             onButtonClick()
-                            iconButtonClickStatus = !iconButtonClickStatus
+                            isExecutionIndicatorActive = !isExecutionIndicatorActive
                         },
                         colors = iconButtonColors,
                         shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
                             .size(56.dp)
                     ) {
-                        if (iconButtonClickStatus){
+                        if (isExecutionIndicatorActive){
                             Icon(
                                 painterResource(R.drawable.material_symbols_check),
                                 contentDescription = "started"

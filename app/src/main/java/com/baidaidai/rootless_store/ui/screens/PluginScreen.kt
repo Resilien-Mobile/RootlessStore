@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 fun RootlessStorePluginScreenContainer(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,
+    navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin:suspend (pluginId: String) -> Unit,
     onActiveOneTimePlugin: (pluginId: String)-> Unit
 ){
@@ -108,7 +108,7 @@ fun PluginScreen(
     isBadgeVisible: Boolean,
     renderingList: List<PluginManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,
+    navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin: suspend (pluginId: String) -> Unit,
     onButtonClick: (pluginId: String)-> Unit
 ){
@@ -131,10 +131,10 @@ fun PluginScreen(
             key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
         ){ pluginManifestRoom ->
 
-            var actionCanSee by remember { mutableStateOf(false) }
+            var isActionPanelVisible by remember { mutableStateOf(false) }
             var cardSize by remember { mutableStateOf(IntSize.Zero) }
 
-            if (actionCanSee){
+            if (isActionPanelVisible){
 
                 PluginActionContainer(
                     pluginManifestRoom = pluginManifestRoom,
@@ -159,7 +159,7 @@ fun PluginScreen(
                         context.startActivity(webUiIntent)
                     },
                     onDeleteButtonClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
-                    onBackButtonClick = { actionCanSee = !actionCanSee },
+                    onBackButtonClick = { isActionPanelVisible = !isActionPanelVisible },
                     modifier = Modifier
                         .size(
                             width = with(density) { cardSize.width.toDp() },
@@ -191,7 +191,7 @@ fun PluginScreen(
                             navigateToExecuteScreen(pluginManifestRoom.pluginId,false)
                         }
                     },
-                    onCardLongClick = { actionCanSee = !actionCanSee },
+                    onCardLongClick = { isActionPanelVisible = !isActionPanelVisible },
                     onCardSizeChanged = { cardSize = it },
                 )
 

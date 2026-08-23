@@ -91,7 +91,7 @@ fun CodeBrickContextList(
         draggedSupportingContentColor = MaterialTheme.colorScheme.onSurface,
     )
 
-    var contextListContentCanSee by remember { mutableStateOf(false) }
+    var isContextListExpanded by remember { mutableStateOf(false) }
 
     fun contextListItemColors(index: Int): ListItemColors{
         return if (brickContextConfigList[index].contextType == currentSelectedContext.contextType){
@@ -106,7 +106,7 @@ fun CodeBrickContextList(
             .clip(RoundedCornerShape(16.dp))
     ) {
         ListItem(
-            onClick = { contextListContentCanSee = !contextListContentCanSee },
+            onClick = { isContextListExpanded = !isContextListExpanded },
             trailingContent = {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
@@ -120,7 +120,7 @@ fun CodeBrickContextList(
                 style = MaterialTheme.typography.titleMedium
             )
         }
-        if (contextListContentCanSee){
+        if (isContextListExpanded){
             Spacer(modifier = Modifier.height(2.dp))
             brickContextConfigList.forEachIndexed { index, codeBrickContextConfig ->
                 val contextText = stringResource(codeBrickContextConfig.contextTextResource)

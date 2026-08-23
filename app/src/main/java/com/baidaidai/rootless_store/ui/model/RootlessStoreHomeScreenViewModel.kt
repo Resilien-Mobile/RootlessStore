@@ -63,9 +63,9 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         fetchLatestVersion()
     }
 
-    private var _dialogStatus = MutableStateFlow(false)
+    private val _isContextDialogVisible = MutableStateFlow(false)
     private val _currentExecutionContextSelected = MutableStateFlow<HosterOverallStatus?>(null)
-    val dialogStatus = _dialogStatus.asStateFlow()
+    val isContextDialogVisible = _isContextDialogVisible.asStateFlow()
 
     // Latest Version Status
     private val _latestVersion = MutableStateFlow<String?>(null)
@@ -123,15 +123,15 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         initialValue = HosterOverallStatus.LIMITED
     )
 
-    val adbStatus = observeAdbShellStatusUseCase()
+    val isAdbShellAvailable = observeAdbShellStatusUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = false
         )
 
-    private val _rootStatus = MutableStateFlow(getRootStatusUseCase())
-    val rootStatus = _rootStatus.asStateFlow()
+    private val _isRootShellAvailable = MutableStateFlow(getRootStatusUseCase())
+    val isRootShellAvailable = _isRootShellAvailable.asStateFlow()
 
     private val _seLinuxStatus = MutableStateFlow(getSeLinuxStatusUseCase())
     val seLinuxStatus = _seLinuxStatus.asStateFlow()
@@ -173,7 +173,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
             setExecutionContextPreferenceUseCase(_currentExecutionContextSelected.value ?: HosterOverallStatus.LIMITED)
         }
 
-        changeDialogStatus()
+        toggleContextDialogVisibility()
     }
 
     fun revertExecutionContextPreference() {
@@ -182,11 +182,11 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
             setCurrentExecutionContextSelected(hosterOverallStatus = overallStatus.first())
         }
 
-        changeDialogStatus()
+        toggleContextDialogVisibility()
     }
 
-    fun changeDialogStatus(){
-        _dialogStatus.value = !_dialogStatus.value
+    fun toggleContextDialogVisibility(){
+        _isContextDialogVisible.value = !_isContextDialogVisible.value
     }
 
     fun fetchLatestVersion(){

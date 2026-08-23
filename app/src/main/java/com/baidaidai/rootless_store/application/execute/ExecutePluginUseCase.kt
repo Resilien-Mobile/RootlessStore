@@ -16,7 +16,7 @@ class ExecutePluginUseCase @Inject constructor(
         pluginId: String
     ): Flow<ExecutionResult> {
 
-        val shouldUseShizuku = judgeShouldUseShizuku()
+        val shouldUseShizuku = shouldUseShizuku()
 
         // Judge if needs use Shizuku
         return if (shouldUseShizuku) {
@@ -26,7 +26,7 @@ class ExecutePluginUseCase @Inject constructor(
         }
     }
 
-    private suspend fun judgeShouldUseShizuku(): Boolean{
+    private suspend fun shouldUseShizuku(): Boolean{
 
         val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
         val isExecutionContextChooserEnabled = storeStatusRepositoryImpl

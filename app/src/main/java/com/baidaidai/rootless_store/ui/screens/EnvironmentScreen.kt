@@ -46,10 +46,10 @@ fun EnvironmentScreen(
             key = { environmentManifestRoom -> environmentManifestRoom.environmentId }
         ){ environmentManifestRoom ->
 
-            var actionCanSee by remember { mutableStateOf(false) }
+            var isActionPanelVisible by remember { mutableStateOf(false) }
             var cardSize by remember { mutableStateOf(IntSize.Zero) }
 
-            if (actionCanSee){
+            if (isActionPanelVisible){
 
                 PluginActionContainer(
                     onShareButtonClick = {
@@ -66,7 +66,7 @@ fun EnvironmentScreen(
 
                     },
                     onDeleteButtonClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
-                    onBackButtonClick = { actionCanSee = !actionCanSee },
+                    onBackButtonClick = { isActionPanelVisible = !isActionPanelVisible },
                     modifier = Modifier
                         .size(
                             width = with(density) { cardSize.width.toDp() },
@@ -84,7 +84,7 @@ fun EnvironmentScreen(
                             isEnabled = !environmentManifestRoom.isEnabled
                         )
                     },
-                    onCardLongClick = { actionCanSee = !actionCanSee },
+                    onCardLongClick = { isActionPanelVisible = !isActionPanelVisible },
                     onCardSizeChanged = { cardSize = it },
                 )
 

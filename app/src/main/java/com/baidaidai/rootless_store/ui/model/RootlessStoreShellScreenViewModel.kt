@@ -28,7 +28,7 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
 ) : ViewModel(){
 
     private var _shellOutputList = MutableStateFlow(emptyList<ShellResult>())
-    private val _rootShellStatus = MutableStateFlow(getRootShellStatusUseCase())
+    private val _isRootShellAvailable = MutableStateFlow(getRootShellStatusUseCase())
     private var _lastCommandContent = MutableStateFlow("")
     val shellContextPreferences = observeShellContextPreferencesUseCase()
         .stateIn(
@@ -37,8 +37,8 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
             initialValue = observeShellContextPreferencesUseCase.defaultPreferences
         )
     val shellOutputList = _shellOutputList.asStateFlow()
-    val rootShellStatus = _rootShellStatus.asStateFlow()
-    val adbShellStatus = observeAdbShellStatusUseCase()
+    val isRootShellAvailable = _isRootShellAvailable.asStateFlow()
+    val isAdbShellAvailable = observeAdbShellStatusUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

@@ -49,8 +49,8 @@ fun HomeScreenContextSwitchDialog(
 
 
 
-    val adbStatus by homeScreenViewModel.adbStatus.collectAsState()
-    val rootStatus by homeScreenViewModel.rootStatus.collectAsState()
+    val isAdbShellAvailable by homeScreenViewModel.isAdbShellAvailable.collectAsState()
+    val isRootShellAvailable by homeScreenViewModel.isRootShellAvailable.collectAsState()
 
     val currentSelected by homeScreenViewModel.currentExecutionContextSelected.collectAsState()
 
@@ -65,13 +65,13 @@ fun HomeScreenContextSwitchDialog(
             option = HosterOverallStatus.ADB,
             iconResource = R.drawable.material_symbols_adb,
             content = "ADB",
-            canUse = adbStatus
+            canUse = isAdbShellAvailable
         ),
         HomeScreenContextSwitchDialogSpec(
             option = HosterOverallStatus.ROOTD,
             iconResource = R.drawable.material_symbols_cyclone,
             content = "ROOTD",
-            canUse = rootStatus
+            canUse = isRootShellAvailable
         )
     )
 
