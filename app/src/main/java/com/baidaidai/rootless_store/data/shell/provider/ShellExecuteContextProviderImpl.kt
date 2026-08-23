@@ -12,11 +12,11 @@ class ShellExecuteContextProviderImpl @Inject constructor(
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl
 ) {
 
-    suspend fun getAppShellContext(): AppShellContextConfig{
+    suspend fun resolveAppShellContext(): AppShellContextConfig{
         val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
-        val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
-        val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
-        val environmentConfig = environmentRepositoryImpl.getAvailableEnvironmentConfig()
+        val environmentPATH = environmentRepositoryImpl.resolveEnvironmentPath()
+        val environmentLDPATH = environmentRepositoryImpl.resolveEnvironmentLdPath()
+        val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
 
         return AppShellContextConfig(
             jumpToDirectory = preferences.jumpToDirectory,
@@ -26,13 +26,13 @@ class ShellExecuteContextProviderImpl @Inject constructor(
         )
     }
 
-    suspend fun getAdbShellContext(): AdbShellContextConfig{
+    suspend fun resolveAdbShellContext(): AdbShellContextConfig{
         val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
-        val environmentPATH = environmentRepositoryImpl.getAvailableEnvironmentPath()
-        val environmentLDPATH = environmentRepositoryImpl.getAvailableEnvironmentLDPATH()
-        val environmentConfig = environmentRepositoryImpl.getAvailableEnvironmentConfig()
-        val environmentConfigKeyList = environmentRepositoryImpl.getEnvironmentConfigKeyList()
-        val environmentConfigValueList = environmentRepositoryImpl.getEnvironmentConfigValueList()
+        val environmentPATH = environmentRepositoryImpl.resolveEnvironmentPath()
+        val environmentLDPATH = environmentRepositoryImpl.resolveEnvironmentLdPath()
+        val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
+        val environmentConfigKeyList = environmentRepositoryImpl.resolveEnvironmentConfigKeys()
+        val environmentConfigValueList = environmentRepositoryImpl.resolveEnvironmentConfigValues()
 
         return AdbShellContextConfig(
             jumpToDirectory = preferences.jumpToDirectory,
@@ -44,7 +44,7 @@ class ShellExecuteContextProviderImpl @Inject constructor(
         )
     }
 
-    fun getRootShellContext(){
+    fun resolveRootShellContext(){
 
     }
 

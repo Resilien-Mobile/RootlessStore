@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManif
 import java.io.File
 import javax.inject.Inject
 
-class GetEnvironmentShareLinkUseCase @Inject constructor(
+class ResolveEnvironmentShareUriUseCase @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
     operator fun invoke(
@@ -16,7 +16,7 @@ class GetEnvironmentShareLinkUseCase @Inject constructor(
         val defaultEnvironmentCacheDirectory = androidFileSystemCapabilityGatewayImpl.getCacheEnvironmentDirectoryFile()
 
         // Get environment package directory -> /file/Environment/ENVIRONMENT_DIRECTORY
-        val environmentPackageDirectory = androidFileSystemCapabilityGatewayImpl.getEnvironmentPackageDirectory(environmentManifestRoom)
+        val environmentPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolveEnvironmentPackageDirectory(environmentManifestRoom)
 
         // Detect if cache/environment available -> /cache/Environment
         val environmentCacheDirectoryAvailable = androidFileSystemCapabilityGatewayImpl.confirmEnvironmentCacheExists()
@@ -39,7 +39,7 @@ class GetEnvironmentShareLinkUseCase @Inject constructor(
 //      TODO("Check Zip integrity")
 
         // Convert from zip to ShareLink
-        val shareLink = androidFileSystemCapabilityGatewayImpl.getShareUriFromFile(zipFile)
+        val shareLink = androidFileSystemCapabilityGatewayImpl.resolveShareUriFromFile(zipFile)
 
         return shareLink
 

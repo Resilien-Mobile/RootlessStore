@@ -4,8 +4,8 @@ import com.baidaidai.rootless_store.data.codebrick.repository.CodeBrickRepositor
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import javax.inject.Inject
 
-class GetCodeBrickConfigByTileIndexUseCase @Inject constructor(
+class FindCodeBrickByTileIndexUseCase @Inject constructor(
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
-    suspend operator fun invoke(tileIndex: Int): CodeBrickConfig? = codeBrickRepositoryImpl.getCodeBrickConfigByTileIndex(tileIndex)
+    suspend operator fun invoke(tileIndex: Int): CodeBrickConfig? = codeBrickRepositoryImpl.findCodeBrickByTileIndex(tileIndex)
 }

@@ -139,7 +139,7 @@ fun PluginScreen(
                 PluginActionContainer(
                     pluginManifestRoom = pluginManifestRoom,
                     onShareButtonClick = {
-                        val shareLink = pluginScreenViewModel.getPluginShareLink(pluginManifestRoom)
+                        val shareLink = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/zip"
@@ -151,7 +151,7 @@ fun PluginScreen(
                     },
                     onWebUiButtonClick = {
 
-                        val webUiUri = pluginScreenViewModel.getPluginWebUiUri(pluginManifestRoom)
+                        val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifestRoom)
 
                         val webUiIntent = Intent(context, WebViewActivity::class.java).apply {
                             putExtra("webUri",webUiUri)

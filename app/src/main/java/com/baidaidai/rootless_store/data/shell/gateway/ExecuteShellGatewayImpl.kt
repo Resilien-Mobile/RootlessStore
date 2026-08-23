@@ -28,7 +28,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
     fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
         var commandContent = commandContent
 
-        val appShellContextConfig = shellExecuteContextProviderImpl.getAppShellContext()
+        val appShellContextConfig = shellExecuteContextProviderImpl.resolveAppShellContext()
 
         if(appShellContextConfig.jumpToDirectory){
             changeDirectoryHandler(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
@@ -87,7 +87,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     fun runCommandByADBShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
-        val adbShellContextConfig = shellExecuteContextProviderImpl.getAdbShellContext()
+        val adbShellContextConfig = shellExecuteContextProviderImpl.resolveAdbShellContext()
 
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
