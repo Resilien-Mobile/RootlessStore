@@ -31,11 +31,11 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Update
-    suspend fun enableEnvironmentById(environmentId: String) {
+    suspend fun enableEnvironment(environmentId: String) {
         environmentDao.updateEnvironmentEnabled(environmentId = environmentId, isEnabled = true)
     }
 
-    suspend fun disableEnvironmentById(environmentId: String) {
+    suspend fun disableEnvironment(environmentId: String) {
         environmentDao.updateEnvironmentEnabled(environmentId = environmentId, isEnabled = false)
     }
 
