@@ -18,7 +18,7 @@ import com.baidaidai.rootless_store.core.i18n.icuString
 object PluginScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
-    fun PluginScreenScreenTopAppBar(
+    fun PluginScreenTopAppBar(
         textButtonOnClick:()-> Unit = {},
         iconButtonOnClick:()-> Unit = {},
         pluginCount: Int = 0,

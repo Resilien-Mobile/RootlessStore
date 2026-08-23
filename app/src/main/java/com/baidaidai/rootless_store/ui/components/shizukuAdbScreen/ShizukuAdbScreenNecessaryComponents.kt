@@ -40,8 +40,8 @@ object ShizukuAdbScreenNecessaryComponents {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShizukuAdbScreenModelSheet(
-        remainderTime: Int,
+    fun ShizukuAdbScreenModalSheet(
+        remainingSeconds: Int,
         onDismissRequest: ()-> Unit,
         onCloseButtonClick: ()-> Unit,
         onReturnButtonClick: ()-> Unit
@@ -84,7 +84,7 @@ object ShizukuAdbScreenNecessaryComponents {
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = icuString(R.string.shizuku_adb_screen_bottom_sheet_countdown_context,mapOf("second" to remainderTime)),
+                    text = icuString(R.string.shizuku_adb_screen_bottom_sheet_countdown_context,mapOf("second" to remainingSeconds)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center

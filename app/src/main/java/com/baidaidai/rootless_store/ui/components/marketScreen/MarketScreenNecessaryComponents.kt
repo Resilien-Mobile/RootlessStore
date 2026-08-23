@@ -15,7 +15,7 @@ object MarketScreenNecessaryComponents {
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
-    fun MarketScreenScreenTopAppBar(
+    fun MarketScreenTopAppBar(
         onBackButtonClick: ()-> Unit = {},
         onSearchButtonClick: ()-> Unit = {},
         onFilterButtonClick: ()-> Unit = {},
@@ -65,6 +65,6 @@ object MarketScreenNecessaryComponents {
 
 //@Composable
 //@PreviewLightDark
-//fun _MarketScreenScreenTopAppBarPreview_(){
-//    MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar()
+//fun _MarketScreenTopAppBarPreview_(){
+//    MarketScreenNecessaryComponents.MarketScreenTopAppBar()
 //}
