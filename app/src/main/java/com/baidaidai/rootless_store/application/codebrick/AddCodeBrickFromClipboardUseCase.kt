@@ -34,7 +34,7 @@ class AddCodeBrickFromClipboardUseCase @Inject constructor(
         )
 
         // Add CodeBrick Config
-        codeBrickRepositoryImpl.createCodeBrickConfig(codeBrickConfig)
+        codeBrickRepositoryImpl.addCodeBrick(codeBrickConfig)
 
         return null
     }

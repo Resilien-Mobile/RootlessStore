@@ -23,6 +23,6 @@ class AddCodeBrickUseCase @Inject constructor(
             boundTileIndex = boundTileIndex
         )
 
-        codeBrickRepositoryImpl.createCodeBrickConfig(codeBrickConfig)
+        codeBrickRepositoryImpl.addCodeBrick(codeBrickConfig)
     }
 }
