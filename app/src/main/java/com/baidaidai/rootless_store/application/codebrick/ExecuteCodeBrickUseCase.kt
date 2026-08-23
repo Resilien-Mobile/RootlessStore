@@ -8,11 +8,11 @@ import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ExecuteOneCodeBrickUseCase @Inject constructor(
+class ExecuteCodeBrickUseCase @Inject constructor(
     private val executeShellGatewayImpl: ExecuteShellGatewayImpl,
 ) {
     operator fun invoke(codeBrickConfig: CodeBrickConfig): Flow<ShellResult> {
-        Log.d("ExecuteOneCodeBrickUseCase, codeBrickContent",codeBrickConfig.codeBrickContent)
+        Log.d("ExecuteCodeBrickUseCase, codeBrickContent",codeBrickConfig.codeBrickContent)
         return when(codeBrickConfig.codeBrickEnvironment){
             HosterOverallStatus.LIMITED,
             HosterOverallStatus.PERMISSIVE -> executeShellGatewayImpl.runCommandByAppShell(codeBrickConfig.codeBrickContent)

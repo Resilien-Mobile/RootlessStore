@@ -12,7 +12,7 @@ import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import java.io.File
 import javax.inject.Inject
 
-class InstallOneShellPluginUseCase @Inject constructor(
+class InstallShellPluginUseCase @Inject constructor(
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
     private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
@@ -63,7 +63,7 @@ class InstallOneShellPluginUseCase @Inject constructor(
             }
 
             // Add Data, Register Plugin
-            pluginRepositoryImpl.insertOnePluginInfo(pluginManifestLocal)
+            pluginRepositoryImpl.insertPluginInfo(pluginManifestLocal)
 
             null
         } catch (error: Throwable) {

@@ -18,7 +18,7 @@ class InstallPluginFromMarketUseCase @Inject constructor(
 
         pluginGatewayImpl.installPluginFromMarket(pluginURI,pluginManifestRemote)
         pluginGatewayImpl.setPluginEntryPointExecutable(manifest)
-        pluginRepositoryImpl.insertOnePluginInfo(pluginManifestRemote)
+        pluginRepositoryImpl.insertPluginInfo(pluginManifestRemote)
 
     }
 }

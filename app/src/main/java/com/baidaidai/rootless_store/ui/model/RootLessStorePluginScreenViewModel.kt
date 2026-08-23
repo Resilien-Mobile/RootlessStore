@@ -10,12 +10,12 @@ import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManif
 import com.baidaidai.rootless_store.application.plugin.GetWholePluginInfoUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
-import com.baidaidai.rootless_store.application.plugin.UninstallOnePluginUseCase
+import com.baidaidai.rootless_store.application.plugin.UninstallPluginUseCase
 import com.baidaidai.rootless_store.application.plugin.GetPluginInfoCountUseCase
 import com.baidaidai.rootless_store.application.environment.GetWholeEnvironmentInfoUseCase
 import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnabledUseCase
 import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
-import com.baidaidai.rootless_store.application.environment.UninstallOneEnvironmentUseCase
+import com.baidaidai.rootless_store.application.environment.UninstallEnvironmentUseCase
 import com.baidaidai.rootless_store.application.plugin.GetPluginShareLinkUseCase
 import com.baidaidai.rootless_store.application.plugin.GetPluginWebUiUriUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
@@ -38,8 +38,8 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     private val installModuleUseCase: InstallModuleUseCase,
     private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
     private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
-    private val uninstallOnePluginUseCase: UninstallOnePluginUseCase,
-    private val uninstallOneEnvironmentUseCase: UninstallOneEnvironmentUseCase,
+    private val uninstallPluginUseCase: UninstallPluginUseCase,
+    private val uninstallEnvironmentUseCase: UninstallEnvironmentUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
     private val getPluginShareLinkUseCase: GetPluginShareLinkUseCase,
     private val getPluginWebUiUriUseCase: GetPluginWebUiUriUseCase,
@@ -93,14 +93,14 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
         pluginManifestRoom: PluginManifestRoom
     ){
         viewModelScope.launch {
-            uninstallOnePluginUseCase(pluginManifestRoom)
+            uninstallPluginUseCase(pluginManifestRoom)
         }
     }
     fun uninstallEnvironment(
         environmentManifestRoom: EnvironmentManifestRoom
     ){
         viewModelScope.launch {
-            uninstallOneEnvironmentUseCase(environmentManifestRoom)
+            uninstallEnvironmentUseCase(environmentManifestRoom)
         }
     }
     fun setPluginEnabled(

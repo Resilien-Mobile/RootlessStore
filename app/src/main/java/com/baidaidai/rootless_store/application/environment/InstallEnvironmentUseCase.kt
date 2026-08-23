@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepos
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import javax.inject.Inject
 
-class InstallOneEnvironmentUseCase @Inject constructor(
+class InstallEnvironmentUseCase @Inject constructor(
     private val environmentGatewayImpl: EnvironmentGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl
 ) {
@@ -18,7 +18,7 @@ class InstallOneEnvironmentUseCase @Inject constructor(
             // Set Execute-able, Made it can call and use
             environmentGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifest = environmentManifestLocal)
             // Add Data, Register Environment
-            environmentRepositoryImpl.insertOneEnvironmentInfo(environmentManifestLocal)
+            environmentRepositoryImpl.insertEnvironmentInfo(environmentManifestLocal)
 
             null
         }catch (error: Throwable){

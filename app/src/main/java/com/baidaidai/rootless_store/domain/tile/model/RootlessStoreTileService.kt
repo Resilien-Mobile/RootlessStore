@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.domain.tile.model
 import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
-import com.baidaidai.rootless_store.application.codebrick.ExecuteOneCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.GetCodeBrickConfigByTileIndexUseCase
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import kotlinx.coroutines.CoroutineScope
@@ -20,7 +20,7 @@ abstract class RootlessStoreTileService: TileService() {
     lateinit var getCodeBrickConfigByTileIndexUseCase: GetCodeBrickConfigByTileIndexUseCase
 
     @Inject
-    lateinit var executeOneCodeBrickUseCase: ExecuteOneCodeBrickUseCase
+    lateinit var executeCodeBrickUseCase: ExecuteCodeBrickUseCase
 
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -42,7 +42,7 @@ abstract class RootlessStoreTileService: TileService() {
         serviceScope.launch {
             val codeBrickConfig = _codeBrickConfig
             if (codeBrickConfig != null){
-                val resultFlow = executeOneCodeBrickUseCase(codeBrickConfig)
+                val resultFlow = executeCodeBrickUseCase(codeBrickConfig)
                 resultFlow.collect {
                     // Do Noting
                     // TODO("Can Collect, Dispatch to notification")

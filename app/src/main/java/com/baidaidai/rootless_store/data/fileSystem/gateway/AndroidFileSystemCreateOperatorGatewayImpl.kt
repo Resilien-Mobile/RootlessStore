@@ -28,7 +28,7 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         message = "Not Longer Recommended",
         replaceWith = ReplaceWith("createVoidFileDirectory(pluginRootDirectory, directoryName)")
     )
-    fun createOneVoidFile(destination: File, fileName: String): Boolean {
+    fun createVoidFile(destination: File, fileName: String): Boolean {
         val result = File(destination, "$fileName.zip").createNewFile()
         return result
     }

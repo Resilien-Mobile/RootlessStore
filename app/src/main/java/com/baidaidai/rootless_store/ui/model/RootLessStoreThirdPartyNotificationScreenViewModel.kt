@@ -2,8 +2,8 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.notification.usecase.AddOneNotificationPreferenceUseCase
-import com.baidaidai.rootless_store.domain.notification.usecase.GetOneNotificationPreferenceUseCase
+import com.baidaidai.rootless_store.domain.notification.usecase.AddNotificationPreferenceUseCase
+import com.baidaidai.rootless_store.domain.notification.usecase.FindNotificationPreferenceUseCase
 import com.baidaidai.rootless_store.ui.uistate.RootLessStoreThirdPartyNotificationScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
-    private val addOneNotificationPreferenceUseCase: AddOneNotificationPreferenceUseCase,
-    private val getOneNotificationPreferenceUseCase: GetOneNotificationPreferenceUseCase
+    private val addNotificationPreferenceUseCase: AddNotificationPreferenceUseCase,
+    private val findNotificationPreferenceUseCase: FindNotificationPreferenceUseCase
 ) : ViewModel() {
 
     init {
@@ -53,7 +53,7 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val uiState = thirdPartyNotificationScreenUiState.value
 
-            addOneNotificationPreferenceUseCase(
+            addNotificationPreferenceUseCase(
                 barkApiKey = uiState.barkApiKey,
                 notificationTitle = uiState.notificationTitle,
                 selfBuiltServer = uiState.selfBuiltServer,
@@ -64,7 +64,7 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
 
     private fun getNotificationPreference(){
         viewModelScope.launch {
-            val notificationPreference = getOneNotificationPreferenceUseCase() ?: return@launch
+            val notificationPreference = findNotificationPreferenceUseCase() ?: return@launch
 
             _thirdPartyNotificationScreenUiState.update {
                 it.copy(

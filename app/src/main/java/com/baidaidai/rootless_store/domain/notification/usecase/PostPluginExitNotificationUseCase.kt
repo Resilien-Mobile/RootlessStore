@@ -10,7 +10,7 @@ class PostPluginExitNotificationUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(){
-        val notificationPreference = notificationPreferenceRepositoryImpl.getOneNotificationPreference()
+        val notificationPreference = notificationPreferenceRepositoryImpl.findNotificationPreference()
 
         if (notificationPreference != null){
             if (notificationPreference.criticalWarning){

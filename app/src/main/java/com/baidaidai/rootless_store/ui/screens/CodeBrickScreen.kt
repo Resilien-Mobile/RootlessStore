@@ -44,7 +44,7 @@ fun CodeBrickScreen(
                 codeBrickViewModel.changeEditorShowStatus(false)
             },
             onConfirmButtonClick = { title, content, context, tileIndex ->
-                codeBrickViewModel.createOneCodeBrick(
+                codeBrickViewModel.createCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,
                     codeBrickContext = context,
@@ -69,7 +69,7 @@ fun CodeBrickScreen(
                 codeBrickViewModel.closeSettingShowStatus(false)
             },
             onConfirmButtonClick = { title, content, context, tileIndex, oldCodeBrickConfig ->
-                codeBrickViewModel.updateOneCodeBrick(
+                codeBrickViewModel.updateCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,
                     codeBrickContext = context,
@@ -78,7 +78,7 @@ fun CodeBrickScreen(
                 )
                 codeBrickViewModel.closeSettingShowStatus(false)
             },
-            onCodeBrickToPluginButtonClick = { codeBrickConfig -> codeBrickViewModel.convertOneCodeBrickToPlugin(codeBrickConfig) }
+            onCodeBrickToPluginButtonClick = { codeBrickConfig -> codeBrickViewModel.convertCodeBrickToPlugin(codeBrickConfig) }
         )
     }
 
@@ -107,14 +107,14 @@ fun CodeBrickScreen(
         ){ index ,codeBrickConfig ->
             CodeBrickPreviewer(
                 codeBrickConfig = codeBrickConfig,
-                onActionButtonClick = codeBrickViewModel::executeOneCodeBrick,
+                onActionButtonClick = codeBrickViewModel::executeCodeBrick,
                 onSettingButtonClick = {
                     codeBrickViewModel.openSettingShowStatus(
                         codeBrickConfig = codeBrickConfig,
                         settingShowStatus = true
                     )
                 },
-                onDeleteButtonClick = codeBrickViewModel::deleteOneCodeBrick
+                onDeleteButtonClick = codeBrickViewModel::deleteCodeBrick
             )
         }
     }

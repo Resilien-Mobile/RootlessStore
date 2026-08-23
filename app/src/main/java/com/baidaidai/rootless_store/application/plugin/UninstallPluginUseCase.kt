@@ -7,7 +7,7 @@ import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import javax.inject.Inject
 
-class UninstallOnePluginUseCase @Inject constructor(
+class UninstallPluginUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginFileSystemGateway: PluginGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
@@ -19,7 +19,7 @@ class UninstallOnePluginUseCase @Inject constructor(
             uninstallShellPlugin(pluginManifestRoom) ; return
         }
         pluginFileSystemGateway.uninstallPlugin(pluginManifestRoom.pluginPackageName)
-        pluginRepositoryImpl.deleteOnePluginInfoByID(pluginManifestRoom.pluginID)
+        pluginRepositoryImpl.deletePluginInfoByID(pluginManifestRoom.pluginID)
     }
     private suspend fun uninstallShellPlugin(
         pluginManifestRoom: PluginManifestRoom
@@ -30,6 +30,6 @@ class UninstallOnePluginUseCase @Inject constructor(
 
         if (!shellPluginUninstallResult) return
 
-        pluginRepositoryImpl.deleteOnePluginInfoByID(pluginManifestRoom.pluginID)
+        pluginRepositoryImpl.deletePluginInfoByID(pluginManifestRoom.pluginID)
     }
 }

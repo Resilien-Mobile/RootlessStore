@@ -129,7 +129,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         message = "Not Longer Recommended",
         replaceWith = ReplaceWith("createVoidFileDirectory(pluginRootDirectory, directoryName)")
     )
-    fun createOneVoidFile(destination: File, fileName: String): Boolean{
+    fun createVoidFile(destination: File, fileName: String): Boolean{
         val result = File(destination, "$fileName.zip").createNewFile()  // 创建了文件，而非单纯路径
         return result
     }
@@ -417,10 +417,10 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
 
     // Delete FS Operator
     @Deprecated(
-        message = "Recommended to use deleteDirectoryByPackageName method, instead of the deleteOneFile method",
+        message = "Recommended to use deleteDirectoryByPackageName method, instead of the deleteFile method",
         replaceWith = ReplaceWith("deleteDirectoryByPackageName(pluginPackageName)")
     )
-    fun deleteOneFile(pluginPackageName: String): Boolean{
+    fun deleteFile(pluginPackageName: String): Boolean{
         val targetFile = File(getInternalPluginRootDirectory(), "${pluginPackageName}.zip")
 
         return targetFile.delete()

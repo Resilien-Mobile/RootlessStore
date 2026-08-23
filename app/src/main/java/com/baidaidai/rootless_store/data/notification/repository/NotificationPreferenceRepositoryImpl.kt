@@ -13,7 +13,7 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
     private val notificationPreferenceDao = rootlessStoreDatabase.notificationPreferenceDao()
 
     // Create
-    suspend fun insertOneNotificationPreference(
+    suspend fun insertNotificationPreference(
         notificationPreference: NotificationPreference
     ) {
         val notificationPreferenceEntity = notificationPreference.toNotificationPreferenceEntity()
@@ -21,7 +21,7 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
     }
 
     // Update
-    suspend fun updateOneNotificationPreference(
+    suspend fun updateNotificationPreference(
         apiKey: String,
         notificationTitle: String? = null,
         selfBuiltServer: String? = null,
@@ -36,7 +36,7 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
     }
 
     // Read
-    suspend fun getOneNotificationPreference(): NotificationPreference? {
+    suspend fun findNotificationPreference(): NotificationPreference? {
         return notificationPreferenceDao.findNotificationPreference()?.toNotificationPreference()
     }
 

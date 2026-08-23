@@ -3,13 +3,13 @@ package com.baidaidai.rootless_store.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.application.codebrick.AddOneCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.AddOneJsonCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.ConvertOneCodeBrickToPluginUseCase
-import com.baidaidai.rootless_store.application.codebrick.DeleteOneCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.ExecuteOneCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.AddJsonCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ConvertCodeBrickToPluginUseCase
+import com.baidaidai.rootless_store.application.codebrick.DeleteCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.GetAllCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.UpdateOneCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
@@ -35,13 +35,13 @@ data class CodeBrickScreenUIState(
 
 @HiltViewModel
 class RootlessStoreCodeBrickViewModel @Inject constructor(
-    private val addOneCodeBrickUseCase: AddOneCodeBrickUseCase,
+    private val addCodeBrickUseCase: AddCodeBrickUseCase,
     private val getAllCodeBrickUseCase: GetAllCodeBrickUseCase,
-    private val executeOneCodeBrickUseCase: ExecuteOneCodeBrickUseCase,
-    private val deleteOneCodeBrickUseCase: DeleteOneCodeBrickUseCase,
-    private val updateOneCodeBrickUseCase: UpdateOneCodeBrickUseCase,
-    private val addOneJsonCodeBrickUseCase: AddOneJsonCodeBrickUseCase,
-    private val convertOneCodeBrickToPluginUseCase: ConvertOneCodeBrickToPluginUseCase
+    private val executeCodeBrickUseCase: ExecuteCodeBrickUseCase,
+    private val deleteCodeBrickUseCase: DeleteCodeBrickUseCase,
+    private val updateCodeBrickUseCase: UpdateCodeBrickUseCase,
+    private val addJsonCodeBrickUseCase: AddJsonCodeBrickUseCase,
+    private val convertCodeBrickToPluginUseCase: ConvertCodeBrickToPluginUseCase
 ): ViewModel() {
 
     private val _codeBrickScreenUIState = MutableStateFlow(CodeBrickScreenUIState())
@@ -105,31 +105,31 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         }
     }
 
-    fun convertOneCodeBrickToPlugin(
+    fun convertCodeBrickToPlugin(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            convertOneCodeBrickToPluginUseCase(codeBrickConfig)
+            convertCodeBrickToPluginUseCase(codeBrickConfig)
         }
     }
 
     // CUDE
 
     // Create
-    fun createOneCodeBrick(
+    fun createCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
         bindTileIndex: Int?
     ){
         viewModelScope.launch {
-            addOneCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,bindTileIndex)
+            addCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,bindTileIndex)
         }
     }
 
-    fun createOneCodeBrickByJson(){
+    fun createCodeBrickByJson(){
         viewModelScope.launch {
-            val codeBrickError = addOneJsonCodeBrickUseCase()
+            val codeBrickError = addJsonCodeBrickUseCase()
             if (codeBrickError != null){
                 _codeBrickEvent.emit(codeBrickError)
             }
@@ -137,7 +137,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     }
 
     // Update
-    fun updateOneCodeBrick(
+    fun updateCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
@@ -145,7 +145,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         oldCodeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            updateOneCodeBrickUseCase(
+            updateCodeBrickUseCase(
                 codeBrickTitle = codeBrickTitle,
                 codeBrickContent = codeBrickContent,
                 codeBrickContext = codeBrickContext,
@@ -156,16 +156,16 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     }
 
     // Delete
-    fun deleteOneCodeBrick(
+    fun deleteCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            deleteOneCodeBrickUseCase(codeBrickConfig)
+            deleteCodeBrickUseCase(codeBrickConfig)
         }
     }
 
     // Execute
-    fun executeOneCodeBrick(
+    fun executeCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
@@ -185,7 +185,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
 
             changeResultShowStatus(true)
 
-            executeOneCodeBrickUseCase(codeBrickConfig).collect { shellResult ->
+            executeCodeBrickUseCase(codeBrickConfig).collect { shellResult ->
                 _codeBrickScreenUIState.update { codeBrickScreenUIState ->
 
                     // Clean the Void-Chars cache

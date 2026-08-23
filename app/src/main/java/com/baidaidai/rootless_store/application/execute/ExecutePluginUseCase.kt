@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class ExecuteOnePluginUseCase @Inject constructor(
-    private val executeOnePluginByShizukuUseCase: ExecuteOnePluginByShizukuUseCase,
-    private val executeOnePluginByAppShellUseCase: ExecuteOnePluginByAppShellUseCase,
+class ExecutePluginUseCase @Inject constructor(
+    private val executePluginByShizukuUseCase: ExecutePluginByShizukuUseCase,
+    private val executePluginByAppShellUseCase: ExecutePluginByAppShellUseCase,
     val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
 ) {
     suspend operator fun invoke(
@@ -20,9 +20,9 @@ class ExecuteOnePluginUseCase @Inject constructor(
 
         // Judge if needs use Shizuku
         return if (shouldUseShizuku) {
-            executeOnePluginByShizukuUseCase(pluginID)
+            executePluginByShizukuUseCase(pluginID)
         } else {
-            executeOnePluginByAppShellUseCase(pluginID)
+            executePluginByAppShellUseCase(pluginID)
         }
     }
 

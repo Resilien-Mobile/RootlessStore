@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class ExecuteOnePluginByShizukuUseCase @Inject constructor(
+class ExecutePluginByShizukuUseCase @Inject constructor(
     private val pluginExecuteGatewayImpl: PluginExecuteGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val settingPreferenceRepositoryImpl: SettingPreferenceRepositoryImpl,
@@ -24,7 +24,7 @@ class ExecuteOnePluginByShizukuUseCase @Inject constructor(
         pluginID: String
     ): Flow<ExecuteResult> {
 
-        val pluginManifestRoom = pluginRepositoryImpl.getOnePluginInfo(pluginID)!!
+        val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
         val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
 
         // Dispatch to PluginExecuteGateway.executePluginWithoutEnvironmentByShizuku

@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
 
-class ConvertOneCodeBrickToPluginUseCase @Inject constructor(
+class ConvertCodeBrickToPluginUseCase @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
@@ -88,7 +88,7 @@ class ConvertOneCodeBrickToPluginUseCase @Inject constructor(
         pluginGatewayImpl.setPluginEntryPointExecutable(pluginManifestLocal)
 
         // Insert result to PluginRepositoryImpl
-        pluginRepositoryImpl.insertOnePluginInfo(pluginManifestLocal)
+        pluginRepositoryImpl.insertPluginInfo(pluginManifestLocal)
     }
 
     private suspend fun convertShellCodeBrick(
@@ -152,7 +152,7 @@ class ConvertOneCodeBrickToPluginUseCase @Inject constructor(
         }
 
         // Insert result to PluginRepositoryImpl
-        pluginRepositoryImpl.insertOnePluginInfo(pluginManifestLocal)
+        pluginRepositoryImpl.insertPluginInfo(pluginManifestLocal)
 
     }
 

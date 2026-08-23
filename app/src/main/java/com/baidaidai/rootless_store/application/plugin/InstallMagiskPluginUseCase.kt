@@ -20,7 +20,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
 
-class InstallOneMagiskPluginUseCase @Inject constructor(
+class InstallMagiskPluginUseCase @Inject constructor(
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
@@ -145,7 +145,7 @@ class InstallOneMagiskPluginUseCase @Inject constructor(
             }
 
             // Insert result to PluginRepositoryImpl
-            pluginRepositoryImpl.insertOnePluginInfo(pluginManifestLocal)
+            pluginRepositoryImpl.insertPluginInfo(pluginManifestLocal)
 
             null
         } catch (error: Throwable) {

@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface PluginCoreRepository {
     // Create
-    suspend fun insertOnePluginInfo(pluginManifestLocal: PluginManifestLocal)
+    suspend fun insertPluginInfo(pluginManifestLocal: PluginManifestLocal)
 
     // Read
-    suspend fun getOnePluginInfo(pluginID: String): PluginManifestRoom?
+    suspend fun findPluginInfo(pluginID: String): PluginManifestRoom?
     fun getWholePluginInfo(): Flow<List<PluginManifestRoom>?>
     fun getPluginInfoCount(): Flow<Int>
     suspend fun getTotalPluginCount(): Int
@@ -21,5 +21,5 @@ interface PluginCoreRepository {
     suspend fun disableAllPlugin()
 
     // Delete
-    suspend fun deleteOnePluginInfoByID(pluginID: String)
+    suspend fun deletePluginInfoByID(pluginID: String)
 }

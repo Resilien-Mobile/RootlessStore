@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
-import com.baidaidai.rootless_store.domain.source.usecase.AddOneSourceByAuthenticationUseCase
-import com.baidaidai.rootless_store.domain.source.usecase.AddOneSourceByDefaultUseCase
-import com.baidaidai.rootless_store.domain.source.usecase.DeleteOneSourceUseCase
+import com.baidaidai.rootless_store.domain.source.usecase.AddSourceByAuthenticationUseCase
+import com.baidaidai.rootless_store.domain.source.usecase.AddSourceByDefaultUseCase
+import com.baidaidai.rootless_store.domain.source.usecase.DeleteSourceUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.GetPluginSourceCountUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.GetWholeSourceUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +25,9 @@ import javax.inject.Inject
 class RootLessStoreSourceScreenViewModel @Inject constructor(
     getWholeSourceUseCase: GetWholeSourceUseCase,
     getPluginSourceCountUseCase: GetPluginSourceCountUseCase,
-    private val addOneSourceByDefaultUseCase: AddOneSourceByDefaultUseCase,
-    private val addOneSourceByAuthenticationUseCase: AddOneSourceByAuthenticationUseCase,
-    private val deleteOneSourceUseCase: DeleteOneSourceUseCase,
+    private val addSourceByDefaultUseCase: AddSourceByDefaultUseCase,
+    private val addSourceByAuthenticationUseCase: AddSourceByAuthenticationUseCase,
+    private val deleteSourceUseCase: DeleteSourceUseCase,
 ): ViewModel(){
 
     var latestPluginSourceEndpoint = ""
@@ -56,14 +56,14 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
     private val _authenticationBottomSheetShowStatus = MutableStateFlow(false)
     val authenticationBottomSheetShowStatus = _authenticationBottomSheetShowStatus.asStateFlow()
 
-    fun addOneSourceByDefault(
+    fun addSourceByDefault(
         sourceURI: String
     ){
 
         latestPluginSourceEndpoint = sourceURI
 
         viewModelScope.launch {
-            val result = addOneSourceByDefaultUseCase(sourceURI)
+            val result = addSourceByDefaultUseCase(sourceURI)
 
             when(result){
                 is PluginSourceEvent.SourceError -> {
@@ -79,7 +79,7 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
         }
     }
 
-    fun addOneSourceByAuthentication(userName: String, passWord: String){
+    fun addSourceByAuthentication(userName: String, passWord: String){
         val pluginSourceAuthFormInput = PluginSourceAuthFormInput(
             sourceRemoteEndpoint = latestPluginSourceEndpoint,
             userName = userName,
@@ -87,7 +87,7 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
         )
 
         viewModelScope.launch {
-            val result = addOneSourceByAuthenticationUseCase(pluginSourceAuthFormInput)
+            val result = addSourceByAuthenticationUseCase(pluginSourceAuthFormInput)
 
             when(result){
                 is PluginSourceEvent.SourceError -> {
@@ -111,11 +111,11 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
         }
     }
 
-    fun deleteOneSource(
+    fun deleteSource(
         pluginSourceInfo: PluginSourceInfo
     ){
         viewModelScope.launch {
-            deleteOneSourceUseCase(pluginSourceInfo)
+            deleteSourceUseCase(pluginSourceInfo)
         }
     }
 
