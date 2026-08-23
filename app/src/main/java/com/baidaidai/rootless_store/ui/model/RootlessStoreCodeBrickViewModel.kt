@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.AddJsonCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickFromClipboardUseCase
 import com.baidaidai.rootless_store.application.codebrick.ConvertCodeBrickToPluginUseCase
 import com.baidaidai.rootless_store.application.codebrick.DeleteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
@@ -40,7 +40,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val executeCodeBrickUseCase: ExecuteCodeBrickUseCase,
     private val deleteCodeBrickUseCase: DeleteCodeBrickUseCase,
     private val updateCodeBrickUseCase: UpdateCodeBrickUseCase,
-    private val addJsonCodeBrickUseCase: AddJsonCodeBrickUseCase,
+    private val addCodeBrickFromClipboardUseCase: AddCodeBrickFromClipboardUseCase,
     private val convertCodeBrickToPluginUseCase: ConvertCodeBrickToPluginUseCase
 ): ViewModel() {
 
@@ -127,9 +127,9 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         }
     }
 
-    fun createCodeBrickByJson(){
+    fun addCodeBrickFromClipboard(){
         viewModelScope.launch {
-            val codeBrickError = addJsonCodeBrickUseCase()
+            val codeBrickError = addCodeBrickFromClipboardUseCase()
             if (codeBrickError != null){
                 _codeBrickEvent.emit(codeBrickError)
             }

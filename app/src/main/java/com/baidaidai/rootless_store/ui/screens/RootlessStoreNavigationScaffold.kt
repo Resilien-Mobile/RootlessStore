@@ -306,7 +306,7 @@ fun RootlessStoreNavigationScaffold(
                                 codeBrickViewModel.setButtonMenuExpanded()
                             },
                             onJsonMenuItemClick = {
-                                codeBrickViewModel.createCodeBrickByJson()
+                                codeBrickViewModel.addCodeBrickFromClipboard()
                                 codeBrickViewModel.setButtonMenuExpanded()
                             },
                             onButtonMenuClick = {
