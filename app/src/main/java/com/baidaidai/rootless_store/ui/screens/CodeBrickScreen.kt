@@ -35,13 +35,13 @@ fun CodeBrickScreen(
     val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
 
     // Editor show status
-    if (codeBrickScreenUiState.brickEditorCanShow){
+    if (codeBrickScreenUiState.isBrickEditorVisible){
         CodeBrickEditor(
             onDismissRequest = {
-                codeBrickViewModel.changeEditorShowStatus(false)
+                codeBrickViewModel.setBrickEditorVisible(false)
             },
             onDismissButtonClick = {
-                codeBrickViewModel.changeEditorShowStatus(false)
+                codeBrickViewModel.setBrickEditorVisible(false)
             },
             onConfirmButtonClick = { title, content, context, tileIndex ->
                 codeBrickViewModel.createCodeBrick(
@@ -50,23 +50,23 @@ fun CodeBrickScreen(
                     codeBrickContext = context,
                     bindTileIndex = tileIndex
                 )
-                codeBrickViewModel.changeEditorShowStatus(false)
+                codeBrickViewModel.setBrickEditorVisible(false)
             },
         )
-    } else if (codeBrickScreenUiState.executeResultCanShow) {
+    } else if (codeBrickScreenUiState.isExecutionResultVisible) {
         CodeBrickResult(
             resultContent = codeBrickScreenUiState.executeResultContent,
-            onDismissRequest = codeBrickViewModel::changeResultShowStatus,
-            onConfirmButtonClick = codeBrickViewModel::changeResultShowStatus
+            onDismissRequest = codeBrickViewModel::setExecutionResultVisible,
+            onConfirmButtonClick = codeBrickViewModel::setExecutionResultVisible
         )
-    } else if (codeBrickScreenUiState.brickSettingCanShow) {
+    } else if (codeBrickScreenUiState.isBrickSettingsVisible) {
         CodeBrickSetting(
             codeBrickConfig = codeBrickScreenUiState.handlingCodeBrickConfig,
             onDismissRequest = {
-                codeBrickViewModel.closeSettingShowStatus(false)
+                codeBrickViewModel.hideBrickSettings(false)
             },
             onDismissButtonClick = {
-                codeBrickViewModel.closeSettingShowStatus(false)
+                codeBrickViewModel.hideBrickSettings(false)
             },
             onConfirmButtonClick = { title, content, context, tileIndex, oldCodeBrickConfig ->
                 codeBrickViewModel.updateCodeBrick(
@@ -76,7 +76,7 @@ fun CodeBrickScreen(
                     bindTileIndex = tileIndex,
                     oldCodeBrickConfig = oldCodeBrickConfig
                 )
-                codeBrickViewModel.closeSettingShowStatus(false)
+                codeBrickViewModel.hideBrickSettings(false)
             },
             onCodeBrickToPluginButtonClick = { codeBrickConfig -> codeBrickViewModel.convertCodeBrickToPlugin(codeBrickConfig) }
         )
@@ -109,9 +109,9 @@ fun CodeBrickScreen(
                 codeBrickConfig = codeBrickConfig,
                 onActionButtonClick = codeBrickViewModel::executeCodeBrick,
                 onSettingButtonClick = {
-                    codeBrickViewModel.openSettingShowStatus(
+                    codeBrickViewModel.showBrickSettings(
                         codeBrickConfig = codeBrickConfig,
-                        settingShowStatus = true
+                        isVisible = true
                     )
                 },
                 onDeleteButtonClick = codeBrickViewModel::deleteCodeBrick

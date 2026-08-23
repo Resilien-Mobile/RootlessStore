@@ -47,14 +47,14 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
     val _sourceEvent = MutableSharedFlow<PluginSourceEvent.SourceError?>()
     val sourceEvent = _sourceEvent.asSharedFlow()
 
-    private val _deleterShowStatus = MutableStateFlow(false)
-    val deleterShowStatus = _deleterShowStatus.asStateFlow()
+    private val _isDeleteActionVisible = MutableStateFlow(false)
+    val isDeleteActionVisible = _isDeleteActionVisible.asStateFlow()
 
-    private val _authenticationAlertDialogShowStatus = MutableStateFlow(false)
-    val authenticationAlertDialogShowStatus = _authenticationAlertDialogShowStatus.asStateFlow()
+    private val _isAuthenticationDialogVisible = MutableStateFlow(false)
+    val isAuthenticationDialogVisible = _isAuthenticationDialogVisible.asStateFlow()
 
-    private val _authenticationBottomSheetShowStatus = MutableStateFlow(false)
-    val authenticationBottomSheetShowStatus = _authenticationBottomSheetShowStatus.asStateFlow()
+    private val _isAuthenticationSheetVisible = MutableStateFlow(false)
+    val isAuthenticationSheetVisible = _isAuthenticationSheetVisible.asStateFlow()
 
     fun addSourceByDefault(
         sourceUri: String
@@ -70,7 +70,7 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
                     _sourceEvent.emit(result)
                 }
                 is PluginSourceEvent.SourceAuthentication -> {
-                    _authenticationAlertDialogShowStatus.value = true
+                    _isAuthenticationDialogVisible.value = true
                 }
                 is PluginSourceEvent.Success -> {
                     _sourceEvent.emit(null)
@@ -119,20 +119,20 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
         }
     }
 
-    fun changeDeleterShowStatus(){
-        _deleterShowStatus.update {
+    fun toggleDeleteActionVisibility(){
+        _isDeleteActionVisible.update {
             !it
         }
     }
 
     fun startSourceAuthentication() {
-        _authenticationAlertDialogShowStatus.value = false
-        _authenticationBottomSheetShowStatus.value = true
+        _isAuthenticationDialogVisible.value = false
+        _isAuthenticationSheetVisible.value = true
     }
 
     fun cancelSourceAuthentication() {
-        _authenticationAlertDialogShowStatus.value = false
-        _authenticationBottomSheetShowStatus.value = false
+        _isAuthenticationDialogVisible.value = false
+        _isAuthenticationSheetVisible.value = false
     }
 
 

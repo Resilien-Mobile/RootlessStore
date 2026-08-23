@@ -24,7 +24,7 @@ import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
 
 @Composable
 fun EnvironmentScreen(
-    badgeShowState: Boolean,
+    isBadgeVisible: Boolean,
     renderingList: List<EnvironmentManifestRoom>,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
 ){

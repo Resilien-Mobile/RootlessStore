@@ -47,7 +47,7 @@ fun RootlessStorePluginScreenContainer(
 ){
     val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
     val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
-    val badgeShowState by pluginScreenViewModel.badgeShowState.collectAsState()
+    val isBadgeVisible by pluginScreenViewModel.isBadgeVisible.collectAsState()
 
     var selectedTabIndex by rememberSaveable{ mutableIntStateOf(0) }
 
@@ -84,7 +84,7 @@ fun RootlessStorePluginScreenContainer(
         when(selectedTabIndex){
             0 -> {
                 PluginScreen(
-                    badgeShowState = badgeShowState,
+                    isBadgeVisible = isBadgeVisible,
                     renderingList = pluginInfoList,
                     pluginScreenViewModel = pluginScreenViewModel,
                     navigateToExecuteScreen = navigateToExecuteScreen,
@@ -94,7 +94,7 @@ fun RootlessStorePluginScreenContainer(
             }
             1 -> {
                 EnvironmentScreen(
-                    badgeShowState = badgeShowState,
+                    isBadgeVisible = isBadgeVisible,
                     renderingList = environmentInfoList,
                     pluginScreenViewModel = pluginScreenViewModel
                 )
@@ -105,7 +105,7 @@ fun RootlessStorePluginScreenContainer(
 
 @Composable
 fun PluginScreen(
-    badgeShowState: Boolean,
+    isBadgeVisible: Boolean,
     renderingList: List<PluginManifestRoom>,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,

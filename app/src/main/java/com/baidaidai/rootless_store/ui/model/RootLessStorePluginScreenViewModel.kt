@@ -49,7 +49,7 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
 
 //    private val _pluginInfoList = observePlugins()  // Will change back to PluginManifestLocal feature
     private val _fileUri = MutableStateFlow<Uri>(value = Uri.EMPTY)
-    private val _badgeShowState = MutableStateFlow(false)
+    private val _isBadgeVisible = MutableStateFlow(false)
 
     private val _pluginEvent = MutableSharedFlow<PluginError?>()
     val pluginEvent = _pluginEvent.asSharedFlow()
@@ -73,7 +73,7 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     )
 
     val fileUri = _fileUri.asStateFlow()
-    val badgeShowState = _badgeShowState.asStateFlow()
+    val isBadgeVisible = _isBadgeVisible.asStateFlow()
 
     fun updateFileUri(uri: Uri){
         _fileUri.value = uri
@@ -127,8 +127,8 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
         }
     }
 
-    fun changeBadgeShowStatus(){
-        _badgeShowState.update { !it }
+    fun toggleBadgeVisibility(){
+        _isBadgeVisible.update { !it }
     }
 
     fun resolvePluginShareUri(

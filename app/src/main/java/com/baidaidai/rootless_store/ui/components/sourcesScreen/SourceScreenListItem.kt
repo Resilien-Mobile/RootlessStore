@@ -24,7 +24,7 @@ import com.baidaidai.rootless_store.ui.theme.colorscheme.SourceListItemColor
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SourceScreenListItem(
-    sourceScreenLeadingDeleteButtonStatus: Boolean,
+    isDeleteActionVisible: Boolean,
     pluginSourceInfo: PluginSourceInfo,
     sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
     onListItemClick:(pluginSourceUri: String)-> Unit
@@ -48,7 +48,7 @@ fun SourceScreenListItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                if (sourceScreenLeadingDeleteButtonStatus){
+                if (isDeleteActionVisible){
                     SourceScreenLeadingDeleteButton(sourceScreenViewModel,pluginSourceInfo)
                 }
                 // Should Change Intro Compatible Source

@@ -25,10 +25,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CodeBrickScreenUiState(
-    val brickEditorCanShow: Boolean = false,
-    val executeResultCanShow: Boolean = false,
-    val brickSettingCanShow: Boolean = false,
-    val buttonMenuExpandStatus: Boolean = false,
+    val isBrickEditorVisible: Boolean = false,
+    val isExecutionResultVisible: Boolean = false,
+    val isBrickSettingsVisible: Boolean = false,
+    val isButtonMenuExpanded: Boolean = false,
     val executeResultContent: List<String> = emptyList(),
     val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimeStamp = 1L,"", HosterOverallStatus.LIMITED,"")
 )
@@ -57,50 +57,50 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    fun changeEditorShowStatus(
-        showStatus: Boolean = false
+    fun setBrickEditorVisible(
+        isVisible: Boolean = false
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                brickEditorCanShow = showStatus
+                isBrickEditorVisible = isVisible
             )
         }
     }
-    fun openSettingShowStatus(
+    fun showBrickSettings(
         codeBrickConfig: CodeBrickConfig,
-        settingShowStatus: Boolean = true,
+        isVisible: Boolean = true,
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                brickSettingCanShow = settingShowStatus,
+                isBrickSettingsVisible = isVisible,
                 handlingCodeBrickConfig = codeBrickConfig
             )
         }
     }
-    fun closeSettingShowStatus(
-        settingShowStatus: Boolean = false,
+    fun hideBrickSettings(
+        isVisible: Boolean = false,
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                brickSettingCanShow = settingShowStatus,
+                isBrickSettingsVisible = isVisible,
             )
         }
     }
-    fun changeResultShowStatus(
-        showStatus: Boolean = false
+    fun setExecutionResultVisible(
+        isVisible: Boolean = false
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                executeResultCanShow = showStatus
+                isExecutionResultVisible = isVisible
             )
         }
     }
-    fun changeButtonMenuStatus(
-        showStatus: Boolean = false
+    fun setButtonMenuExpanded(
+        isExpanded: Boolean = false
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                buttonMenuExpandStatus = showStatus
+                isButtonMenuExpanded = isExpanded
             )
         }
     }
@@ -183,7 +183,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
                 )
             }
 
-            changeResultShowStatus(true)
+            setExecutionResultVisible(true)
 
             executeCodeBrickUseCase(codeBrickConfig).collect { shellResult ->
                 _codeBrickScreenUiState.update { codeBrickScreenUiState ->

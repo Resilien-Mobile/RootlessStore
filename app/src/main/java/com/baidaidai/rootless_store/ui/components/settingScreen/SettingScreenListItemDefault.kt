@@ -20,7 +20,7 @@ fun SettingScreenListItemDefault(
     headlineText: String,
     supportingText: String,
     leadingContent: @Composable (() -> Unit)? = null,
-    checked: Boolean = false,
+    isChecked: Boolean = false,
     onSwitchClicked: (Boolean)-> Unit = {},
     trailingContent: @Composable (()-> Unit)? = null
 ){
@@ -49,7 +49,7 @@ fun SettingScreenListItemDefault(
                 trailingContent()
             }else{
                 Switch(
-                    checked = checked,
+                    checked = isChecked,
                     onCheckedChange = onSwitchClicked,
                 )
             }

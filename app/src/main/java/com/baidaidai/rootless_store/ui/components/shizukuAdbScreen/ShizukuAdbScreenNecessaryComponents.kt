@@ -119,7 +119,7 @@ object ShizukuAdbScreenNecessaryComponents {
         step: String,
         title: String,
         description: String,
-        targetStatus: Boolean,
+        isTargetActive: Boolean,
         onClick: () -> Unit
     ){
         Card(
@@ -160,7 +160,7 @@ object ShizukuAdbScreenNecessaryComponents {
                             contentPadding = PaddingValues(0.dp)
                         ) {
                             Icon(
-                                painter = if (targetStatus){
+                                painter = if (isTargetActive){
                                     painterResource(R.drawable.material_symbols_check)
                                 }else{
                                     painterResource(R.drawable.material_symbols_play_arrow)

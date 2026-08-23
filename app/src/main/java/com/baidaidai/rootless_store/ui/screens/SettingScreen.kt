@@ -69,7 +69,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_check_latest_version_headline),
                     supportingText = stringResource(R.string.setting_screen_general_check_latest_version_supporting),
-                    checked = settingPanelPreferences.isAutoUpdateEnabled,
+                    isChecked = settingPanelPreferences.isAutoUpdateEnabled,
                     onSwitchClicked = settingScreenViewModel::setAutoUpdateEnabled,
                     leadingContent = {
                         Icon(
@@ -82,7 +82,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_notify_plugin_status_headline),
                     supportingText = stringResource(R.string.setting_screen_general_notify_plugin_status_supporting),
-                    checked = settingPanelPreferences.isPluginStatusNotificationEnabled,
+                    isChecked = settingPanelPreferences.isPluginStatusNotificationEnabled,
                     onSwitchClicked = settingScreenViewModel::setPluginStatusNotificationEnabled,
                     leadingContent = {
                         Icon(
@@ -95,7 +95,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_third_party_push_headline),
                     supportingText = stringResource(R.string.setting_screen_general_third_party_push_supporting),
-                    checked = settingPanelPreferences.isThirdPartyNotificationPushEnabled,
+                    isChecked = settingPanelPreferences.isThirdPartyNotificationPushEnabled,
                     onSwitchClicked = settingScreenViewModel::setThirdPartyNotificationPushEnabled,
                     leadingContent = {
                         Icon(
@@ -136,7 +136,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_allow_insecure_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_allow_insecure_connection_supporting),
-                    checked = settingPanelPreferences.isInsecureConnectionAllowed,
+                    isChecked = settingPanelPreferences.isInsecureConnectionAllowed,
                     onSwitchClicked = settingScreenViewModel::setInsecureConnectionAllowed,
                     leadingContent = {
                         Icon(
@@ -149,7 +149,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_supporting),
-                    checked = settingPanelPreferences.isDotProtectedConnectionEnabled,
+                    isChecked = settingPanelPreferences.isDotProtectedConnectionEnabled,
                     onSwitchClicked = settingScreenViewModel::setDotProtectedConnectionEnabled,
                     leadingContent = {
                         Icon(

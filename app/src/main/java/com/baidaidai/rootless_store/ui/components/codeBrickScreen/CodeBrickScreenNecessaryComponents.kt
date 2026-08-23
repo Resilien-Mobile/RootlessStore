@@ -41,20 +41,20 @@ object CodeBrickScreenNecessaryComponents {
 
     @Composable
     fun CodeBrickScreenFloatingButton(
-        buttonMenuExpandStatus: Boolean,
+        isButtonMenuExpanded: Boolean,
         onHandMenuItemClick: ()-> Unit = {},
         onJsonMenuItemClick: ()-> Unit = {},
         onButtonMenuClick:(Boolean)-> Unit = {}
     ) {
 
         FloatingActionButtonMenu(
-            expanded = buttonMenuExpandStatus,
+            expanded = isButtonMenuExpanded,
             button = {
                 ToggleFloatingActionButton(
-                    checked = buttonMenuExpandStatus,
+                    checked = isButtonMenuExpanded,
                     onCheckedChange = onButtonMenuClick
                 ) {
-                    if (buttonMenuExpandStatus){
+                    if (isButtonMenuExpanded){
                         Icon(
                             painter = painterResource(R.drawable.outline_close_24),
                             contentDescription = stringResource(R.string.code_brick_screen_floating_button_add_content_description),
