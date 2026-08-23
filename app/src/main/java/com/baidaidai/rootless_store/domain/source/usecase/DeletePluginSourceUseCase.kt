@@ -5,8 +5,8 @@ import com.baidaidai.rootless_store.data.source.repository.PluginSourceRepositor
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import javax.inject.Inject
 
-class DeleteSourceUseCase @Inject constructor(
-    val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
+class DeletePluginSourceUseCase @Inject constructor(
+    private val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ) {
     suspend operator fun invoke(
         pluginSource: PluginSource

@@ -26,7 +26,7 @@ fun SourceScreenLeadingDeleteButton(
     Row {
         IconButton(
             onClick = {
-                sourceScreenViewModel.deleteSource(pluginSource)
+                sourceScreenViewModel.deletePluginSource(pluginSource)
             },
             colors = IconButtonDefaults.iconButtonColors(
                 containerColor = BadgeDefaults.containerColor,

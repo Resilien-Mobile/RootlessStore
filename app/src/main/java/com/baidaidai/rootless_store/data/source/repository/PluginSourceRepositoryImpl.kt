@@ -27,8 +27,8 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
     private val pluginSourceDao = appDatabase.pluginSourceDao()
 
-    // Create
-    override suspend fun insertPluginSourceByDefault(
+    // Add
+    override suspend fun addPluginSource(
         sourceEndpointInput: PluginSourceEndpointInput
     ): PluginSourceEvent {
         try{
@@ -59,7 +59,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertPluginSourceByAuthentication(
+    override suspend fun addAuthenticatedPluginSource(
         pluginSourceAuthFormInput: PluginSourceAuthFormInput
     ): PluginSourceEvent {
         try{
