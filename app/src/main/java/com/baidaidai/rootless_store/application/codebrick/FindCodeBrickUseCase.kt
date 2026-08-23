@@ -9,5 +9,5 @@ class FindCodeBrickUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         unixTimestamp: Long
-    ): CodeBrickConfig? = codeBrickRepositoryImpl.findCodeBrickConfig(unixTimestamp)
+    ): CodeBrickConfig? = codeBrickRepositoryImpl.findCodeBrick(unixTimestamp)
 }

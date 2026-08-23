@@ -10,6 +10,6 @@ class DeleteCodeBrickUseCase @Inject constructor(
     suspend operator fun invoke(
         codeBrickConfig: CodeBrickConfig
     ) {
-        codeBrickRepositoryImpl.deleteCodeBrickConfig(codeBrickConfig)
+        codeBrickRepositoryImpl.deleteCodeBrick(codeBrickConfig)
     }
 }

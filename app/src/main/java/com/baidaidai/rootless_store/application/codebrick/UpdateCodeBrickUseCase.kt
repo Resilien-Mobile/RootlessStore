@@ -24,6 +24,6 @@ class UpdateCodeBrickUseCase @Inject constructor(
             boundTileIndex = boundTileIndex
         )
 
-        codeBrickRepositoryImpl.updateCodeBrickConfig(codeBrickConfig)
+        codeBrickRepositoryImpl.updateCodeBrick(codeBrickConfig)
     }
 }
