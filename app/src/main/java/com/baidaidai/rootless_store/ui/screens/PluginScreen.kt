@@ -43,7 +43,7 @@ fun PluginManagementScreen(
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin:suspend (pluginId: String) -> Unit,
-    onActiveOneTimePlugin: (pluginId: String)-> Unit
+    onActivateOneTimePlugin: (pluginId: String)-> Unit
 ){
     val plugins by pluginScreenViewModel.plugins.collectAsState()
     val environments by pluginScreenViewModel.environments.collectAsState()
@@ -83,19 +83,19 @@ fun PluginManagementScreen(
         }
         when(selectedTabIndex){
             0 -> {
-                PluginScreen(
+                InstalledPluginList(
                     isBadgeVisible = isBadgeVisible,
-                    renderingList = plugins,
+                    plugins = plugins,
                     pluginScreenViewModel = pluginScreenViewModel,
                     navigateToExecuteScreen = navigateToExecuteScreen,
                     onAbortPlugin = onAbortPlugin,
-                    onButtonClick = onActiveOneTimePlugin
+                    onActivateOneTimePlugin = onActivateOneTimePlugin
                 )
             }
             1 -> {
-                EnvironmentScreen(
+                InstalledEnvironmentList(
                     isBadgeVisible = isBadgeVisible,
-                    renderingList = environments,
+                    environments = environments,
                     pluginScreenViewModel = pluginScreenViewModel
                 )
             }
@@ -104,13 +104,13 @@ fun PluginManagementScreen(
 }
 
 @Composable
-fun PluginScreen(
+fun InstalledPluginList(
     isBadgeVisible: Boolean,
-    renderingList: List<PluginManifestRoom>,
+    plugins: List<PluginManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin: suspend (pluginId: String) -> Unit,
-    onButtonClick: (pluginId: String)-> Unit
+    onActivateOneTimePlugin: (pluginId: String)-> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -127,7 +127,7 @@ fun PluginScreen(
     ) {
 
         items(
-            items = renderingList,
+            items = plugins,
             key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
         ){ pluginManifestRoom ->
 
@@ -185,7 +185,7 @@ fun PluginScreen(
                             }
                         }
                     },
-                    onButtonClick = { onButtonClick(pluginManifestRoom.pluginId) },
+                    onButtonClick = { onActivateOneTimePlugin(pluginManifestRoom.pluginId) },
                     onCardClick = {
                         if (pluginManifestRoom.isEnabled){
                             navigateToExecuteScreen(pluginManifestRoom.pluginId,false)
