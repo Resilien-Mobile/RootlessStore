@@ -13,7 +13,7 @@ class PostPluginExitNotificationUseCase @Inject constructor(
         val notificationPreference = notificationPreferenceRepositoryImpl.findNotificationPreference()
 
         if (notificationPreference != null){
-            if (notificationPreference.criticalWarning){
+            if (notificationPreference.isCriticalWarningEnabled){
                 notificationManagerGatewayImpl
                     .pushWarningNotificationOverBark(
                         title = notificationPreference.notificationTitle,

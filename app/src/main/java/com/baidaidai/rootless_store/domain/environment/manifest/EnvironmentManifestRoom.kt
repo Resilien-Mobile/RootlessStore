@@ -6,7 +6,8 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
 data class EnvironmentManifestRoom(
-    override val enabled: Boolean,
+    @ColumnInfo(name = "enabled")
+    override val isEnabled: Boolean,
     override val state: PluginState,
     override val source: PluginSource,
     override val installedVersion: String,
@@ -33,7 +34,7 @@ data class EnvironmentManifestRoom(
             author = "Rootless Store(Creater. Bai)",
             requiredEnvironment = HosterOverallStatus.LIMITED,
             environmentDescription = "Tested by Creater. Bai",
-            enabled = false,
+            isEnabled = false,
             state = PluginState.PermissionProblems,
             source = PluginSource.Local,
             entryPoint = "./index.sh",

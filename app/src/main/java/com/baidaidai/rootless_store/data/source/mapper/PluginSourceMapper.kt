@@ -12,7 +12,7 @@ object PluginSourceMapper {
 
     fun SourceAuthenticationInfoMetaDto.toPluginSourceAuthenticationMeta(): PluginSourceAuthenticationMeta {
         return PluginSourceAuthenticationMeta(
-            requireAuthentication = requireAuthentication
+            needsAuthentication = needsAuthentication
         )
     }
 

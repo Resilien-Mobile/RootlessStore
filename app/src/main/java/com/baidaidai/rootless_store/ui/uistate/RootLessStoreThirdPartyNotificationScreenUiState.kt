@@ -4,5 +4,5 @@ data class RootLessStoreThirdPartyNotificationScreenUiState(
     val barkApiKey: String = "",
     val notificationTitle:String? = null,
     val selfBuiltServer: String? = null,
-    val warningNotificationEnabled: Boolean = false
+    val isWarningNotificationEnabled: Boolean = false
 )

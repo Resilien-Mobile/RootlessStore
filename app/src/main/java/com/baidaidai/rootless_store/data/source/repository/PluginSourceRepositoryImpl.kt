@@ -38,7 +38,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
             /**
              * 验证，拉起WebView
              */
-            if (sourceAuthenticationInfo.requireAuthentication){
+            if (sourceAuthenticationInfo.needsAuthentication){
                 return PluginSourceEvent.SourceAuthentication
             }
 

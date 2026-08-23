@@ -81,7 +81,7 @@ fun EnvironmentScreen(
                     onSwitchClick = {
                         pluginScreenViewModel.setEnvironmentEnabled(
                             environmentId = environmentManifestRoom.environmentId,
-                            environmentEnabledStatus = !environmentManifestRoom.enabled
+                            isEnabled = !environmentManifestRoom.isEnabled
                         )
                     },
                     onCardLongClick = { actionCanSee = !actionCanSee },

@@ -8,9 +8,9 @@ class SetEnvironmentEnabledUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         environmentId: String,
-        environmentEnabledStatus: Boolean
+        isEnabled: Boolean
     ){
-        if (environmentEnabledStatus){
+        if (isEnabled){
             environmentRepositoryImpl.enableEnvironmentById(environmentId)
         }else{
             environmentRepositoryImpl.disableEnvironmentById(environmentId)

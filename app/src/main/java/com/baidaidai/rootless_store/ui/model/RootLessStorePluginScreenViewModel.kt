@@ -105,24 +105,24 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     }
     fun setPluginEnabled(
         pluginId: String,
-        pluginEnabledStatus: Boolean
+        isEnabled: Boolean
     ){
         viewModelScope.launch {
             setPluginEnabledUseCase(
                 pluginId = pluginId,
-                pluginEnabledStatus = pluginEnabledStatus
+                isEnabled = isEnabled
             )
         }
     }
 
     fun setEnvironmentEnabled(
         environmentId: String,
-        environmentEnabledStatus: Boolean
+        isEnabled: Boolean
     ){
         viewModelScope.launch {
             setEnvironmentEnabledUseCase(
                 environmentId = environmentId,
-                environmentEnabledStatus = environmentEnabledStatus
+                isEnabled = isEnabled
             )
         }
     }
