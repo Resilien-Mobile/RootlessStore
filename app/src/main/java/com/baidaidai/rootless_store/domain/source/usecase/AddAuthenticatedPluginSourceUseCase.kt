@@ -5,10 +5,10 @@ import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInpu
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import javax.inject.Inject
 
-class AddSourceByAuthenticationUseCase @Inject constructor(
-    val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
+class AddAuthenticatedPluginSourceUseCase @Inject constructor(
+    private val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ){
     suspend operator fun invoke(
         pluginSourceAuthFormInput: PluginSourceAuthFormInput
-    ): PluginSourceEvent = pluginSourceRepositoryImpl.insertPluginSourceByAuthentication(pluginSourceAuthFormInput)
+    ): PluginSourceEvent = pluginSourceRepositoryImpl.addAuthenticatedPluginSource(pluginSourceAuthFormInput)
 }

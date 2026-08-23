@@ -52,7 +52,7 @@ fun SourceScreen(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
             onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication,
         ) { userName, passWord ->
-            sourceScreenViewModel.addSourceByAuthentication(userName,passWord)
+            sourceScreenViewModel.addAuthenticatedPluginSource(userName,passWord)
         }
     }
 

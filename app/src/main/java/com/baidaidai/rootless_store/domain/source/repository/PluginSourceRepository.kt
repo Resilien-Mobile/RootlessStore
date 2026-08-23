@@ -13,10 +13,10 @@ interface PluginSourceRepository {
 
     val appDatabase: RoomDatabase
 
-    // Create
-    suspend fun insertPluginSourceByDefault(sourceEndpointInput: PluginSourceEndpointInput): PluginSourceEvent
+    // Add
+    suspend fun addPluginSource(sourceEndpointInput: PluginSourceEndpointInput): PluginSourceEvent
 
-    suspend fun insertPluginSourceByAuthentication(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceEvent
+    suspend fun addAuthenticatedPluginSource(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceEvent
 
     // Update
     suspend fun updatePluginSource(
