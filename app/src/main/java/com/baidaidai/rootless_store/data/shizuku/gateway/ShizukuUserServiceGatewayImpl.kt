@@ -46,7 +46,7 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         Log.d("ShizukuEndpointManager","shizukuEndpoint != null: ${shizukuUserService != null}")
     }
 
-    fun getShizukuUserService(): IShellService? {
+    fun findShizukuUserService(): IShellService? {
         return shizukuUserService
     }
 

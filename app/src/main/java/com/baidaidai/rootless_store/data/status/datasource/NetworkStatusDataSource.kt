@@ -34,7 +34,7 @@ class NetworkStatusDataSource @Inject constructor(
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read the first network interface snapshot
         val firstNetworkSnapshot = readNetworkSnapshot(

@@ -118,7 +118,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
             )
 
             shizukuUserServiceGatewayImpl
-                .getShizukuUserService()
+                .findShizukuUserService()
                 ?.exec(pluginDirectory,pluginEntryPoint,shouldMonitor,callback)
         }
         awaitClose {  }
@@ -134,10 +134,10 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
     fun abortPluginProcessByShizuku(pluginProcessPid: Int?): Boolean{
         return if (pluginProcessPid != null){
-            Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.getShizukuUserService() == null}")
+            Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.findShizukuUserService() == null}")
             Log.d("pid","$pluginProcessPid")
 
-            val result = shizukuUserServiceGatewayImpl.getShizukuUserService()
+            val result = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.kill(pluginProcessPid)
 
             Log.d("kill pid result",result.toString())

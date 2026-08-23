@@ -21,7 +21,7 @@ class KernelSuCompatible(
     fun exec(command: String): String {
         val stdout = StringBuilder()
         val stderr = StringBuilder()
-        val shizukuUserService = shizukuUserServiceGatewayImpl.getShizukuUserService()
+        val shizukuUserService = shizukuUserServiceGatewayImpl.findShizukuUserService()
 
         if (shizukuUserService == null) {
             return result(

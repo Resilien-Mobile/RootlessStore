@@ -18,7 +18,7 @@ class ObserveNetworkDashboardConfigUseCase @Inject constructor(
     operator fun invoke(): Flow<NetworkDashboardConfig> {
         return flow {
             while (currentCoroutineContext().isActive) {
-                val networkDashboardConfig = getNetworkDashboardConfigOnce()
+                val networkDashboardConfig = resolveNetworkDashboardConfig()
 
                 if (networkDashboardConfig == null) {
                     delay(NETWORK_DASHBOARD_RETRY_INTERVAL_MILLIS.milliseconds)
@@ -31,7 +31,7 @@ class ObserveNetworkDashboardConfigUseCase @Inject constructor(
         }
     }
 
-    private suspend fun getNetworkDashboardConfigOnce(): NetworkDashboardConfig? {
+    private suspend fun resolveNetworkDashboardConfig(): NetworkDashboardConfig? {
         return coroutineScope {
 
             // Get optional network availability
