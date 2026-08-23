@@ -260,17 +260,17 @@ val unspecified_scheme = ColorFamily(
 @Composable
 @ExperimentalMaterial3ExpressiveApi
 fun RootlessStoreTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    isDynamicColorEnabled: Boolean = true,
     content: @Composable() () -> Unit
 ) {
   val colorScheme = when {
-      dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+      isDynamicColorEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
           val context = LocalContext.current
-          if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+          if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
       }
-      darkTheme -> darkScheme
+      isDarkTheme -> darkScheme
       else -> lightScheme
   }
     MaterialExpressiveTheme(

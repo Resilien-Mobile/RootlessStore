@@ -174,7 +174,7 @@ object StartScreenNecessaryComponents {
             ) {
                 navBarItemsList.forEach { navBarItemSpec ->
                     ExpressiveNavigationRailItem(
-                        selected = currentDestination::class in navBarItemSpec.compatibleDestinationList,
+                        isSelected = currentDestination::class in navBarItemSpec.compatibleDestinationList,
                         onClick = {
                             onNavigate(navBarItemSpec.targetDestination)
                         },
@@ -195,11 +195,11 @@ object StartScreenNecessaryComponents {
 
     @Composable
     private fun ExpressiveNavigationRailItem(
-        selected: Boolean,
+        isSelected: Boolean,
         onClick: () -> Unit,
         icon: @Composable () -> Unit,
         modifier: Modifier = Modifier,
-        enabled: Boolean = true,
+        isEnabled: Boolean = true,
         label: @Composable (() -> Unit)? = null,
     ){
         val buttonColorsSelected = ButtonColors(
@@ -216,9 +216,9 @@ object StartScreenNecessaryComponents {
         )
 
         Button(
-            onClick = { if (enabled){ onClick() } },
+            onClick = { if (isEnabled){ onClick() } },
             contentPadding = PaddingValues(horizontal = 24.dp),
-            colors = if (selected) buttonColorsSelected else buttonColorsNoSelected,
+            colors = if (isSelected) buttonColorsSelected else buttonColorsNoSelected,
             modifier = modifier
                 .height(56.dp)
         ) {

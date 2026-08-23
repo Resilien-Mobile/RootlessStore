@@ -200,7 +200,7 @@ fun RootlessStoreStartScreenContainer(
                     PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
                         pluginInfoCount = pluginInfoCount,
                         textButtonOnClick = {
-                            pluginScreenViewModel.changeBadgeShowStatus()
+                            pluginScreenViewModel.toggleBadgeVisibility()
                         },
                         scrollBehavior = scrollBehavior
                     )
@@ -212,7 +212,7 @@ fun RootlessStoreStartScreenContainer(
                             alertDialogStatus = !alertDialogStatus
                         },
                         textButtonOnClick = {
-                            sourceScreenViewModel.changeDeleterShowStatus()
+                            sourceScreenViewModel.toggleDeleteActionVisibility()
                         },
                         sourceCount = sourceCount
                     )
@@ -300,17 +300,17 @@ fun RootlessStoreStartScreenContainer(
                     CodeBrickScreenKey -> {
                         val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
                         CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
-                            buttonMenuExpandStatus = codeBrickScreenUiState.buttonMenuExpandStatus,
+                            isButtonMenuExpanded = codeBrickScreenUiState.isButtonMenuExpanded,
                             onHandMenuItemClick = {
-                                codeBrickViewModel.changeEditorShowStatus(true)
-                                codeBrickViewModel.changeButtonMenuStatus()
+                                codeBrickViewModel.setBrickEditorVisible(true)
+                                codeBrickViewModel.setButtonMenuExpanded()
                             },
                             onJsonMenuItemClick = {
                                 codeBrickViewModel.createCodeBrickByJson()
-                                codeBrickViewModel.changeButtonMenuStatus()
+                                codeBrickViewModel.setButtonMenuExpanded()
                             },
                             onButtonMenuClick = {
-                                codeBrickViewModel.changeButtonMenuStatus(it)
+                                codeBrickViewModel.setButtonMenuExpanded(it)
                             }
                         )
                     }
@@ -384,7 +384,7 @@ fun RootlessStoreStartScreenContainer(
                             codeBrickViewModel = codeBrickViewModel,
                             rootlessStoreWindowSize = rootlessStoreWidthWindowSize,
                             onBackgroundClick = {
-                                codeBrickViewModel.changeButtonMenuStatus()
+                                codeBrickViewModel.setButtonMenuExpanded()
                             }
                         )
                     }

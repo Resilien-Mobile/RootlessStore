@@ -32,14 +32,14 @@ fun SourceScreen(
     onListItemClick: (pluginSourceInfo: PluginSourceInfo)-> Unit
 ){
     val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()
-    val sourceScreenLeadingDeleteButtonStatus by sourceScreenViewModel.deleterShowStatus.collectAsState()
+    val isDeleteActionVisible by sourceScreenViewModel.isDeleteActionVisible.collectAsState()
 
-    val authenticationBottomSheetShowStatus by sourceScreenViewModel.authenticationBottomSheetShowStatus.collectAsState()
-    val authenticationAlertDialogShowStatus by sourceScreenViewModel.authenticationAlertDialogShowStatus.collectAsState()
+    val isAuthenticationSheetVisible by sourceScreenViewModel.isAuthenticationSheetVisible.collectAsState()
+    val isAuthenticationDialogVisible by sourceScreenViewModel.isAuthenticationDialogVisible.collectAsState()
 
 
 
-    if(authenticationAlertDialogShowStatus){
+    if(isAuthenticationDialogVisible){
         SourceScreenAlertDialog(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
             onConfirmButtonClick = sourceScreenViewModel::startSourceAuthentication,
@@ -47,7 +47,7 @@ fun SourceScreen(
         )
     }
 
-    if (authenticationBottomSheetShowStatus){
+    if (isAuthenticationSheetVisible){
         SourceScreenAuthenticationModalBottomSheet(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
             onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication,
@@ -70,7 +70,7 @@ fun SourceScreen(
                 ){ listIndex, pluginSource ->
                     Column {
                         SourceScreenListItem(
-                            sourceScreenLeadingDeleteButtonStatus,
+                            isDeleteActionVisible,
                             pluginSourceInfo = pluginSource,
                             sourceScreenViewModel
                         ) {
