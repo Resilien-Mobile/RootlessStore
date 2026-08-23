@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.dp
 fun SourceScreenAuthenticationModalBottomSheet(
     onDismissRequest:()-> Unit = {},
     onDismissButtonClick: () -> Unit = {},
-    onSubmitButtonClick: (userName:String, passWord: String) -> Unit = { u, p ->  }
+    onSubmitButtonClick: (username:String, password: String) -> Unit = { u, p ->  }
 ){
 
-    var userName by rememberSaveable { mutableStateOf("") }
-    var passWord by rememberSaveable { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -53,16 +53,16 @@ fun SourceScreenAuthenticationModalBottomSheet(
                 style = MaterialTheme.typography.titleLargeEmphasized
             )
             OutlinedTextField(
-                value = userName,
-                onValueChange = { userName = it},
+                value = username,
+                onValueChange = { username = it},
                 label = {
                     Text("Username")
                 },
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
-                value = passWord,
-                onValueChange = { passWord = it },
+                value = password,
+                onValueChange = { password = it },
                 label = {
                     Text("Password")
                 },
@@ -86,7 +86,7 @@ fun SourceScreenAuthenticationModalBottomSheet(
 
                 Button(
                     onClick = {
-                        onSubmitButtonClick(userName,passWord)
+                        onSubmitButtonClick(username,password)
                     },
                     modifier = Modifier
                         .height(40.dp)

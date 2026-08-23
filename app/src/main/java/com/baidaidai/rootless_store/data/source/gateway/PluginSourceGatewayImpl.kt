@@ -1,13 +1,13 @@
 package com.baidaidai.rootless_store.data.source.gateway
 
-import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceAuthentication
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceCredentials
 import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSource
 import com.baidaidai.rootless_store.data.source.remote.api.PluginSourceApi
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationResponseDto
 import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceDto
 import com.baidaidai.rootless_store.domain.source.gateway.PluginSourceGateway
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import io.ktor.client.call.body
 import javax.inject.Inject
@@ -24,19 +24,19 @@ class PluginSourceGatewayImpl @Inject constructor(
         return pluginSource
     }
 
-    suspend fun fetchPluginSourceAuthenticationResult(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceAuthenticationResult {
+    suspend fun fetchPluginSourceAuthenticationResult(authenticationInput: PluginSourceAuthenticationInput): PluginSourceAuthenticationResult {
         return try {
-            val ktorResponse = pluginSourceApi.fetchPluginSourceAuthentication(pluginSourceAuthFormInput)
+            val ktorResponse = pluginSourceApi.fetchPluginSourceCredentials(authenticationInput)
             val httpStatusCode = ktorResponse.status.value
 
             when(httpStatusCode){
                 200 -> {
-                    val pluginSourceAuthenticationDto = ktorResponse.body<PluginSourceAuthenticationDto>()  // Convert JSON to DTO
-                    val pluginSourceAuthentication = pluginSourceAuthenticationDto.toPluginSourceAuthentication()
+                    val authenticationResponseDto = ktorResponse.body<PluginSourceAuthenticationResponseDto>()  // Convert JSON to DTO
+                    val pluginSourceCredentials = authenticationResponseDto.toPluginSourceCredentials()
 
                     PluginSourceAuthenticationResult.Success(
-                        userName = pluginSourceAuthentication.userName,
-                        userAccessToken = pluginSourceAuthentication.userAccessToken
+                        username = pluginSourceCredentials.username,
+                        accessToken = pluginSourceCredentials.accessToken
                     )
                 }
 

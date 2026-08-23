@@ -16,7 +16,8 @@ data class PluginSourceEntity(
     val sourceId: String,
     val sourceName: String,
     val sourceRemoteEndpoint: String,
-    val userAccessToken: String?,
+    @ColumnInfo(name = "userAccessToken")
+    val accessToken: String?,
 
     @Embedded
     val pluginSourceAuthenticationMetadata: PluginSourceAuthenticationMetadata,
@@ -32,7 +33,7 @@ data class PluginSourceEntity(
                 sourceId = pluginSourceDto.sourceId,
                 sourceName = pluginSourceDto.sourceName,
                 sourceRemoteEndpoint = pluginSourceDto.sourceRemoteEndpoint,
-                userAccessToken = null,
+                accessToken = null,
                 pluginSourceAuthenticationMetadata = pluginSourceDto.authenticationMetadata.toPluginSourceAuthenticationMetadata(),
             )
         }
@@ -45,7 +46,7 @@ data class PluginSourceEntity(
                 sourceId = pluginSource.sourceId,
                 sourceName = pluginSource.sourceName,
                 sourceRemoteEndpoint = pluginSource.sourceRemoteEndpoint,
-                userAccessToken = null,
+                accessToken = null,
                 pluginSourceAuthenticationMetadata = pluginSource.pluginSourceAuthenticationMetadata,
             )
         }

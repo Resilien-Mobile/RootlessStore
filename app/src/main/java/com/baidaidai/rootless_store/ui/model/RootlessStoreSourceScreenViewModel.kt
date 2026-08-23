@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.usecase.AddAuthenticatedPluginSourceUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.AddPluginSourceUseCase
@@ -69,7 +69,7 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
                 is PluginSourceEvent.SourceError -> {
                     _sourceEvent.emit(result)
                 }
-                is PluginSourceEvent.SourceAuthentication -> {
+                is PluginSourceEvent.AuthenticationRequired -> {
                     _isAuthenticationDialogVisible.value = true
                 }
                 is PluginSourceEvent.Success -> {
@@ -79,22 +79,22 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
         }
     }
 
-    fun addAuthenticatedPluginSource(userName: String, passWord: String){
-        val pluginSourceAuthFormInput = PluginSourceAuthFormInput(
+    fun addAuthenticatedPluginSource(username: String, password: String){
+        val authenticationInput = PluginSourceAuthenticationInput(
             sourceRemoteEndpoint = latestPluginSourceEndpoint,
-            userName = userName,
-            passWord = passWord
+            username = username,
+            password = password
         )
 
         viewModelScope.launch {
-            val result = addAuthenticatedPluginSourceUseCase(pluginSourceAuthFormInput)
+            val result = addAuthenticatedPluginSourceUseCase(authenticationInput)
 
             when(result){
                 is PluginSourceEvent.SourceError -> {
                     _sourceEvent.emit(result)
                     cancelSourceAuthentication()
                 }
-                is PluginSourceEvent.SourceAuthentication -> {
+                is PluginSourceEvent.AuthenticationRequired -> {
 
                 }
                 is PluginSourceEvent.Success -> {
