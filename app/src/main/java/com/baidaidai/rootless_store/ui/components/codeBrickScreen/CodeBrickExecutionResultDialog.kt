@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 
 @Composable
-fun CodeBrickResult(
-    resultContent: List<String>,
+fun CodeBrickExecutionResultDialog(
+    outputLines: List<String>,
     onDismissRequest: () -> Unit = {},
     onConfirmButtonClick: () -> Unit = {},
 ) {
@@ -35,9 +35,9 @@ fun CodeBrickResult(
         text = {
             LazyColumn {
                 itemsIndexed(
-                    items = resultContent
-                ){ index, content ->
-                    Text(content)
+                    items = outputLines
+                ){ _, outputLine ->
+                    Text(outputLine)
                 }
             }
         },
@@ -48,6 +48,6 @@ fun CodeBrickResult(
 
 @Composable
 @PreviewLightDark
-private fun _CodeBrickResultPreview_() {
+private fun _CodeBrickExecutionResultDialogPreview_() {
 
 }

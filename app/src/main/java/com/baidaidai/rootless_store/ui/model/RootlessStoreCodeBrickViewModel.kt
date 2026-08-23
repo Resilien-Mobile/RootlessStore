@@ -29,8 +29,8 @@ data class CodeBrickScreenUiState(
     val isExecutionResultVisible: Boolean = false,
     val isBrickSettingsVisible: Boolean = false,
     val isButtonMenuExpanded: Boolean = false,
-    val executeResultContent: List<String> = emptyList(),
-    val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", HosterOverallStatus.LIMITED,"")
+    val executionOutputLines: List<String> = emptyList(),
+    val selectedCodeBrick: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", HosterOverallStatus.LIMITED,"")
 )
 
 @HiltViewModel
@@ -50,7 +50,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val _codeBrickEvent = MutableSharedFlow<CodeBrickError?>()
     val codeBrickEvent = _codeBrickEvent.asSharedFlow()
 
-    val codeBrickConfigList = observeCodeBricksUseCase()
+    val codeBricks = observeCodeBricksUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
@@ -67,22 +67,19 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         }
     }
     fun showBrickSettings(
-        codeBrickConfig: CodeBrickConfig,
-        isVisible: Boolean = true,
+        codeBrickConfig: CodeBrickConfig
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                isBrickSettingsVisible = isVisible,
-                handlingCodeBrickConfig = codeBrickConfig
+                isBrickSettingsVisible = true,
+                selectedCodeBrick = codeBrickConfig
             )
         }
     }
-    fun hideBrickSettings(
-        isVisible: Boolean = false,
-    ){
+    fun hideBrickSettings(){
         _codeBrickScreenUiState.update {
             it.copy(
-                isBrickSettingsVisible = isVisible,
+                isBrickSettingsVisible = false,
             )
         }
     }
@@ -116,7 +113,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     // CUDE
 
     // Create
-    fun createCodeBrick(
+    fun addCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
@@ -169,17 +166,17 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            Log.d("codeBrickScreenUiState.executeResultContent", codeBrickScreenUiState.value.executeResultContent.toString())
+            Log.d("CodeBrickExecution", codeBrickScreenUiState.value.executionOutputLines.toString())
 
             // Clean Up
             _codeBrickScreenUiState.update { codeBrickScreenUiState ->
                 // Clean the cache
-                val voidUiState = codeBrickScreenUiState.copy(
-                    executeResultContent = emptyList()
+                val clearedUiState = codeBrickScreenUiState.copy(
+                    executionOutputLines = emptyList()
                 )
                 // Fill the Void Content
-                voidUiState.copy(
-                    executeResultContent = voidUiState.executeResultContent + "Void"
+                clearedUiState.copy(
+                    executionOutputLines = clearedUiState.executionOutputLines + "Void"
                 )
             }
 
@@ -189,13 +186,13 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
                 _codeBrickScreenUiState.update { codeBrickScreenUiState ->
 
                     // Clean the Void-Chars cache
-                    val voidUiState = codeBrickScreenUiState.copy(
-                        executeResultContent = codeBrickScreenUiState.executeResultContent - "Void"
+                    val clearedUiState = codeBrickScreenUiState.copy(
+                        executionOutputLines = codeBrickScreenUiState.executionOutputLines - "Void"
                     )
 
                     // Add results
-                    voidUiState.copy(
-                        executeResultContent = voidUiState.executeResultContent + shellResult.content
+                    clearedUiState.copy(
+                        executionOutputLines = clearedUiState.executionOutputLines + shellResult.content
                     )
                 }
             }
