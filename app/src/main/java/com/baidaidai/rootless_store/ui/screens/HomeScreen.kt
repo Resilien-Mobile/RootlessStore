@@ -45,7 +45,7 @@ fun HomeScreen(
     val temperatureStatus by homeScreenViewModel.temperatureStatus.collectAsState()
     val seLinuxStatus by homeScreenViewModel.seLinuxStatus.collectAsState()
     val kernelStatus by homeScreenViewModel.kernelStatus.collectAsState()
-    val androidAndAPIStatus by homeScreenViewModel.androidAndAPIStatus.collectAsState()
+    val androidAndApiStatus by homeScreenViewModel.androidAndApiStatus.collectAsState()
     val hosterOverallStatus by homeScreenViewModel.overallStatus.collectAsState()
     val dialogStats by homeScreenViewModel.dialogStatus.collectAsState()
     val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
@@ -55,9 +55,9 @@ fun HomeScreen(
 
     val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
         hosterOverallStatus = hosterOverallStatus,
-        osAndAPIVersion = androidAndAPIStatus,
+        osAndApiVersion = androidAndApiStatus,
         kernelVersion = kernelStatus,
-        selinuxStatus = seLinuxStatus,
+        seLinuxStatus = seLinuxStatus,
         pluginStatus = pluginStatus,
         memoryStatus = memoryStatus,
         storageStatus = storageStatus,

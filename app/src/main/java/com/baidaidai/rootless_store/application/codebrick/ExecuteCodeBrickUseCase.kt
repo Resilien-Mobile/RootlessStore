@@ -17,7 +17,7 @@ class ExecuteCodeBrickUseCase @Inject constructor(
             HosterOverallStatus.LIMITED,
             HosterOverallStatus.PERMISSIVE -> executeShellGatewayImpl.runCommandByAppShell(codeBrickConfig.codeBrickContent)
 
-            HosterOverallStatus.ADB -> executeShellGatewayImpl.runCommandByADBShell(codeBrickConfig.codeBrickContent)
+            HosterOverallStatus.ADB -> executeShellGatewayImpl.runCommandByAdbShell(codeBrickConfig.codeBrickContent)
             HosterOverallStatus.ROOTD -> executeShellGatewayImpl.runCommandByRootShell(codeBrickConfig.codeBrickContent)
         }
     }

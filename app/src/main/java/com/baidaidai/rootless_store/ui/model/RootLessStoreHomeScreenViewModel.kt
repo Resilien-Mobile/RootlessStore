@@ -15,13 +15,13 @@ import com.baidaidai.rootless_store.domain.status.model.NetDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
-import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndAPIStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndApiStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecutionContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetKernelStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveMemoryStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObservePluginStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetRootStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetSELinuxUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.GetSeLinuxStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveStorageStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveTemperatureStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetEnableChooserPreferenceUseCase
@@ -44,9 +44,9 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     observeStorageStatusUseCase: ObserveStorageStatusUseCase,
     observePluginStatusUseCase: ObservePluginStatusUseCase,
     observeTemperatureStatusUseCase: ObserveTemperatureStatusUseCase,
-    getSELinuxUseCase: GetSELinuxUseCase,
+    getSeLinuxStatusUseCase: GetSeLinuxStatusUseCase,
     getKernelStatusUseCase: GetKernelStatusUseCase,
-    getAndroidAndAPIStatusUseCase: GetAndroidAndAPIStatusUseCase,
+    getAndroidAndApiStatusUseCase: GetAndroidAndApiStatusUseCase,
     observeExecutionContextPreferenceUseCase: ObserveExecutionContextPreferenceUseCase,
     private val getRootStatusUseCase: GetRootStatusUseCase,
     private val observeOverallStatusUseCase: ObserveOverallStatusUseCase,
@@ -133,14 +133,14 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     private val _rootStatus = MutableStateFlow(getRootStatusUseCase())
     val rootStatus = _rootStatus.asStateFlow()
 
-    private val _seLinuxStatus = MutableStateFlow(getSELinuxUseCase())
+    private val _seLinuxStatus = MutableStateFlow(getSeLinuxStatusUseCase())
     val seLinuxStatus = _seLinuxStatus.asStateFlow()
 
     private val _kernelStatus = MutableStateFlow(getKernelStatusUseCase())
     val kernelStatus = _kernelStatus.asStateFlow()
 
-    private val _androidAndAPIStatus = MutableStateFlow(getAndroidAndAPIStatusUseCase())
-    val androidAndAPIStatus = _androidAndAPIStatus.asStateFlow()
+    private val _androidAndApiStatus = MutableStateFlow(getAndroidAndApiStatusUseCase())
+    val androidAndApiStatus = _androidAndApiStatus.asStateFlow()
 
     val overallStatus = observeOverallStatusUseCase().stateIn(
         scope = viewModelScope,

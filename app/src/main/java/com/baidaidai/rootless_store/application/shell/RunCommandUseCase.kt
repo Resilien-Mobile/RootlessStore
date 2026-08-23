@@ -14,7 +14,7 @@ class RunCommandUseCase @Inject constructor(
     operator fun invoke(shellCommandContainer: ShellCommandContainer): Flow<ShellResult> {
         return when(shellCommandContainer.shellEnvironment){
             ShellEnvironment.AppShell -> executeShellGatewayImpl.runCommandByAppShell(shellCommandContainer.commandContent)
-            ShellEnvironment.ADBShell -> executeShellGatewayImpl.runCommandByADBShell(shellCommandContainer.commandContent)
+            ShellEnvironment.AdbShell -> executeShellGatewayImpl.runCommandByAdbShell(shellCommandContainer.commandContent)
             ShellEnvironment.RootShell -> executeShellGatewayImpl.runCommandByRootShell(shellCommandContainer.commandContent)
         }
     }

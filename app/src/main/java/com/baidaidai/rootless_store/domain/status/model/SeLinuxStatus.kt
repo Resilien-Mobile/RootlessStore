@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.domain.status.model
 
-enum class SELinuxStatus {
+enum class SeLinuxStatus {
     Enforcing,
     Permissive,
     Disabled,

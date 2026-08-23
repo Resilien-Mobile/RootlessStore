@@ -1,12 +1,12 @@
 package com.baidaidai.rootless_store.data.status.datasource
 
 import android.util.Log
-import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
+import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.topjohnwu.superuser.Shell
 import javax.inject.Inject
 
-class SELinuxStatusDataSource @Inject constructor() {
-    fun returnSELinuxStatus(): SELinuxStatus{
+class SeLinuxStatusDataSource @Inject constructor() {
+    fun getSeLinuxStatus(): SeLinuxStatus{
         val shell = Shell.Builder.create()
             .setFlags(Shell.FLAG_REDIRECT_STDERR)
             .build("sh")
@@ -19,19 +19,19 @@ class SELinuxStatusDataSource @Inject constructor() {
 
         if (result.isSuccess) {
             return when (output) {
-                "Enforcing" -> SELinuxStatus.Enforcing
-                "Permissive" -> SELinuxStatus.Permissive
-                "Disabled" -> SELinuxStatus.Disabled
-                else -> SELinuxStatus.Unknow
+                "Enforcing" -> SeLinuxStatus.Enforcing
+                "Permissive" -> SeLinuxStatus.Permissive
+                "Disabled" -> SeLinuxStatus.Disabled
+                else -> SeLinuxStatus.Unknow
             }
         }
 
         return if (output.endsWith("Permission denied")) {
-            SELinuxStatus.Enforcing
+            SeLinuxStatus.Enforcing
         } else {
             Log.d("err",result.err.isEmpty().toString())
             Log.d("out",result.out.isEmpty().toString())
-            SELinuxStatus.Unknow
+            SeLinuxStatus.Unknow
         }
     }
 }
