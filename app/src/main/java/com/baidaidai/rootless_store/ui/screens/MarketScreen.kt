@@ -19,26 +19,26 @@ fun MarketScreen(
     navigateToPluginScreen: () -> Unit
 ){
 
-    val _contentPadding = PaddingValues(vertical = 15.dp)
+    val listContentPadding = PaddingValues(vertical = 15.dp)
 
-    val remoteModuleList = marketScreenViewModel.remoteModuleList.collectAsLazyPagingItems()
+    val marketManifests = marketScreenViewModel.marketManifests.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = Modifier
             .padding(contentPadding)
             .padding(horizontal = 15.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = _contentPadding
+        contentPadding = listContentPadding
     ) {
         items(
-            count = remoteModuleList.itemCount
-        ){ moduleIndex ->
+            count = marketManifests.itemCount
+        ){ manifestIndex ->
 
-            val remoteModuleListContent = remoteModuleList[moduleIndex]
+            val marketManifest = marketManifests[manifestIndex]
             PluginInfoContainerRemote(
-                manifest = remoteModuleListContent!!
+                manifest = marketManifest!!
             ) {
-                marketScreenViewModel.installModule(remoteModuleListContent)
+                marketScreenViewModel.installMarketManifest(marketManifest)
                 navigateToPluginScreen()
             }
 

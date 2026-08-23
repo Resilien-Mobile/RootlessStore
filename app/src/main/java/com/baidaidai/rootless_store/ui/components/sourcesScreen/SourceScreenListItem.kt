@@ -27,7 +27,7 @@ fun SourceScreenListItem(
     isDeleteActionVisible: Boolean,
     pluginSource: PluginSource,
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
-    onListItemClick:(pluginSourceUri: String)-> Unit
+    onListItemClick:(pluginSourceEndpoint: String)-> Unit
 ){
     ListItem(
         onClick = {

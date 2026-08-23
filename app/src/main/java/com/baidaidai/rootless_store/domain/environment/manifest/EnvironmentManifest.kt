@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
-import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
+import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
-sealed interface EnvironmentManifest: ModuleManifestCollection {
+sealed interface EnvironmentManifest: MarketManifest {
     // ─────────────────────────────────────────────────────────────
     // Environment Basic Infos
     // ─────────────────────────────────────────────────────────────

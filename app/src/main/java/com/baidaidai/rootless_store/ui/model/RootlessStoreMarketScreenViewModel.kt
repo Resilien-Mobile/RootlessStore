@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.baidaidai.rootless_store.domain.market.error.MarketError
-import com.baidaidai.rootless_store.domain.market.usecase.FetchRemotePluginsUseCase
+import com.baidaidai.rootless_store.domain.market.usecase.FetchMarketManifestsUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.application.environment.InstallEnvironmentFromMarketUseCase
 import com.baidaidai.rootless_store.application.plugin.InstallPluginFromMarketUseCase
-import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
+import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootlessStoreMarketScreenViewModel @Inject constructor(
-    private val fetchRemotePluginsUseCase: FetchRemotePluginsUseCase,
+    private val fetchMarketManifestsUseCase: FetchMarketManifestsUseCase,
     private val installPluginFromMarketUseCase: InstallPluginFromMarketUseCase,
     private val installEnvironmentFromMarketUseCase: InstallEnvironmentFromMarketUseCase
 ): ViewModel() {
@@ -53,13 +53,13 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
     val currentPluginSource = _currentPluginSource.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val remoteModuleList = _pluginSourceEndpoint
+    val marketManifests = _pluginSourceEndpoint
         .filterNotNull()
         .flatMapLatest { pluginSourceEndpoint ->  // Use the latest value
 
             Log.d("RootlessStoreMarketScreenViewModel._pluginSourceEndpoint",pluginSourceEndpoint)
 
-            fetchRemotePluginsUseCase(pluginSourceEndpoint){ marketError ->
+            fetchMarketManifestsUseCase(pluginSourceEndpoint){ marketError ->
                 // Error Callback Lambda
                 _marketEvent.emit(marketError)
             }
@@ -90,14 +90,14 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
 
     }
 
-    fun installModule(moduleManifest: ModuleManifestCollection){
+    fun installMarketManifest(marketManifest: MarketManifest){
         viewModelScope.launch {
-            when(moduleManifest){
+            when(marketManifest){
                 is PluginManifestRemote -> {
-                    installPluginFromMarketUseCase(moduleManifest.pluginUri,moduleManifest)
+                    installPluginFromMarketUseCase(marketManifest.pluginUri,marketManifest)
                 }
                 is EnvironmentManifestRemote -> {
-                    installEnvironmentFromMarketUseCase(moduleManifest.environmentUri,moduleManifest)
+                    installEnvironmentFromMarketUseCase(marketManifest.environmentUri,marketManifest)
                 }
                 else -> Unit
             }
