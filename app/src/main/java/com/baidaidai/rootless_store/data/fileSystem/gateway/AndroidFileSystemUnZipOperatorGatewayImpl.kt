@@ -36,8 +36,8 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
         return getInternalEnvironmentRootDirectory().apply { mkdirs() }
     }
 
-    private fun createVoidFileDirectory(pluginRootDirectory: File, directoryName: String): File {
-        return File(pluginRootDirectory, directoryName)
+    private fun resolveChildFile(parentDirectory: File, childName: String): File {
+        return File(parentDirectory, childName)
     } // /File/Plugin/PLUGIN
 
     // Un-Zip FS Operator
@@ -89,9 +89,9 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
             }
         }
 
-        // Create Void Directory
+        // Resolve Target Directory
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
-        val createdFileDirectory = createVoidFileDirectory(internalPluginRootDirectory, directoryName).apply {
+        val createdFileDirectory = resolveChildFile(internalPluginRootDirectory, directoryName).apply {
             mkdirs()
         }
 
@@ -136,9 +136,9 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
             }
         }
 
-        // Create Void Directory
+        // Resolve Target Directory
         val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
-        val createdFileDirectory = createVoidFileDirectory(internalEnvironmentRootDirectory, directoryName).apply {
+        val createdFileDirectory = resolveChildFile(internalEnvironmentRootDirectory, directoryName).apply {
             mkdirs()
         }
 
@@ -169,9 +169,9 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     @Suppress("UNUSED_PARAMETER")
     fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String) {
 
-        // Provide void file, for copy use
+        // Resolve target directory for copy
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
-        createVoidFileDirectory(internalPluginRootDirectory, directoryName)
+        resolveChildFile(internalPluginRootDirectory, directoryName)
         val operationFile = File(internalPluginRootDirectory, directoryName).apply {
             mkdirs()
         }
@@ -206,9 +206,9 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
         directoryName: String
     ) {
 
-        // Provide void file, for copy use
+        // Resolve target directory for copy
         val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
-        createVoidFileDirectory(internalEnvironmentRootDirectory, directoryName)
+        resolveChildFile(internalEnvironmentRootDirectory, directoryName)
         val operationFile = File(internalEnvironmentRootDirectory, directoryName).apply {
             mkdirs()
         }
