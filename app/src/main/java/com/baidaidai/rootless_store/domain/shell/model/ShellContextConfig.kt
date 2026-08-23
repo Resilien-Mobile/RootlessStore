@@ -2,8 +2,8 @@ package com.baidaidai.rootless_store.domain.shell.model
 
 interface ShellContextConfig {
 
-    val environmentPATH: String
-    val environmentLDPATH: String
+    val environmentPath: String
+    val environmentLdPath: String
     val environmentConfig: Map<String, String>
 
 }

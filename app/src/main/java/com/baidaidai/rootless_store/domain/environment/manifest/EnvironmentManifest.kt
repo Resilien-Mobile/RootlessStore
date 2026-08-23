@@ -23,7 +23,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
 
     val environmentPackageName: String
 
-    val environmentID: String
+    val environmentId: String
 
     /**
      * Environment icon reference shown in the environment list.
@@ -36,7 +36,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
      * - File URI/path: "file://..." or "/icons/xxx.png"
      * - Relative path inside plugin package/zip: "icons/icon.png"
      */
-    val iconURI: String?
+    val iconUri: String?
 
     /**
      * Environment author / publisher name.
@@ -83,7 +83,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
     // - source: PluginSource
     interface EnvironmentManifestLocal: EnvironmentManifest
     interface EnvironmentManifestRemote: EnvironmentManifest {
-        val environmentURI: String
+        val environmentUri: String
     }
     interface EnvironmentManifestRoom: EnvironmentManifest {
         val enabled: Boolean

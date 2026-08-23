@@ -48,7 +48,7 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
 ): ViewModel() {
 
 //    private val _pluginInfoList = observePlugins()  // Will change back to PluginManifestLocal feature
-    private val _fileURI = MutableStateFlow<Uri>(value = Uri.EMPTY)
+    private val _fileUri = MutableStateFlow<Uri>(value = Uri.EMPTY)
     private val _badgeShowState = MutableStateFlow(false)
 
     private val _pluginEvent = MutableSharedFlow<PluginError?>()
@@ -72,16 +72,16 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
         initialValue = 0
     )
 
-    val fileURI = _fileURI.asStateFlow()
+    val fileUri = _fileUri.asStateFlow()
     val badgeShowState = _badgeShowState.asStateFlow()
 
-    fun updateFileURI(uri: Uri){
-        _fileURI.value = uri
+    fun updateFileUri(uri: Uri){
+        _fileUri.value = uri
     }
 
     fun installPlugin(){
         viewModelScope.launch {
-            val result = installModuleUseCase(fileURI.value)
+            val result = installModuleUseCase(fileUri.value)
             if (result is PluginError){
                 _pluginEvent.emit(result)
             }else{
@@ -104,24 +104,24 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
         }
     }
     fun setPluginEnabled(
-        pluginID: String,
+        pluginId: String,
         pluginEnabledStatus: Boolean
     ){
         viewModelScope.launch {
             setPluginEnabledUseCase(
-                pluginID = pluginID,
+                pluginId = pluginId,
                 pluginEnabledStatus = pluginEnabledStatus
             )
         }
     }
 
     fun setEnvironmentEnabled(
-        environmentID: String,
+        environmentId: String,
         environmentEnabledStatus: Boolean
     ){
         viewModelScope.launch {
             setEnvironmentEnabledUseCase(
-                environmentID = environmentID,
+                environmentId = environmentId,
                 environmentEnabledStatus = environmentEnabledStatus
             )
         }

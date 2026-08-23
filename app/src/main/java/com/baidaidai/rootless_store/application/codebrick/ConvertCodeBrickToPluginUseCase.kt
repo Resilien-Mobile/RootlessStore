@@ -36,13 +36,13 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
     ) {
 
         // Build Plugin Manifest
-        val pluginID = codeBrickConfig.unixTimeStamp.toString()
+        val pluginId = codeBrickConfig.unixTimeStamp.toString()
         val pluginManifestLocal = PluginManifestLocal(
             installedVersion = "1.0.0",
             pluginRenderingName = codeBrickConfig.codeBrickTitle,
             pluginPackageName = codeBrickConfig.codeBrickTitle,
-            pluginID = pluginID,
-            iconURI = null,
+            pluginId = pluginId,
+            iconUri = null,
             author = "CodeBrick",
             pluginDescription = "Generated from CodeBrick",
             requiredEnvironment = codeBrickConfig.codeBrickEnvironment,

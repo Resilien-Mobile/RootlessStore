@@ -30,12 +30,12 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     // Update
-    override suspend fun enablePluginByID(pluginID: String) {
-        pluginDao.updatePluginEnabled(pluginId = pluginID, isEnabled = true)
+    override suspend fun enablePluginById(pluginId: String) {
+        pluginDao.updatePluginEnabled(pluginId = pluginId, isEnabled = true)
     }
 
-    override suspend fun disablePluginByID(pluginID: String) {
-        pluginDao.updatePluginEnabled(pluginId = pluginID, isEnabled = false)
+    override suspend fun disablePluginById(pluginId: String) {
+        pluginDao.updatePluginEnabled(pluginId = pluginId, isEnabled = false)
     }
 
     override suspend fun disableAllPlugin() {
@@ -44,9 +44,9 @@ class PluginRepositoryImpl @Inject constructor(
 
     // READ
     override suspend fun findPluginInfo(
-        pluginID: String
+        pluginId: String
     ): PluginManifestRoom? {
-        val pluginInfo = pluginDao.findPluginById(pluginID)
+        val pluginInfo = pluginDao.findPluginById(pluginId)
         return pluginInfo
     }
 
@@ -69,8 +69,8 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    override suspend fun deletePluginInfoByID(pluginID: String) {
-        pluginDao.deletePluginById(pluginID)
+    override suspend fun deletePluginInfoById(pluginId: String) {
+        pluginDao.deletePluginById(pluginId)
     }
 
 }

@@ -23,10 +23,10 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
     private val pidRegex = Regex("""^\s*-\s*PID:(\d+)\s*$""")
 
     suspend operator fun invoke(
-        pluginID: String
+        pluginId: String
     ) : Flow<ExecutionResult> {
 
-        val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
+        val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginId)!!
         val enableMonitor = settingPreferenceRepositoryImpl.observeEnableNotifyPluginStatus().first()
 
         var pidSaved = false

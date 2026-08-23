@@ -82,7 +82,7 @@ fun PluginInfoContainerLocal(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 DynamicPluginIcon(
-                    iconUri = pluginManifestRoom.iconURI?.toUri(),
+                    iconUri = pluginManifestRoom.iconUri?.toUri(),
                     contentDescription = "Plugin Icon",
                     modifier = Modifier
                         .clip(CircleShape)
@@ -204,7 +204,7 @@ fun PluginInfoContainerLocal(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 DynamicPluginIcon(
-                    iconUri = environmentManifest.iconURI?.toUri(),
+                    iconUri = environmentManifest.iconUri?.toUri(),
                     contentDescription = "Plugin Icon",
                     modifier = Modifier
                         .clip(CircleShape)

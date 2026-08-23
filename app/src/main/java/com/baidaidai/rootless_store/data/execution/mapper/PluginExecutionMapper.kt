@@ -7,7 +7,7 @@ object PluginExecutionMapper {
 
     fun PluginExecutionEntity.toPluginExecutionStatus(): PluginExecutionStatus {
         return PluginExecutionStatus(
-            pluginID = pluginID,
+            pluginId = pluginId,
             executionState = executionState,
             executionPid = executionPid,
             executionContext = executionContext

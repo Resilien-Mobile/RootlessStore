@@ -32,10 +32,10 @@ fun CodeBrickScreen(
 ){
 
     val codeBrickConfigList by codeBrickViewModel.codeBrickConfigList.collectAsState()
-    val codeBrickScreenUIState by codeBrickViewModel.codeBrickScreenUIState.collectAsState()
+    val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
 
     // Editor show status
-    if (codeBrickScreenUIState.brickEditorCanShow){
+    if (codeBrickScreenUiState.brickEditorCanShow){
         CodeBrickEditor(
             onDismissRequest = {
                 codeBrickViewModel.changeEditorShowStatus(false)
@@ -53,15 +53,15 @@ fun CodeBrickScreen(
                 codeBrickViewModel.changeEditorShowStatus(false)
             },
         )
-    } else if (codeBrickScreenUIState.executeResultCanShow) {
+    } else if (codeBrickScreenUiState.executeResultCanShow) {
         CodeBrickResult(
-            resultContent = codeBrickScreenUIState.executeResultContent,
+            resultContent = codeBrickScreenUiState.executeResultContent,
             onDismissRequest = codeBrickViewModel::changeResultShowStatus,
             onConfirmButtonClick = codeBrickViewModel::changeResultShowStatus
         )
-    } else if (codeBrickScreenUIState.brickSettingCanShow) {
+    } else if (codeBrickScreenUiState.brickSettingCanShow) {
         CodeBrickSetting(
-            codeBrickConfig = codeBrickScreenUIState.handlingCodeBrickConfig,
+            codeBrickConfig = codeBrickScreenUiState.handlingCodeBrickConfig,
             onDismissRequest = {
                 codeBrickViewModel.closeSettingShowStatus(false)
             },

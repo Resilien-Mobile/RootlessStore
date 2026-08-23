@@ -91,7 +91,7 @@ fun RootlessStoreStartScreenContainer(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let {
-            pluginScreenViewModel.updateFileURI(uri)
+            pluginScreenViewModel.updateFileUri(uri)
             pluginScreenViewModel.installPlugin()
         }
     }
@@ -160,21 +160,21 @@ fun RootlessStoreStartScreenContainer(
         val uri = fileIntentUri ?: return@LaunchedEffect
 
         navigationBackStack.add(PluginScreenKey)
-        pluginScreenViewModel.updateFileURI(uri)
+        pluginScreenViewModel.updateFileUri(uri)
         pluginScreenViewModel.installPlugin()
         onHandlerEnded()
     }
 
 
     @Composable
-    fun executeViewModelBuilder(pluginID: String): RootLessStoreExecuteScreenViewModel {
-        val viewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(viewModelStoreOwner = viewModelStoreOwner, key = pluginID)
+    fun executeViewModelBuilder(pluginId: String): RootLessStoreExecuteScreenViewModel {
+        val viewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(viewModelStoreOwner = viewModelStoreOwner, key = pluginId)
         return viewModel
     }
 
     val currentExecuteViewModel =
         if (currentDestination is ExecuteScreenKey) {
-            executeViewModelBuilder(currentDestination.pluginID)
+            executeViewModelBuilder(currentDestination.pluginId)
         }else{
             executeViewModelBuilder("abc")
         }
@@ -220,7 +220,7 @@ fun RootlessStoreStartScreenContainer(
                         executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
                             scrollBehavior = scrollBehavior,
                             onExecuteScreenStopButtonClick = {
-                                currentExecuteViewModel.abortPluginProcess(currentDestination.pluginID)
+                                currentExecuteViewModel.abortPluginProcess(currentDestination.pluginId)
                             },
                             onExecuteScreenBackButtonClick = {
                                 navigationBackStack.removeLastOrNull()
@@ -298,9 +298,9 @@ fun RootlessStoreStartScreenContainer(
                     }
 
                     CodeBrickScreenKey -> {
-                        val codeBrickScreenUIState by codeBrickViewModel.codeBrickScreenUIState.collectAsState()
+                        val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
                         CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
-                            buttonMenuExpandStatus = codeBrickScreenUIState.buttonMenuExpandStatus,
+                            buttonMenuExpandStatus = codeBrickScreenUiState.buttonMenuExpandStatus,
                             onHandMenuItemClick = {
                                 codeBrickViewModel.changeEditorShowStatus(true)
                                 codeBrickViewModel.changeButtonMenuStatus()
@@ -334,7 +334,7 @@ fun RootlessStoreStartScreenContainer(
                         alertDialogStatus = !alertDialogStatus
                     },
                     onConfirmButtonClick = {
-                        sourceScreenViewModel.addSourceByDefault(sourceURI = sourceDomainContent)
+                        sourceScreenViewModel.addSourceByDefault(sourceUri = sourceDomainContent)
                         alertDialogStatus = !alertDialogStatus
                     },
                     onDismissButtonClick = {
@@ -366,15 +366,15 @@ fun RootlessStoreStartScreenContainer(
                         RootlessStorePluginScreenContainer(
                             contentPadding = contentPadding,
                             pluginScreenViewModel = pluginScreenViewModel,
-                            navigateToExecuteScreen = { pluginID, isExecutePlugin ->
+                            navigateToExecuteScreen = { pluginId, isExecutePlugin ->
                                 navigationBackStack
-                                    .add(ExecuteScreenKey(pluginID,isExecutePlugin))
+                                    .add(ExecuteScreenKey(pluginId,isExecutePlugin))
                             },
-                            onAbortPlugin = { pluginID ->
-                                currentExecuteViewModel.abortPluginProcess(pluginID)
+                            onAbortPlugin = { pluginId ->
+                                currentExecuteViewModel.abortPluginProcess(pluginId)
                             },
-                            onActiveOneTimePlugin = { pluginID ->
-                                currentExecuteViewModel.executePlugin(pluginID)
+                            onActiveOneTimePlugin = { pluginId ->
+                                currentExecuteViewModel.executePlugin(pluginId)
                             }
                         )
                     }
@@ -416,18 +416,18 @@ fun RootlessStoreStartScreenContainer(
                     entry<ExecuteScreenKey> { executeScreenKey ->
 
                         // The overall constructor of ExecuteScreenViewModel
-                        val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginID, viewModelStoreOwner = viewModelStoreOwner)
+                        val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginId, viewModelStoreOwner = viewModelStoreOwner)
 
-                        val pluginID = executeScreenKey.pluginID
+                        val pluginId = executeScreenKey.pluginId
                         val isExecutePlugin = executeScreenKey.isExecutePlugin
 
-                        Log.d("ExecuteScreenKey.pluginID",pluginID)
+                        Log.d("ExecuteScreenKey.pluginId",pluginId)
                         Log.d("ExecuteScreenKey.isExecutePlugin",isExecutePlugin.toString())
 
                         // Function debouncing
-                        LaunchedEffect(pluginID, isExecutePlugin) {
+                        LaunchedEffect(pluginId, isExecutePlugin) {
                             if (isExecutePlugin) {
-                                executeScreenViewModel.executePlugin(pluginID)
+                                executeScreenViewModel.executePlugin(pluginId)
                             }
                         }
 

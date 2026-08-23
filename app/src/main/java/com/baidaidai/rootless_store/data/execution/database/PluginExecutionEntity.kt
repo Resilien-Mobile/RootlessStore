@@ -11,7 +11,8 @@ import javax.inject.Inject
 @Entity(tableName = "PluginExecuteStatusEntry")
 data class PluginExecutionEntity @Inject constructor(
     @PrimaryKey
-    val pluginID: String,
+    @ColumnInfo(name = "pluginID")
+    val pluginId: String,
     @ColumnInfo(name = "executeStatus")
     val executionState: PluginState,
     @ColumnInfo(name = "executePID")
@@ -22,7 +23,7 @@ data class PluginExecutionEntity @Inject constructor(
     companion object{
         fun fromPluginManifest(pluginManifest: PluginManifest, executionPid: Int): PluginExecutionEntity{
             return PluginExecutionEntity(
-                pluginID = pluginManifest.pluginID,
+                pluginId = pluginManifest.pluginId,
                 executionState = PluginState.Great,
                 executionPid = executionPid
             )

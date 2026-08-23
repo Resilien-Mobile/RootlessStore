@@ -94,10 +94,10 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
         viewModelScope.launch {
             when(moduleManifest){
                 is PluginManifestRemote -> {
-                    installPluginFromMarketUseCase(moduleManifest.pluginURI,moduleManifest)
+                    installPluginFromMarketUseCase(moduleManifest.pluginUri,moduleManifest)
                 }
                 is EnvironmentManifestRemote -> {
-                    installEnvironmentFromMarketUseCase(moduleManifest.environmentURI,moduleManifest)
+                    installEnvironmentFromMarketUseCase(moduleManifest.environmentUri,moduleManifest)
                 }
                 else -> Unit
             }

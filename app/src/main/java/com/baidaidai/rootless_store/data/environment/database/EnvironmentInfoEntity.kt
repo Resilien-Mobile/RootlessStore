@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.environment.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
@@ -11,19 +12,21 @@ import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 data class EnvironmentInfoEntity(
 
     /**
-     * environmentID is primaryKey
+     * environmentId is primaryKey
      *
      * See more infos
      * @example com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
-     */
+    */
     @PrimaryKey
-    val environmentID: String,
+    @ColumnInfo(name = "environmentID")
+    val environmentId: String,
 
     // Environment Basic Infos
     val installedVersion: String,
     val environmentRenderingName: String,
     val environmentPackageName: String,
-    val iconURI: String?,
+    @ColumnInfo(name = "iconURI")
+    val iconUri: String?,
     val author: String,
     val environmentDescription:String,
 
@@ -48,13 +51,13 @@ data class EnvironmentInfoEntity(
             environmentManifestRoom: EnvironmentManifestRoom
         ): EnvironmentInfoEntity =
             EnvironmentInfoEntity(
-                environmentID = environmentManifestRoom.environmentID,
+                environmentId = environmentManifestRoom.environmentId,
 
                 // Basic Infos
                 installedVersion = environmentManifestRoom.installedVersion,
                 environmentRenderingName = environmentManifestRoom.environmentRenderingName,
                 environmentPackageName = environmentManifestRoom.environmentPackageName,
-                iconURI = environmentManifestRoom.iconURI,
+                iconUri = environmentManifestRoom.iconUri,
                 author = environmentManifestRoom.author,
                 environmentDescription = environmentManifestRoom.environmentDescription,
 

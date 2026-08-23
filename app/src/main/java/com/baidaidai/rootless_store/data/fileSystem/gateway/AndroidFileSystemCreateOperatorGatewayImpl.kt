@@ -43,10 +43,10 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         return targetFile
     }
 
-    fun copyUriToFile(originFileURI: Uri, targetFile: File): File {
+    fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
         targetFile.parentFile?.mkdirs()
 
-        context.contentResolver.openInputStream(originFileURI).use { originInputStream ->
+        context.contentResolver.openInputStream(originFileUri).use { originInputStream ->
             FileOutputStream(targetFile).use { targetOutputStream ->
                 originInputStream!!.copyTo(targetOutputStream)
             }

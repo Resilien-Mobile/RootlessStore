@@ -93,7 +93,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             magiskTemplateDirectory.mkdirs()
 
             androidFileSystemUnZipOperatorGatewayImpl.unzipFromFileToDirectory(
-                originFileURI = uri,
+                originFileUri = uri,
                 targetDirectory = magiskTemplateDirectory
             )
 
@@ -163,8 +163,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
             installedVersion = version,
             pluginRenderingName = name,
             pluginPackageName = name.replace(" ",""), // Avoid spacing, Prevent misidentification
-            pluginID = id,
-            iconURI = null,
+            pluginId = id,
+            iconUri = null,
             author = author,
             pluginDescription = description,
             requiredEnvironment = HosterOverallStatus.ADB,

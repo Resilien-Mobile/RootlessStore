@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.plugin.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
@@ -11,19 +12,21 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 data class PluginInfoEntity(
 
     /**
-     * pluginID is primaryKey
+     * pluginId is primaryKey
      *
      * See more infos
      * @example com.baidaidai.rootless_store.domain.pluginManiFest.model.PluginMainFest
-     */
+    */
     @PrimaryKey
-    val pluginID: String,
+    @ColumnInfo(name = "pluginID")
+    val pluginId: String,
 
     // Plugin Basic Infos
     val installedVersion: String,
     val pluginRenderingName: String,
     val pluginPackageName: String,
-    val iconURI: String?,
+    @ColumnInfo(name = "iconURI")
+    val iconUri: String?,
     val author: String,
     val pluginDescription:String,
 
@@ -34,5 +37,6 @@ data class PluginInfoEntity(
     val source: PluginSource,
     val entryPoint: String,
     val pluginRunModel: PluginRunModel,
-    val webUIEntryPoint: String?
+    @ColumnInfo(name = "webUIEntryPoint")
+    val webUiEntryPoint: String?
 )

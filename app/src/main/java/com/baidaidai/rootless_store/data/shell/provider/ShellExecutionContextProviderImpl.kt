@@ -14,30 +14,30 @@ class ShellExecutionContextProviderImpl @Inject constructor(
 
     suspend fun resolveAppShellContext(): AppShellContextConfig{
         val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
-        val environmentPATH = environmentRepositoryImpl.resolveEnvironmentPath()
-        val environmentLDPATH = environmentRepositoryImpl.resolveEnvironmentLdPath()
+        val environmentPath = environmentRepositoryImpl.resolveEnvironmentPath()
+        val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
 
         return AppShellContextConfig(
             jumpToDirectory = preferences.jumpToDirectory,
-            environmentPATH = environmentPATH,
-            environmentLDPATH = environmentLDPATH,
+            environmentPath = environmentPath,
+            environmentLdPath = environmentLdPath,
             environmentConfig = environmentConfig,
         )
     }
 
     suspend fun resolveAdbShellContext(): AdbShellContextConfig{
         val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
-        val environmentPATH = environmentRepositoryImpl.resolveEnvironmentPath()
-        val environmentLDPATH = environmentRepositoryImpl.resolveEnvironmentLdPath()
+        val environmentPath = environmentRepositoryImpl.resolveEnvironmentPath()
+        val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
         val environmentConfigKeyList = environmentRepositoryImpl.resolveEnvironmentConfigKeys()
         val environmentConfigValueList = environmentRepositoryImpl.resolveEnvironmentConfigValues()
 
         return AdbShellContextConfig(
             jumpToDirectory = preferences.jumpToDirectory,
-            environmentPATH = environmentPATH,
-            environmentLDPATH = environmentLDPATH,
+            environmentPath = environmentPath,
+            environmentLdPath = environmentLdPath,
             environmentConfig = environmentConfig,
             environmentConfigKeyList = environmentConfigKeyList,
             environmentConfigValueList = environmentConfigValueList,

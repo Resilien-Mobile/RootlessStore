@@ -54,7 +54,7 @@ sealed interface PluginManifest: ModuleManifestCollection {
      * Why “more random” helps:
      * - Higher entropy reduces collision probability, which reduces DB key conflicts.
      */
-    val pluginID: String
+    val pluginId: String
 
     /**
      * Plugin icon reference shown in the plugin list.
@@ -67,7 +67,7 @@ sealed interface PluginManifest: ModuleManifestCollection {
      * - File URI/path: "file://..." or "/icons/xxx.png"
      * - Relative path inside plugin package/zip: "icons/icon.png"
      */
-    val iconURI: String?
+    val iconUri: String?
 
     /**
      * Plugin author / publisher name.
@@ -132,7 +132,7 @@ sealed interface PluginManifest: ModuleManifestCollection {
      * - `"webroot/index.html"`
      * - `"ui/index.html"`
      */
-    val webUIEntryPoint: String?
+    val webUiEntryPoint: String?
 
     // Runtime state such as `enabled`, `state`, `source` should NOT belong here:
     // - enabled: Boolean
@@ -152,7 +152,7 @@ sealed interface PluginManifest: ModuleManifestCollection {
 
     }
     interface PluginManifestRemote: PluginManifest {
-        val pluginURI: String
+        val pluginUri: String
     }
     interface PluginManifestRoom: PluginManifest {
         val enabled: Boolean

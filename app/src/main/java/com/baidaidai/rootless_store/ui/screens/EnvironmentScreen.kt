@@ -43,7 +43,7 @@ fun EnvironmentScreen(
     ) {
         items(
             items = renderingList,
-            key = { environmentManifestRoom -> environmentManifestRoom.environmentID }
+            key = { environmentManifestRoom -> environmentManifestRoom.environmentId }
         ){ environmentManifestRoom ->
 
             var actionCanSee by remember { mutableStateOf(false) }
@@ -80,7 +80,7 @@ fun EnvironmentScreen(
                     environmentManifest = environmentManifestRoom,
                     onSwitchClick = {
                         pluginScreenViewModel.setEnvironmentEnabled(
-                            environmentID = environmentManifestRoom.environmentID,
+                            environmentId = environmentManifestRoom.environmentId,
                             environmentEnabledStatus = !environmentManifestRoom.enabled
                         )
                     },

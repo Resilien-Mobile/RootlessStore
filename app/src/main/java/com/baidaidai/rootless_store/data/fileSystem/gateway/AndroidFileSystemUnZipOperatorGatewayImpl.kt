@@ -41,11 +41,11 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     } // /File/Plugin/PLUGIN
 
     // Un-Zip FS Operator
-    fun unzipFromFileToDirectory(originFileURI: Uri, targetDirectory: File) {
+    fun unzipFromFileToDirectory(originFileUri: Uri, targetDirectory: File) {
         targetDirectory.mkdirs()
         val canonicalTargetDirectory = targetDirectory.canonicalFile
 
-        context.contentResolver.openInputStream(originFileURI).use { inputStream ->
+        context.contentResolver.openInputStream(originFileUri).use { inputStream ->
             ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
                 var zipEntry = zipInputStream.nextEntry
                 while (zipEntry != null) {
@@ -73,7 +73,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun unzipFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
+    fun unzipFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
         // Get file's name, always powered by readManiFestJsonContent
         val directoryName = when {
@@ -83,7 +83,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
             }
 
             else -> {
-                androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(originFileURI).let { json ->
+                androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(originFileUri).let { json ->
                     androidFileSystemReadOperatorGatewayImpl.parsePluginManifest(json).pluginPackageName
                 }.trim()
             }
@@ -96,7 +96,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
         }
 
         // Open IO Stream
-        context.contentResolver.openInputStream(originFileURI).use { fis ->
+        context.contentResolver.openInputStream(originFileUri).use { fis ->
             // Unzip from File Input Stream
             ZipInputStream(BufferedInputStream(fis)).use { zis ->
                 var entry = zis.nextEntry
@@ -120,7 +120,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun unzipEnvironmentFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
+    fun unzipEnvironmentFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
         // Get file's name, always powered by readManiFestJsonContent
         val directoryName = when {
@@ -130,7 +130,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
             }
 
             else -> {
-                androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(originFileURI).let { json ->
+                androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(originFileUri).let { json ->
                     androidFileSystemReadOperatorGatewayImpl.parseEnvironmentManifest(json).environmentPackageName
                 }.trim()
             }
@@ -143,7 +143,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
         }
 
         // Open IO Stream
-        context.contentResolver.openInputStream(originFileURI).use { fis ->
+        context.contentResolver.openInputStream(originFileUri).use { fis ->
             // Unzip from File Input Stream
             ZipInputStream(BufferedInputStream(fis)).use { zis ->
                 var entry = zis.nextEntry
@@ -167,7 +167,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun unZipFromURI(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String) {
+    fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String) {
 
         // Provide void file, for copy use
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
@@ -200,7 +200,7 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun unZipEnvironmentFromURI(
+    fun unzipEnvironmentFromUri(
         originFileByteChannel: ByteReadChannel,
         pluginRootDirectory: File,
         directoryName: String

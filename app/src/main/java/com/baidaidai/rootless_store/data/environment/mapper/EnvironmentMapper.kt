@@ -17,8 +17,8 @@ object EnvironmentMapper {
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
             environmentPackageName = environmentPackageName,
-            environmentID = environmentID,
-            iconURI = iconURI,
+            environmentId = environmentId,
+            iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
             requiredEnvironment = requiredEnvironment,
@@ -30,11 +30,11 @@ object EnvironmentMapper {
 
     fun EnvironmentManifestLocal.toEnvironmentInfoEntity(): EnvironmentInfoEntity{
         return EnvironmentInfoEntity(
-            environmentID = environmentID,
+            environmentId = environmentId,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
             environmentPackageName = environmentPackageName,
-            iconURI = iconURI,
+            iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
             enabled = false,
@@ -49,11 +49,11 @@ object EnvironmentMapper {
 
     fun EnvironmentManifestRemote.toEnvironmentInfoEntity(): EnvironmentInfoEntity {
         return EnvironmentInfoEntity(
-            environmentID = environmentID,
+            environmentId = environmentId,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
             environmentPackageName = environmentPackageName,
-            iconURI = iconURI,
+            iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
             enabled = false,

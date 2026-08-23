@@ -31,7 +31,7 @@ class InstallShellPluginUseCase @Inject constructor(
             val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
 
             androidFileSystemCreateOperatorGatewayImpl.copyUriToFile(
-                originFileURI = uri,
+                originFileUri = uri,
                 targetFile = shellPluginStagingFile
             )
 
