@@ -8,7 +8,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
 
-class AndroidFileSystemReZipOperatorGatewayImpl @Inject constructor(
+class AndroidFileSystemRezipOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 

@@ -446,15 +446,15 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val pluginRootDirectory = getInternalPluginRootDirectory()
         val pluginPackageName = pluginManifest.pluginPackageName
         val pluginEntryPoint = pluginManifest.entryPoint
-        val _child = "$pluginPackageName/$pluginEntryPoint"
-        return File(pluginRootDirectory,_child).setExecutable(true)
+        val entryPointPath = "$pluginPackageName/$pluginEntryPoint"
+        return File(pluginRootDirectory,entryPointPath).setExecutable(true)
     }
     fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean{
         val environmentRootDirectory = getInternalEnvironmentRootDirectory()
         val environmentPackageName = environmentManifest.environmentPackageName
         val environmentEntryPoint = environmentManifest.entryPoint
-        val _child = "$environmentPackageName/$environmentEntryPoint"
-        return File(environmentRootDirectory,_child).setExecutable(true)
+        val entryPointPath = "$environmentPackageName/$environmentEntryPoint"
+        return File(environmentRootDirectory,entryPointPath).setExecutable(true)
     }
 
     // Share FS Operator

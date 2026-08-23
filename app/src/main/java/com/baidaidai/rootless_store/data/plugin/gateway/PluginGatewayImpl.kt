@@ -23,13 +23,13 @@ class PluginGatewayImpl @Inject constructor(
 
     // Create
     override fun installPluginFromLocal(originFileUri: Uri) {
-        _pre_intallPlugin(originFileUri)
+        installPluginPackage(originFileUri)
     }
 
     override suspend fun installPluginFromMarket(pluginUrl: String, pluginManifestRemote: PluginManifestRemote) {
         val remotePluginContent: ByteReadChannel = marketPackageRemoteDataSource.fetchPackage(pluginUrl).bodyAsChannel()
         val pluginPackageName = pluginManifestRemote.pluginPackageName
-        _pre_intallPlugin(
+        installPluginPackage(
             originFileByteChannel = remotePluginContent,
             destinationFileName = pluginPackageName
         )
@@ -53,7 +53,7 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
-    private fun _pre_intallPlugin(originFileUri: Uri, destination: File = defaultPluginLocation) {
+    private fun installPluginPackage(originFileUri: Uri, destination: File = defaultPluginLocation) {
         if (androidFileSystemCapabilityGatewayImpl.hasPluginDirectory()){
             androidFileSystemCapabilityGatewayImpl.unzipFromFile(
                 originFileUri = originFileUri,
@@ -61,11 +61,11 @@ class PluginGatewayImpl @Inject constructor(
             )
         }else{
             androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
-            _pre_intallPlugin(originFileUri)
+            installPluginPackage(originFileUri)
         }
     }
 
-    private fun _pre_intallPlugin(originFileByteChannel: ByteReadChannel, destination: File = defaultPluginLocation, destinationFileName: String) {
+    private fun installPluginPackage(originFileByteChannel: ByteReadChannel, destination: File = defaultPluginLocation, destinationFileName: String) {
         if (androidFileSystemCapabilityGatewayImpl.hasPluginDirectory()){
             androidFileSystemCapabilityGatewayImpl.unzipFromUri(
                 originFileByteChannel = originFileByteChannel,
@@ -74,7 +74,7 @@ class PluginGatewayImpl @Inject constructor(
             )
         }else{
             androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
-            _pre_intallPlugin(originFileByteChannel,destination,destinationFileName)
+            installPluginPackage(originFileByteChannel,destination,destinationFileName)
         }
     }
 }

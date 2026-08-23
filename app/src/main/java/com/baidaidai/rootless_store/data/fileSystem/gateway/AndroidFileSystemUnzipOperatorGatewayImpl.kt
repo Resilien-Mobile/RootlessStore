@@ -11,7 +11,7 @@ import java.io.FileOutputStream
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
-class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
+class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl
 ) {

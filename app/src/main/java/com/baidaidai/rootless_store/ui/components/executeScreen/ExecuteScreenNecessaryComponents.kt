@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.baidaidai.rootless_store.R
 
-object executeScreenNecessaryComponents {
+object ExecuteScreenNecessaryComponents {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -85,7 +85,7 @@ object executeScreenNecessaryComponents {
 @PreviewLightDark
 @Composable
 private fun test(){
-    executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
+    ExecuteScreenNecessaryComponents.ExecuteScreenTopAppBar(
         scrollBehavior = androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior()
     )
 }

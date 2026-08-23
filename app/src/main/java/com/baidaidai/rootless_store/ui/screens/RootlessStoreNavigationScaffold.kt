@@ -44,7 +44,7 @@ import com.baidaidai.rootless_store.domain.navigation.model.SourceScreenKey
 import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificationScreenKey
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickScreenNecessaryComponents
-import com.baidaidai.rootless_store.ui.components.executeScreen.executeScreenNecessaryComponents
+import com.baidaidai.rootless_store.ui.components.executeScreen.ExecuteScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.marketScreen.MarketScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenNecessaryComponents
@@ -111,17 +111,17 @@ fun RootlessStoreNavigationScaffold(
     }
 
     // Reactive Style
-    val _windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
-    val isExpandedWidth = _windowSizeClass.isWidthAtLeastBreakpoint(
+    val windowSizeClass = currentWindowAdaptiveInfoV2().windowSizeClass
+    val isExpandedWidth = windowSizeClass.isWidthAtLeastBreakpoint(
         WindowSizeClass.WIDTH_DP_EXPANDED_LOWER_BOUND
     )
-    val isExpandedHeight = _windowSizeClass.isHeightAtLeastBreakpoint(
+    val isExpandedHeight = windowSizeClass.isHeightAtLeastBreakpoint(
         WindowSizeClass.HEIGHT_DP_EXPANDED_LOWER_BOUND
     )
-    val isMediumWidth = _windowSizeClass.isWidthAtLeastBreakpoint(
+    val isMediumWidth = windowSizeClass.isWidthAtLeastBreakpoint(
         WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND
     )
-    val isMediumHeight = _windowSizeClass.isHeightAtLeastBreakpoint(
+    val isMediumHeight = windowSizeClass.isHeightAtLeastBreakpoint(
         WindowSizeClass.HEIGHT_DP_MEDIUM_LOWER_BOUND
     )
     val rootlessStoreWidthWindowSize = when {
@@ -217,7 +217,7 @@ fun RootlessStoreNavigationScaffold(
                         sourceCount = sourceCount
                     )
                     is ExecuteScreenKey -> {
-                        executeScreenNecessaryComponents.ExecuteScreenTopAppBar(
+                        ExecuteScreenNecessaryComponents.ExecuteScreenTopAppBar(
                             scrollBehavior = scrollBehavior,
                             onExecuteScreenStopButtonClick = {
                                 currentExecuteViewModel.abortPluginProcess(currentDestination.pluginId)

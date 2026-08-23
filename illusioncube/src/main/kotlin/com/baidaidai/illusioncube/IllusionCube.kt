@@ -10,21 +10,21 @@ import com.baidaidai.illusioncube.domain.type.ConfigType
 class IllusionCube (
     private val rawConfig: String,
 ){
-    private var _configType: ConfigType? = null
-    val configType = _configType
+    private var resolvedConfigType: ConfigType? = null
+    val configType = resolvedConfigType
 
     fun resolveConfigType(): ConfigType {
         when{
             Json.validate(rawConfig) -> {
-                _configType = ConfigType.Json
+                resolvedConfigType = ConfigType.Json
                 return ConfigType.Json
             }
             Prop.validate(rawConfig) -> {
-                _configType = ConfigType.Prop
+                resolvedConfigType = ConfigType.Prop
                 return ConfigType.Prop
             }
             else -> {
-                _configType = ConfigType.Error
+                resolvedConfigType = ConfigType.Error
                 return ConfigType.Error
             }
         }
