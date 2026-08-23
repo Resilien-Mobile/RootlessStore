@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.domain.status.model
 
 data class RootlessStoreHosterStatus(
-    val hosterOverallStatus: HosterOverallStatus? = null,
+    val executionContext: ExecutionContext? = null,
     val osAndApiVersion: AndroidAndApiStatus? = null,
     val kernelVersion: String? = null,
     val seLinuxStatus: SeLinuxStatus = SeLinuxStatus.Unknow,

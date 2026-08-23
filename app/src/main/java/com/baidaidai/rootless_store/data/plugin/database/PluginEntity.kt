@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.plugin.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
@@ -33,7 +33,7 @@ data class PluginEntity(
     // Plugin Runtime Infos
     @ColumnInfo(name = "enabled")
     val isEnabled: Boolean,
-    val requiredEnvironment: HosterOverallStatus,
+    val requiredEnvironment: ExecutionContext,
     val state: PluginState,
     @ColumnInfo(name = "source")
     val origin: PluginOrigin,

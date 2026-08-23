@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.status.ObserveCpuDashboardConfigUseCase
 import com.baidaidai.rootless_store.application.status.ObserveNetworkDashboardConfigUseCase
-import com.baidaidai.rootless_store.application.status.ObserveOverallStatusUseCase
+import com.baidaidai.rootless_store.application.status.ObserveExecutionContextUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.ObserveAutoUpdateEnabledPreferenceUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
@@ -49,7 +49,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     getAndroidAndApiStatusUseCase: GetAndroidAndApiStatusUseCase,
     observeExecutionContextPreferenceUseCase: ObserveExecutionContextPreferenceUseCase,
     private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
-    private val observeOverallStatusUseCase: ObserveOverallStatusUseCase,
+    private val observeExecutionContextUseCase: ObserveExecutionContextUseCase,
     private val setExecutionContextPreferenceUseCase: SetExecutionContextPreferenceUseCase,
     private val setExecutionContextChooserEnabledUseCase: SetExecutionContextChooserEnabledUseCase,
     private val observeAutoUpdateEnabledPreferenceUseCase: ObserveAutoUpdateEnabledPreferenceUseCase,
@@ -64,7 +64,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     }
 
     private val _isContextDialogVisible = MutableStateFlow(false)
-    private val _currentExecutionContextSelected = MutableStateFlow<HosterOverallStatus?>(null)
+    private val _currentExecutionContextSelected = MutableStateFlow<ExecutionContext?>(null)
     val isContextDialogVisible = _isContextDialogVisible.asStateFlow()
 
     // Latest Version Status
@@ -105,14 +105,14 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
-            initialValue = HosterOverallStatus.LIMITED
+            initialValue = ExecutionContext.LIMITED
         )
 
     /**
      * if initial -> get from preference
      * else -> get from user settings
      */
-    val currentExecutionContextSelected: StateFlow<HosterOverallStatus> = combine(
+    val currentExecutionContextSelected: StateFlow<ExecutionContext> = combine(
         executionContextPreference,
         _currentExecutionContextSelected
     ) { contextPreference, contextSelected ->
@@ -120,7 +120,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
-        initialValue = HosterOverallStatus.LIMITED
+        initialValue = ExecutionContext.LIMITED
     )
 
     val isAdbShellAvailable = observeAdbShellStatusUseCase()
@@ -142,10 +142,10 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     private val _androidAndApiStatus = MutableStateFlow(getAndroidAndApiStatusUseCase())
     val androidAndApiStatus = _androidAndApiStatus.asStateFlow()
 
-    val overallStatus = observeOverallStatusUseCase().stateIn(
+    val executionContext = observeExecutionContextUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
-        initialValue = HosterOverallStatus.LIMITED
+        initialValue = ExecutionContext.LIMITED
     )
 
     val cpuDashboardConfig = observeCpuDashboardConfigUseCase().stateIn(
@@ -162,15 +162,15 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
 
     // Saves the user's selected execute context for now.
     // This is only for the UI and is not saved to preferences yet.
-    fun selectExecutionContext(hosterOverallStatus: HosterOverallStatus) {
-        _currentExecutionContextSelected.value = hosterOverallStatus
+    fun selectExecutionContext(executionContext: ExecutionContext) {
+        _currentExecutionContextSelected.value = executionContext
     }
 
     // The real context setting for preferences
     fun setExecutionContextPreference() {
         viewModelScope.launch {
             setExecutionContextChooserEnabledUseCase(true)
-            setExecutionContextPreferenceUseCase(_currentExecutionContextSelected.value ?: HosterOverallStatus.LIMITED)
+            setExecutionContextPreferenceUseCase(_currentExecutionContextSelected.value ?: ExecutionContext.LIMITED)
         }
 
         toggleContextDialogVisibility()
@@ -179,7 +179,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     fun resetExecutionContextPreference() {
         viewModelScope.launch {
             setExecutionContextChooserEnabledUseCase(false)
-            selectExecutionContext(hosterOverallStatus = overallStatus.first())
+            selectExecutionContext(executionContext = executionContext.first())
         }
 
         toggleContextDialogVisibility()

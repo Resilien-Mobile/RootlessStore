@@ -15,7 +15,7 @@ import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.manifest.MagiskProp
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
@@ -167,7 +167,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             iconUri = null,
             author = author,
             pluginDescription = description,
-            requiredEnvironment = HosterOverallStatus.ADB,
+            requiredEnvironment = ExecutionContext.ADB,
             entryPoint = entryPoint,
             pluginRunModel = PluginRunModel.Daemon,
             executableFiles = null

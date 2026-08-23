@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.application.execute
 
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -10,7 +10,7 @@ import javax.inject.Inject
 class ExecutePluginUseCase @Inject constructor(
     private val executePluginByShizukuUseCase: ExecutePluginByShizukuUseCase,
     private val executePluginByAppShellUseCase: ExecutePluginByAppShellUseCase,
-    val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
+    private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
 ) {
     suspend operator fun invoke(
         pluginId: String
@@ -28,7 +28,7 @@ class ExecutePluginUseCase @Inject constructor(
 
     private suspend fun shouldUseShizuku(): Boolean{
 
-        val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
+        val availableExecutionContext = storeStatusRepositoryImpl.observeAvailableExecutionContext().first()
         val isExecutionContextChooserEnabled = storeStatusRepositoryImpl
             .observeExecutionContextChooserEnabled()
             .first()
@@ -41,6 +41,6 @@ class ExecutePluginUseCase @Inject constructor(
         }
 
 
-        return hosterOverallStatus == HosterOverallStatus.ADB && (!isExecutionContextChooserEnabled || selectedExecutionContext == HosterOverallStatus.ADB)
+        return availableExecutionContext == ExecutionContext.ADB && (!isExecutionContextChooserEnabled || selectedExecutionContext == ExecutionContext.ADB)
     }
 }

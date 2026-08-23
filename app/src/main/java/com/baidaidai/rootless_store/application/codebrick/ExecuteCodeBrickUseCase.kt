@@ -4,7 +4,7 @@ import android.util.Log
 import com.baidaidai.rootless_store.data.shell.gateway.ExecuteShellGatewayImpl
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -14,11 +14,11 @@ class ExecuteCodeBrickUseCase @Inject constructor(
     operator fun invoke(codeBrickConfig: CodeBrickConfig): Flow<ShellResult> {
         Log.d("ExecuteCodeBrickUseCase, codeBrickContent",codeBrickConfig.codeBrickContent)
         return when(codeBrickConfig.codeBrickEnvironment){
-            HosterOverallStatus.LIMITED,
-            HosterOverallStatus.PERMISSIVE -> executeShellGatewayImpl.executeCommandByAppShell(codeBrickConfig.codeBrickContent)
+            ExecutionContext.LIMITED,
+            ExecutionContext.PERMISSIVE -> executeShellGatewayImpl.executeCommandByAppShell(codeBrickConfig.codeBrickContent)
 
-            HosterOverallStatus.ADB -> executeShellGatewayImpl.executeCommandByAdbShell(codeBrickConfig.codeBrickContent)
-            HosterOverallStatus.ROOTD -> executeShellGatewayImpl.executeCommandByRootShell(codeBrickConfig.codeBrickContent)
+            ExecutionContext.ADB -> executeShellGatewayImpl.executeCommandByAdbShell(codeBrickConfig.codeBrickContent)
+            ExecutionContext.ROOTD -> executeShellGatewayImpl.executeCommandByRootShell(codeBrickConfig.codeBrickContent)
         }
     }
 }

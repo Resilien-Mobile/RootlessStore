@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginType
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Composable
 fun PluginTagTonalAssistChip(
@@ -118,40 +118,40 @@ fun PluginTagTonalAssistChip(
 
 @Composable
 fun PluginTagTonalAssistChip(
-    pluginRequired: HosterOverallStatus,
+    pluginRequired: ExecutionContext,
     modifier: Modifier = Modifier,
 ){
     val leadingIconPainter = when(pluginRequired){
-        HosterOverallStatus.LIMITED -> {
+        ExecutionContext.LIMITED -> {
             painterResource(R.drawable.material_symbols_disabled)
         }
 
-        HosterOverallStatus.PERMISSIVE -> {
+        ExecutionContext.PERMISSIVE -> {
             painterResource(R.drawable.material_symbols_warning)
         }
 
-        HosterOverallStatus.ADB -> {
+        ExecutionContext.ADB -> {
             painterResource(R.drawable.material_symbols_adb)
         }
 
-        HosterOverallStatus.ROOTD -> {
+        ExecutionContext.ROOTD -> {
             painterResource(R.drawable.material_symbols_cyclone)
         }
     }
     val primaryColor = when(pluginRequired){
-        HosterOverallStatus.LIMITED -> {
+        ExecutionContext.LIMITED -> {
             Color(0xFF8E8E93)
         }
 
-        HosterOverallStatus.PERMISSIVE -> {
+        ExecutionContext.PERMISSIVE -> {
             Color(0xFF8E8E93)
         }
 
-        HosterOverallStatus.ADB -> {
+        ExecutionContext.ADB -> {
             Color(0xFF0A84FF)
         }
 
-        HosterOverallStatus.ROOTD -> {
+        ExecutionContext.ROOTD -> {
             Color(0xFFFF3B30)
         }
     }

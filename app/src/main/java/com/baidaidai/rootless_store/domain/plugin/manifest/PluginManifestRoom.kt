@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 data class PluginManifestRoom(
     @ColumnInfo(name = "enabled")
@@ -21,7 +21,7 @@ data class PluginManifestRoom(
     override val iconUri: String?,
     override val author: String,
     override val pluginDescription: String,
-    override val requiredEnvironment: HosterOverallStatus,
+    override val requiredEnvironment: ExecutionContext,
     override val entryPoint: String,
     override val pluginRunModel: PluginRunModel,
     @ColumnInfo(name = "webUIEntryPoint")
@@ -36,7 +36,7 @@ data class PluginManifestRoom(
             pluginId = "29bb10c46772264df3c0d0fade57d2eb",
             iconUri = null,
             author = "Rootless Store(Creater. Bai)",
-            requiredEnvironment = HosterOverallStatus.LIMITED,
+            requiredEnvironment = ExecutionContext.LIMITED,
             pluginDescription = "Tested by Creater. Bai",
             isEnabled = false,
             state = PluginState.PermissionProblems,

@@ -27,13 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
 import androidx.compose.ui.graphics.*
 
 
 private data class HomeScreenContextSwitchDialogSpec(
-    val option: HosterOverallStatus,
+    val option: ExecutionContext,
     @DrawableRes val iconResource: Int,
     val content: String,
     val canUse: Boolean
@@ -56,19 +56,19 @@ fun HomeScreenContextSwitchDialog(
 
     val HomeScreenContextSwitchDialogRenderingList = listOf(
         HomeScreenContextSwitchDialogSpec(
-            option = HosterOverallStatus.LIMITED,
+            option = ExecutionContext.LIMITED,
             iconResource = R.drawable.material_symbols_disabled,
             content = "LIMITED",
             canUse = true
         ),
         HomeScreenContextSwitchDialogSpec(
-            option = HosterOverallStatus.ADB,
+            option = ExecutionContext.ADB,
             iconResource = R.drawable.material_symbols_adb,
             content = "ADB",
             canUse = isAdbShellAvailable
         ),
         HomeScreenContextSwitchDialogSpec(
-            option = HosterOverallStatus.ROOTD,
+            option = ExecutionContext.ROOTD,
             iconResource = R.drawable.material_symbols_cyclone,
             content = "ROOTD",
             canUse = isRootShellAvailable

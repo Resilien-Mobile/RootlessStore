@@ -12,7 +12,7 @@ import com.baidaidai.rootless_store.application.codebrick.ObserveCodeBricksUseCa
 import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +30,7 @@ data class CodeBrickScreenUiState(
     val isBrickSettingsVisible: Boolean = false,
     val isButtonMenuExpanded: Boolean = false,
     val executionOutputLines: List<String> = emptyList(),
-    val selectedCodeBrick: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", HosterOverallStatus.LIMITED,"")
+    val selectedCodeBrick: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", ExecutionContext.LIMITED,"")
 )
 
 @HiltViewModel
@@ -116,7 +116,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun addCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
-        codeBrickContext: HosterOverallStatus,
+        codeBrickContext: ExecutionContext,
         boundTileIndex: Int?
     ){
         viewModelScope.launch {
@@ -137,7 +137,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun updateCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
-        codeBrickContext: HosterOverallStatus,
+        codeBrickContext: ExecutionContext,
         boundTileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     ){

@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,7 +15,7 @@ data class EnvironmentManifestLocal(
     override val iconUri: String?,
     override val author: String,
     override val environmentDescription: String,
-    override val requiredEnvironment: HosterOverallStatus,
+    override val requiredEnvironment: ExecutionContext,
     override val entryPoint: String,
     override val ldLibraryPath: List<String>,
     override val env: Map<String, String>
@@ -28,7 +28,7 @@ data class EnvironmentManifestLocal(
             environmentId = "29bb10c46772264df3c0d0fade57d2eb",
             iconUri = "content://rootless_store/environment_icon/test",
             author = "Rootless Store(Creater. Bai)",
-            requiredEnvironment = HosterOverallStatus.LIMITED,
+            requiredEnvironment = ExecutionContext.LIMITED,
             environmentDescription = "Tested by Creater. Bai",
             entryPoint = "./index.sh",
             ldLibraryPath = emptyList(),

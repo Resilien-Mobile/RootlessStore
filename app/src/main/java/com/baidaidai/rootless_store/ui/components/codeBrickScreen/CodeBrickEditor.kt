@@ -13,20 +13,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CodeBrickEditor(
     onDismissRequest: () -> Unit,
     onDismissButtonClick: ()-> Unit,
-    onConfirmButtonClick: (title: String,content: String,context: HosterOverallStatus,tileIndex: Int?)-> Unit
+    onConfirmButtonClick: (title: String,content: String,context: ExecutionContext,tileIndex: Int?)-> Unit
 ){
 
     var titleContent by remember { mutableStateOf("") }
     var codeContent by remember { mutableStateOf("") }
     var tileIndex: Int? by remember { mutableStateOf(null) }
-    var selectedContext by remember { mutableStateOf(HosterOverallStatus.LIMITED) }
+    var selectedContext by remember { mutableStateOf(ExecutionContext.LIMITED) }
 
     AlertDialog(
         title = {

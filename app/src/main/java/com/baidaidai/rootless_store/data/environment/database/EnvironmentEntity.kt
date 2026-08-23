@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Entity(tableName = "environmentInfo")
 data class EnvironmentEntity(
@@ -33,7 +33,7 @@ data class EnvironmentEntity(
     // Environment Runtime Infos
     @ColumnInfo(name = "enabled")
     val isEnabled: Boolean,
-    val requiredEnvironment: HosterOverallStatus,
+    val requiredEnvironment: ExecutionContext,
     val state: PluginState,
     @ColumnInfo(name = "source")
     val origin: PluginOrigin,

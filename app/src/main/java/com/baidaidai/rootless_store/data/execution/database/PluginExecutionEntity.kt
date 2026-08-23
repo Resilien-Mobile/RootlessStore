@@ -5,7 +5,7 @@ import androidx.room.ColumnInfo
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import javax.inject.Inject
 
 @Entity(tableName = "PluginExecuteStatusEntry")
@@ -18,7 +18,7 @@ data class PluginExecutionEntity @Inject constructor(
     @ColumnInfo(name = "executePID")
     val executionPid: Int,
     @ColumnInfo(name = "executeContext", defaultValue = "'LIMITED'")
-    val executionContext: HosterOverallStatus = HosterOverallStatus.LIMITED
+    val executionContext: ExecutionContext = ExecutionContext.LIMITED
 ){
     companion object{
         fun fromPluginManifest(pluginManifest: PluginManifest, executionPid: Int): PluginExecutionEntity{

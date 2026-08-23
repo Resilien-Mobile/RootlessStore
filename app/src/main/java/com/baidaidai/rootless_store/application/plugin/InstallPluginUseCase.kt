@@ -4,7 +4,7 @@ import android.net.Uri
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import javax.inject.Inject
 
 class InstallPluginUseCase @Inject constructor(
@@ -16,7 +16,7 @@ class InstallPluginUseCase @Inject constructor(
         return try {
             val pluginManifestLocal = pluginGatewayImpl.parsePluginManifest(uri)
 
-            if (pluginManifestLocal.requiredEnvironment == HosterOverallStatus.ADB){
+            if (pluginManifestLocal.requiredEnvironment == ExecutionContext.ADB){
                 installShellPluginUseCase(uri)
             }else{
                 // Un-Zip, Install Plugin
