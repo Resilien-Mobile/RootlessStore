@@ -306,7 +306,7 @@ fun RootlessStoreStartScreenContainer(
                                 codeBrickViewModel.changeButtonMenuStatus()
                             },
                             onJsonMenuItemClick = {
-                                codeBrickViewModel.createOneCodeBrickByJson()
+                                codeBrickViewModel.createCodeBrickByJson()
                                 codeBrickViewModel.changeButtonMenuStatus()
                             },
                             onButtonMenuClick = {
@@ -334,7 +334,7 @@ fun RootlessStoreStartScreenContainer(
                         alertDialogStatus = !alertDialogStatus
                     },
                     onConfirmButtonClick = {
-                        sourceScreenViewModel.addOneSourceByDefault(sourceURI = sourceDomainContent)
+                        sourceScreenViewModel.addSourceByDefault(sourceURI = sourceDomainContent)
                         alertDialogStatus = !alertDialogStatus
                     },
                     onDismissButtonClick = {
@@ -370,11 +370,11 @@ fun RootlessStoreStartScreenContainer(
                                 navigationBackStack
                                     .add(ExecuteScreenKey(pluginID,isExecutePlugin))
                             },
-                            onAbortOnePlugin = { pluginID ->
+                            onAbortPlugin = { pluginID ->
                                 currentExecuteViewModel.abortPluginProcess(pluginID)
                             },
                             onActiveOneTimePlugin = { pluginID ->
-                                currentExecuteViewModel.executeOnePlugin(pluginID)
+                                currentExecuteViewModel.executePlugin(pluginID)
                             }
                         )
                     }
@@ -427,7 +427,7 @@ fun RootlessStoreStartScreenContainer(
                         // Function debouncing
                         LaunchedEffect(pluginID, isExecutePlugin) {
                             if (isExecutePlugin) {
-                                executeScreenViewModel.executeOnePlugin(pluginID)
+                                executeScreenViewModel.executePlugin(pluginID)
                             }
                         }
 

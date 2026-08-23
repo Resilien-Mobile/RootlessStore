@@ -5,7 +5,7 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCap
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import javax.inject.Inject
 
-class UninstallOneEnvironmentUseCase @Inject constructor(
+class UninstallEnvironmentUseCase @Inject constructor(
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
 ) {
@@ -13,6 +13,6 @@ class UninstallOneEnvironmentUseCase @Inject constructor(
         environmentManifestRoom: EnvironmentManifestRoom
     ){
         androidFileSystemCapabilityGatewayImpl.deleteEnvironmentDirectoryByPackageName(environmentManifestRoom.environmentPackageName)
-        environmentRepositoryImpl.deleteOneEnvironmentInfoByID(environmentManifestRoom.environmentID)
+        environmentRepositoryImpl.deleteEnvironmentInfoByID(environmentManifestRoom.environmentID)
     }
 }

@@ -18,6 +18,6 @@ class InstallEnvironmentFromMarketUseCase @Inject constructor(
 
         environmentGatewayImpl.installEnvironmentFromMarket(environmentURI, environmentManifestRemote)
         environmentGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifestRemote)
-        environmentRepositoryImpl.insertOneEnvironmentInfo(environmentManifestRemote)
+        environmentRepositoryImpl.insertEnvironmentInfo(environmentManifestRemote)
     }
 }

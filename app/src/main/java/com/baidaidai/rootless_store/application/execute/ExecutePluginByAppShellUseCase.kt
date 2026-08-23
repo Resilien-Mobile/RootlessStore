@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-class ExecuteOnePluginByAppShellUseCase @Inject constructor(
+class ExecutePluginByAppShellUseCase @Inject constructor(
     private val pluginExecuteGatewayImpl: PluginExecuteGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
@@ -26,7 +26,7 @@ class ExecuteOnePluginByAppShellUseCase @Inject constructor(
         pluginID: String
     ) : Flow<ExecuteResult> {
 
-        val pluginManifestRoom = pluginRepositoryImpl.getOnePluginInfo(pluginID)!!
+        val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
         val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
 
         var pidSaved = false

@@ -28,7 +28,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
     private val pluginSourceDao = appDatabase.pluginSourceDao()
 
     // Create
-    override suspend fun insertOnePluginSourceByDefault(
+    override suspend fun insertPluginSourceByDefault(
         sourceEndpointInput: PluginSourceEndpointInput
     ): PluginSourceEvent {
         try{
@@ -59,7 +59,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertOnePluginSourceByAuthentication(
+    override suspend fun insertPluginSourceByAuthentication(
         pluginSourceAuthFormInput: PluginSourceAuthFormInput
     ): PluginSourceEvent {
         try{
@@ -117,7 +117,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
     }
 
     // Update
-    override suspend fun updateOnePluginSource(
+    override suspend fun updatePluginSource(
         sourceID: String,
         sourceName: String,
         sourceRemoteEndpoint: String
@@ -130,7 +130,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
     }
 
     // Read
-    override suspend fun getOnePluginSource(
+    override suspend fun findPluginSource(
         sourceID: String
     ): PluginSourceEntity? {
         return pluginSourceDao.findPluginSourceById(sourceID)
@@ -153,7 +153,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    override suspend fun deleteOnePluginSource(
+    override suspend fun deletePluginSource(
         pluginSourceEntity: PluginSourceEntity
     ) {
         pluginSourceDao.deletePluginSource(pluginSourceEntity)

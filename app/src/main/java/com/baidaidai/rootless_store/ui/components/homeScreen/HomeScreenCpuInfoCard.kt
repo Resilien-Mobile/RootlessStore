@@ -35,7 +35,7 @@ fun HomeScreenCpuInfoCard(
             .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(20.dp)
     ) {
-        // Data One
+        // Primary data
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier

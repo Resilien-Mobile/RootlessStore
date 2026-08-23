@@ -4,10 +4,12 @@ import com.baidaidai.rootless_store.data.codebrick.repository.CodeBrickRepositor
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import javax.inject.Inject
 
-class GetOneCodeBrickUseCase @Inject constructor(
+class DeleteCodeBrickUseCase @Inject constructor(
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
     suspend operator fun invoke(
-        unixTimeStamp: Long
-    ): CodeBrickConfig? = codeBrickRepositoryImpl.getOneCodeBrickConfig(unixTimeStamp)
+        codeBrickConfig: CodeBrickConfig
+    ) {
+        codeBrickRepositoryImpl.deleteCodeBrickConfig(codeBrickConfig)
+    }
 }

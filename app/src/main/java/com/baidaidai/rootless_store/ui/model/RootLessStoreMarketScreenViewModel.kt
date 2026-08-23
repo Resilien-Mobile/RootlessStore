@@ -55,7 +55,7 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val remoteModuleList = _pluginSourceUri
         .filterNotNull()
-        .flatMapLatest { pluginSourceUri ->  // Use the latest One
+        .flatMapLatest { pluginSourceUri ->  // Use the latest value
 
             Log.d("RootlessStoreMarketScreenViewModel._pluginSourceUri",pluginSourceUri)
 

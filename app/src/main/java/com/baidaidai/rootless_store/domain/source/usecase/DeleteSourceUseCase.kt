@@ -5,13 +5,13 @@ import com.baidaidai.rootless_store.data.source.repository.PluginSourceRepositor
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import javax.inject.Inject
 
-class DeleteOneSourceUseCase @Inject constructor(
+class DeleteSourceUseCase @Inject constructor(
     val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ) {
     suspend operator fun invoke(
         pluginSourceInfo: PluginSourceInfo
     ){
         val pluginSourceEntity = PluginSourceEntity.fromPluginSourceLocal(pluginSourceInfo)
-        pluginSourceRepositoryImpl.deleteOnePluginSource(pluginSourceEntity)
+        pluginSourceRepositoryImpl.deletePluginSource(pluginSourceEntity)
     }
 }

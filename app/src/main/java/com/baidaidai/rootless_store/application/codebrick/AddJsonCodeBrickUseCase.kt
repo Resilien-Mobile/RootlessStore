@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import javax.inject.Inject
 
-class AddOneJsonCodeBrickUseCase @Inject constructor(
+class AddJsonCodeBrickUseCase @Inject constructor(
     private val codeBrickGatewayImpl: CodeBrickGatewayImpl,
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
@@ -35,7 +35,7 @@ class AddOneJsonCodeBrickUseCase @Inject constructor(
 
 
         // Add CodeBrick config
-        codeBrickRepositoryImpl.createOneCodeBrickConfig(codeBrickConfig)
+        codeBrickRepositoryImpl.createCodeBrickConfig(codeBrickConfig)
 
         return null
     }

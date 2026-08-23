@@ -16,13 +16,13 @@ class PluginRepositoryImpl @Inject constructor(
     private val pluginDao = rootlessStoreDatabase.pluginDao()
 
     // Create
-    override suspend fun insertOnePluginInfo(
+    override suspend fun insertPluginInfo(
         pluginManifestLocal: PluginManifestLocal
     ){
         val pluginInfoEntity = pluginManifestLocal.toPluginInfoEntity()
         pluginDao.insertPlugin(pluginInfoEntity)
     }
-    suspend fun insertOnePluginInfo(
+    suspend fun insertPluginInfo(
         pluginManifestRemote: PluginManifestRemote
     ){
         val pluginInfoEntity = pluginManifestRemote.toPluginInfoEntity()
@@ -43,7 +43,7 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     // READ
-    override suspend fun getOnePluginInfo(
+    override suspend fun findPluginInfo(
         pluginID: String
     ): PluginManifestRoom? {
         val pluginInfo = pluginDao.findPluginById(pluginID)
@@ -69,7 +69,7 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    override suspend fun deleteOnePluginInfoByID(pluginID: String) {
+    override suspend fun deletePluginInfoByID(pluginID: String) {
         pluginDao.deletePluginById(pluginID)
     }
 

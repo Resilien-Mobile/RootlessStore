@@ -14,7 +14,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
     private val codeBrickDao = rootlessStoreDatabase.codeBrickDao()
 
     // Create
-    suspend fun createOneCodeBrickConfig(
+    suspend fun createCodeBrickConfig(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
@@ -22,7 +22,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
     }
 
     // Update
-    suspend fun updateOneCodeBrickConfig(
+    suspend fun updateCodeBrickConfig(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
@@ -30,7 +30,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
     }
 
     // Read
-    suspend fun getOneCodeBrickConfig(
+    suspend fun findCodeBrickConfig(
         unixTimeStamp: Long
     ): CodeBrickConfig? {
         return codeBrickDao
@@ -54,7 +54,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    suspend fun deleteOneCodeBrickConfig(
+    suspend fun deleteCodeBrickConfig(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()

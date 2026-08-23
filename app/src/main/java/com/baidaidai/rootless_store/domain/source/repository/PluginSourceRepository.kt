@@ -14,24 +14,24 @@ interface PluginSourceRepository {
     val appDatabase: RoomDatabase
 
     // Create
-    suspend fun insertOnePluginSourceByDefault(sourceEndpointInput: PluginSourceEndpointInput): PluginSourceEvent
+    suspend fun insertPluginSourceByDefault(sourceEndpointInput: PluginSourceEndpointInput): PluginSourceEvent
 
-    suspend fun insertOnePluginSourceByAuthentication(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceEvent
+    suspend fun insertPluginSourceByAuthentication(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceEvent
 
     // Update
-    suspend fun updateOnePluginSource(
+    suspend fun updatePluginSource(
         sourceID: String,
         sourceName: String,
         sourceRemoteEndpoint: String
     )
 
     // Read
-    suspend fun getOnePluginSource(sourceID: String): PluginSourceEntity?
+    suspend fun findPluginSource(sourceID: String): PluginSourceEntity?
 
     fun getAllPluginSources(): Flow<List<PluginSourceInfo>?>
 
     fun getPluginSourcesCount(): Flow<Int>
 
     // Delete
-    suspend fun deleteOnePluginSource(pluginSourceEntity: PluginSourceEntity)
+    suspend fun deletePluginSource(pluginSourceEntity: PluginSourceEntity)
 }

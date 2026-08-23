@@ -17,13 +17,13 @@ class EnvironmentRepositoryImpl @Inject constructor(
     private val environmentDao = rootlessStoreDatabase.environmentDao()
 
     // Create
-    suspend fun insertOneEnvironmentInfo(
+    suspend fun insertEnvironmentInfo(
         environmentManifestLocal: EnvironmentManifestLocal
     ) {
         val environmentInfoEntity = environmentManifestLocal.toEnvironmentInfoEntity()
         environmentDao.insertEnvironment(environmentInfoEntity)
     }
-    suspend fun insertOneEnvironmentInfo(
+    suspend fun insertEnvironmentInfo(
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
         val environmentInfoEntity = environmentManifestRemote.toEnvironmentInfoEntity()
@@ -40,7 +40,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Read
-    suspend fun getOneEnvironmentInfoRoomByID(
+    suspend fun findEnvironmentInfoRoomByID(
         environmentID: String
     ): EnvironmentManifestRoom? {
         val environmentInfoRoom = environmentDao.findEnvironmentById(environmentID)
@@ -87,7 +87,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    suspend fun deleteOneEnvironmentInfoByID(environmentID: String) {
+    suspend fun deleteEnvironmentInfoByID(environmentID: String) {
         environmentDao.deleteEnvironmentById(environmentID)
     }
 }
