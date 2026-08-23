@@ -12,16 +12,16 @@ class UpdateCodeBrickUseCase @Inject constructor(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
-        bindTileIndex: Int?,
+        boundTileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     ) {
 
         val codeBrickConfig = CodeBrickConfig(
-            unixTimeStamp = oldCodeBrickConfig.unixTimeStamp,
+            unixTimestamp = oldCodeBrickConfig.unixTimestamp,
             codeBrickTitle = codeBrickTitle,
             codeBrickContent = codeBrickContent,
             codeBrickEnvironment = codeBrickContext,
-            bindTileIndex = bindTileIndex
+            boundTileIndex = boundTileIndex
         )
 
         codeBrickRepositoryImpl.updateCodeBrickConfig(codeBrickConfig)

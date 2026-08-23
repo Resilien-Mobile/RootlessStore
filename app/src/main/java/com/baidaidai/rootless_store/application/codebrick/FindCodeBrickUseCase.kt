@@ -8,6 +8,6 @@ class FindCodeBrickUseCase @Inject constructor(
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
     suspend operator fun invoke(
-        unixTimeStamp: Long
-    ): CodeBrickConfig? = codeBrickRepositoryImpl.findCodeBrickConfig(unixTimeStamp)
+        unixTimestamp: Long
+    ): CodeBrickConfig? = codeBrickRepositoryImpl.findCodeBrickConfig(unixTimestamp)
 }

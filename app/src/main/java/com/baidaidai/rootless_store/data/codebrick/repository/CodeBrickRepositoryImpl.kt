@@ -31,10 +31,10 @@ class CodeBrickRepositoryImpl @Inject constructor(
 
     // Read
     suspend fun findCodeBrickConfig(
-        unixTimeStamp: Long
+        unixTimestamp: Long
     ): CodeBrickConfig? {
         return codeBrickDao
-            .findCodeBrickByTimestamp(unixTimeStamp)
+            .findCodeBrickByTimestamp(unixTimestamp)
             ?.toCodeBrickConfig()
     }
 

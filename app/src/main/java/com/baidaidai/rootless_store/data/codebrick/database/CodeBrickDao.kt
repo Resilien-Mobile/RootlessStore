@@ -23,8 +23,8 @@ interface CodeBrickDao {
     suspend fun updateCodeBrick(codeBrickEntity: CodeBrickEntity)
 
     // Read
-    @Query("SELECT * FROM CodeBrickEntity WHERE unixTimeStamp = :unixTimeStamp LIMIT 1")
-    suspend fun findCodeBrickByTimestamp(unixTimeStamp: Long): CodeBrickEntity?
+    @Query("SELECT * FROM CodeBrickEntity WHERE unixTimeStamp = :unixTimestamp LIMIT 1")
+    suspend fun findCodeBrickByTimestamp(unixTimestamp: Long): CodeBrickEntity?
 
     @Query("SELECT * FROM CodeBrickEntity")
     fun observeCodeBricks(): Flow<List<CodeBrickEntity>>
