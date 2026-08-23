@@ -11,12 +11,12 @@ class InstallEnvironmentFromMarketUseCase @Inject constructor(
     private val environmentGatewayImpl: EnvironmentGatewayImpl
 ) {
     suspend operator fun invoke(
-        environmentURI: String,
+        environmentUri: String,
         manifest: ModuleManifestCollection
     ) {
         val environmentManifestRemote = manifest as EnvironmentManifestRemote
 
-        environmentGatewayImpl.installEnvironmentFromMarket(environmentURI, environmentManifestRemote)
+        environmentGatewayImpl.installEnvironmentFromMarket(environmentUri, environmentManifestRemote)
         environmentGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifestRemote)
         environmentRepositoryImpl.insertEnvironmentInfo(environmentManifestRemote)
     }

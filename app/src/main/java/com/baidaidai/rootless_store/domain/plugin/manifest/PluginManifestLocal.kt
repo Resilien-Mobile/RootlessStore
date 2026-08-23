@@ -2,6 +2,7 @@ package com.baidaidai.rootless_store.domain.plugin.manifest
 
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -24,14 +25,17 @@ data class PluginManifestLocal(
     override val installedVersion: String,
     override val pluginRenderingName: String,
     override val pluginPackageName: String,
-    override val pluginID: String,
-    override val iconURI: String?,
+    @SerialName("pluginID")
+    override val pluginId: String,
+    @SerialName("iconURI")
+    override val iconUri: String?,
     override val author: String,
     override val pluginDescription: String,
     override val requiredEnvironment: HosterOverallStatus,
     override val entryPoint: String,
     override val pluginRunModel: PluginRunModel,
-    override val webUIEntryPoint: String? = null,
+    @SerialName("webUIEntryPoint")
+    override val webUiEntryPoint: String? = null,
     override val executableFiles: List<String>? = null
 ): PluginManifest.PluginManifestLocal{
     companion object {
@@ -39,8 +43,8 @@ data class PluginManifestLocal(
             installedVersion = "x.x.x",
             pluginRenderingName=  "Test Plugin",
             pluginPackageName = "TestPlugin",
-            pluginID = "29bb10c46772264df3c0d0fade57d2eb",
-            iconURI = "content://rootless_store/plugin_icon/test",
+            pluginId = "29bb10c46772264df3c0d0fade57d2eb",
+            iconUri = "content://rootless_store/plugin_icon/test",
             author = "Rootless Store(Creater. Bai)",
             requiredEnvironment = HosterOverallStatus.LIMITED,
             pluginDescription = "Tested by Creater. Bai",

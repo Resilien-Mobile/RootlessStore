@@ -31,19 +31,19 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Update
-    suspend fun enableEnvironmentByID(environmentID: String) {
-        environmentDao.updateEnvironmentEnabled(environmentId = environmentID, isEnabled = true)
+    suspend fun enableEnvironmentById(environmentId: String) {
+        environmentDao.updateEnvironmentEnabled(environmentId = environmentId, isEnabled = true)
     }
 
-    suspend fun disableEnvironmentByID(environmentID: String) {
-        environmentDao.updateEnvironmentEnabled(environmentId = environmentID, isEnabled = false)
+    suspend fun disableEnvironmentById(environmentId: String) {
+        environmentDao.updateEnvironmentEnabled(environmentId = environmentId, isEnabled = false)
     }
 
     // Read
-    suspend fun findEnvironmentInfoRoomByID(
-        environmentID: String
+    suspend fun findEnvironmentInfoRoomById(
+        environmentId: String
     ): EnvironmentManifestRoom? {
-        val environmentInfoRoom = environmentDao.findEnvironmentById(environmentID)
+        val environmentInfoRoom = environmentDao.findEnvironmentById(environmentId)
         return environmentInfoRoom
     }
 
@@ -87,7 +87,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    suspend fun deleteEnvironmentInfoByID(environmentID: String) {
-        environmentDao.deleteEnvironmentById(environmentID)
+    suspend fun deleteEnvironmentInfoById(environmentId: String) {
+        environmentDao.deleteEnvironmentById(environmentId)
     }
 }

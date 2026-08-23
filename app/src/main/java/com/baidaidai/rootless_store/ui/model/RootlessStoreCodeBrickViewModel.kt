@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class CodeBrickScreenUIState(
+data class CodeBrickScreenUiState(
     val brickEditorCanShow: Boolean = false,
     val executeResultCanShow: Boolean = false,
     val brickSettingCanShow: Boolean = false,
@@ -44,8 +44,8 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val convertCodeBrickToPluginUseCase: ConvertCodeBrickToPluginUseCase
 ): ViewModel() {
 
-    private val _codeBrickScreenUIState = MutableStateFlow(CodeBrickScreenUIState())
-    val codeBrickScreenUIState = _codeBrickScreenUIState.asStateFlow()
+    private val _codeBrickScreenUiState = MutableStateFlow(CodeBrickScreenUiState())
+    val codeBrickScreenUiState = _codeBrickScreenUiState.asStateFlow()
 
     private val _codeBrickEvent = MutableSharedFlow<CodeBrickError?>()
     val codeBrickEvent = _codeBrickEvent.asSharedFlow()
@@ -60,7 +60,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun changeEditorShowStatus(
         showStatus: Boolean = false
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
                 brickEditorCanShow = showStatus
             )
@@ -70,7 +70,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         codeBrickConfig: CodeBrickConfig,
         settingShowStatus: Boolean = true,
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
                 brickSettingCanShow = settingShowStatus,
                 handlingCodeBrickConfig = codeBrickConfig
@@ -80,7 +80,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun closeSettingShowStatus(
         settingShowStatus: Boolean = false,
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
                 brickSettingCanShow = settingShowStatus,
             )
@@ -89,7 +89,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun changeResultShowStatus(
         showStatus: Boolean = false
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
                 executeResultCanShow = showStatus
             )
@@ -98,7 +98,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun changeButtonMenuStatus(
         showStatus: Boolean = false
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
                 buttonMenuExpandStatus = showStatus
             )
@@ -169,33 +169,33 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            Log.d("codeBrickScreenUIState.executeResultContent", codeBrickScreenUIState.value.executeResultContent.toString())
+            Log.d("codeBrickScreenUiState.executeResultContent", codeBrickScreenUiState.value.executeResultContent.toString())
 
             // Clean Up
-            _codeBrickScreenUIState.update { codeBrickScreenUIState ->
+            _codeBrickScreenUiState.update { codeBrickScreenUiState ->
                 // Clean the cache
-                val voidUIState = codeBrickScreenUIState.copy(
+                val voidUiState = codeBrickScreenUiState.copy(
                     executeResultContent = emptyList()
                 )
                 // Fill the Void Content
-                voidUIState.copy(
-                    executeResultContent = voidUIState.executeResultContent + "Void"
+                voidUiState.copy(
+                    executeResultContent = voidUiState.executeResultContent + "Void"
                 )
             }
 
             changeResultShowStatus(true)
 
             executeCodeBrickUseCase(codeBrickConfig).collect { shellResult ->
-                _codeBrickScreenUIState.update { codeBrickScreenUIState ->
+                _codeBrickScreenUiState.update { codeBrickScreenUiState ->
 
                     // Clean the Void-Chars cache
-                    val voidUIState = codeBrickScreenUIState.copy(
-                        executeResultContent = codeBrickScreenUIState.executeResultContent - "Void"
+                    val voidUiState = codeBrickScreenUiState.copy(
+                        executeResultContent = codeBrickScreenUiState.executeResultContent - "Void"
                     )
 
                     // Add results
-                    voidUIState.copy(
-                        executeResultContent = voidUIState.executeResultContent + shellResult.content
+                    voidUiState.copy(
+                        executeResultContent = voidUiState.executeResultContent + shellResult.content
                     )
                 }
             }

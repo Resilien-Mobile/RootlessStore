@@ -13,8 +13,8 @@ class ResolvePluginWebUiUriUseCase @Inject constructor(
         val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.resolvePluginPackageDirectory(
             pluginManifestRoom
         )
-        val webUIEntryPoint = pluginManifestRoom.webUIEntryPoint!!
+        val webUiEntryPoint = pluginManifestRoom.webUiEntryPoint!!
 
-        return "$pluginPackageDirectory/$webUIEntryPoint"
+        return "$pluginPackageDirectory/$webUiEntryPoint"
     }
 }

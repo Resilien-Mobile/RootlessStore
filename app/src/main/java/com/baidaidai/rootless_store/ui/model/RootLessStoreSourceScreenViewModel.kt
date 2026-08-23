@@ -57,13 +57,13 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
     val authenticationBottomSheetShowStatus = _authenticationBottomSheetShowStatus.asStateFlow()
 
     fun addSourceByDefault(
-        sourceURI: String
+        sourceUri: String
     ){
 
-        latestPluginSourceEndpoint = sourceURI
+        latestPluginSourceEndpoint = sourceUri
 
         viewModelScope.launch {
-            val result = addSourceByDefaultUseCase(sourceURI)
+            val result = addSourceByDefaultUseCase(sourceUri)
 
             when(result){
                 is PluginSourceEvent.SourceError -> {

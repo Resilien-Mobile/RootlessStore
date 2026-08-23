@@ -84,7 +84,7 @@ fun PluginActionContainer(
                 )
             }
 
-            if (!pluginManifestRoom?.webUIEntryPoint.isNullOrEmpty()){
+            if (!pluginManifestRoom?.webUiEntryPoint.isNullOrEmpty()){
                 IconButton(
                     onClick = onWebUiButtonClick,
                     colors = webUiButtonColors,
@@ -131,7 +131,7 @@ fun PluginActionContainer(
 @Composable
 private fun _preview_() {
     PluginActionContainer(
-        pluginManifestRoom = PluginManifestRoom._testOnly_.copy(webUIEntryPoint = "akjfjdkdjskf"),
+        pluginManifestRoom = PluginManifestRoom._testOnly_.copy(webUiEntryPoint = "akjfjdkdjskf"),
         modifier = Modifier
             .size(
                 width = 300.dp,

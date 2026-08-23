@@ -20,13 +20,13 @@ interface PluginSourceRepository {
 
     // Update
     suspend fun updatePluginSource(
-        sourceID: String,
+        sourceId: String,
         sourceName: String,
         sourceRemoteEndpoint: String
     )
 
     // Read
-    suspend fun findPluginSource(sourceID: String): PluginSourceEntity?
+    suspend fun findPluginSource(sourceId: String): PluginSourceEntity?
 
     fun observePluginSources(): Flow<List<PluginSourceInfo>?>
 

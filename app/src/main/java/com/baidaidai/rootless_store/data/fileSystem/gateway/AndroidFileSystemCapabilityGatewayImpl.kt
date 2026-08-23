@@ -141,10 +141,10 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         targetFile.writeText(content)
         return targetFile
     }
-    fun copyUriToFile(originFileURI: Uri, targetFile: File): File {
+    fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
         targetFile.parentFile?.mkdirs()
 
-        context.contentResolver.openInputStream(originFileURI).use { originInputStream ->
+        context.contentResolver.openInputStream(originFileUri).use { originInputStream ->
             FileOutputStream(targetFile).use { targetOutputStream ->
                 originInputStream!!.copyTo(targetOutputStream)
             }
@@ -155,7 +155,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
 
     // Un-Zip FS Operator
     @Suppress("UNUSED_PARAMETER")
-    fun unzipFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
+    fun unzipFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
         // Get file's name, always powered by readManiFestJsonContent
         val directoryName = when {
@@ -166,7 +166,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
             }  // 只有destinationFilName显式指定，否则不走
 
             else -> {
-                loadRawPluginManifest(originFileURI).let { json ->
+                loadRawPluginManifest(originFileUri).let { json ->
                     parsePluginManifest(json).pluginPackageName
                 }.trim()
             }
@@ -180,7 +180,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
 
         // Open IO Stream
-        context.contentResolver.openInputStream(originFileURI).use{ fis ->
+        context.contentResolver.openInputStream(originFileUri).use{ fis ->
             // Unzip from File Input Stream
             ZipInputStream(BufferedInputStream(fis)).use { zis ->
                 var entry = zis.nextEntry
@@ -204,7 +204,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
-    fun unzipEnvironmentFromFile(originFileURI: Uri, pluginRootDirectory: File, directoryName: String? = null) {
+    fun unzipEnvironmentFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
         // Get file's name, always powered by readManiFestJsonContent
         val directoryName = when {
@@ -215,7 +215,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
             }  // 只有destinationFilName显式指定，否则不走
 
             else -> {
-                loadRawEnvironmentManifest(originFileURI).let { json ->
+                loadRawEnvironmentManifest(originFileUri).let { json ->
                     parseEnvironmentManifest(json).environmentPackageName
                 }.trim()
             }
@@ -229,7 +229,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
 
         // Open IO Stream
-        context.contentResolver.openInputStream(originFileURI).use{ fis ->
+        context.contentResolver.openInputStream(originFileUri).use{ fis ->
             // Unzip from File Input Stream
             ZipInputStream(BufferedInputStream(fis)).use { zis ->
                 var entry = zis.nextEntry
@@ -253,7 +253,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
-    fun unZipFromURI(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
+    fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
         // Provide void file, for copy use
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
@@ -285,7 +285,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
-    fun unZipEnvironmentFromURI(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
+    fun unzipEnvironmentFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
         // Provide void file, for copy use
         val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()

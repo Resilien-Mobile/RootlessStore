@@ -8,8 +8,8 @@ import javax.inject.Inject
 class AddSourceByDefaultUseCase @Inject constructor(
     private val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ) {
-    suspend operator fun invoke(sourceURI: String): PluginSourceEvent{
-        val sourceEndpointInput = PluginSourceEndpointInput(sourceRemoteEndpoint = sourceURI)
+    suspend operator fun invoke(sourceUri: String): PluginSourceEvent{
+        val sourceEndpointInput = PluginSourceEndpointInput(sourceRemoteEndpoint = sourceUri)
         return pluginSourceRepositoryImpl.insertPluginSourceByDefault(sourceEndpointInput)
     }
 }

@@ -41,19 +41,19 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
         val environment = processBuilder.environment()
 
-        val oldPATH = environment["PATH"].orEmpty()
-        val oldLDPATH = environment["LD_LIBRARY_PATH"].orEmpty()
+        val oldPath = environment["PATH"].orEmpty()
+        val oldLdPath = environment["LD_LIBRARY_PATH"].orEmpty()
 
-        val environmentPATH = environmentRepositoryImpl.resolveEnvironmentPath()
-        val environmentLDPATH = environmentRepositoryImpl.resolveEnvironmentLdPath()
+        val environmentPath = environmentRepositoryImpl.resolveEnvironmentPath()
+        val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
 
-        environment["PATH"] = "$environmentPATH:$oldPATH"
-        environment["LD_LIBRARY_PATH"] = "$environmentLDPATH:$oldLDPATH"
+        environment["PATH"] = "$environmentPath:$oldPath"
+        environment["LD_LIBRARY_PATH"] = "$environmentLdPath:$oldLdPath"
         environment.putAll(environmentConfig)
 
-        Log.d("executePluginEntryPoint","environmentPATH: $environmentPATH")
-        Log.d("executePluginEntryPoint","environmentLDPATH: $environmentLDPATH")
+        Log.d("executePluginEntryPoint","environmentPath: $environmentPath")
+        Log.d("executePluginEntryPoint","environmentLdPath: $environmentLdPath")
 
         val process = processBuilder.start()
 
@@ -124,21 +124,21 @@ class PluginExecutionGatewayImpl @Inject constructor(
         awaitClose {  }
     }
 
-    fun abortPluginProcess(pluginProcessPID: Int?){
-        if (pluginProcessPID != null){
+    fun abortPluginProcess(pluginProcessPid: Int?){
+        if (pluginProcessPid != null){
             ProcessBuilder(
-                rootEnvironmentSwitch(), "-c", "kill -9 $pluginProcessPID"
+                rootEnvironmentSwitch(), "-c", "kill -9 $pluginProcessPid"
             ).start()
         }
     }
 
-    fun abortPluginProcessByShizuku(pluginProcessPID: Int?): Boolean{
-        return if (pluginProcessPID != null){
+    fun abortPluginProcessByShizuku(pluginProcessPid: Int?): Boolean{
+        return if (pluginProcessPid != null){
             Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.getShizukuUserService() == null}")
-            Log.d("pid","$pluginProcessPID")
+            Log.d("pid","$pluginProcessPid")
 
             val result = shizukuUserServiceGatewayImpl.getShizukuUserService()
-                ?.kill(pluginProcessPID)
+                ?.kill(pluginProcessPid)
 
             Log.d("kill pid result",result.toString())
 

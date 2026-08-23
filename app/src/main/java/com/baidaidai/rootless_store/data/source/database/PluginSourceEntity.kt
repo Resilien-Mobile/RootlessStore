@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.source.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,7 +12,8 @@ import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticati
 @Entity(tableName = "pluginSource")
 data class PluginSourceEntity(
     @PrimaryKey
-    val sourceID: String,
+    @ColumnInfo(name = "sourceID")
+    val sourceId: String,
     val sourceName: String,
     val sourceRemoteEndpoint: String,
     val userAccessToken: String?,
@@ -27,7 +29,7 @@ data class PluginSourceEntity(
             pluginSourceInfoDto: PluginSourceInfoDto
         ): PluginSourceEntity{
             return PluginSourceEntity(
-                sourceID = pluginSourceInfoDto.sourceID,
+                sourceId = pluginSourceInfoDto.sourceId,
                 sourceName = pluginSourceInfoDto.sourceName,
                 sourceRemoteEndpoint = pluginSourceInfoDto.sourceRemoteEndpoint,
                 userAccessToken = null,
@@ -40,7 +42,7 @@ data class PluginSourceEntity(
             pluginSourceInfo: PluginSourceInfo
         ): PluginSourceEntity{
             return PluginSourceEntity(
-                sourceID = pluginSourceInfo.sourceID,
+                sourceId = pluginSourceInfo.sourceId,
                 sourceName = pluginSourceInfo.sourceName,
                 sourceRemoteEndpoint = pluginSourceInfo.sourceRemoteEndpoint,
                 userAccessToken = null,

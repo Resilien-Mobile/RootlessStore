@@ -41,9 +41,9 @@ import kotlinx.coroutines.launch
 fun RootlessStorePluginScreenContainer(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
-    onAbortPlugin:suspend (pluginID: String) -> Unit,
-    onActiveOneTimePlugin: (pluginID: String)-> Unit
+    navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,
+    onAbortPlugin:suspend (pluginId: String) -> Unit,
+    onActiveOneTimePlugin: (pluginId: String)-> Unit
 ){
     val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
     val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
@@ -108,9 +108,9 @@ fun PluginScreen(
     badgeShowState: Boolean,
     renderingList: List<PluginManifestRoom>,
     pluginScreenViewModel: RootLessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
-    onAbortPlugin: suspend (pluginID: String) -> Unit,
-    onButtonClick: (pluginID: String)-> Unit
+    navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,
+    onAbortPlugin: suspend (pluginId: String) -> Unit,
+    onButtonClick: (pluginId: String)-> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -128,7 +128,7 @@ fun PluginScreen(
 
         items(
             items = renderingList,
-            key = { pluginManifestRoom -> pluginManifestRoom.pluginID }
+            key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
         ){ pluginManifestRoom ->
 
             var actionCanSee by remember { mutableStateOf(false) }
@@ -173,22 +173,22 @@ fun PluginScreen(
                     pluginManifestRoom = pluginManifestRoom,
                     onSwitchClick = {
                         pluginScreenViewModel.setPluginEnabled(
-                            pluginID = pluginManifestRoom.pluginID,
+                            pluginId = pluginManifestRoom.pluginId,
                             pluginEnabledStatus = !pluginManifestRoom.enabled
                         )
 
                         if (!pluginManifestRoom.enabled){
-                            navigateToExecuteScreen(pluginManifestRoom.pluginID,true)
+                            navigateToExecuteScreen(pluginManifestRoom.pluginId,true)
                         }else{
                             coroutineScope.launch {
-                                onAbortPlugin(pluginManifestRoom.pluginID)
+                                onAbortPlugin(pluginManifestRoom.pluginId)
                             }
                         }
                     },
-                    onButtonClick = { onButtonClick(pluginManifestRoom.pluginID) },
+                    onButtonClick = { onButtonClick(pluginManifestRoom.pluginId) },
                     onCardClick = {
                         if (pluginManifestRoom.enabled){
-                            navigateToExecuteScreen(pluginManifestRoom.pluginID,false)
+                            navigateToExecuteScreen(pluginManifestRoom.pluginId,false)
                         }
                     },
                     onCardLongClick = { actionCanSee = !actionCanSee },

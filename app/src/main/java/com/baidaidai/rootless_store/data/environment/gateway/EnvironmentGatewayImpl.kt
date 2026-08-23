@@ -21,15 +21,15 @@ class EnvironmentGatewayImpl @Inject constructor(
     private val defaultEnvironmentLocation = File(context.filesDir, "Environment")
 
     // Install Environment
-    fun installEnvironmentFromLocal(originFileURI: Uri) {
-        installEnvironment(originFileURI)
+    fun installEnvironmentFromLocal(originFileUri: Uri) {
+        installEnvironment(originFileUri)
     }
 
     suspend fun installEnvironmentFromMarket(
-        environmentURI: String,
+        environmentUri: String,
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
-        val remoteEnvironmentContent = downloadPluginPackage.usePluginURI(environmentURI).bodyAsChannel()
+        val remoteEnvironmentContent = downloadPluginPackage.usePluginUri(environmentUri).bodyAsChannel()
         val environmentPackageName = environmentManifestRemote.environmentPackageName
         installEnvironment(
             originFileByteChannel = remoteEnvironmentContent,
@@ -68,25 +68,25 @@ class EnvironmentGatewayImpl @Inject constructor(
 
 
     // Get Raw EnvironmentManifestLocal
-    fun loadEnvironmentManifest(originFileURI: Uri): EnvironmentManifestLocal {
-        return androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileURI).let {
+    fun loadEnvironmentManifest(originFileUri: Uri): EnvironmentManifestLocal {
+        return androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileUri).let {
             androidFileSystemCapabilityGatewayImpl.parseEnvironmentManifest(it)
         }
     }
 
     // Only Un-Zip operation, which from given zip file
     private fun installEnvironment(
-        originFileURI: Uri,
+        originFileUri: Uri,
         destination: File = defaultEnvironmentLocation
     ) {
         if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()) {
             androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromFile(
-                originFileURI = originFileURI,
+                originFileUri = originFileUri,
                 pluginRootDirectory = destination
             )
         } else {
             androidFileSystemCapabilityGatewayImpl.createFileDir("Environment")
-            installEnvironment(originFileURI)
+            installEnvironment(originFileUri)
         }
     }
 
@@ -96,7 +96,7 @@ class EnvironmentGatewayImpl @Inject constructor(
         destinationFileName: String
     ) {
         if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()) {
-            androidFileSystemCapabilityGatewayImpl.unZipEnvironmentFromURI(
+            androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromUri(
                 originFileByteChannel = originFileByteChannel,
                 pluginRootDirectory = destination,
                 directoryName = destinationFileName

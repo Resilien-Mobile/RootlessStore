@@ -10,9 +10,9 @@ class DownloadPluginPackage @Inject constructor(
 ){
     private val client = ktorClient
 
-    suspend fun usePluginURI(pluginURI: String): HttpResponse {
+    suspend fun usePluginUri(pluginUri: String): HttpResponse {
         return client.get(
-            urlString = pluginURI
+            urlString = pluginUri
         )
     }
 }

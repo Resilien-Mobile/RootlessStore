@@ -13,16 +13,16 @@ class ExecutePluginUseCase @Inject constructor(
     val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
 ) {
     suspend operator fun invoke(
-        pluginID: String
+        pluginId: String
     ): Flow<ExecutionResult> {
 
         val shouldUseShizuku = judgeShouldUseShizuku()
 
         // Judge if needs use Shizuku
         return if (shouldUseShizuku) {
-            executePluginByShizukuUseCase(pluginID)
+            executePluginByShizukuUseCase(pluginId)
         } else {
-            executePluginByAppShellUseCase(pluginID)
+            executePluginByAppShellUseCase(pluginId)
         }
     }
 

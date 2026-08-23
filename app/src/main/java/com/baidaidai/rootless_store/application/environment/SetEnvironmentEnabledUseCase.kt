@@ -7,13 +7,13 @@ class SetEnvironmentEnabledUseCase @Inject constructor(
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl
 ) {
     suspend operator fun invoke(
-        environmentID: String,
+        environmentId: String,
         environmentEnabledStatus: Boolean
     ){
         if (environmentEnabledStatus){
-            environmentRepositoryImpl.enableEnvironmentByID(environmentID)
+            environmentRepositoryImpl.enableEnvironmentById(environmentId)
         }else{
-            environmentRepositoryImpl.disableEnvironmentByID(environmentID)
+            environmentRepositoryImpl.disableEnvironmentById(environmentId)
         }
     }
 }

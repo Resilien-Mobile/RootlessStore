@@ -16,13 +16,13 @@ class PluginExecutionRepositoryImpl @Inject constructor(
 
     suspend fun abortPluginProcess(pluginManifestRoom: PluginManifestRoom){
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
-        val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginManifestRoom.pluginID)
+        val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginManifestRoom.pluginId)
         pluginExecutionGatewayImpl.abortPluginProcess(pidSaved)
     }
 
     suspend fun abortPluginProcessByShizuku(pluginManifestRoom: PluginManifestRoom){
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
-        val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginManifestRoom.pluginID)
+        val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginManifestRoom.pluginId)
         pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pidSaved)
     }
 
@@ -39,8 +39,8 @@ class PluginExecutionRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    suspend fun deletePluginExecutionByPluginID(pluginID: String) {
-        pluginExecutionDao.deletePluginExecutionByPluginId(pluginID)
+    suspend fun deletePluginExecutionByPluginId(pluginId: String) {
+        pluginExecutionDao.deletePluginExecutionByPluginId(pluginId)
     }
 
     suspend fun deleteAllPluginExecutions() {

@@ -28,12 +28,12 @@ class ObservePluginsUseCase @Inject constructor(
             pluginManifestRoomList.map { pluginManifestRoom ->
 
                 // If user provide icon uri
-                if (pluginManifestRoom.iconURI != null && !uriRegex.containsMatchIn(pluginManifestRoom.iconURI)){
+                if (pluginManifestRoom.iconUri != null && !uriRegex.containsMatchIn(pluginManifestRoom.iconUri)){
                     val pluginPackageDirectory = File(androidFileSystemCapabilityGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom))
-                    val pluginIconURI = File(pluginPackageDirectory,pluginManifestRoom.iconURI).toURI()
+                    val pluginIconUri = File(pluginPackageDirectory,pluginManifestRoom.iconUri).toURI()
 
                     pluginManifestRoom.copy(
-                        iconURI = pluginIconURI.toString()
+                        iconUri = pluginIconUri.toString()
                     )
                 }else{
                     pluginManifestRoom

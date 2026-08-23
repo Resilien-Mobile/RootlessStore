@@ -7,13 +7,13 @@ class SetPluginEnabledUseCase @Inject constructor(
     private val pluginInfoRepository: PluginRepositoryImpl
 ) {
     suspend operator fun invoke(
-        pluginID: String,
+        pluginId: String,
         pluginEnabledStatus: Boolean
     ){
         if (pluginEnabledStatus){
-            pluginInfoRepository.enablePluginByID(pluginID)
+            pluginInfoRepository.enablePluginById(pluginId)
         }else{
-            pluginInfoRepository.disablePluginByID(pluginID)
+            pluginInfoRepository.disablePluginById(pluginId)
         }
     }
 }

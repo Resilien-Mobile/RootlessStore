@@ -10,11 +10,11 @@ object PluginMapper {
 
     fun PluginManifestLocal.toPluginInfoEntity(): PluginInfoEntity {
         return PluginInfoEntity(
-            pluginID = pluginID,
+            pluginId = pluginId,
             installedVersion = installedVersion,
             pluginRenderingName = pluginRenderingName,
             pluginPackageName = pluginPackageName,
-            iconURI = iconURI,
+            iconUri = iconUri,
             author = author,
             pluginDescription = pluginDescription,
             enabled = false,
@@ -23,16 +23,16 @@ object PluginMapper {
             source = PluginSource.Local,
             entryPoint = entryPoint,
             pluginRunModel = pluginRunModel,
-            webUIEntryPoint = webUIEntryPoint
+            webUiEntryPoint = webUiEntryPoint
         )
     }
     fun PluginManifestRemote.toPluginInfoEntity(): PluginInfoEntity {
         return PluginInfoEntity(
-            pluginID = pluginID,
+            pluginId = pluginId,
             installedVersion = installedVersion,
             pluginRenderingName = pluginRenderingName,
             pluginPackageName = pluginPackageName,
-            iconURI = iconURI,
+            iconUri = iconUri,
             author = author,
             pluginDescription = pluginDescription,
             enabled = false,
@@ -41,7 +41,7 @@ object PluginMapper {
             source = PluginSource.Official,
             entryPoint = entryPoint,
             pluginRunModel = pluginRunModel,
-            webUIEntryPoint = webUIEntryPoint,
+            webUiEntryPoint = webUiEntryPoint,
         )
     }
 

@@ -118,12 +118,12 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
     // Update
     override suspend fun updatePluginSource(
-        sourceID: String,
+        sourceId: String,
         sourceName: String,
         sourceRemoteEndpoint: String
     ) {
         pluginSourceDao.updatePluginSource(
-            sourceId = sourceID,
+            sourceId = sourceId,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint
         )
@@ -131,9 +131,9 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
     // Read
     override suspend fun findPluginSource(
-        sourceID: String
+        sourceId: String
     ): PluginSourceEntity? {
-        return pluginSourceDao.findPluginSourceById(sourceID)
+        return pluginSourceDao.findPluginSourceById(sourceId)
     }
 
     override fun observePluginSources(): Flow<List<PluginSourceInfo>?> {

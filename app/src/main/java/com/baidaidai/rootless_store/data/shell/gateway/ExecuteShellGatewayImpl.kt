@@ -42,15 +42,15 @@ class ExecuteShellGatewayImpl @Inject constructor(
         val appShellProcessBuilder = ProcessBuilder("sh","-c", "${changeDirectoryHandler()}$commandContent")
 
         val environment = appShellProcessBuilder.environment()
-        val oldPATH = environment["PATH"].orEmpty()
-        val oldLDPATH = environment["LD_LIBRARY_PATH"].orEmpty()
+        val oldPath = environment["PATH"].orEmpty()
+        val oldLdPath = environment["LD_LIBRARY_PATH"].orEmpty()
 
-        environment["PATH"] = "${appShellContextConfig.environmentPATH}:$oldPATH"
-        environment["LD_LIBRARY_PATH"] = "${appShellContextConfig.environmentLDPATH}:$oldLDPATH"
+        environment["PATH"] = "${appShellContextConfig.environmentPath}:$oldPath"
+        environment["LD_LIBRARY_PATH"] = "${appShellContextConfig.environmentLdPath}:$oldLdPath"
         environment.putAll(appShellContextConfig.environmentConfig)
 
-        Log.d("executePluginEntryPoint","environmentPATH: ${appShellContextConfig.environmentPATH}")
-        Log.d("executePluginEntryPoint","environmentLDPATH: ${appShellContextConfig.environmentLDPATH}")
+        Log.d("executePluginEntryPoint","environmentPath: ${appShellContextConfig.environmentPath}")
+        Log.d("executePluginEntryPoint","environmentLdPath: ${appShellContextConfig.environmentLdPath}")
 
         val appShellProcess = appShellProcessBuilder.start()
 

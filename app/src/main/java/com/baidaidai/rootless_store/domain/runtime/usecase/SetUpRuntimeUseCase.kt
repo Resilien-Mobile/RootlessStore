@@ -18,13 +18,13 @@ class SetUpRuntimeUseCase @Inject constructor(
             if (pluginExecutionStatus.executionContext == HosterOverallStatus.ADB){
                 val abortResult = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
                 if (abortResult){
-                    pluginRepositoryImpl.disablePluginByID(pluginExecutionStatus.pluginID)
-                    pluginExecutionRepositoryImpl.deletePluginExecutionByPluginID(pluginExecutionStatus.pluginID)
+                    pluginRepositoryImpl.disablePluginById(pluginExecutionStatus.pluginId)
+                    pluginExecutionRepositoryImpl.deletePluginExecutionByPluginId(pluginExecutionStatus.pluginId)
                 }
             }else{
                 pluginExecutionGatewayImpl.abortPluginProcess(pluginExecutionStatus.executionPid)
-                pluginRepositoryImpl.disablePluginByID(pluginExecutionStatus.pluginID)
-                pluginExecutionRepositoryImpl.deletePluginExecutionByPluginID(pluginExecutionStatus.pluginID)
+                pluginRepositoryImpl.disablePluginById(pluginExecutionStatus.pluginId)
+                pluginExecutionRepositoryImpl.deletePluginExecutionByPluginId(pluginExecutionStatus.pluginId)
             }
         }
     }

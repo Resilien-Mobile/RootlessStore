@@ -18,7 +18,7 @@ object PluginSourceMapper {
 
     fun PluginSourceInfoDto.toPluginSourceInfo(): PluginSourceInfo{
         return PluginSourceInfo(
-            sourceID = sourceID,
+            sourceId = sourceId,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint,
             pluginSourceAuthenticationMeta = sourceAuthenticationInfo.toPluginSourceAuthenticationMeta()
@@ -27,7 +27,7 @@ object PluginSourceMapper {
 
     fun PluginSourceEntity.toPluginSourceInfo(): PluginSourceInfo{
         return PluginSourceInfo(
-            sourceID = sourceID,
+            sourceId = sourceId,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint,
             pluginSourceAuthenticationMeta = pluginSourceAuthenticationMeta
