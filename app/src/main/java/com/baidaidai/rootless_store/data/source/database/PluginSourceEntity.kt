@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceAuthenticationMeta
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDTO
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDto
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMeta
 
@@ -23,15 +23,15 @@ data class PluginSourceEntity(
     companion object {
 
         // Work best for Adding PluginSource
-        fun fromPluginSourceDTO(
-            pluginSourceInfoDTO: PluginSourceInfoDTO
+        fun fromPluginSourceDto(
+            pluginSourceInfoDto: PluginSourceInfoDto
         ): PluginSourceEntity{
             return PluginSourceEntity(
-                sourceID = pluginSourceInfoDTO.sourceID,
-                sourceName = pluginSourceInfoDTO.sourceName,
-                sourceRemoteEndpoint = pluginSourceInfoDTO.sourceRemoteEndpoint,
+                sourceID = pluginSourceInfoDto.sourceID,
+                sourceName = pluginSourceInfoDto.sourceName,
+                sourceRemoteEndpoint = pluginSourceInfoDto.sourceRemoteEndpoint,
                 userAccessToken = null,
-                pluginSourceAuthenticationMeta = pluginSourceInfoDTO.sourceAuthenticationInfo.toPluginSourceAuthenticationMeta(),
+                pluginSourceAuthenticationMeta = pluginSourceInfoDto.sourceAuthenticationInfo.toPluginSourceAuthenticationMeta(),
             )
         }
 

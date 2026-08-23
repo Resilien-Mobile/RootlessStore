@@ -1,22 +1,22 @@
 package com.baidaidai.rootless_store.data.source.mapper
 
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationInfoDTO
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDTO
-import com.baidaidai.rootless_store.data.source.remote.dto.SourceAuthenticationInfoMetaDTO
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationInfoDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceInfoDto
+import com.baidaidai.rootless_store.data.source.remote.dto.SourceAuthenticationInfoMetaDto
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInfo
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMeta
 
 object PluginSourceMapper {
 
-    fun SourceAuthenticationInfoMetaDTO.toPluginSourceAuthenticationMeta(): PluginSourceAuthenticationMeta {
+    fun SourceAuthenticationInfoMetaDto.toPluginSourceAuthenticationMeta(): PluginSourceAuthenticationMeta {
         return PluginSourceAuthenticationMeta(
             requireAuthentication = requireAuthentication
         )
     }
 
-    fun PluginSourceInfoDTO.toPluginSourceInfo(): PluginSourceInfo{
+    fun PluginSourceInfoDto.toPluginSourceInfo(): PluginSourceInfo{
         return PluginSourceInfo(
             sourceID = sourceID,
             sourceName = sourceName,
@@ -34,7 +34,7 @@ object PluginSourceMapper {
         )
     }
 
-    fun PluginSourceAuthenticationInfoDTO.toPluginSourceAuthenticationInfo(): PluginSourceAuthenticationInfo {
+    fun PluginSourceAuthenticationInfoDto.toPluginSourceAuthenticationInfo(): PluginSourceAuthenticationInfo {
         return PluginSourceAuthenticationInfo(
             userName = userName,
             userAccessToken = userAccessToken

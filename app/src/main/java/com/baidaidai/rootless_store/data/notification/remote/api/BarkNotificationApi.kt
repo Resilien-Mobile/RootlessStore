@@ -7,7 +7,7 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.appendPathSegments
 import javax.inject.Inject
 
-class BarkNotificationAPI @Inject constructor(
+class BarkNotificationApi @Inject constructor(
     private val ktorClient: HttpClient
 ) {
 

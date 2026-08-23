@@ -4,14 +4,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.baidaidai.rootless_store.data.market.paging.PluginPagingSource
-import com.baidaidai.rootless_store.data.market.remote.api.PluginMarketAPI
+import com.baidaidai.rootless_store.data.market.remote.api.PluginMarketApi
 import com.baidaidai.rootless_store.domain.market.error.MarketError
 import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PluginMarketGatewayImpl @Inject constructor(
-    private val api: PluginMarketAPI
+    private val api: PluginMarketApi
 ) {
     fun fetchPlugins(
         pluginSourceUri: String,
