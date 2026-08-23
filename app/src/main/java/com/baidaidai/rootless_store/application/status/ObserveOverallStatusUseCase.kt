@@ -5,7 +5,7 @@ import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatew
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
-import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
+import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -32,7 +32,7 @@ class ObserveOverallStatusUseCase @Inject constructor(
                 } else {
                     false
                 }
-            val seLinuxStatus = storeStatusRepositoryImpl.getSELinuxStatus()
+            val seLinuxStatus = storeStatusRepositoryImpl.getSeLinuxStatus()
 
             val executionContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.observeExecutionContextPreference().first() else null
 
@@ -50,7 +50,7 @@ class ObserveOverallStatusUseCase @Inject constructor(
                     Log.d("HosterOverallStatus", "Shizuku")
                     HosterOverallStatus.ADB
                 }
-                seLinuxStatus == SELinuxStatus.Permissive -> {
+                seLinuxStatus == SeLinuxStatus.Permissive -> {
                     Log.d("HosterOverallStatus", "Permissive")
                     HosterOverallStatus.PERMISSIVE
                 }

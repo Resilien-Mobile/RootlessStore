@@ -43,7 +43,7 @@ fun RootlessStoreHosterStatusBoard(
             ) {
                 HosterStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_version_label),
-                    "${hosterStatus.osAndAPIVersion?.androidVersion} (${hosterStatus.osAndAPIVersion?.apiVersion})"
+                    "${hosterStatus.osAndApiVersion?.androidVersion} (${hosterStatus.osAndApiVersion?.apiVersion})"
                 )
                 Spacer(
                     modifier = Modifier
@@ -59,7 +59,7 @@ fun RootlessStoreHosterStatusBoard(
                 )
                 HosterStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_selinux_label),
-                    hosterStatus.selinuxStatus.toString()
+                    hosterStatus.seLinuxStatus.toString()
                 )
                 Spacer(
                     modifier = Modifier

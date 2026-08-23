@@ -85,7 +85,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    fun runCommandByADBShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun runCommandByAdbShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
         val adbShellContextConfig = shellExecutionContextProviderImpl.resolveAdbShellContext()
 

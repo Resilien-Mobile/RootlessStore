@@ -77,7 +77,7 @@ fun ShellScreen(
 
     val shellEnvironmentSymbol = remember(shellEnvironment){
         when(shellEnvironment){
-            ShellEnvironment.AppShell, ShellEnvironment.ADBShell -> "~"
+            ShellEnvironment.AppShell, ShellEnvironment.AdbShell -> "~"
             ShellEnvironment.RootShell -> "#"
         }
     }
@@ -155,7 +155,7 @@ fun ShellScreen(
                         .height(56.dp)
                 ){
                     when(shellEnvironment){
-                        ShellEnvironment.ADBShell -> {
+                        ShellEnvironment.AdbShell -> {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center,
@@ -266,7 +266,7 @@ fun ShellScreen(
                                             Spacer(modifier = Modifier.height(2.dp))
                                             DropdownMenuItem(
                                                 enabled = adbShellStatus,
-                                                selected = shellEnvironment == ShellEnvironment.ADBShell,
+                                                selected = shellEnvironment == ShellEnvironment.AdbShell,
                                                 shapes = MenuDefaults.itemShape(2,4),
                                                 leadingIcon = {
                                                     Icon(
@@ -278,7 +278,7 @@ fun ShellScreen(
                                                     Text("ADB shell")
                                                 },
                                                 onClick = {
-                                                    shellEnvironment = ShellEnvironment.ADBShell
+                                                    shellEnvironment = ShellEnvironment.AdbShell
                                                 }
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))

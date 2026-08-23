@@ -9,21 +9,21 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
-import com.baidaidai.rootless_store.data.status.datasource.AndroidAndAPIVersionDataSource
+import com.baidaidai.rootless_store.data.status.datasource.AndroidAndApiVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.NetStatusDataSource
-import com.baidaidai.rootless_store.data.status.datasource.SELinuxStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.SeLinuxStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.StorageStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.TemperatureStatusDataSource
-import com.baidaidai.rootless_store.domain.status.model.AndroidAndAPIStatus
+import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
 import com.baidaidai.rootless_store.domain.status.model.CoreInfo
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.PortInfo
-import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
+import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
 import com.topjohnwu.superuser.Shell
@@ -40,10 +40,10 @@ import kotlin.time.Duration
 class StoreStatusGatewayImpl @Inject constructor(
     private val memoryStatusDataSource: MemoryStatusDataSource,
     private val storageStatusDataSource: StorageStatusDataSource,
-    private val selinuxStatusDataSource: SELinuxStatusDataSource,
+    private val seLinuxStatusDataSource: SeLinuxStatusDataSource,
     private val kernelStatusDataSource: KernelStatusDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
-    private val androidAndAPIVersionDataSource: AndroidAndAPIVersionDataSource,
+    private val androidAndApiVersionDataSource: AndroidAndApiVersionDataSource,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
@@ -72,16 +72,16 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun getSELinuxStatus(): SELinuxStatus = selinuxStatusDataSource.returnSELinuxStatus()
+    fun getSeLinuxStatus(): SeLinuxStatus = seLinuxStatusDataSource.getSeLinuxStatus()
 
     fun getKernelStatus(): String = kernelStatusDataSource.getDeviceKernel()
 
     fun observeTemperatureStatus(): Flow<TempStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 
-    fun getAndroidAndAPIStatus(): AndroidAndAPIStatus {
-        val androidVersion = androidAndAPIVersionDataSource.getAndroidVersion()
-        val apiVersion = androidAndAPIVersionDataSource.getAndroidAPIVersion()
-        return AndroidAndAPIStatus(androidVersion,apiVersion)
+    fun getAndroidAndApiStatus(): AndroidAndApiStatus {
+        val androidVersion = androidAndApiVersionDataSource.getAndroidVersion()
+        val apiVersion = androidAndApiVersionDataSource.getAndroidApiVersion()
+        return AndroidAndApiStatus(androidVersion,apiVersion)
     }
 
     fun observeHosterOverallStatus():Flow<HosterOverallStatus> = flow {
@@ -106,7 +106,7 @@ class StoreStatusGatewayImpl @Inject constructor(
                     Log.d("HosterOverallStatus", "Shizuku")
                     HosterOverallStatus.ADB
                 }
-                getSELinuxStatus() == SELinuxStatus.Permissive -> {
+                getSeLinuxStatus() == SeLinuxStatus.Permissive -> {
                     Log.d("HosterOverallStatus", "Permissive")
                     HosterOverallStatus.PERMISSIVE
                 }

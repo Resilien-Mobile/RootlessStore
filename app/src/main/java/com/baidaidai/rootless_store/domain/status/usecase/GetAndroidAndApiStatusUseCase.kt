@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.domain.status.usecase
 
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
-import com.baidaidai.rootless_store.domain.status.model.AndroidAndAPIStatus
+import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
 import javax.inject.Inject
 
-class GetAndroidAndAPIStatusUseCase @Inject constructor(
+class GetAndroidAndApiStatusUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
-    operator fun invoke(): AndroidAndAPIStatus = storeStatusRepositoryImpl.getAndroidAndAPIStatus()
+    operator fun invoke(): AndroidAndApiStatus = storeStatusRepositoryImpl.getAndroidAndApiStatus()
 }

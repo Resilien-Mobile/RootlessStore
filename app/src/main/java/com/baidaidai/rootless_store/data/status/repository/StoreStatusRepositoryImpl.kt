@@ -1,10 +1,10 @@
 package com.baidaidai.rootless_store.data.status.repository
 
 import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
-import com.baidaidai.rootless_store.domain.status.model.AndroidAndAPIStatus
+import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
-import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
+import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
 import jakarta.inject.Inject
@@ -18,13 +18,13 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun observeMemoryStatus(): Flow<MemoryStatus> = storeStatusGatewayImpl.observeMemoryStatus()
 
-    fun getSELinuxStatus(): SELinuxStatus = storeStatusGatewayImpl.getSELinuxStatus()
+    fun getSeLinuxStatus(): SeLinuxStatus = storeStatusGatewayImpl.getSeLinuxStatus()
 
     fun getKernelStatus(): String = storeStatusGatewayImpl.getKernelStatus()
 
     fun observeTemperatureStatus(): Flow<TempStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
 
-    fun getAndroidAndAPIStatus(): AndroidAndAPIStatus = storeStatusGatewayImpl.getAndroidAndAPIStatus()
+    fun getAndroidAndApiStatus(): AndroidAndApiStatus = storeStatusGatewayImpl.getAndroidAndApiStatus()
 
     fun observeOverallStatus(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.observeHosterOverallStatus()
 
