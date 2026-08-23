@@ -76,7 +76,7 @@ fun RootlessStoreNavigationScaffold(
     val shellScreenViewModel = hiltViewModel<RootlessStoreShellScreenViewModel>()
     val thirdPartyNotificationScreenViewModel = hiltViewModel<RootlessStoreThirdPartyNotificationScreenViewModel>()
     val codeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>()
-    val pluginInfoCount by pluginScreenViewModel.pluginInfoCount.collectAsState()
+    val pluginCount by pluginScreenViewModel.pluginCount.collectAsState()
     val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
 
     // Navigation
@@ -198,7 +198,7 @@ fun RootlessStoreNavigationScaffold(
             topBar = {
                 when(currentDestination){
                     PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
-                        pluginInfoCount = pluginInfoCount,
+                        pluginCount = pluginCount,
                         textButtonOnClick = {
                             pluginScreenViewModel.toggleBadgeVisibility()
                         },

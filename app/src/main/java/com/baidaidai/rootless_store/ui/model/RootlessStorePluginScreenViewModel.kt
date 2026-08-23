@@ -54,19 +54,19 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     private val _pluginEvent = MutableSharedFlow<PluginError?>()
     val pluginEvent = _pluginEvent.asSharedFlow()
 
-    val pluginInfoList = observePluginsUseCase().stateIn(
+    val plugins = observePluginsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList<PluginManifestRoom>()
     )
 
-    val environmentInfoList = observeEnvironmentsUseCase().stateIn(
+    val environments = observeEnvironmentsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList<EnvironmentManifestRoom>()
     )
 
-    val pluginInfoCount = observePluginCountUseCase().stateIn(
+    val pluginCount = observePluginCountUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = 0

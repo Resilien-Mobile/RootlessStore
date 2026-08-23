@@ -128,7 +128,7 @@ fun HomeScreen(
                 .horizontalScroll(rememberScrollState())
         ){
 
-            // Version Tag && Info Flag
+            // Version and update status
             RootlessStoreVersionCard(Modifier.width(preferWidth))
 
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {

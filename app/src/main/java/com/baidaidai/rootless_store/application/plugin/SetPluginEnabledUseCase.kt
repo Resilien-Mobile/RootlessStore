@@ -4,16 +4,16 @@ import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import javax.inject.Inject
 
 class SetPluginEnabledUseCase @Inject constructor(
-    private val pluginInfoRepository: PluginRepositoryImpl
+    private val pluginRepositoryImpl: PluginRepositoryImpl
 ) {
     suspend operator fun invoke(
         pluginId: String,
         isEnabled: Boolean
     ){
         if (isEnabled){
-            pluginInfoRepository.enablePluginById(pluginId)
+            pluginRepositoryImpl.enablePluginById(pluginId)
         }else{
-            pluginInfoRepository.disablePluginById(pluginId)
+            pluginRepositoryImpl.disablePluginById(pluginId)
         }
     }
 }

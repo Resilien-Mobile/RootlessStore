@@ -45,8 +45,8 @@ fun PluginManagementScreen(
     onAbortPlugin:suspend (pluginId: String) -> Unit,
     onActiveOneTimePlugin: (pluginId: String)-> Unit
 ){
-    val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
-    val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
+    val plugins by pluginScreenViewModel.plugins.collectAsState()
+    val environments by pluginScreenViewModel.environments.collectAsState()
     val isBadgeVisible by pluginScreenViewModel.isBadgeVisible.collectAsState()
 
     var selectedTabIndex by rememberSaveable{ mutableIntStateOf(0) }
@@ -85,7 +85,7 @@ fun PluginManagementScreen(
             0 -> {
                 PluginScreen(
                     isBadgeVisible = isBadgeVisible,
-                    renderingList = pluginInfoList,
+                    renderingList = plugins,
                     pluginScreenViewModel = pluginScreenViewModel,
                     navigateToExecuteScreen = navigateToExecuteScreen,
                     onAbortPlugin = onAbortPlugin,
@@ -95,7 +95,7 @@ fun PluginManagementScreen(
             1 -> {
                 EnvironmentScreen(
                     isBadgeVisible = isBadgeVisible,
-                    renderingList = environmentInfoList,
+                    renderingList = environments,
                     pluginScreenViewModel = pluginScreenViewModel
                 )
             }

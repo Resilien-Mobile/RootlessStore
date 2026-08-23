@@ -46,8 +46,8 @@ class PluginRepositoryImpl @Inject constructor(
     override suspend fun findPlugin(
         pluginId: String
     ): PluginManifestRoom? {
-        val pluginInfo = pluginDao.findPluginById(pluginId)
-        return pluginInfo
+        val pluginManifest = pluginDao.findPluginById(pluginId)
+        return pluginManifest
     }
 
     override fun observePlugins(): Flow<List<PluginManifestRoom>> {

@@ -103,8 +103,8 @@ fun MarketManifestCard(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        PluginInfoRow(label = "Author", value = pluginManifest.author)
-                        PluginInfoRow(
+                        ManifestDetailRow(label = "Author", value = pluginManifest.author)
+                        ManifestDetailRow(
                             label = "Description",
                             value = pluginManifest.pluginDescription
                         )
@@ -174,8 +174,8 @@ fun MarketManifestCard(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        PluginInfoRow(label = "Author", value = environmentManifest.author)
-                        PluginInfoRow(
+                        ManifestDetailRow(label = "Author", value = environmentManifest.author)
+                        ManifestDetailRow(
                             label = "Description",
                             value = environmentManifest.environmentDescription
                         )
@@ -192,7 +192,7 @@ fun MarketManifestCard(
  * If Problems, Needs Review !
  */
 @Composable
-private fun PluginInfoRow(
+private fun ManifestDetailRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier

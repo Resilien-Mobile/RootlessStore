@@ -21,7 +21,7 @@ object PluginScreenNecessaryComponents {
     fun PluginScreenScreenTopAppBar(
         textButtonOnClick:()-> Unit = {},
         iconButtonOnClick:()-> Unit = {},
-        pluginInfoCount: Int = 0,
+        pluginCount: Int = 0,
         scrollBehavior: TopAppBarScrollBehavior
     ){
         LargeFlexibleTopAppBar(
@@ -32,7 +32,7 @@ object PluginScreenNecessaryComponents {
                 Text(
                     text = icuString(
                         R.string.plugin_screen_top_app_bar_subtitle,
-                        mapOf("pluginCount" to pluginInfoCount)
+                        mapOf("pluginCount" to pluginCount)
                     )
                 )
             },

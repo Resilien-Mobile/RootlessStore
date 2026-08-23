@@ -43,8 +43,8 @@ class EnvironmentRepositoryImpl @Inject constructor(
     suspend fun findEnvironmentById(
         environmentId: String
     ): EnvironmentManifestRoom? {
-        val environmentInfoRoom = environmentDao.findEnvironmentById(environmentId)
-        return environmentInfoRoom
+        val environmentManifest = environmentDao.findEnvironmentById(environmentId)
+        return environmentManifest
     }
 
     fun observeEnvironments(): Flow<List<EnvironmentManifestRoom>> {
