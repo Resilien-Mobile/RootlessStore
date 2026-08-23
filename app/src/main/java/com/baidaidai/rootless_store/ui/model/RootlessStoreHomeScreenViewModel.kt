@@ -4,14 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.status.ObserveCpuDashboardConfigUseCase
-import com.baidaidai.rootless_store.application.status.ObserveNetDashboardConfigUseCase
+import com.baidaidai.rootless_store.application.status.ObserveNetworkDashboardConfigUseCase
 import com.baidaidai.rootless_store.application.status.ObserveOverallStatusUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.ObserveAutoUpdateEnabledPreferenceUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
-import com.baidaidai.rootless_store.domain.status.model.NetDashboardConfig
+import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
@@ -56,7 +56,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     private val fetchLatestVersionUseCase: FetchLatestVersionUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
     private val observeCpuDashboardConfigUseCase: ObserveCpuDashboardConfigUseCase,
-    private val observeNetDashboardConfigUseCase: ObserveNetDashboardConfigUseCase
+    private val observeNetworkDashboardConfigUseCase: ObserveNetworkDashboardConfigUseCase
 ) : ViewModel() {
 
     init {
@@ -148,16 +148,16 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         initialValue = HosterOverallStatus.LIMITED
     )
 
-    val cpuStatus = observeCpuDashboardConfigUseCase().stateIn(
+    val cpuDashboardConfig = observeCpuDashboardConfigUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
         initialValue = CpuDashboardConfig._testOnly_
     )
 
-    val netStatus = observeNetDashboardConfigUseCase().stateIn(
+    val networkDashboardConfig = observeNetworkDashboardConfigUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
-        initialValue = NetDashboardConfig._testOnly_
+        initialValue = NetworkDashboardConfig._testOnly_
     )
 
     // Saves the user's selected execute context for now.

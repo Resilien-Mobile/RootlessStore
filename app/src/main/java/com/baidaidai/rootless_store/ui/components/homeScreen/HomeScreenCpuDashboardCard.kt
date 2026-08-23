@@ -24,7 +24,7 @@ import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 
 
 @Composable
-fun HomeScreenCpuInfoCard(
+fun HomeScreenCpuDashboardCard(
     modifier: Modifier = Modifier,
     cpuDashboardConfig: CpuDashboardConfig
 ) {
@@ -42,22 +42,22 @@ fun HomeScreenCpuInfoCard(
                 .fillMaxWidth()
                 .height(IntrinsicSize.Max)
         ) {
-            Text("%04.1f".format((cpuDashboardConfig.totalCoreInfo.totalPercent*100)), style = MaterialTheme.typography.headlineLarge)
-            HomeScreenCpuInfoCell(
+            Text("%04.1f".format((cpuDashboardConfig.aggregateMetrics.totalPercent*100)), style = MaterialTheme.typography.headlineLarge)
+            HomeScreenMetricCell(
                 title = "SYS",
-                value = cpuDashboardConfig.totalCoreInfo.systemDelta.toString()
+                value = cpuDashboardConfig.aggregateMetrics.systemDelta.toString()
             )
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "USER",
-                value = cpuDashboardConfig.totalCoreInfo.userDelta.toString()
+                value = cpuDashboardConfig.aggregateMetrics.userDelta.toString()
             )
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "IO WAIT",
-                value = cpuDashboardConfig.totalCoreInfo.ioWaitDelta.toString()
+                value = cpuDashboardConfig.aggregateMetrics.ioWaitDelta.toString()
             )
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "STEAL",
-                value = cpuDashboardConfig.totalCoreInfo.stealDelta.toString()
+                value = cpuDashboardConfig.aggregateMetrics.stealDelta.toString()
             )
         }
 
@@ -70,8 +70,8 @@ fun HomeScreenCpuInfoCard(
                     .fillMaxWidth()
             ) {
                 repeat(cpuDashboardConfig.coreCount){ index->
-                    HomeScreenCpuInfoTie(
-                        percent = cpuDashboardConfig.core[index].totalPercent,
+                    HomeScreenCpuUsageBar(
+                        percent = cpuDashboardConfig.coreMetrics[index].totalPercent,
                         maxWidth = this@BoxWithConstraints.maxWidth
                     )
                     if(index != cpuDashboardConfig.coreCount-1){
@@ -90,19 +90,19 @@ fun HomeScreenCpuInfoCard(
                 .height(IntrinsicSize.Max)
                 .fillMaxWidth()
         ) {
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "CORES",
                 value = cpuDashboardConfig.coreCount.toString()
             )
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "IDLE",
-                value = cpuDashboardConfig.totalCoreInfo.idleDelta.toString()
+                value = cpuDashboardConfig.aggregateMetrics.idleDelta.toString()
             )
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "UPTIME",
                 value = "${cpuDashboardConfig.uptime.inWholeSeconds} S"
             )
-            HosterStatusCircularProgress(label = "Pressure", percentage = cpuDashboardConfig.totalCoreInfo.totalPercent)
+            HosterStatusCircularProgress(label = "Pressure", percentage = cpuDashboardConfig.aggregateMetrics.totalPercent)
         }
 
     }
@@ -112,7 +112,7 @@ fun HomeScreenCpuInfoCard(
 @Composable
 private fun _preview_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        HomeScreenCpuInfoCard(
+        HomeScreenCpuDashboardCard(
             cpuDashboardConfig = CpuDashboardConfig._testOnly_,
             modifier = Modifier
                 .width(200.dp)

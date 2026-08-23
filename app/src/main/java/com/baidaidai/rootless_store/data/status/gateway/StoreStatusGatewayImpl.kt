@@ -13,16 +13,16 @@ import com.baidaidai.rootless_store.data.status.datasource.AndroidAndApiVersionD
 import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
-import com.baidaidai.rootless_store.data.status.datasource.NetStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.NetworkStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.SeLinuxStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.StorageStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.TemperatureStatusDataSource
 import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
-import com.baidaidai.rootless_store.domain.status.model.CoreInfo
+import com.baidaidai.rootless_store.domain.status.model.CpuCoreMetrics
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
-import com.baidaidai.rootless_store.domain.status.model.PortInfo
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
@@ -47,7 +47,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
-    private val netStatusDataSource: NetStatusDataSource,
+    private val networkStatusDataSource: NetworkStatusDataSource,
     @ApplicationContext context: Context
 ) {
 
@@ -132,39 +132,39 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     // CPU Status
-    suspend fun getCoreInfo(cpuCoreIndex: Int? = null): CoreInfo? {
+    suspend fun findCpuCoreMetrics(cpuCoreIndex: Int? = null): CpuCoreMetrics? {
         return cpuStatusDataSource(cpuCoreIndex)
     }
 
-    suspend fun getCpuCoreCount(): Int? {
-        return cpuStatusDataSource.getCpuCoreCount()
+    suspend fun findCpuCoreCount(): Int? {
+        return cpuStatusDataSource.findCpuCoreCount()
     }
 
-    suspend fun getSystemUptime(): Duration? {
-        return cpuStatusDataSource.getSystemUptime()
+    suspend fun findSystemUptime(): Duration? {
+        return cpuStatusDataSource.findSystemUptime()
     }
 
     // Network Status
-    suspend fun getPortInfo(
+    suspend fun findNetworkInterfaceMetrics(
         networkInterfaceName: String = "wlan0"
-    ): PortInfo? {
-        return netStatusDataSource(networkInterfaceName)
+    ): NetworkInterfaceMetrics? {
+        return networkStatusDataSource(networkInterfaceName)
     }
 
     fun isCarrierAvailable(): Boolean {
-        return netStatusDataSource.isCarrierAvailable()
+        return networkStatusDataSource.isCarrierAvailable()
     }
 
     fun isVpnAvailable(): Boolean {
-        return netStatusDataSource.isVpnAvailable()
+        return networkStatusDataSource.isVpnAvailable()
     }
 
-    fun getCarrierNetworkInterfaceName(): String? {
-        return netStatusDataSource.getCarrierNetworkInterfaceName()
+    fun findCarrierNetworkInterfaceName(): String? {
+        return networkStatusDataSource.findCarrierNetworkInterfaceName()
     }
 
-    fun getVpnNetworkInterfaceName(): String? {
-        return netStatusDataSource.getVpnNetworkInterfaceName()
+    fun findVpnNetworkInterfaceName(): String? {
+        return networkStatusDataSource.findVpnNetworkInterfaceName()
     }
 
     // Preference

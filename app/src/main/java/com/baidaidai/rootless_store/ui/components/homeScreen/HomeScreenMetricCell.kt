@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreenCpuInfoCell(
+fun HomeScreenMetricCell(
     modifier: Modifier = Modifier,
     title: String,
     value: String,
@@ -33,7 +33,7 @@ fun HomeScreenCpuInfoCell(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    HomeScreenCpuInfoCell(
+    HomeScreenMetricCell(
         title = "USER",
         value = 64.toString(),
         modifier = Modifier

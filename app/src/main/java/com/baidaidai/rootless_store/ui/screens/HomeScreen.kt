@@ -21,8 +21,8 @@ import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenContextSwitchDialog
-import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuInfoCard
-import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetDashboard
+import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuDashboardCard
+import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetworkDashboard
 import com.baidaidai.rootless_store.ui.components.homeScreen.HosterStatusCircularProgressRow
 import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootlessStorePlugin
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionCheckerContainer
@@ -49,8 +49,8 @@ fun HomeScreen(
     val hosterOverallStatus by homeScreenViewModel.overallStatus.collectAsState()
     val dialogStats by homeScreenViewModel.dialogStatus.collectAsState()
     val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
-    val cpuStatus by homeScreenViewModel.cpuStatus.collectAsState()
-    val netStatus by homeScreenViewModel.netStatus.collectAsState()
+    val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
+    val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
     val appVersion = stringResource(R.string.app_version)
 
     val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
@@ -172,13 +172,13 @@ fun HomeScreen(
             }
 
 
-            HomeScreenCpuInfoCard(
-                cpuDashboardConfig = cpuStatus,
+            HomeScreenCpuDashboardCard(
+                cpuDashboardConfig = cpuDashboardConfig,
                 modifier = getBasicWidthModifier(Modifier.height(280.dp))
             )
 
-            HomeScreenNetDashboard(
-                netDashboardConfig = netStatus,
+            HomeScreenNetworkDashboard(
+                networkDashboardConfig = networkDashboardConfig,
                 rootlessStoreHeightWindowSize = rootlessStoreHeightWindowSize,
                 modifier = if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
                     Modifier.fillMaxHeight()

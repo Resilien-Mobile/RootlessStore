@@ -18,25 +18,25 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreenCpuInfoTie(
+fun HomeScreenCpuUsageBar(
     modifier: Modifier = Modifier,
     maxWidth: Dp,
     percent: Float = 0.3f,
-    isObverse: Boolean = false
+    isInverted: Boolean = false
 ){
-    val primaryDotColor = if (isObverse) Color.Green else Color.Red
-    val secondaryDotColor = if (isObverse) Color.Red else Color.Green
-    val availableCells = (maxWidth / 10.dp).toInt()
-    val percentageValue: Int = (percent * availableCells).toInt()
+    val primaryDotColor = if (isInverted) Color.Green else Color.Red
+    val secondaryDotColor = if (isInverted) Color.Red else Color.Green
+    val segmentCount = (maxWidth / 10.dp).toInt()
+    val activeSegmentCount = (percent * segmentCount).toInt()
 
     Row(
         modifier = modifier.fillMaxWidth()
     ) {
-        for(index in 0..< availableCells){
-            if(index < percentageValue){
-                HomeScreenCpuInfoTieCell(color = primaryDotColor)
+        for(index in 0..< segmentCount){
+            if(index < activeSegmentCount){
+                HomeScreenCpuUsageBarSegment(color = primaryDotColor)
             }else{
-                HomeScreenCpuInfoTieCell(color = secondaryDotColor)
+                HomeScreenCpuUsageBarSegment(color = secondaryDotColor)
             }
             if (index != 50){
                 Spacer(modifier = Modifier.width(5.dp))
@@ -48,7 +48,7 @@ fun HomeScreenCpuInfoTie(
 }
 
 @Composable
-private fun HomeScreenCpuInfoTieCell(
+private fun HomeScreenCpuUsageBarSegment(
     modifier: Modifier = Modifier,
     color: Color = Color.Red
 ){
@@ -64,16 +64,16 @@ private fun HomeScreenCpuInfoTieCell(
 
 @PreviewLightDark
 @Composable
-private fun _previewTieCell_() {
-    HomeScreenCpuInfoTieCell()
+private fun _previewCpuUsageBarSegment_() {
+    HomeScreenCpuUsageBarSegment()
 }
 
 @PreviewLightDark
 @Composable
-private fun _previewTie_() {
+private fun _previewCpuUsageBar_() {
     BoxWithConstraints(
         modifier = Modifier.width(400.dp)
     ) {
-        HomeScreenCpuInfoTie(maxWidth = maxWidth)
+        HomeScreenCpuUsageBar(maxWidth = maxWidth)
     }
 }
