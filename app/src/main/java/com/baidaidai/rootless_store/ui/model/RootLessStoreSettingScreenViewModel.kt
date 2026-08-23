@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreference
 import com.baidaidai.rootless_store.domain.setting.usecase.ObserveSettingScreenPreferencesUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.SetAllowInsecureConnectionUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.SetEnableAutoUpdateUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.SetNotifyPluginStatusUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.SetUseDotProtectedConnectionUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.SetUseThirdPartyNotificationPushUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.SetInsecureConnectionAllowedUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.SetAutoUpdateEnabledUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.SetPluginStatusNotificationEnabledUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.SetDotProtectedConnectionEnabledUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.SetThirdPartyNotificationPushEnabledUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,11 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class RootLessStoreSettingScreenViewModel @Inject constructor(
     observeSettingScreenPreferencesUseCase: ObserveSettingScreenPreferencesUseCase,
-    private val setNotifyPluginStatusUseCase: SetNotifyPluginStatusUseCase,
-    private val setUseThirdPartyNotificationPushUseCase: SetUseThirdPartyNotificationPushUseCase,
-    private val setAllowInsecureConnectionUseCase: SetAllowInsecureConnectionUseCase,
-    private val setUseDotProtectedConnectionUseCase: SetUseDotProtectedConnectionUseCase,
-    private val setEnableAutoUpdateUseCase: SetEnableAutoUpdateUseCase,
+    private val setPluginStatusNotificationEnabledUseCase: SetPluginStatusNotificationEnabledUseCase,
+    private val setThirdPartyNotificationPushEnabledUseCase: SetThirdPartyNotificationPushEnabledUseCase,
+    private val setInsecureConnectionAllowedUseCase: SetInsecureConnectionAllowedUseCase,
+    private val setDotProtectedConnectionEnabledUseCase: SetDotProtectedConnectionEnabledUseCase,
+    private val setAutoUpdateEnabledUseCase: SetAutoUpdateEnabledUseCase,
 ) : ViewModel() {
 
     val settingPanelPreferences: StateFlow<SettingScreenPreference> =
@@ -33,33 +33,33 @@ class RootLessStoreSettingScreenViewModel @Inject constructor(
             initialValue = SettingScreenPreference()
         )
 
-    fun setNotifyPluginStatus(enabled: Boolean) {
+    fun setPluginStatusNotificationEnabled(isEnabled: Boolean) {
         viewModelScope.launch {
-            setNotifyPluginStatusUseCase(enabled)
+            setPluginStatusNotificationEnabledUseCase(isEnabled)
         }
     }
 
-    fun setUseThirdPartyNotificationPush(enabled: Boolean) {
+    fun setThirdPartyNotificationPushEnabled(isEnabled: Boolean) {
         viewModelScope.launch {
-            setUseThirdPartyNotificationPushUseCase(enabled)
+            setThirdPartyNotificationPushEnabledUseCase(isEnabled)
         }
     }
 
-    fun setAllowInsecureConnection(enabled: Boolean) {
+    fun setInsecureConnectionAllowed(isAllowed: Boolean) {
         viewModelScope.launch {
-            setAllowInsecureConnectionUseCase(enabled)
+            setInsecureConnectionAllowedUseCase(isAllowed)
         }
     }
 
-    fun setUseDotProtectedConnection(enabled: Boolean) {
+    fun setDotProtectedConnectionEnabled(isEnabled: Boolean) {
         viewModelScope.launch {
-            setUseDotProtectedConnectionUseCase(enabled)
+            setDotProtectedConnectionEnabledUseCase(isEnabled)
         }
     }
 
-    fun setEnableAutoUpdate(enabled: Boolean) {
+    fun setAutoUpdateEnabled(isEnabled: Boolean) {
         viewModelScope.launch {
-            setEnableAutoUpdateUseCase(enabled)
+            setAutoUpdateEnabledUseCase(isEnabled)
         }
     }
 }

@@ -4,9 +4,9 @@ import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRep
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ObserveEnableAutoUpdatePreferenceUseCase @Inject constructor(
+class ObserveAutoUpdateEnabledPreferenceUseCase @Inject constructor(
     private val settingPreferencesRepositoryImpl: SettingPreferenceRepositoryImpl
 ) {
     operator fun invoke(): Flow<Boolean> =
-        settingPreferencesRepositoryImpl.observeEnableAutoUpdatePreference()
+        settingPreferencesRepositoryImpl.observeAutoUpdateEnabledPreference()
 }

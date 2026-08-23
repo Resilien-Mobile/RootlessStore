@@ -29,15 +29,15 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
             }
             .map { preferences ->
                 SettingScreenPreference(
-                    enableAutoUpdate = preferences[ENABLE_AUTO_UPDATE] ?: false,
-                    notifyPluginStatus = preferences[NOTIFY_PLUGIN_STATUS] ?: false,
-                    useThirdPartyNotificationPush = preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] ?: false,
-                    allowInsecureConnection = preferences[ALLOW_INSECURE_CONNECTION] ?: false,
-                    useDotProtectedConnection = preferences[USE_DOT_PROTECTED_CONNECTION] ?: false
+                    isAutoUpdateEnabled = preferences[ENABLE_AUTO_UPDATE] ?: false,
+                    isPluginStatusNotificationEnabled = preferences[NOTIFY_PLUGIN_STATUS] ?: false,
+                    isThirdPartyNotificationPushEnabled = preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] ?: false,
+                    isInsecureConnectionAllowed = preferences[ALLOW_INSECURE_CONNECTION] ?: false,
+                    isDotProtectedConnectionEnabled = preferences[USE_DOT_PROTECTED_CONNECTION] ?: false
                 )
             }
 
-    fun observeEnableAutoUpdatePreference(): Flow<Boolean> =
+    fun observeAutoUpdateEnabledPreference(): Flow<Boolean> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -50,7 +50,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
                 preferences[ENABLE_AUTO_UPDATE] ?: false
             }
 
-    fun observeEnableNotifyPluginStatus(): Flow<Boolean> =
+    fun observePluginStatusNotificationEnabled(): Flow<Boolean> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -64,33 +64,33 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
             }
 
     // Update
-    suspend fun setNotifyPluginStatus(enabled: Boolean) {
+    suspend fun setPluginStatusNotificationEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[NOTIFY_PLUGIN_STATUS] = enabled
+            preferences[NOTIFY_PLUGIN_STATUS] = isEnabled
         }
     }
 
-    suspend fun setUseThirdPartyNotificationPush(enabled: Boolean) {
+    suspend fun setThirdPartyNotificationPushEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] = enabled
+            preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] = isEnabled
         }
     }
 
-    suspend fun setAllowInsecureConnection(enabled: Boolean) {
+    suspend fun setInsecureConnectionAllowed(isAllowed: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[ALLOW_INSECURE_CONNECTION] = enabled
+            preferences[ALLOW_INSECURE_CONNECTION] = isAllowed
         }
     }
 
-    suspend fun setUseDotProtectedConnection(enabled: Boolean) {
+    suspend fun setDotProtectedConnectionEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[USE_DOT_PROTECTED_CONNECTION] = enabled
+            preferences[USE_DOT_PROTECTED_CONNECTION] = isEnabled
         }
     }
 
-    suspend fun changeEnableAutoUpdate(enabled: Boolean) {
+    suspend fun setAutoUpdateEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[ENABLE_AUTO_UPDATE] = enabled
+            preferences[ENABLE_AUTO_UPDATE] = isEnabled
         }
     }
 

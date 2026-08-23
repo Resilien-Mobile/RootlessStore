@@ -69,8 +69,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_check_latest_version_headline),
                     supportingText = stringResource(R.string.setting_screen_general_check_latest_version_supporting),
-                    checked = settingPanelPreferences.enableAutoUpdate,
-                    onSwitchClicked = settingScreenViewModel::setEnableAutoUpdate,
+                    checked = settingPanelPreferences.isAutoUpdateEnabled,
+                    onSwitchClicked = settingScreenViewModel::setAutoUpdateEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_upgrade),
@@ -82,8 +82,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_notify_plugin_status_headline),
                     supportingText = stringResource(R.string.setting_screen_general_notify_plugin_status_supporting),
-                    checked = settingPanelPreferences.notifyPluginStatus,
-                    onSwitchClicked = settingScreenViewModel::setNotifyPluginStatus,
+                    checked = settingPanelPreferences.isPluginStatusNotificationEnabled,
+                    onSwitchClicked = settingScreenViewModel::setPluginStatusNotificationEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_notification),
@@ -95,8 +95,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_third_party_push_headline),
                     supportingText = stringResource(R.string.setting_screen_general_third_party_push_supporting),
-                    checked = settingPanelPreferences.useThirdPartyNotificationPush,
-                    onSwitchClicked = settingScreenViewModel::setUseThirdPartyNotificationPush,
+                    checked = settingPanelPreferences.isThirdPartyNotificationPushEnabled,
+                    onSwitchClicked = settingScreenViewModel::setThirdPartyNotificationPushEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_notification_add),
@@ -136,8 +136,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_allow_insecure_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_allow_insecure_connection_supporting),
-                    checked = settingPanelPreferences.allowInsecureConnection,
-                    onSwitchClicked = settingScreenViewModel::setAllowInsecureConnection,
+                    checked = settingPanelPreferences.isInsecureConnectionAllowed,
+                    onSwitchClicked = settingScreenViewModel::setInsecureConnectionAllowed,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_safety_check),
@@ -149,8 +149,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_supporting),
-                    checked = settingPanelPreferences.useDotProtectedConnection,
-                    onSwitchClicked = settingScreenViewModel::setUseDotProtectedConnection,
+                    checked = settingPanelPreferences.isDotProtectedConnectionEnabled,
+                    onSwitchClicked = settingScreenViewModel::setDotProtectedConnectionEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_cloud_lock),
