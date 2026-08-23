@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.baidaidai.rootless_store.application.webui.ExecuteAppShellUseCase
-import com.baidaidai.rootless_store.application.webui.KernelSuCompatible
+import com.baidaidai.rootless_store.application.webui.KernelSuJavaScriptBridge
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -18,17 +18,17 @@ class RootlessStoreWebViewScreenViewModel @Inject constructor(
     private val executeAppShellUseCase: ExecuteAppShellUseCase
 ): ViewModel() {
 
-    fun createKernelSuCompatible(): KernelSuCompatible {
-        return KernelSuCompatible(
+    fun createKernelSuJavaScriptBridge(): KernelSuJavaScriptBridge {
+        return KernelSuJavaScriptBridge(
             context = context,
             shizukuUserServiceGatewayImpl = shizukuUserServiceGatewayImpl
         )
     }
 
-    fun executeAppShellUseCase(
+    fun executeAppShell(
         commandContent: String
     ): Flow<ShellResult> {
-        return executeAppShellUseCase.invoke(commandContent)
+        return executeAppShellUseCase(commandContent)
     }
 
 }
