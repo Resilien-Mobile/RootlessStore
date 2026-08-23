@@ -39,7 +39,7 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreHomeScreenViewModel @Inject constructor(
+class RootlessStoreHomeScreenViewModel @Inject constructor(
     observeMemoryStatusUseCase: ObserveMemoryStatusUseCase,
     observeStorageStatusUseCase: ObserveStorageStatusUseCase,
     observePluginStatusUseCase: ObservePluginStatusUseCase,

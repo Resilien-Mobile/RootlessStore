@@ -32,7 +32,7 @@ import javax.inject.Inject
 import kotlin.collections.emptyList
 
 @HiltViewModel
-class RootLessStorePluginScreenViewModel @Inject constructor(
+class RootlessStorePluginScreenViewModel @Inject constructor(
     private val observePluginsUseCase: ObservePluginsUseCase,
     private val observeEnvironmentsUseCase: ObserveEnvironmentsUseCase,
     private val installModuleUseCase: InstallModuleUseCase,

@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.theme.colorscheme.SourceListItemColor
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -26,7 +26,7 @@ import com.baidaidai.rootless_store.ui.theme.colorscheme.SourceListItemColor
 fun SourceScreenListItem(
     isDeleteActionVisible: Boolean,
     pluginSourceInfo: PluginSourceInfo,
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     onListItemClick:(pluginSourceUri: String)-> Unit
 ){
     ListItem(

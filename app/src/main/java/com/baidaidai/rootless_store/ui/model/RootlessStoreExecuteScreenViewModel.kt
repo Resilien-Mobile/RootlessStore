@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreExecuteScreenViewModel @Inject constructor(
+class RootlessStoreExecuteScreenViewModel @Inject constructor(
     private val executePluginUseCase: ExecutePluginUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
 ): ViewModel() {

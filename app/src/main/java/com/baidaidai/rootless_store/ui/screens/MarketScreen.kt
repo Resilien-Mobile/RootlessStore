@@ -10,12 +10,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.baidaidai.rootless_store.ui.components.marketScreen.PluginInfoContainerRemote
-import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreMarketScreenViewModel
 
 @Composable
 fun MarketScreen(
     contentPadding: PaddingValues,
-    marketScreenViewModel: RootLessStoreMarketScreenViewModel,
+    marketScreenViewModel: RootlessStoreMarketScreenViewModel,
     navigateToPluginScreen: () -> Unit
 ){
 

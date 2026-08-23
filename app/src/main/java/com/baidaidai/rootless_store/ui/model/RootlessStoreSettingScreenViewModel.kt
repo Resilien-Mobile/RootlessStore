@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreSettingScreenViewModel @Inject constructor(
+class RootlessStoreSettingScreenViewModel @Inject constructor(
     observeSettingScreenPreferencesUseCase: ObserveSettingScreenPreferencesUseCase,
     private val setPluginStatusNotificationEnabledUseCase: SetPluginStatusNotificationEnabledUseCase,
     private val setThirdPartyNotificationPushEnabledUseCase: SetThirdPartyNotificationPushEnabledUseCase,

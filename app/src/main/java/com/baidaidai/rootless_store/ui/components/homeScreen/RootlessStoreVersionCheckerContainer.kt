@@ -27,7 +27,7 @@ import androidx.core.net.toUri
 import com.baidaidai.rootless_store.R
 
 @Composable
-fun RootLessStoreVersionCheckerContainer(
+fun RootlessStoreVersionCheckerContainer(
     modifier: Modifier = Modifier,
     latestVersionNumber: String
 ){
@@ -88,6 +88,6 @@ fun RootLessStoreVersionCheckerContainer(
 @Composable
 private fun _preview_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        RootLessStoreVersionCheckerContainer(latestVersionNumber = "v2.2.0", modifier = Modifier.width(200.dp))
+        RootlessStoreVersionCheckerContainer(latestVersionNumber = "v2.2.0", modifier = Modifier.width(200.dp))
     }
 }

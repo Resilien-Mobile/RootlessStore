@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreShellScreenViewModel @Inject constructor(
+class RootlessStoreShellScreenViewModel @Inject constructor(
     private val runCommandUseCase: RunCommandUseCase,
     private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,

@@ -20,13 +20,13 @@ import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
-import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 
 @Composable
 fun EnvironmentScreen(
     isBadgeVisible: Boolean,
     renderingList: List<EnvironmentManifestRoom>,
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel,
 ){
 
     val density = LocalDensity.current

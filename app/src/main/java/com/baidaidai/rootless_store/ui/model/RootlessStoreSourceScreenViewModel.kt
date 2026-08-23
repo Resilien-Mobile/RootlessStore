@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreSourceScreenViewModel @Inject constructor(
+class RootlessStoreSourceScreenViewModel @Inject constructor(
     observePluginSourcesUseCase: ObservePluginSourcesUseCase,
     observePluginSourceCountUseCase: ObservePluginSourceCountUseCase,
     private val addSourceByDefaultUseCase: AddSourceByDefaultUseCase,

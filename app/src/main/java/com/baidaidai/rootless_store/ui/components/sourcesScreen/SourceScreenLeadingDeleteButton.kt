@@ -16,11 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 
 @Composable
 fun SourceScreenLeadingDeleteButton(
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     pluginSourceInfo: PluginSourceInfo
 ){
     Row {

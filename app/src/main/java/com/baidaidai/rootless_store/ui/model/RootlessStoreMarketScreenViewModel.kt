@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreMarketScreenViewModel @Inject constructor(
+class RootlessStoreMarketScreenViewModel @Inject constructor(
     private val fetchRemotePluginsUseCase: FetchRemotePluginsUseCase,
     private val installPluginFromMarketUseCase: InstallPluginFromMarketUseCase,
     private val installEnvironmentFromMarketUseCase: InstallEnvironmentFromMarketUseCase

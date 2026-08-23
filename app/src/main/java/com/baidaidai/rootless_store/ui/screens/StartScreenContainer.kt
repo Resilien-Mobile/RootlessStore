@@ -54,27 +54,27 @@ import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenErrorDi
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenRepositoryDialog
 import com.baidaidai.rootless_store.ui.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenNecessaryComponents
-import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
-import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
-import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
-import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
-import com.baidaidai.rootless_store.ui.model.RootLessStoreThirdPartyNotificationScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreExecuteScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreMarketScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreShellScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreThirdPartyNotificationScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootlessStoreStartScreenContainer(
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel = hiltViewModel(),
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel = hiltViewModel(),
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel = hiltViewModel(),
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel = hiltViewModel(),
     fileIntentUri:Uri?,
     onHandlerEnded:()-> Unit
 ){
     // VM & VM Data
-    val marketScreenViewModel = hiltViewModel<RootLessStoreMarketScreenViewModel>()
-    val shellScreenViewModel = hiltViewModel<RootLessStoreShellScreenViewModel>()
-    val thirdPartyNotificationScreenViewModel = hiltViewModel<RootLessStoreThirdPartyNotificationScreenViewModel>()
+    val marketScreenViewModel = hiltViewModel<RootlessStoreMarketScreenViewModel>()
+    val shellScreenViewModel = hiltViewModel<RootlessStoreShellScreenViewModel>()
+    val thirdPartyNotificationScreenViewModel = hiltViewModel<RootlessStoreThirdPartyNotificationScreenViewModel>()
     val codeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>()
     val pluginInfoCount by pluginScreenViewModel.pluginInfoCount.collectAsState()
     val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
@@ -167,8 +167,8 @@ fun RootlessStoreStartScreenContainer(
 
 
     @Composable
-    fun executeViewModelBuilder(pluginId: String): RootLessStoreExecuteScreenViewModel {
-        val viewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(viewModelStoreOwner = viewModelStoreOwner, key = pluginId)
+    fun executeViewModelBuilder(pluginId: String): RootlessStoreExecuteScreenViewModel {
+        val viewModel = hiltViewModel<RootlessStoreExecuteScreenViewModel>(viewModelStoreOwner = viewModelStoreOwner, key = pluginId)
         return viewModel
     }
 
@@ -416,7 +416,7 @@ fun RootlessStoreStartScreenContainer(
                     entry<ExecuteScreenKey> { executeScreenKey ->
 
                         // The overall constructor of ExecuteScreenViewModel
-                        val executeScreenViewModel = hiltViewModel<RootLessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginId, viewModelStoreOwner = viewModelStoreOwner)
+                        val executeScreenViewModel = hiltViewModel<RootlessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginId, viewModelStoreOwner = viewModelStoreOwner)
 
                         val pluginId = executeScreenKey.pluginId
                         val isExecutePlugin = executeScreenKey.isExecutePlugin

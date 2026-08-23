@@ -26,12 +26,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.ui.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenListItemDefault
-import com.baidaidai.rootless_store.ui.model.RootLessStoreThirdPartyNotificationScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreThirdPartyNotificationScreenViewModel
 
 @Composable
 fun ThirdPartyNotificationScreen(
     contentPaddingValues: PaddingValues,
-    thirdPartyNotificationScreenViewModel: RootLessStoreThirdPartyNotificationScreenViewModel
+    thirdPartyNotificationScreenViewModel: RootlessStoreThirdPartyNotificationScreenViewModel
 ){
 
     val thirdPartyNotificationScreenUiState by thirdPartyNotificationScreenViewModel.thirdPartyNotificationScreenUiState.collectAsState()
