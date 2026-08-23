@@ -44,7 +44,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
         val oldPath = environment["PATH"].orEmpty()
         val oldLdPath = environment["LD_LIBRARY_PATH"].orEmpty()
 
-        val environmentPath = environmentRepositoryImpl.resolveEnvironmentPath()
+        val environmentPath = environmentRepositoryImpl.resolveEnvironmentRuntimePath()
         val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
 

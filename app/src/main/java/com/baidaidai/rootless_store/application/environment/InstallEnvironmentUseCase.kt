@@ -18,7 +18,7 @@ class InstallEnvironmentUseCase @Inject constructor(
             // Set Execute-able, Made it can call and use
             environmentGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifest = environmentManifestLocal)
             // Add Data, Register Environment
-            environmentRepositoryImpl.insertEnvironment(environmentManifestLocal)
+            environmentRepositoryImpl.addEnvironment(environmentManifestLocal)
 
             null
         }catch (error: Throwable){
