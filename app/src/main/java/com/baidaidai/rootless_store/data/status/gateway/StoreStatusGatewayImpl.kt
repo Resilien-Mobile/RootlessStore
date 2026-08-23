@@ -20,7 +20,7 @@ import com.baidaidai.rootless_store.data.status.datasource.TemperatureStatusData
 import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
 import com.baidaidai.rootless_store.domain.status.model.CpuCoreMetrics
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
@@ -84,39 +84,39 @@ class StoreStatusGatewayImpl @Inject constructor(
         return AndroidAndApiStatus(androidVersion,apiVersion)
     }
 
-    fun observeHosterOverallStatus():Flow<HosterOverallStatus> = flow {
+    fun observeAvailableExecutionContext(): Flow<ExecutionContext> = flow {
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
                 if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
-                    Log.d("HosterOverallStatus", "Attempt startShizukuUserService Shizuku Endpoint")
-                    val ok = shizukuUserServiceGatewayImpl.startShizukuUserService()
-                    Log.d("HosterOverallStatus", "Bind result: $ok")
+                    Log.d("ExecutionContext", "Attempt startShizukuUserService Shizuku Endpoint")
+                    val isUserServiceStarted = shizukuUserServiceGatewayImpl.startShizukuUserService()
+                    Log.d("ExecutionContext", "Bind result: $isUserServiceStarted")
                     true
                 } else {
                     false
                 }
 
-            val status = when {
+            val availableExecutionContext = when {
                 isRoot -> {
-                    Log.d("HosterOverallStatus", "Root")
-                    HosterOverallStatus.ROOTD
+                    Log.d("ExecutionContext", "Root")
+                    ExecutionContext.ROOTD
                 }
                 isShizukuAvailable -> {
-                    Log.d("HosterOverallStatus", "Shizuku")
-                    HosterOverallStatus.ADB
+                    Log.d("ExecutionContext", "Shizuku")
+                    ExecutionContext.ADB
                 }
                 getSeLinuxStatus() == SeLinuxStatus.Permissive -> {
-                    Log.d("HosterOverallStatus", "Permissive")
-                    HosterOverallStatus.PERMISSIVE
+                    Log.d("ExecutionContext", "Permissive")
+                    ExecutionContext.PERMISSIVE
                 }
                 else -> {
-                    Log.d("HosterOverallStatus", "Limited")
-                    HosterOverallStatus.LIMITED
+                    Log.d("ExecutionContext", "Limited")
+                    ExecutionContext.LIMITED
                 }
             }
 
-            emit(status)
+            emit(availableExecutionContext)
             delay(3000)
         }
     }
@@ -168,7 +168,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     // Preference
-    fun observeExecutionContextPreference(): Flow<HosterOverallStatus> {
+    fun observeExecutionContextPreference(): Flow<ExecutionContext> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -178,13 +178,13 @@ class StoreStatusGatewayImpl @Inject constructor(
                 }
             }
             .map { preference ->
-                preference[EXECUTION_CONTEXT]?.let { HosterOverallStatus.valueOf(it) } ?: HosterOverallStatus.LIMITED
+                preference[EXECUTION_CONTEXT]?.let { ExecutionContext.valueOf(it) } ?: ExecutionContext.LIMITED
             }
     }
 
-    suspend fun setExecutionContextPreference(hosterOverallStatus: HosterOverallStatus) {
+    suspend fun setExecutionContextPreference(executionContext: ExecutionContext) {
         dataStore.edit { preference ->
-            preference[EXECUTION_CONTEXT] = hosterOverallStatus.name
+            preference[EXECUTION_CONTEXT] = executionContext.name
         }
     }
 

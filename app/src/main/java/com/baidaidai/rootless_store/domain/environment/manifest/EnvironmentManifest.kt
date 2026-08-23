@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.domain.environment.manifest
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 sealed interface EnvironmentManifest: MarketManifest {
     // ─────────────────────────────────────────────────────────────
@@ -69,7 +69,7 @@ sealed interface EnvironmentManifest: MarketManifest {
      * - If this is purely a *computed* runtime value (not declared by plugin),
      *   move it out of the manifest.
      */
-    val requiredEnvironment: HosterOverallStatus
+    val requiredEnvironment: ExecutionContext
 
     val entryPoint: String
 

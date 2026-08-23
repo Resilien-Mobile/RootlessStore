@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.R
 
 @Composable
@@ -143,7 +143,7 @@ private fun _preview_(){
     val codeBrickConfig = CodeBrickConfig(
         unixTimestamp = 0L,
         codeBrickTitle = "Test Brick",
-        codeBrickEnvironment = HosterOverallStatus.LIMITED,
+        codeBrickEnvironment = ExecutionContext.LIMITED,
         codeBrickContent = "whoami"
     )
 

@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.domain.environment.manifest
 import androidx.room.ColumnInfo
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 data class EnvironmentManifestRoom(
     @ColumnInfo(name = "enabled")
@@ -20,7 +20,7 @@ data class EnvironmentManifestRoom(
     override val iconUri: String?,
     override val author: String,
     override val environmentDescription: String,
-    override val requiredEnvironment: HosterOverallStatus,
+    override val requiredEnvironment: ExecutionContext,
     override val entryPoint: String,
     override val ldLibraryPath: List<String>,
     override val env: Map<String, String>
@@ -33,7 +33,7 @@ data class EnvironmentManifestRoom(
             environmentId = "29bb10c46772264df3c0d0fade57d2eb",
             iconUri = "content://rootless_store/environment_icon/test",
             author = "Rootless Store(Creater. Bai)",
-            requiredEnvironment = HosterOverallStatus.LIMITED,
+            requiredEnvironment = ExecutionContext.LIMITED,
             environmentDescription = "Tested by Creater. Bai",
             isEnabled = false,
             state = PluginState.PermissionProblems,

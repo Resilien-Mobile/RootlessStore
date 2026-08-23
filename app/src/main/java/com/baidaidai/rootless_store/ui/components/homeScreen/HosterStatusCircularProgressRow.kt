@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
@@ -126,7 +126,7 @@ private fun _preview_() {
             modifier = Modifier.width(300.dp),
             hosterStatus = RootlessStoreHosterStatus()
                 .copy(
-                    hosterOverallStatus = HosterOverallStatus.LIMITED,
+                    executionContext = ExecutionContext.LIMITED,
                     memoryStatus = MemoryStatus(totalMemory = 256.01, usedMemory = 128.64),
                     storageStatus = StorageStatus(totalStorage = 512.10, usedStorage = 128.64)
                 )

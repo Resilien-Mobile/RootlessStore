@@ -11,7 +11,7 @@ import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatew
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
         )
         val pluginManifestJson = json.encodeToString(pluginManifestLocal)
 
-        if (pluginManifestLocal.requiredEnvironment == HosterOverallStatus.ADB){
+        if (pluginManifestLocal.requiredEnvironment == ExecutionContext.ADB){
             convertShellCodeBrick(
                 codeBrickConfig = codeBrickConfig,
                 pluginManifestLocal = pluginManifestLocal,

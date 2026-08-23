@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.domain.runtime.usecase
 import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
 import com.baidaidai.rootless_store.data.execution.repository.PluginExecutionRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import javax.inject.Inject
 
 class RecoverPluginRuntimeStateUseCase @Inject constructor(
@@ -15,7 +15,7 @@ class RecoverPluginRuntimeStateUseCase @Inject constructor(
         val pluginExecutionStatusList = pluginExecutionRepositoryImpl.listPluginExecutionStatuses()
 
         pluginExecutionStatusList.forEach { pluginExecutionStatus ->
-            if (pluginExecutionStatus.executionContext == HosterOverallStatus.ADB){
+            if (pluginExecutionStatus.executionContext == ExecutionContext.ADB){
                 val abortResult = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
                 if (abortResult){
                     pluginRepositoryImpl.disablePlugin(pluginExecutionStatus.pluginId)

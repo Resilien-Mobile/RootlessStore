@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,7 +17,7 @@ data class PluginManifestRemote(
     override val iconUri: String?,
     override val author: String,
     override val pluginDescription: String,
-    override val requiredEnvironment: HosterOverallStatus,
+    override val requiredEnvironment: ExecutionContext,
     @SerialName("pluginURI")
     override val pluginUrl: String,
     override val entryPoint: String,
@@ -35,7 +35,7 @@ data class PluginManifestRemote(
             pluginUrl = "http://test.only.ai/api/v3/assets/plugin?id=29bb10c46772264df3c0d0fade57d2eb",
             iconUri = "content://rootless_store/plugin_icon/test",
             author = "Rootless Store(Creater. Bai)",
-            requiredEnvironment = HosterOverallStatus.ADB,
+            requiredEnvironment = ExecutionContext.ADB,
             pluginDescription = "Tested by Creater.",
             entryPoint = "./index.sh",
             pluginRunModel = PluginRunModel.OneTime

@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewa
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRepositoryImpl
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
@@ -43,7 +43,7 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
                     pidSaved = true
                     val pluginExecutionEntity = PluginExecutionEntity
                         .fromPluginManifest(pluginManifestRoom, pid)
-                        .copy(executionContext = HosterOverallStatus.ADB)
+                        .copy(executionContext = ExecutionContext.ADB)
                     rootlessStoreDatabase
                         .pluginExecutionDao()
                         .insertPluginExecution(pluginExecutionEntity)

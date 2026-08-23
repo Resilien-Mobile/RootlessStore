@@ -8,7 +8,7 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemSea
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import java.io.File
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
         pluginManifestRoom: PluginManifestRoom
     ): Uri {
 
-        if (pluginManifestRoom.requiredEnvironment == HosterOverallStatus.ADB) {
+        if (pluginManifestRoom.requiredEnvironment == ExecutionContext.ADB) {
             return resolveShellPluginShareUri(pluginManifestRoom)
         }
 

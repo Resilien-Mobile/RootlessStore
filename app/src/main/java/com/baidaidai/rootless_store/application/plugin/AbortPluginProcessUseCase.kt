@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class AbortPluginProcessUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
     suspend operator fun invoke(pluginManifestRoom: PluginManifestRoom) {
-        val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
+        val availableExecutionContext = storeStatusRepositoryImpl.observeAvailableExecutionContext().first()
         val isExecutionContextChooserEnabled = storeStatusRepositoryImpl
             .observeExecutionContextChooserEnabled()
             .first()
@@ -29,8 +29,8 @@ class AbortPluginProcessUseCase @Inject constructor(
         }
 
         val shouldUseShizuku =
-            hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!isExecutionContextChooserEnabled || selectedExecutionContext == HosterOverallStatus.ADB)
+            availableExecutionContext == ExecutionContext.ADB &&
+                    (!isExecutionContextChooserEnabled || selectedExecutionContext == ExecutionContext.ADB)
 
         if (shouldUseShizuku) {
             pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)
@@ -43,7 +43,7 @@ class AbortPluginProcessUseCase @Inject constructor(
 
         val pluginManifestRoom = pluginRepositoryImpl.findPlugin(pluginId)!!
 
-        val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
+        val availableExecutionContext = storeStatusRepositoryImpl.observeAvailableExecutionContext().first()
         val isExecutionContextChooserEnabled = storeStatusRepositoryImpl
             .observeExecutionContextChooserEnabled()
             .first()
@@ -56,8 +56,8 @@ class AbortPluginProcessUseCase @Inject constructor(
         }
 
         val shouldUseShizuku =
-            hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!isExecutionContextChooserEnabled || selectedExecutionContext == HosterOverallStatus.ADB)
+            availableExecutionContext == ExecutionContext.ADB &&
+                    (!isExecutionContextChooserEnabled || selectedExecutionContext == ExecutionContext.ADB)
 
         if (shouldUseShizuku) {
             pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)

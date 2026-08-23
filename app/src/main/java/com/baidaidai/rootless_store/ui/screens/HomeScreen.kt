@@ -46,7 +46,7 @@ fun HomeScreen(
     val seLinuxStatus by homeScreenViewModel.seLinuxStatus.collectAsState()
     val kernelStatus by homeScreenViewModel.kernelStatus.collectAsState()
     val androidAndApiStatus by homeScreenViewModel.androidAndApiStatus.collectAsState()
-    val hosterOverallStatus by homeScreenViewModel.overallStatus.collectAsState()
+    val executionContext by homeScreenViewModel.executionContext.collectAsState()
     val isContextDialogVisible by homeScreenViewModel.isContextDialogVisible.collectAsState()
     val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
     val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
@@ -54,7 +54,7 @@ fun HomeScreen(
     val appVersion = stringResource(R.string.app_version)
 
     val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
-        hosterOverallStatus = hosterOverallStatus,
+        executionContext = executionContext,
         osAndApiVersion = androidAndApiStatus,
         kernelVersion = kernelStatus,
         seLinuxStatus = seLinuxStatus,

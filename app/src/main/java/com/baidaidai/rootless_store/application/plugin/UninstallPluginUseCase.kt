@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import javax.inject.Inject
 
 class UninstallPluginUseCase @Inject constructor(
@@ -15,7 +15,7 @@ class UninstallPluginUseCase @Inject constructor(
     suspend operator fun invoke(
         pluginManifestRoom: PluginManifestRoom
     ){
-        if (pluginManifestRoom.requiredEnvironment == HosterOverallStatus.ADB){
+        if (pluginManifestRoom.requiredEnvironment == ExecutionContext.ADB){
             uninstallShellPlugin(pluginManifestRoom) ; return
         }
         pluginFileSystemGateway.uninstallPlugin(pluginManifestRoom.pluginPackageName)

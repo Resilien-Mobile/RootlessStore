@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.data.status.repository
 
 import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
 import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
@@ -26,15 +26,15 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun getAndroidAndApiStatus(): AndroidAndApiStatus = storeStatusGatewayImpl.getAndroidAndApiStatus()
 
-    fun observeOverallStatus(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.observeHosterOverallStatus()
+    fun observeAvailableExecutionContext(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeAvailableExecutionContext()
 
     fun getRootStatus(): Boolean = storeStatusGatewayImpl.getRootStatus()
 
     fun getShizukuStatus(): Boolean = storeStatusGatewayImpl.getShizukuStatus()
 
-    fun observeExecutionContextPreference(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.observeExecutionContextPreference()
+    fun observeExecutionContextPreference(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeExecutionContextPreference()
 
-    suspend fun setExecutionContextPreference(hosterOverallStatus: HosterOverallStatus) = storeStatusGatewayImpl.setExecutionContextPreference(hosterOverallStatus)
+    suspend fun setExecutionContextPreference(executionContext: ExecutionContext) = storeStatusGatewayImpl.setExecutionContextPreference(executionContext)
 
     fun observeExecutionContextChooserEnabled(): Flow<Boolean> = storeStatusGatewayImpl.observeExecutionContextChooserEnabled()
 

@@ -44,7 +44,7 @@ fun OverallStatusChip(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Overall: ${hosterStatus.hosterOverallStatus}",
+                text = "Overall: ${hosterStatus.executionContext}",
                 maxLines = 1,
                 softWrap = false,
                 style = MaterialTheme.typography.labelLarge,

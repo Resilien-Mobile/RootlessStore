@@ -4,7 +4,7 @@ import android.util.Log
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,13 +13,13 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class ObserveOverallStatusUseCase @Inject constructor(
+class ObserveExecutionContextUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
     private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(): Flow<HosterOverallStatus> = flow {
+    operator fun invoke(): Flow<ExecutionContext> = flow {
 
         while (true){
 
@@ -36,31 +36,31 @@ class ObserveOverallStatusUseCase @Inject constructor(
 
             val executionContextPreference = if (isExecutionContextChooserEnabled) storeStatusRepositoryImpl.observeExecutionContextPreference().first() else null
 
-            val status = when {
+            val executionContext = when {
                 (executionContextPreference != null) -> {
-                    Log.d("HosterOverallStatus", "Now At ContextPreference")
-                    Log.d("HosterOverallStatus", executionContextPreference.toString())
+                    Log.d("ExecutionContext", "Now At ContextPreference")
+                    Log.d("ExecutionContext", executionContextPreference.toString())
                     executionContextPreference
                 }
                 isRoot -> {
-                    Log.d("HosterOverallStatus", "Root")
-                    HosterOverallStatus.ROOTD
+                    Log.d("ExecutionContext", "Root")
+                    ExecutionContext.ROOTD
                 }
                 isShizukuAvailable -> {
-                    Log.d("HosterOverallStatus", "Shizuku")
-                    HosterOverallStatus.ADB
+                    Log.d("ExecutionContext", "Shizuku")
+                    ExecutionContext.ADB
                 }
                 seLinuxStatus == SeLinuxStatus.Permissive -> {
-                    Log.d("HosterOverallStatus", "Permissive")
-                    HosterOverallStatus.PERMISSIVE
+                    Log.d("ExecutionContext", "Permissive")
+                    ExecutionContext.PERMISSIVE
                 }
                 else -> {
-                    Log.d("HosterOverallStatus", "Limited")
-                    HosterOverallStatus.LIMITED
+                    Log.d("ExecutionContext", "Limited")
+                    ExecutionContext.LIMITED
                 }
             }
 
-            emit(status)
+            emit(executionContext)
             delay(3000.milliseconds)
         }
     }

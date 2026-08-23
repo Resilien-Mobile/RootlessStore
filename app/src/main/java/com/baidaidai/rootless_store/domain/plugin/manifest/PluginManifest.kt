@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 sealed interface PluginManifest: MarketManifest {
 
@@ -100,7 +100,7 @@ sealed interface PluginManifest: MarketManifest {
      * - If this is purely a *computed* runtime value (not declared by plugin),
      *   move it out of the manifest.
      */
-    val requiredEnvironment: HosterOverallStatus
+    val requiredEnvironment: ExecutionContext
 
     /**
      * The runtime model used when executing the plugin.
