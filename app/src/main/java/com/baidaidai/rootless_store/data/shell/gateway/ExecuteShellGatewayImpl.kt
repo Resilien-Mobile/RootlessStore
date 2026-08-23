@@ -112,9 +112,9 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 onProcessExitedCallback = {}
             )
 
-            Log.d("exam",(shizukuUserServiceGatewayImpl.getShizukuUserService()==null).toString())
+            Log.d("exam",(shizukuUserServiceGatewayImpl.findShizukuUserService()==null).toString())
 
-            shizukuUserServiceGatewayImpl.getShizukuUserService()
+            shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.command(
                     commandContent,
                     callback,

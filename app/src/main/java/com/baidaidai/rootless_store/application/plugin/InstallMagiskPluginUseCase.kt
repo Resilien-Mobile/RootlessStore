@@ -119,7 +119,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             }
 
             // Shizuku File Flow
-            val shellPluginInstallResult = shizukuUserServiceGatewayImpl.getShizukuUserService()
+            val shellPluginInstallResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.installShellPlugin(
                     magiskTemplateZipFile.path,
                     pluginManifestLocal.pluginPackageName,

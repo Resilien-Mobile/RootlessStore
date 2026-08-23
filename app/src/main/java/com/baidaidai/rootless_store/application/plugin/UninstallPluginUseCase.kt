@@ -25,7 +25,7 @@ class UninstallPluginUseCase @Inject constructor(
         pluginManifestRoom: PluginManifestRoom
     ){
         val shellPluginUninstallResult = shizukuUserServiceGatewayImpl
-            .getShizukuUserService()
+            .findShizukuUserService()
             ?.uninstallShellPlugin(pluginManifestRoom.pluginPackageName) ?: false
 
         if (!shellPluginUninstallResult) return

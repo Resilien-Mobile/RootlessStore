@@ -36,7 +36,7 @@ class InstallShellPluginUseCase @Inject constructor(
             )
 
             // Shizuku File Flow
-            val shellPluginInstallResult = shizukuUserServiceGatewayImpl.getShizukuUserService()
+            val shellPluginInstallResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.installShellPlugin(
                     shellPluginStagingFile.path,
                     pluginManifestLocal.pluginPackageName,

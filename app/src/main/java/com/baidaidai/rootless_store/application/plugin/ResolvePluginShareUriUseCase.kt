@@ -72,7 +72,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
         )
 
         // Shizuku File Flow
-        val shellPluginExportResult = shizukuUserServiceGatewayImpl.getShizukuUserService()
+        val shellPluginExportResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
             ?.exportShellPlugin(
                 pluginManifestRoom.pluginPackageName,
                 shellPluginExportZipFile.path

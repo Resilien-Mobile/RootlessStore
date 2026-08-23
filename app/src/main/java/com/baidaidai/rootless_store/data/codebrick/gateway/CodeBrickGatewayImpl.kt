@@ -17,7 +17,7 @@ class CodeBrickGatewayImpl @Inject constructor(
         ignoreUnknownKeys = true
     }
 
-    fun getClipboardText(): String? {
+    fun findClipboardText(): String? {
         val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = clipboardManager.primaryClip ?: return null
         val clipItem = clipData.getItemAt(0) ?: return null

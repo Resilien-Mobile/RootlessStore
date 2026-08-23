@@ -25,7 +25,7 @@ class CpuStatusDataSource @Inject constructor(
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read the first CPU snapshot
         val firstCpuSnapshot = readCpuSnapshot(
@@ -53,7 +53,7 @@ class CpuStatusDataSource @Inject constructor(
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read CPU core count
         val cpuCoreCountCommandResult = executeSingleLineCommand(
@@ -73,7 +73,7 @@ class CpuStatusDataSource @Inject constructor(
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read system uptime
         val systemUptimeCommandResult = executeSingleLineCommand(

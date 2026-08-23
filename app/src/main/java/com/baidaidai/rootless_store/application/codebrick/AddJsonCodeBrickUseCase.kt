@@ -14,7 +14,7 @@ class AddJsonCodeBrickUseCase @Inject constructor(
     suspend operator fun invoke(): CodeBrickError? {
 
         // Get Clip Board
-        val clipBoard = codeBrickGatewayImpl.getClipboardText() ?: return CodeBrickError(
+        val clipBoard = codeBrickGatewayImpl.findClipboardText() ?: return CodeBrickError(
             errorMessage = "Clipboard is empty.",
             errorCause = "CodeBrick json text is null."
         )
