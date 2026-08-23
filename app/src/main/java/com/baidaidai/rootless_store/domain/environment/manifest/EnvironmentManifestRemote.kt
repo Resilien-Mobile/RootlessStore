@@ -18,7 +18,7 @@ data class EnvironmentManifestRemote(
     override val environmentDescription: String,
     override val requiredEnvironment: HosterOverallStatus,
     @SerialName("environmentURI")
-    override val environmentUri: String,
+    override val environmentUrl: String,
     override val entryPoint: String,
     override val ldLibraryPath: List<String>,
     override val env: Map<String, String>
@@ -29,7 +29,7 @@ data class EnvironmentManifestRemote(
             environmentRenderingName = "Test Environment",
             environmentPackageName = "TestEnvironment",
             environmentId = "29bb10c46772264df3c0d0fade57d2eb",
-            environmentUri = "http://test.only.ai/api/v3/assets/environment?id=29bb10c46772264df3c0d0fade57d2eb",
+            environmentUrl = "http://test.only.ai/api/v3/assets/environment?id=29bb10c46772264df3c0d0fade57d2eb",
             iconUri = "content://rootless_store/environment_icon/test",
             author = "Rootless Store(Creater. Bai)",
             requiredEnvironment = HosterOverallStatus.LIMITED,

@@ -83,7 +83,7 @@ sealed interface EnvironmentManifest: MarketManifest {
     // - origin: PluginOrigin
     interface EnvironmentManifestLocal: EnvironmentManifest
     interface EnvironmentManifestRemote: EnvironmentManifest {
-        val environmentUri: String
+        val environmentUrl: String
     }
     interface EnvironmentManifestRoom: EnvironmentManifest {
         val isEnabled: Boolean
