@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 object ShellScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShellScreenScreenTopAppBar(
+    fun ShellScreenTopAppBar(
         onTopIconClick:suspend ()-> Unit = {},
         onBottomIconClick:suspend ()-> Unit = {},
         onDeleteIconClick:()-> Unit = {},

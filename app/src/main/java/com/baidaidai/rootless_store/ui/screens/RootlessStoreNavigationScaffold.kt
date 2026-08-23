@@ -49,7 +49,7 @@ import com.baidaidai.rootless_store.ui.components.marketScreen.MarketScreenNeces
 import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.shellScreen.ShellScreenNecessaryComponents
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourcesScreenNecessaryComponents
+import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenErrorDialog
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenRepositoryDialog
@@ -197,7 +197,7 @@ fun RootlessStoreNavigationScaffold(
         Scaffold(
             topBar = {
                 when(currentDestination){
-                    PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenScreenTopAppBar(
+                    PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenTopAppBar(
                         pluginCount = pluginCount,
                         textButtonOnClick = {
                             pluginScreenViewModel.toggleBadgeVisibility()
@@ -207,7 +207,7 @@ fun RootlessStoreNavigationScaffold(
                     CodeBrickScreenKey -> CodeBrickScreenNecessaryComponents.CodeBrickScreenTopAppBar(
                         scrollBehavior = scrollBehavior
                     )
-                    SourceScreenKey -> SourcesScreenNecessaryComponents.SourcesScreenTopAppBar(
+                    SourceScreenKey -> SourceScreenNecessaryComponents.SourceScreenTopAppBar(
                         iconButtonOnClick = {
                             isSourceDialogVisible = !isSourceDialogVisible
                         },
@@ -236,11 +236,11 @@ fun RootlessStoreNavigationScaffold(
                             }
                         )
                     }
-                    MarketScreenKey -> MarketScreenNecessaryComponents.MarketScreenScreenTopAppBar(
+                    MarketScreenKey -> MarketScreenNecessaryComponents.MarketScreenTopAppBar(
                         sourceName = currentPluginSource!!.sourceName,
                         scrollBehavior = scrollBehavior
                     )
-                    ShellScreenKey -> ShellScreenNecessaryComponents.ShellScreenScreenTopAppBar(
+                    ShellScreenKey -> ShellScreenNecessaryComponents.ShellScreenTopAppBar(
                         onTopIconClick = {
                             lazyColumnState.scrollToItem(0)
                         },

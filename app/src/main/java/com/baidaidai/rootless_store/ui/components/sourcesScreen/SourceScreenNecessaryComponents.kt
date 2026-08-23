@@ -13,10 +13,10 @@ import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.core.i18n.icuString
 
-object SourcesScreenNecessaryComponents {
+object SourceScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
-    fun SourcesScreenTopAppBar(
+    fun SourceScreenTopAppBar(
         textButtonOnClick:()-> Unit = {},
         iconButtonOnClick:()-> Unit = {},
         sourceCount: Int = 0

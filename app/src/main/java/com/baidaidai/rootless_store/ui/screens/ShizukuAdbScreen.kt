@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenActionCard
-import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModelSheet
+import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModalSheet
 import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenOverviewCard
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 import kotlinx.coroutines.delay
@@ -44,23 +44,23 @@ fun ShizukuAdbScreen(
     val activity = context as? Activity
 
     var isCompletionSheetVisible by remember { mutableStateOf(false) }
-    var remainderTime by remember { mutableIntStateOf(6) }
+    var remainingSeconds by remember { mutableIntStateOf(6) }
 
 
     LaunchedEffect(isEndpointActive) {
         if (isEndpointActive) {
             isCompletionSheetVisible = true
-            while (remainderTime > 0){
+            while (remainingSeconds > 0){
                 delay(1000)
-                remainderTime--
+                remainingSeconds--
             }
             activity?.finish()
         }
     }
 
     if (isCompletionSheetVisible){
-        ShizukuAdbScreenModelSheet(
-            remainderTime = remainderTime,
+        ShizukuAdbScreenModalSheet(
+            remainingSeconds = remainingSeconds,
             onDismissRequest = { isCompletionSheetVisible = false},
             onCloseButtonClick = { isCompletionSheetVisible = false },
             onReturnButtonClick = { activity?.finish() }
