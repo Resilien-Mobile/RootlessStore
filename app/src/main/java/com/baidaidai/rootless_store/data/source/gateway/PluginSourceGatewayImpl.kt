@@ -16,17 +16,17 @@ class PluginSourceGatewayImpl @Inject constructor(
     private val pluginSourceAPI: PluginSourceAPI
 ): PluginSourceGateway  {
 
-    override suspend fun getPluginSource(sourceRemoteEndpoint: String): PluginSourceInfo {
-        val ktorResponse = pluginSourceAPI.getPluginSourceInfo(sourceRemoteEndpoint)
+    override suspend fun fetchPluginSource(sourceRemoteEndpoint: String): PluginSourceInfo {
+        val ktorResponse = pluginSourceAPI.fetchPluginSourceInfo(sourceRemoteEndpoint)
         val pluginSourceInfoDTO = ktorResponse.body<PluginSourceInfoDTO>()  // Convert JSON to DTO
 
         val pluginSource = pluginSourceInfoDTO.toPluginSourceInfo()
         return pluginSource
     }
 
-    suspend fun getPluginSourceAuthenticationResult(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceAuthenticationResult {
+    suspend fun fetchPluginSourceAuthenticationResult(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceAuthenticationResult {
         return try {
-            val ktorResponse = pluginSourceAPI.getPluginSourceAuthenticationInfo(pluginSourceAuthFormInput)
+            val ktorResponse = pluginSourceAPI.fetchPluginSourceAuthenticationInfo(pluginSourceAuthFormInput)
             val httpStatusCode = ktorResponse.status.value
 
             when(httpStatusCode){

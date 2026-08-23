@@ -11,7 +11,7 @@ class GithubReleaseAPI @Inject constructor(
 ) {
     private val client = ktorClient
 
-    suspend fun getLatestVersionTagName(): HttpResponse{
+    suspend fun fetchLatestVersionTagName(): HttpResponse{
         return client.request(
             urlString = "https://api.github.com/repos/Resilien-Mobile/RootlessStore/releases/latest"
         ){

@@ -32,7 +32,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
         sourceEndpointInput: PluginSourceEndpointInput
     ): PluginSourceEvent {
         try{
-            val pluginSource = pluginSourceGatewayImpl.getPluginSource(sourceEndpointInput.sourceRemoteEndpoint)
+            val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceEndpointInput.sourceRemoteEndpoint)
             val sourceAuthenticationInfo = pluginSource.pluginSourceAuthenticationMeta
 
             /**
@@ -64,8 +64,8 @@ class PluginSourceRepositoryImpl @Inject constructor(
     ): PluginSourceEvent {
         try{
 
-            val pluginSource = pluginSourceGatewayImpl.getPluginSource(sourceRemoteEndpoint = pluginSourceAuthFormInput.sourceRemoteEndpoint)
-            val sourceAuthenticationResult = pluginSourceGatewayImpl.getPluginSourceAuthenticationResult(pluginSourceAuthFormInput)
+            val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceRemoteEndpoint = pluginSourceAuthFormInput.sourceRemoteEndpoint)
+            val sourceAuthenticationResult = pluginSourceGatewayImpl.fetchPluginSourceAuthenticationResult(pluginSourceAuthFormInput)
 
             /**
              * 验证，打断异常会话
