@@ -10,16 +10,16 @@ import io.ktor.http.appendPathSegments
 import javax.inject.Inject
 import io.ktor.http.path
 
-class PluginMarketApi @Inject constructor(
+class MarketApi @Inject constructor(
     private val ktorClient: HttpClient
 ){
     private val client = ktorClient
 
-    suspend fun fetchPlugins(
+    suspend fun fetchMarketManifests(
         pageNumber: Int,
-        pluginSourceUri: String
+        pluginSourceEndpoint: String
     ): HttpResponse {
-        return client.request(pluginSourceUri){
+        return client.request(pluginSourceEndpoint){
             method = HttpMethod.Get
             accept(ContentType.Application.Json)
             url{
