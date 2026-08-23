@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.domain.notification.usecase
 
-import com.baidaidai.rootless_store.data.notification.gateway.NotificationManagerGatewayImpl
+import com.baidaidai.rootless_store.data.notification.gateway.NotificationGatewayImpl
 import com.baidaidai.rootless_store.data.notification.repository.NotificationPreferenceRepositoryImpl
 import javax.inject.Inject
 
-class PostPluginExitNotificationUseCase @Inject constructor(
-    private val notificationManagerGatewayImpl: NotificationManagerGatewayImpl,
+class SendPluginExitNotificationUseCase @Inject constructor(
+    private val notificationGatewayImpl: NotificationGatewayImpl,
     private val notificationPreferenceRepositoryImpl: NotificationPreferenceRepositoryImpl
 ) {
 
@@ -14,14 +14,14 @@ class PostPluginExitNotificationUseCase @Inject constructor(
 
         if (notificationPreference != null){
             if (notificationPreference.isCriticalWarningEnabled){
-                notificationManagerGatewayImpl
-                    .pushWarningNotificationOverBark(
+                notificationGatewayImpl
+                    .sendCriticalBarkNotification(
                         title = notificationPreference.notificationTitle,
                         apiKey = notificationPreference.apiKey
                     )
             }else{
-                notificationManagerGatewayImpl
-                    .pushNormalNotificationOverBark(
+                notificationGatewayImpl
+                    .sendBarkNotification(
                         title = notificationPreference.notificationTitle,
                         apiKey = notificationPreference.apiKey
                     )
