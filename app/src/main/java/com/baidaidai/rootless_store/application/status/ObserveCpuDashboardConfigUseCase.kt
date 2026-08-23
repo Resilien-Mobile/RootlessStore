@@ -19,7 +19,7 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
     operator fun invoke(): Flow<CpuDashboardConfig> {
         return flow {
             while (currentCoroutineContext().isActive) {
-                val cpuDashboardConfig = getCpuDashboardConfigOnce()
+                val cpuDashboardConfig = resolveCpuDashboardConfig()
 
                 if (cpuDashboardConfig == null) {
                     delay(CPU_DASHBOARD_RETRY_INTERVAL_MILLIS.milliseconds)
@@ -31,51 +31,51 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
         }
     }
 
-    private suspend fun getCpuDashboardConfigOnce(): CpuDashboardConfig? {
+    private suspend fun resolveCpuDashboardConfig(): CpuDashboardConfig? {
         return coroutineScope {
 
             // Get available CPU core count
             val availableCpuCoreCount =
-                storeStatusGatewayImpl.getCpuCoreCount() ?: return@coroutineScope null
+                storeStatusGatewayImpl.findCpuCoreCount() ?: return@coroutineScope null
             if (availableCpuCoreCount <= 0) {
                 return@coroutineScope null
             }
             val cpuCoreIndexList = (0 until availableCpuCoreCount).toList()
 
             // Start total CPU sampling
-            val totalCoreInfoDeferred = async {
-                storeStatusGatewayImpl.getCoreInfo(cpuCoreIndex = null)
+            val aggregateMetricsDeferred = async {
+                storeStatusGatewayImpl.findCpuCoreMetrics(cpuCoreIndex = null)
             }
 
             // Start each CPU core sampling
-            val cpuCoreInfoDeferredList = cpuCoreIndexList.map { cpuCoreIndex ->
+            val coreMetricsDeferredList = cpuCoreIndexList.map { cpuCoreIndex ->
                 async {
-                    storeStatusGatewayImpl.getCoreInfo(cpuCoreIndex = cpuCoreIndex)
+                    storeStatusGatewayImpl.findCpuCoreMetrics(cpuCoreIndex = cpuCoreIndex)
                 }
             }
 
             // Start system uptime query
             val systemUptimeDeferred = async {
-                storeStatusGatewayImpl.getSystemUptime()
+                storeStatusGatewayImpl.findSystemUptime()
             }
 
             // Await all CPU sampling results
-            val totalCoreInfo = totalCoreInfoDeferred.await() ?: return@coroutineScope null
-            val cpuCoreInfoResultList = cpuCoreInfoDeferredList.awaitAll()
+            val aggregateMetrics = aggregateMetricsDeferred.await() ?: return@coroutineScope null
+            val coreMetricsResultList = coreMetricsDeferredList.awaitAll()
             val systemUptime = systemUptimeDeferred.await() ?: return@coroutineScope null
 
             // Filter unavailable CPU core results
-            val availableCpuCoreInfoList = cpuCoreInfoResultList.filterNotNull()
-            if (availableCpuCoreInfoList.isEmpty()) {
+            val availableCoreMetrics = coreMetricsResultList.filterNotNull()
+            if (availableCoreMetrics.isEmpty()) {
                 return@coroutineScope null
             }
-            val resolvedCpuCoreCount = availableCpuCoreInfoList.size
+            val resolvedCpuCoreCount = availableCoreMetrics.size
 
             // Build CPU dashboard config
             return@coroutineScope CpuDashboardConfig(
                 coreCount = resolvedCpuCoreCount,
-                totalCoreInfo = totalCoreInfo,
-                core = availableCpuCoreInfoList,
+                aggregateMetrics = aggregateMetrics,
+                coreMetrics = availableCoreMetrics,
                 uptime = systemUptime
             )
         }

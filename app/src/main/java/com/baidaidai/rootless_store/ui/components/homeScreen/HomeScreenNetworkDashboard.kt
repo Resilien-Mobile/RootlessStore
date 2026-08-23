@@ -38,21 +38,21 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
-import com.baidaidai.rootless_store.domain.status.model.NetDashboardConfig
-import com.baidaidai.rootless_store.domain.status.model.PortInfo
+import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 
 @Composable
-fun HomeScreenNetDashboard(
+fun HomeScreenNetworkDashboard(
     modifier: Modifier = Modifier,
-    netDashboardConfig: NetDashboardConfig,
+    networkDashboardConfig: NetworkDashboardConfig,
     rootlessStoreHeightWindowSize: RootlessStoreWindowSize
 ){
     val downloadSpeedList = rememberSaveable { mutableStateListOf(0f,0f,0f,0f,0f,0f,0f,0f) }
 
-    LaunchedEffect(netDashboardConfig.currentDownloadRate) {
+    LaunchedEffect(networkDashboardConfig.currentDownloadRate) {
         downloadSpeedList.removeAt(0)
-        downloadSpeedList.add(netDashboardConfig.currentDownloadRate)
+        downloadSpeedList.add(networkDashboardConfig.currentDownloadRate)
     }
 
     val dynamicallyAdjustedModifier = when(rootlessStoreHeightWindowSize){
@@ -115,9 +115,9 @@ fun HomeScreenNetDashboard(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                netDashboardConfig.port.forEachIndexed { index, portInfo ->
-                    HomeScreenNetDashboardTie(portInfo = portInfo)
-                    if (index != netDashboardConfig.port.size-1){
+                networkDashboardConfig.networkInterfaces.forEachIndexed { index, networkInterfaceMetrics ->
+                    HomeScreenNetworkInterfaceRow(networkInterfaceMetrics = networkInterfaceMetrics)
+                    if (index != networkDashboardConfig.networkInterfaces.size-1){
                         Spacer(modifier = Modifier.height(10.dp))
                         HorizontalDivider(Modifier
                             .fillMaxWidth()
@@ -185,9 +185,9 @@ fun HomeScreenNetDashboard(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
             ) {
-                netDashboardConfig.port.forEachIndexed { index, portInfo ->
-                    HomeScreenNetDashboardTie(portInfo = portInfo)
-                    if (index != netDashboardConfig.port.size-1){
+                networkDashboardConfig.networkInterfaces.forEachIndexed { index, networkInterfaceMetrics ->
+                    HomeScreenNetworkInterfaceRow(networkInterfaceMetrics = networkInterfaceMetrics)
+                    if (index != networkDashboardConfig.networkInterfaces.size-1){
                         Spacer(modifier = Modifier.height(10.dp))
                         HorizontalDivider(Modifier.height(1.dp))
                         Spacer(modifier = Modifier.height(10.dp))
@@ -199,9 +199,9 @@ fun HomeScreenNetDashboard(
 }
 
 @Composable
-private fun HomeScreenNetDashboardTie(
+private fun HomeScreenNetworkInterfaceRow(
     modifier: Modifier = Modifier,
-    portInfo: PortInfo
+    networkInterfaceMetrics: NetworkInterfaceMetrics
 ){
     Column(modifier = modifier) {
         Row(
@@ -211,14 +211,14 @@ private fun HomeScreenNetDashboardTie(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(portInfo.portIcon),
-                    contentDescription = portInfo.portName
+                    painter = painterResource(networkInterfaceMetrics.interfaceIcon),
+                    contentDescription = networkInterfaceMetrics.interfaceName
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(portInfo.portName)
+                Text(networkInterfaceMetrics.interfaceName)
             }
             Spacer(modifier = Modifier.width(10.dp))
-            Text(portInfo.portAddress)
+            Text(networkInterfaceMetrics.interfaceAddress)
         }
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -227,25 +227,25 @@ private fun HomeScreenNetDashboardTie(
                 .fillMaxWidth()
                 .height(intrinsicSize = IntrinsicSize.Min)
         ) {
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "↑/S",
-                value = "${"%.1f".format(portInfo.currentUploadRate)} M/s"
+                value = "${"%.1f".format(networkInterfaceMetrics.currentUploadRate)} M/s"
             )
             Spacer(modifier = Modifier.width(10.dp))
-            HomeScreenCpuInfoCell(
+            HomeScreenMetricCell(
                 title = "↓/S",
-                value = "${"%.1f".format(portInfo.currentDownloadRate)} M/s"
+                value = "${"%.1f".format(networkInterfaceMetrics.currentDownloadRate)} M/s"
             )
             Spacer(modifier = Modifier.width(10.dp))
             Row {
                 Column {
-                    Row(verticalAlignment = Alignment.CenterVertically) { Text("↑") ; Spacer(modifier = Modifier.width(10.dp)) ; Text("${"%.1f".format(portInfo.totalUploadPackage)} M")}
-                    Row(verticalAlignment = Alignment.CenterVertically) { Text("↓") ; Spacer(modifier = Modifier.width(10.dp)) ; Text("${"%.1f".format(portInfo.totalDownloadPackage)} M")}
+                    Row(verticalAlignment = Alignment.CenterVertically) { Text("↑") ; Spacer(modifier = Modifier.width(10.dp)) ; Text("${"%.1f".format(networkInterfaceMetrics.totalUploadedMebibytes)} M")}
+                    Row(verticalAlignment = Alignment.CenterVertically) { Text("↓") ; Spacer(modifier = Modifier.width(10.dp)) ; Text("${"%.1f".format(networkInterfaceMetrics.totalDownloadedMebibytes)} M")}
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 CircularProgressIndicator(
                     progress = {
-                        (portInfo.totalUploadPackage/(portInfo.totalDownloadPackage+portInfo.totalUploadPackage))
+                        (networkInterfaceMetrics.totalUploadedMebibytes/(networkInterfaceMetrics.totalDownloadedMebibytes+networkInterfaceMetrics.totalUploadedMebibytes))
                     },
                     modifier = Modifier
                         .fillMaxHeight()
@@ -264,8 +264,8 @@ private fun HomeScreenNetDashboardTie(
 @Composable
 private fun _previewBoardCompact_() {
     Column(modifier = Modifier.width(500.dp)) {
-        HomeScreenNetDashboard(
-            netDashboardConfig = NetDashboardConfig._testOnly_,
+        HomeScreenNetworkDashboard(
+            networkDashboardConfig = NetworkDashboardConfig._testOnly_,
             rootlessStoreHeightWindowSize = RootlessStoreWindowSize.Compact,
             modifier = Modifier
                 .height(500.dp)
@@ -281,8 +281,8 @@ private fun _previewBoardCompact_() {
 @Composable
 private fun _previewBoardExpanded_() {
     Column(modifier = Modifier.width(500.dp)) {
-        HomeScreenNetDashboard(
-            netDashboardConfig = NetDashboardConfig._testOnly_,
+        HomeScreenNetworkDashboard(
+            networkDashboardConfig = NetworkDashboardConfig._testOnly_,
             rootlessStoreHeightWindowSize = RootlessStoreWindowSize.Expanded,
             modifier = Modifier
                 .height(500.dp)
@@ -294,10 +294,10 @@ private fun _previewBoardExpanded_() {
 
 @PreviewLightDark
 @Composable
-private fun _previewTie_() {
+private fun _previewNetworkInterfaceRow_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        HomeScreenNetDashboardTie(
-            portInfo = NetDashboardConfig._testOnly_.port[0],
+        HomeScreenNetworkInterfaceRow(
+            networkInterfaceMetrics = NetworkDashboardConfig._testOnly_.networkInterfaces[0],
             modifier = Modifier
                 .width(200.dp)
                 .background(MaterialTheme.colorScheme.background)

@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.application.status
 
 import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
-import com.baidaidai.rootless_store.domain.status.model.NetDashboardConfig
+import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
@@ -12,26 +12,26 @@ import kotlinx.coroutines.isActive
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class ObserveNetDashboardConfigUseCase @Inject constructor(
+class ObserveNetworkDashboardConfigUseCase @Inject constructor(
     private val storeStatusGatewayImpl: StoreStatusGatewayImpl
 ) {
-    operator fun invoke(): Flow<NetDashboardConfig> {
+    operator fun invoke(): Flow<NetworkDashboardConfig> {
         return flow {
             while (currentCoroutineContext().isActive) {
-                val netDashboardConfig = getNetDashboardConfigOnce()
+                val networkDashboardConfig = getNetworkDashboardConfigOnce()
 
-                if (netDashboardConfig == null) {
-                    delay(NET_DASHBOARD_RETRY_INTERVAL_MILLIS.milliseconds)
+                if (networkDashboardConfig == null) {
+                    delay(NETWORK_DASHBOARD_RETRY_INTERVAL_MILLIS.milliseconds)
                     continue
                 }
 
                 // Emit network dashboard config
-                emit(netDashboardConfig)
+                emit(networkDashboardConfig)
             }
         }
     }
 
-    private suspend fun getNetDashboardConfigOnce(): NetDashboardConfig? {
+    private suspend fun getNetworkDashboardConfigOnce(): NetworkDashboardConfig? {
         return coroutineScope {
 
             // Get optional network availability
@@ -40,32 +40,32 @@ class ObserveNetDashboardConfigUseCase @Inject constructor(
 
             // Resolve active network interface names
             val carrierNetworkInterfaceName = if (isCarrierAvailable) {
-                storeStatusGatewayImpl.getCarrierNetworkInterfaceName()
+                storeStatusGatewayImpl.findCarrierNetworkInterfaceName()
             } else {
                 null
             }
             val vpnNetworkInterfaceName = if (isVpnAvailable) {
-                storeStatusGatewayImpl.getVpnNetworkInterfaceName()
+                storeStatusGatewayImpl.findVpnNetworkInterfaceName()
             } else {
                 null
             }
 
             // Start network interface sampling
-            val wlanPortInfoDeferred = async {
-                storeStatusGatewayImpl.getPortInfo()
+            val wlanNetworkInterfaceMetricsDeferred = async {
+                storeStatusGatewayImpl.findNetworkInterfaceMetrics()
             }
-            val vpnPortInfoDeferred = async {
+            val vpnNetworkInterfaceMetricsDeferred = async {
                 if (isVpnAvailable && vpnNetworkInterfaceName != null) {
-                    storeStatusGatewayImpl.getPortInfo(
+                    storeStatusGatewayImpl.findNetworkInterfaceMetrics(
                         networkInterfaceName = vpnNetworkInterfaceName
                     )
                 } else {
                     null
                 }
             }
-            val carrierPortInfoDeferred = async {
+            val carrierNetworkInterfaceMetricsDeferred = async {
                 if (isCarrierAvailable && carrierNetworkInterfaceName != null) {
-                    storeStatusGatewayImpl.getPortInfo(
+                    storeStatusGatewayImpl.findNetworkInterfaceMetrics(
                         networkInterfaceName = carrierNetworkInterfaceName
                     )
                 } else {
@@ -74,38 +74,38 @@ class ObserveNetDashboardConfigUseCase @Inject constructor(
             }
 
             // Await all network interface results
-            val wlanPortInfo = wlanPortInfoDeferred.await()
-            val vpnPortInfo = vpnPortInfoDeferred.await()
-            val carrierPortInfo = carrierPortInfoDeferred.await()
+            val wlanNetworkInterfaceMetrics = wlanNetworkInterfaceMetricsDeferred.await()
+            val vpnNetworkInterfaceMetrics = vpnNetworkInterfaceMetricsDeferred.await()
+            val carrierNetworkInterfaceMetrics = carrierNetworkInterfaceMetricsDeferred.await()
 
             // Build available network interface list
-            val availableNetworkInterfaceList = listOfNotNull(
-                wlanPortInfo,
-                vpnPortInfo,
-                carrierPortInfo
+            val availableNetworkInterfaces = listOfNotNull(
+                wlanNetworkInterfaceMetrics,
+                vpnNetworkInterfaceMetrics,
+                carrierNetworkInterfaceMetrics
             )
-            if (availableNetworkInterfaceList.isEmpty()) {
+            if (availableNetworkInterfaces.isEmpty()) {
                 return@coroutineScope null
             }
 
             // Select current network rate source
             // Priority: VPN -> WLAN -> Carrier
             val currentNetworkRateSource =
-                vpnPortInfo
-                    ?: wlanPortInfo
-                    ?: carrierPortInfo
+                vpnNetworkInterfaceMetrics
+                    ?: wlanNetworkInterfaceMetrics
+                    ?: carrierNetworkInterfaceMetrics
                     ?: return@coroutineScope null
 
             // Build network dashboard config
-            return@coroutineScope NetDashboardConfig(
+            return@coroutineScope NetworkDashboardConfig(
                 currentUploadRate = currentNetworkRateSource.currentUploadRate,
                 currentDownloadRate = currentNetworkRateSource.currentDownloadRate,
-                port = availableNetworkInterfaceList
+                networkInterfaces = availableNetworkInterfaces
             )
         }
     }
 
     private companion object {
-        const val NET_DASHBOARD_RETRY_INTERVAL_MILLIS = 1_000L
+        const val NETWORK_DASHBOARD_RETRY_INTERVAL_MILLIS = 1_000L
     }
 }

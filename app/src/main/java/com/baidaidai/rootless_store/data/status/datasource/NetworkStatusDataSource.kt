@@ -9,7 +9,7 @@ import android.os.RemoteException
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
-import com.baidaidai.rootless_store.domain.status.model.PortInfo
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -21,7 +21,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class NetStatusDataSource @Inject constructor(
+class NetworkStatusDataSource @Inject constructor(
     @ApplicationContext private val context: Context,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
@@ -30,7 +30,7 @@ class NetStatusDataSource @Inject constructor(
 
     suspend operator fun invoke(
         networkInterfaceName: String = DEFAULT_NETWORK_INTERFACE_NAME
-    ): PortInfo? {
+    ): NetworkInterfaceMetrics? {
 
         // Get Shizuku user service
         val shizukuUserService =
@@ -58,7 +58,7 @@ class NetStatusDataSource @Inject constructor(
         ) ?: return null
 
         // Convert the two snapshots into network interface information
-        return calculatePortInfo(
+        return calculateNetworkInterfaceMetrics(
             networkInterfaceName = networkInterfaceName,
             networkInterfaceAddress = networkInterfaceAddress,
             firstNetworkSnapshot = firstNetworkSnapshot,
@@ -67,19 +67,19 @@ class NetStatusDataSource @Inject constructor(
     }
 
     fun isCarrierAvailable(): Boolean {
-        return getNetworkByTransport(NetworkCapabilities.TRANSPORT_CELLULAR) != null
+        return findNetworkByTransport(NetworkCapabilities.TRANSPORT_CELLULAR) != null
     }
 
     fun isVpnAvailable(): Boolean {
-        return getNetworkByTransport(NetworkCapabilities.TRANSPORT_VPN) != null
+        return findNetworkByTransport(NetworkCapabilities.TRANSPORT_VPN) != null
     }
 
-    fun getCarrierNetworkInterfaceName(): String? {
-        return getNetworkInterfaceName(NetworkCapabilities.TRANSPORT_CELLULAR)
+    fun findCarrierNetworkInterfaceName(): String? {
+        return findNetworkInterfaceName(NetworkCapabilities.TRANSPORT_CELLULAR)
     }
 
-    fun getVpnNetworkInterfaceName(): String? {
-        return getNetworkInterfaceName(NetworkCapabilities.TRANSPORT_VPN)
+    fun findVpnNetworkInterfaceName(): String? {
+        return findNetworkInterfaceName(NetworkCapabilities.TRANSPORT_VPN)
     }
 
     private suspend fun readNetworkSnapshot(
@@ -174,12 +174,12 @@ class NetStatusDataSource @Inject constructor(
         }
     }
 
-    private fun calculatePortInfo(
+    private fun calculateNetworkInterfaceMetrics(
         networkInterfaceName: String,
         networkInterfaceAddress: String,
         firstNetworkSnapshot: NetworkSnapshot,
         secondNetworkSnapshot: NetworkSnapshot
-    ): PortInfo {
+    ): NetworkInterfaceMetrics {
         val currentUploadBytes = calculateDelta(
             firstValue = firstNetworkSnapshot.transmittedBytes,
             secondValue = secondNetworkSnapshot.transmittedBytes
@@ -189,14 +189,14 @@ class NetStatusDataSource @Inject constructor(
             secondValue = secondNetworkSnapshot.receivedBytes
         )
 
-        return PortInfo(
-            portName = networkInterfaceName,
-            portIcon = getNetworkInterfaceIcon(networkInterfaceName),
-            portAddress = networkInterfaceAddress,
+        return NetworkInterfaceMetrics(
+            interfaceName = networkInterfaceName,
+            interfaceIcon = resolveNetworkInterfaceIcon(networkInterfaceName),
+            interfaceAddress = networkInterfaceAddress,
             currentUploadRate = currentUploadBytes.toMebibyte(),
             currentDownloadRate = currentDownloadBytes.toMebibyte(),
-            totalUploadPackage = secondNetworkSnapshot.transmittedBytes.toMebibyte(),
-            totalDownloadPackage = secondNetworkSnapshot.receivedBytes.toMebibyte()
+            totalUploadedMebibytes = secondNetworkSnapshot.transmittedBytes.toMebibyte(),
+            totalDownloadedMebibytes = secondNetworkSnapshot.receivedBytes.toMebibyte()
         )
     }
 
@@ -207,7 +207,7 @@ class NetStatusDataSource @Inject constructor(
         return (secondValue - firstValue).coerceAtLeast(0L)
     }
 
-    private fun getNetworkByTransport(transportType: Int): Network? {
+    private fun findNetworkByTransport(transportType: Int): Network? {
         return connectivityManager.allNetworks.firstOrNull { network ->
             connectivityManager
                 .getNetworkCapabilities(network)
@@ -215,12 +215,12 @@ class NetStatusDataSource @Inject constructor(
         }
     }
 
-    private fun getNetworkInterfaceName(transportType: Int): String? {
-        val network = getNetworkByTransport(transportType) ?: return null
+    private fun findNetworkInterfaceName(transportType: Int): String? {
+        val network = findNetworkByTransport(transportType) ?: return null
         return connectivityManager.getLinkProperties(network)?.interfaceName
     }
 
-    private fun getNetworkInterfaceIcon(networkInterfaceName: String): Int {
+    private fun resolveNetworkInterfaceIcon(networkInterfaceName: String): Int {
         return when {
             networkInterfaceName.startsWith("rmnet") -> R.drawable.material_symbols_sim_card
             networkInterfaceName.startsWith("ccmni") -> R.drawable.material_symbols_sim_card
