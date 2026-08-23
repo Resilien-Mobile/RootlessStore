@@ -13,8 +13,10 @@ import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
 import com.baidaidai.rootless_store.application.plugin.UninstallPluginUseCase
 import com.baidaidai.rootless_store.application.plugin.ObservePluginCountUseCase
 import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentsUseCase
-import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnabledUseCase
-import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
+import com.baidaidai.rootless_store.application.environment.DisableEnvironmentUseCase
+import com.baidaidai.rootless_store.application.environment.EnableEnvironmentUseCase
+import com.baidaidai.rootless_store.application.plugin.DisablePluginUseCase
+import com.baidaidai.rootless_store.application.plugin.EnablePluginUseCase
 import com.baidaidai.rootless_store.application.environment.UninstallEnvironmentUseCase
 import com.baidaidai.rootless_store.application.plugin.ResolvePluginShareUriUseCase
 import com.baidaidai.rootless_store.application.plugin.ResolvePluginWebUiUriUseCase
@@ -36,8 +38,10 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     private val observePluginsUseCase: ObservePluginsUseCase,
     private val observeEnvironmentsUseCase: ObserveEnvironmentsUseCase,
     private val installLocalPackageUseCase: InstallLocalPackageUseCase,
-    private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
-    private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
+    private val enablePluginUseCase: EnablePluginUseCase,
+    private val disablePluginUseCase: DisablePluginUseCase,
+    private val enableEnvironmentUseCase: EnableEnvironmentUseCase,
+    private val disableEnvironmentUseCase: DisableEnvironmentUseCase,
     private val uninstallPluginUseCase: UninstallPluginUseCase,
     private val uninstallEnvironmentUseCase: UninstallEnvironmentUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
@@ -108,10 +112,11 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         isEnabled: Boolean
     ){
         viewModelScope.launch {
-            setPluginEnabledUseCase(
-                pluginId = pluginId,
-                isEnabled = isEnabled
-            )
+            if (isEnabled) {
+                enablePluginUseCase(pluginId)
+            } else {
+                disablePluginUseCase(pluginId)
+            }
         }
     }
 
@@ -120,10 +125,11 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         isEnabled: Boolean
     ){
         viewModelScope.launch {
-            setEnvironmentEnabledUseCase(
-                environmentId = environmentId,
-                isEnabled = isEnabled
-            )
+            if (isEnabled) {
+                enableEnvironmentUseCase(environmentId)
+            } else {
+                disableEnvironmentUseCase(environmentId)
+            }
         }
     }
 

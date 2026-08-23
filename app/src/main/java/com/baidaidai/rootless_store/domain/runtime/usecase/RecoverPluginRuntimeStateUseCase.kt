@@ -18,12 +18,12 @@ class RecoverPluginRuntimeStateUseCase @Inject constructor(
             if (pluginExecutionStatus.executionContext == HosterOverallStatus.ADB){
                 val abortResult = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
                 if (abortResult){
-                    pluginRepositoryImpl.disablePluginById(pluginExecutionStatus.pluginId)
+                    pluginRepositoryImpl.disablePlugin(pluginExecutionStatus.pluginId)
                     pluginExecutionRepositoryImpl.deletePluginExecutionByPluginId(pluginExecutionStatus.pluginId)
                 }
             }else{
                 pluginExecutionGatewayImpl.abortPluginProcess(pluginExecutionStatus.executionPid)
-                pluginRepositoryImpl.disablePluginById(pluginExecutionStatus.pluginId)
+                pluginRepositoryImpl.disablePlugin(pluginExecutionStatus.pluginId)
                 pluginExecutionRepositoryImpl.deletePluginExecutionByPluginId(pluginExecutionStatus.pluginId)
             }
         }

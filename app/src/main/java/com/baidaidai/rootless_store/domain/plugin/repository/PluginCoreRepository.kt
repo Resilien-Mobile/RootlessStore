@@ -16,9 +16,9 @@ interface PluginCoreRepository {
     suspend fun getEnabledPluginCount(): Int
 
     // Update
-    suspend fun enablePluginById(pluginId: String)
-    suspend fun disablePluginById(pluginId: String)
-    suspend fun disableAllPlugin()
+    suspend fun enablePlugin(pluginId: String)
+    suspend fun disablePlugin(pluginId: String)
+    suspend fun disableAllPlugins()
 
     // Delete
     suspend fun deletePluginById(pluginId: String)
