@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.environment.gateway
 import android.content.Context
 import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.data.plugin.remote.datasource.DownloadPluginPackage
+import com.baidaidai.rootless_store.data.plugin.remote.datasource.ModulePackageRemoteDataSource
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class EnvironmentGatewayImpl @Inject constructor(
     @ApplicationContext val context: Context,
-    private val downloadPluginPackage: DownloadPluginPackage,
+    private val modulePackageRemoteDataSource: ModulePackageRemoteDataSource,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
     private val defaultEnvironmentLocation = File(context.filesDir, "Environment")
@@ -29,7 +29,7 @@ class EnvironmentGatewayImpl @Inject constructor(
         environmentUri: String,
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
-        val remoteEnvironmentContent = downloadPluginPackage.usePluginUri(environmentUri).bodyAsChannel()
+        val remoteEnvironmentContent = modulePackageRemoteDataSource.fetchPackage(environmentUri).bodyAsChannel()
         val environmentPackageName = environmentManifestRemote.environmentPackageName
         installEnvironment(
             originFileByteChannel = remoteEnvironmentContent,

@@ -5,14 +5,14 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import javax.inject.Inject
 
-class DownloadPluginPackage @Inject constructor(
+class ModulePackageRemoteDataSource @Inject constructor(
     ktorClient: HttpClient
 ){
     private val client = ktorClient
 
-    suspend fun usePluginUri(pluginUri: String): HttpResponse {
+    suspend fun fetchPackage(packageUri: String): HttpResponse {
         return client.get(
-            urlString = pluginUri
+            urlString = packageUri
         )
     }
 }
