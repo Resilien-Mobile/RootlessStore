@@ -36,8 +36,8 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     suspend fun setExecutionContextPreference(hosterOverallStatus: HosterOverallStatus) = storeStatusGatewayImpl.setExecutionContextPreference(hosterOverallStatus)
 
-    fun observeEnableChooserPreference(): Flow<Boolean> = storeStatusGatewayImpl.observeEnableChooserPreference()
+    fun observeExecutionContextChooserEnabled(): Flow<Boolean> = storeStatusGatewayImpl.observeExecutionContextChooserEnabled()
 
-    suspend fun setEnableChooserPreference(chooserStatus: Boolean) = storeStatusGatewayImpl.setEnableChooserPreference(chooserStatus)
+    suspend fun setExecutionContextChooserEnabled(isEnabled: Boolean) = storeStatusGatewayImpl.setExecutionContextChooserEnabled(isEnabled)
 
 }

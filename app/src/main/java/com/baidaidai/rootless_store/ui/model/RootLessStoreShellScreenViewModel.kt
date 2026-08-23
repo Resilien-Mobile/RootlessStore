@@ -9,7 +9,7 @@ import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUs
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveShellContextPreferencesUseCase
 import com.baidaidai.rootless_store.application.shell.RunCommandUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.SetShellJumpToDirectoryUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.SetShellDirectoryJumpEnabledUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +24,7 @@ class RootLessStoreShellScreenViewModel @Inject constructor(
     private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
     observeShellContextPreferencesUseCase: ObserveShellContextPreferencesUseCase,
-    private val setShellJumpToDirectoryUseCase: SetShellJumpToDirectoryUseCase
+    private val setShellDirectoryJumpEnabledUseCase: SetShellDirectoryJumpEnabledUseCase
 ) : ViewModel(){
 
     private var _shellOutputList = MutableStateFlow(emptyList<ShellResult>())
@@ -77,9 +77,9 @@ class RootLessStoreShellScreenViewModel @Inject constructor(
         _shellOutputList.value =  emptyList()
     }
 
-    fun setJumpToDirectory(enabled: Boolean) {
+    fun setDirectoryJumpEnabled(isEnabled: Boolean) {
         viewModelScope.launch {
-            setShellJumpToDirectoryUseCase(enabled)
+            setShellDirectoryJumpEnabledUseCase(isEnabled)
         }
     }
 
