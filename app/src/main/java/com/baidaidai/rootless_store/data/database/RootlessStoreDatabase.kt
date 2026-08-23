@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.baidaidai.rootless_store.data.codebrick.database.CodeBrickDao
 import com.baidaidai.rootless_store.data.codebrick.database.CodeBrickEntity
-import com.baidaidai.rootless_store.data.database.repository.RoomConvertRepositoryImpl
+import com.baidaidai.rootless_store.data.database.converter.RoomCollectionTypeConverters
 import com.baidaidai.rootless_store.data.execution.database.PluginExecutionDao
 import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntity
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceDao
@@ -30,7 +30,7 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
     version = 2,
     exportSchema = true
 )
-@TypeConverters(RoomConvertRepositoryImpl::class)
+@TypeConverters(RoomCollectionTypeConverters::class)
 abstract class RootlessStoreDatabase : RoomDatabase() {
     abstract fun pluginDao(): PluginDao
     abstract fun environmentDao(): EnvironmentDao
