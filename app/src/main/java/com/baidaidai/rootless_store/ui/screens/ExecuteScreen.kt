@@ -12,7 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.domain.execute.model.ResultTag
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
 import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
 
 @Composable
@@ -20,7 +20,7 @@ fun ExecuteScreen(
     contentPaddingValues: PaddingValues,
     executeScreenViewModel: RootLessStoreExecuteScreenViewModel
 ){
-    val executeLog by executeScreenViewModel.executeLog.collectAsState()
+    val executionLog by executeScreenViewModel.executionLog.collectAsState()
 
     LazyColumn(
         modifier = Modifier.padding(contentPaddingValues),
@@ -30,15 +30,15 @@ fun ExecuteScreen(
             horizontal = 15.dp
         )
     ) {
-        itemsIndexed(executeLog){ ListIndex, ListContent ->
-            when(ListContent.resulTag){
-                ResultTag.Normal -> {
+        itemsIndexed(executionLog){ ListIndex, ListContent ->
+            when(ListContent.resultTag){
+                ExecutionResultTag.Normal -> {
                     Text(
                         text = ListContent.content,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                ResultTag.RedLine -> {
+                ExecutionResultTag.RedLine -> {
                     Text(
                         text = ListContent.content,
                         style = MaterialTheme.typography.bodySmall,

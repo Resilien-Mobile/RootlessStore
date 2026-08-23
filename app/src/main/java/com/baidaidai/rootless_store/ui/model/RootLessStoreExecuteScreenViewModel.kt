@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import com.baidaidai.rootless_store.application.execute.ExecutePluginUseCase
 import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,15 +17,15 @@ class RootLessStoreExecuteScreenViewModel @Inject constructor(
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
 ): ViewModel() {
 
-    private val _executeLog = MutableStateFlow<List<ExecuteResult>>(emptyList())
-    val executeLog = _executeLog.asStateFlow()
+    private val _executionLog = MutableStateFlow<List<ExecutionResult>>(emptyList())
+    val executionLog = _executionLog.asStateFlow()
 
     fun executePlugin(pluginID: String){
-        _executeLog.value = emptyList()
+        _executionLog.value = emptyList()
         viewModelScope.launch {
             executePluginUseCase(pluginID)
                 .collect {
-                    _executeLog.value += it
+                _executionLog.value += it
                 }
         }
     }
@@ -36,8 +36,8 @@ class RootLessStoreExecuteScreenViewModel @Inject constructor(
         }
     }
 
-    fun exportExecuteLog(executeLog: List<ExecuteResult> = _executeLog.value): String{
-        return executeLog.joinToString(separator = "\n") { it.content }
+    fun exportExecutionLog(executionLog: List<ExecutionResult> = _executionLog.value): String{
+        return executionLog.joinToString(separator = "\n") { it.content }
     }
 
 }

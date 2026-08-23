@@ -32,9 +32,9 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun getShizukuStatus(): Boolean = storeStatusGatewayImpl.getShizukuStatus()
 
-    fun observeExecuteContextPreference(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.observeExecuteContextPreference()
+    fun observeExecutionContextPreference(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.observeExecutionContextPreference()
 
-    suspend fun setExecuteContextPreference(hosterOverallStatus: HosterOverallStatus) = storeStatusGatewayImpl.setExecuteContextPreference(hosterOverallStatus)
+    suspend fun setExecutionContextPreference(hosterOverallStatus: HosterOverallStatus) = storeStatusGatewayImpl.setExecutionContextPreference(hosterOverallStatus)
 
     fun observeEnableChooserPreference(): Flow<Boolean> = storeStatusGatewayImpl.observeEnableChooserPreference()
 

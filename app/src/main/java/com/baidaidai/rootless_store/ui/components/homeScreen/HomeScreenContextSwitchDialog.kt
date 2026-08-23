@@ -52,7 +52,7 @@ fun HomeScreenContextSwitchDialog(
     val adbStatus by homeScreenViewModel.adbStatus.collectAsState()
     val rootStatus by homeScreenViewModel.rootStatus.collectAsState()
 
-    val currentSelected by homeScreenViewModel.currentExecuteContextSelected.collectAsState()
+    val currentSelected by homeScreenViewModel.currentExecutionContextSelected.collectAsState()
 
     val HomeScreenContextSwitchDialogRenderingList = listOf(
         HomeScreenContextSwitchDialogSpec(
@@ -115,7 +115,7 @@ fun HomeScreenContextSwitchDialog(
                     HomeScreenContextSwitchDialogItem(
                         currentSelected = currentSelected.name,
                         onClick = {
-                            homeScreenViewModel.setCurrentExecuteContextSelected(spec.option)
+                            homeScreenViewModel.setCurrentExecutionContextSelected(spec.option)
                         },
                         homeScreenContextSwitchDialogSpec = spec
                     )

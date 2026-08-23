@@ -1,12 +1,12 @@
-package com.baidaidai.rootless_store.data.execute.gateway
+package com.baidaidai.rootless_store.data.execution.gateway
 
 import android.util.Log
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.data.monitor.ProcessMonitor
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
-import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
-import com.baidaidai.rootless_store.domain.execute.model.ResultTag
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
 import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class PluginExecuteGatewayImpl @Inject constructor(
+class PluginExecutionGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val processMonitor: ProcessMonitor
@@ -31,12 +31,12 @@ class PluginExecuteGatewayImpl @Inject constructor(
         }
     }
     fun executePluginEntryPoint(
-        pluginExecuteEntryPoint: String,
+        pluginEntryPoint: String,
         pluginPackageDirectory: String,
         enableMonitor: Boolean = false
-    ): Flow<ExecuteResult> = callbackFlow {
+    ): Flow<ExecutionResult> = callbackFlow {
         val processBuilder = ProcessBuilder(
-            rootEnvironmentSwitch(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginExecuteEntryPoint"
+            rootEnvironmentSwitch(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginEntryPoint"
         )
 
         val environment = processBuilder.environment()
@@ -65,8 +65,8 @@ class PluginExecuteGatewayImpl @Inject constructor(
             process.inputStream.bufferedReader().useLines { lines ->
                 lines.forEach { result ->
                     send(
-                        ExecuteResult(
-                            resulTag = ResultTag.Normal,
+                        ExecutionResult(
+                            resultTag = ExecutionResultTag.Normal,
                             content = "- ${result.toString()}"
                         )
                     )
@@ -75,8 +75,8 @@ class PluginExecuteGatewayImpl @Inject constructor(
             process.errorStream.bufferedReader().useLines { lines ->
                 lines.forEach { error ->
                     send(
-                        ExecuteResult(
-                            resulTag = ResultTag.Normal,
+                        ExecutionResult(
+                            resultTag = ExecutionResultTag.Normal,
                             content = "- ${error.toString()}"
                         )
                     )
@@ -93,21 +93,21 @@ class PluginExecuteGatewayImpl @Inject constructor(
         pluginDirectory: String,
         pluginEntryPoint: String,
         enableMonitor: Boolean
-    ): Flow<ExecuteResult> = callbackFlow {
+    ): Flow<ExecutionResult> = callbackFlow {
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
                 onExecuteCallback = { session ->
                     trySend(
-                        ExecuteResult(
-                            resulTag = ResultTag.Normal,
+                        ExecutionResult(
+                            resultTag = ExecutionResultTag.Normal,
                             content = "- ${session.toString()}"
                         )
                     )
                 },
                 onErrorCallback = { error ->
                     trySend(
-                        ExecuteResult(
-                            resulTag = ResultTag.RedLine,
+                        ExecutionResult(
+                            resultTag = ExecutionResultTag.RedLine,
                             content = "- ${error.toString()}"
                         )
                     )

@@ -16,7 +16,7 @@ import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
 import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndAPIStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecuteContextPreferenceUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecutionContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetKernelStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveMemoryStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObservePluginStatusUseCase
@@ -25,7 +25,7 @@ import com.baidaidai.rootless_store.domain.status.usecase.GetSELinuxUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveStorageStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveTemperatureStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetEnableChooserPreferenceUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.SetExecuteContextPreferenceUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.SetExecutionContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.update.usecase.FetchLatestVersionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -47,10 +47,10 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     getSELinuxUseCase: GetSELinuxUseCase,
     getKernelStatusUseCase: GetKernelStatusUseCase,
     getAndroidAndAPIStatusUseCase: GetAndroidAndAPIStatusUseCase,
-    observeExecuteContextPreferenceUseCase: ObserveExecuteContextPreferenceUseCase,
+    observeExecutionContextPreferenceUseCase: ObserveExecutionContextPreferenceUseCase,
     private val getRootStatusUseCase: GetRootStatusUseCase,
     private val observeOverallStatusUseCase: ObserveOverallStatusUseCase,
-    private val setExecuteContextPreferenceUseCase: SetExecuteContextPreferenceUseCase,
+    private val setExecutionContextPreferenceUseCase: SetExecutionContextPreferenceUseCase,
     private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
     private val observeEnableAutoUpdatePreferenceUseCase: ObserveEnableAutoUpdatePreferenceUseCase,
     private val fetchLatestVersionUseCase: FetchLatestVersionUseCase,
@@ -64,7 +64,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     }
 
     private var _dialogStatus = MutableStateFlow(false)
-    private val _currentExecuteContextSelected = MutableStateFlow<HosterOverallStatus?>(null)
+    private val _currentExecutionContextSelected = MutableStateFlow<HosterOverallStatus?>(null)
     val dialogStatus = _dialogStatus.asStateFlow()
 
     // Latest Version Status
@@ -101,7 +101,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
                 initialValue = TempStatus.ERROR
             )
 
-    val executeContextPreference = observeExecuteContextPreferenceUseCase()
+    val executionContextPreference = observeExecutionContextPreferenceUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
@@ -112,9 +112,9 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
      * if initial -> get from preference
      * else -> get from user settings
      */
-    val currentExecuteContextSelected: StateFlow<HosterOverallStatus> = combine(
-        executeContextPreference,
-        _currentExecuteContextSelected
+    val currentExecutionContextSelected: StateFlow<HosterOverallStatus> = combine(
+        executionContextPreference,
+        _currentExecutionContextSelected
     ) { contextPreference, contextSelected ->
         contextSelected ?: contextPreference
     }.stateIn(
@@ -162,24 +162,24 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
 
     // Saves the user's selected execute context for now.
     // This is only for the UI and is not saved to preferences yet.
-    fun setCurrentExecuteContextSelected(hosterOverallStatus: HosterOverallStatus) {
-        _currentExecuteContextSelected.value = hosterOverallStatus
+    fun setCurrentExecutionContextSelected(hosterOverallStatus: HosterOverallStatus) {
+        _currentExecutionContextSelected.value = hosterOverallStatus
     }
 
     // The real context setting for preferences
-    fun setExecuteContextPreference() {
+    fun setExecutionContextPreference() {
         viewModelScope.launch {
             setEnableChooserPreferenceUseCase(true)
-            setExecuteContextPreferenceUseCase(_currentExecuteContextSelected.value ?: HosterOverallStatus.LIMITED)
+            setExecutionContextPreferenceUseCase(_currentExecutionContextSelected.value ?: HosterOverallStatus.LIMITED)
         }
 
         changeDialogStatus()
     }
 
-    fun revertExecuteContextPreference() {
+    fun revertExecutionContextPreference() {
         viewModelScope.launch {
             setEnableChooserPreferenceUseCase(false)
-            setCurrentExecuteContextSelected(hosterOverallStatus = overallStatus.first())
+            setCurrentExecutionContextSelected(hosterOverallStatus = overallStatus.first())
         }
 
         changeDialogStatus()

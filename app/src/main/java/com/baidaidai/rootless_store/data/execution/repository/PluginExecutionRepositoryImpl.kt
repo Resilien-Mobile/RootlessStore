@@ -1,14 +1,14 @@
-package com.baidaidai.rootless_store.data.execute.repository
+package com.baidaidai.rootless_store.data.execution.repository
 
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.execute.gateway.PluginExecuteGatewayImpl
-import com.baidaidai.rootless_store.data.execute.mapper.PluginExecuteMapper.toPluginExecuteStatus
-import com.baidaidai.rootless_store.domain.execute.model.PluginExecuteStatus
+import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
+import com.baidaidai.rootless_store.data.execution.mapper.PluginExecutionMapper.toPluginExecutionStatus
+import com.baidaidai.rootless_store.domain.execution.model.PluginExecutionStatus
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import javax.inject.Inject
 
-class PluginExecuteRepositoryImpl @Inject constructor(
-    private val pluginExecuteGatewayImpl: PluginExecuteGatewayImpl,
+class PluginExecutionRepositoryImpl @Inject constructor(
+    private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
     private val rootlessStoreDatabase: RootlessStoreDatabase
 ) {
 
@@ -17,33 +17,33 @@ class PluginExecuteRepositoryImpl @Inject constructor(
     suspend fun abortPluginProcess(pluginManifestRoom: PluginManifestRoom){
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
         val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginManifestRoom.pluginID)
-        pluginExecuteGatewayImpl.abortPluginProcess(pidSaved)
+        pluginExecutionGatewayImpl.abortPluginProcess(pidSaved)
     }
 
     suspend fun abortPluginProcessByShizuku(pluginManifestRoom: PluginManifestRoom){
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
         val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginManifestRoom.pluginID)
-        pluginExecuteGatewayImpl.abortPluginProcessByShizuku(pidSaved)
+        pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pidSaved)
     }
 
     // Create
     // Update
     // Read
-    suspend fun getPluginExecuteStatusList(): List<PluginExecuteStatus> {
-        val pluginExecuteStatusEntityList = pluginExecutionDao.listPluginExecutions()
-        val pluginExecuteStatusList = pluginExecuteStatusEntityList
-            .map { pluginExecuteStatusEntry ->
-                pluginExecuteStatusEntry.toPluginExecuteStatus()
+    suspend fun listPluginExecutionStatuses(): List<PluginExecutionStatus> {
+        val pluginExecutionEntityList = pluginExecutionDao.listPluginExecutions()
+        val pluginExecutionStatusList = pluginExecutionEntityList
+            .map { pluginExecutionEntity ->
+                pluginExecutionEntity.toPluginExecutionStatus()
             }
-        return pluginExecuteStatusList
+        return pluginExecutionStatusList
     }
 
     // Delete
-    suspend fun deleteExecuteRecordByPluginID(pluginID: String) {
+    suspend fun deletePluginExecutionByPluginID(pluginID: String) {
         pluginExecutionDao.deletePluginExecutionByPluginId(pluginID)
     }
 
-    suspend fun deleteAllExecuteRecord() {
+    suspend fun deleteAllPluginExecutions() {
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
         pluginExecutionDao.deleteAllPluginExecutions()
     }
