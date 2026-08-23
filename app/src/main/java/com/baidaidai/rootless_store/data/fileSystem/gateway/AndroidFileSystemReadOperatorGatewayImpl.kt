@@ -53,7 +53,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    fun confirmFileExistsInZip(uri: Uri, fileName: String): Boolean {
+    fun hasFileInZip(uri: Uri, fileName: String): Boolean {
         context.contentResolver.openInputStream(uri).use { inputStream ->
             ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
                 var zipEntry = zipInputStream.nextEntry

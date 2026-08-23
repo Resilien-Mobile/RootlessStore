@@ -91,50 +91,50 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }  // /File/Environment/ENVIRONMENT
 
     // Search FS Operator
-    fun confirmPluginPathExists(): Boolean{
-        return confirmPathExists(PLUGIN_DIR_NAME)
+    fun hasPluginDirectory(): Boolean{
+        return hasInternalDirectory(PLUGIN_DIR_NAME)
     }  // /File/Plugin?
-    fun confirmPluginCacheExists(): Boolean{
-        return confirmCacheExists(PLUGIN_DIR_NAME)  // Cache Directory's name is same
+    fun hasPluginCacheDirectory(): Boolean{
+        return hasCacheDirectory(PLUGIN_DIR_NAME)  // Cache Directory's name is same
     }  // /Cache/Plugin?
-    fun confirmEnvironmentPathExists(): Boolean{
-        return confirmPathExists(ENVIRONMENT_DIR_NAME)
+    fun hasEnvironmentDirectory(): Boolean{
+        return hasInternalDirectory(ENVIRONMENT_DIR_NAME)
     }  // /File/Environment?
-    fun confirmEnvironmentCacheExists(): Boolean{
-        return confirmCacheExists(ENVIRONMENT_DIR_NAME)
+    fun hasEnvironmentCacheDirectory(): Boolean{
+        return hasCacheDirectory(ENVIRONMENT_DIR_NAME)
     }  // /Cache/Environment?
-    private fun confirmPathExists(path: String): Boolean{
+    private fun hasInternalDirectory(path: String): Boolean{
         val targetFile = File(context.filesDir, path)
-        Log.d("confirmPathExists", targetFile.exists().toString())
+        Log.d("hasInternalDirectory", targetFile.exists().toString())
         return targetFile.exists()
     }  // /File/?
-    private fun confirmCacheExists(path: String): Boolean{
+    private fun hasCacheDirectory(path: String): Boolean{
         val targetFile = File(context.cacheDir, path)
-        Log.d("confirmCacheExists", targetFile.exists().toString())
+        Log.d("hasCacheDirectory", targetFile.exists().toString())
         return targetFile.exists()
     }  // /Cache/?
 
     // Create FS Operator
-    fun createFileDir(path: String){
-        if (!confirmPathExists(path)){
+    fun ensureFilesDirectory(path: String){
+        if (!hasInternalDirectory(path)){
             File(context.filesDir, path).mkdirs()
         }
     }  // /File
-    fun createCacheDir(path: String){
-        if (!confirmCacheExists(path)){
+    fun ensureCacheDirectory(path: String){
+        if (!hasCacheDirectory(path)){
             File(context.cacheDir, path).mkdirs()
         }
     }  // /Cache/path  e.g. /Cache/Plugin
     @Deprecated(
         message = "Not Longer Recommended",
-        replaceWith = ReplaceWith("createVoidFileDirectory(pluginRootDirectory, directoryName)")
+        replaceWith = ReplaceWith("resolveChildFile(destinationDirectory, fileNameWithoutExtension + \".zip\").createNewFile()")
     )
-    fun createVoidFile(destination: File, fileName: String): Boolean{
-        val result = File(destination, "$fileName.zip").createNewFile()  // 创建了文件，而非单纯路径
+    fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean{
+        val result = File(destinationDirectory, "$fileNameWithoutExtension.zip").createNewFile()  // 创建了文件，而非单纯路径
         return result
     }
-    fun createVoidFileDirectory(pluginRootDirectory: File, directoryName: String): File {
-        return File(pluginRootDirectory, directoryName) // 创建文件夹
+    fun resolveChildFile(parentDirectory: File, childName: String): File {
+        return File(parentDirectory, childName)
     }  // /File/Plugin/PLUGIN
     fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
         val targetFile = File(parentDirectory, fileName)
@@ -173,9 +173,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
 
         }
 
-        // Create Void Directory
+        // Resolve Target Directory
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
-        val createdFileDirectory = createVoidFileDirectory(internalPluginRootDirectory, directoryName).apply {
+        val createdFileDirectory = resolveChildFile(internalPluginRootDirectory, directoryName).apply {
             mkdirs()
         }
 
@@ -222,9 +222,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
 
         }
 
-        // Create Void Directory
+        // Resolve Target Directory
         val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
-        val createdFileDirectory = createVoidFileDirectory(internalEnvironmentRootDirectory, directoryName).apply {
+        val createdFileDirectory = resolveChildFile(internalEnvironmentRootDirectory, directoryName).apply {
             mkdirs()
         }
 
@@ -255,9 +255,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     @Suppress("UNUSED_PARAMETER")
     fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
-        // Provide void file, for copy use
+        // Resolve target directory for copy
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
-        createVoidFileDirectory(internalPluginRootDirectory, directoryName)  // needs prevent override files
+        resolveChildFile(internalPluginRootDirectory, directoryName)  // needs prevent override files
         val operationFile = File(internalPluginRootDirectory, directoryName).apply {
             mkdirs()
         }
@@ -287,9 +287,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     @Suppress("UNUSED_PARAMETER")
     fun unzipEnvironmentFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
-        // Provide void file, for copy use
+        // Resolve target directory for copy
         val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
-        createVoidFileDirectory(internalEnvironmentRootDirectory, directoryName)  // needs prevent override files
+        resolveChildFile(internalEnvironmentRootDirectory, directoryName)  // needs prevent override files
         val operationFile = File(internalEnvironmentRootDirectory, directoryName).apply {
             mkdirs()
         }

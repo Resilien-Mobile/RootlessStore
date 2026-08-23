@@ -63,11 +63,11 @@ class InstallMagiskPluginUseCase @Inject constructor(
 
             // Detect AXManager style action script.
             // Some Magisk modules use action.sh as the actual entry point instead of service.sh.
-            val actionScriptExists = androidFileSystemReadOperatorGatewayImpl.confirmFileExistsInZip(
+            val hasActionScript = androidFileSystemReadOperatorGatewayImpl.hasFileInZip(
                 uri = uri,
                 fileName = "action.sh"
             )
-            val magiskModuleEntryPoint = if (actionScriptExists) {
+            val magiskModuleEntryPoint = if (hasActionScript) {
                 "action.sh"
             } else {
                 "service.sh"

@@ -54,26 +54,26 @@ class PluginGatewayImpl @Inject constructor(
     }
 
     private fun _pre_intallPlugin(originFileUri: Uri, destination: File = defaultPluginLocation) {
-        if (androidFileSystemCapabilityGatewayImpl.confirmPluginPathExists()){
+        if (androidFileSystemCapabilityGatewayImpl.hasPluginDirectory()){
             androidFileSystemCapabilityGatewayImpl.unzipFromFile(
                 originFileUri = originFileUri,
                 pluginRootDirectory = destination
             )
         }else{
-            androidFileSystemCapabilityGatewayImpl.createFileDir("Plugin")
+            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
             _pre_intallPlugin(originFileUri)
         }
     }
 
     private fun _pre_intallPlugin(originFileByteChannel: ByteReadChannel, destination: File = defaultPluginLocation, destinationFileName: String) {
-        if (androidFileSystemCapabilityGatewayImpl.confirmPluginPathExists()){
+        if (androidFileSystemCapabilityGatewayImpl.hasPluginDirectory()){
             androidFileSystemCapabilityGatewayImpl.unzipFromUri(
                 originFileByteChannel = originFileByteChannel,
                 pluginRootDirectory = destination,
                 directoryName = destinationFileName
             )
         }else{
-            androidFileSystemCapabilityGatewayImpl.createFileDir("Plugin")
+            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
             _pre_intallPlugin(originFileByteChannel,destination,destinationFileName)
         }
     }

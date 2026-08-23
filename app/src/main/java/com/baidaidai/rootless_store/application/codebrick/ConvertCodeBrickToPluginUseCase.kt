@@ -61,11 +61,11 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
         }
 
         // Prepare Plugin Directory
-        androidFileSystemCapabilityGatewayImpl.createFileDir("Plugin")
+        androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
         val pluginRootDirectory = File(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
-        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.createVoidFileDirectory(
-            pluginRootDirectory = pluginRootDirectory,
-            directoryName = codeBrickConfig.codeBrickTitle
+        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolveChildFile(
+            parentDirectory = pluginRootDirectory,
+            childName = codeBrickConfig.codeBrickTitle
         ).apply {
             mkdirs()
         }

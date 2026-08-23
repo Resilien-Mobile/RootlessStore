@@ -19,15 +19,15 @@ class ResolveEnvironmentShareUriUseCase @Inject constructor(
         val environmentPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolveEnvironmentPackageDirectory(environmentManifestRoom)
 
         // Detect if cache/environment available -> /cache/Environment
-        val environmentCacheDirectoryAvailable = androidFileSystemCapabilityGatewayImpl.confirmEnvironmentCacheExists()
+        val hasEnvironmentCacheDirectory = androidFileSystemCapabilityGatewayImpl.hasEnvironmentCacheDirectory()
 
-        if (!environmentCacheDirectoryAvailable){
-            androidFileSystemCapabilityGatewayImpl.createCacheDir("Environment")
+        if (!hasEnvironmentCacheDirectory){
+            androidFileSystemCapabilityGatewayImpl.ensureCacheDirectory("Environment")
         }
 
         // Zip to cache/environment
-        // Create void zip content -> /cache/Environment/ENVIRONMENT.zip
-        val zipFile = androidFileSystemCapabilityGatewayImpl.createVoidFileDirectory(defaultEnvironmentCacheDirectory,"${environmentManifestRoom.environmentPackageName}.zip")
+        // Resolve zip target -> /cache/Environment/ENVIRONMENT.zip
+        val zipFile = androidFileSystemCapabilityGatewayImpl.resolveChildFile(defaultEnvironmentCacheDirectory,"${environmentManifestRoom.environmentPackageName}.zip")
 
         // Write Zip Byte
         androidFileSystemCapabilityGatewayImpl.rezipFromFile(

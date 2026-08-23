@@ -79,13 +79,13 @@ class EnvironmentGatewayImpl @Inject constructor(
         originFileUri: Uri,
         destination: File = defaultEnvironmentLocation
     ) {
-        if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()) {
+        if (androidFileSystemCapabilityGatewayImpl.hasEnvironmentDirectory()) {
             androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromFile(
                 originFileUri = originFileUri,
                 pluginRootDirectory = destination
             )
         } else {
-            androidFileSystemCapabilityGatewayImpl.createFileDir("Environment")
+            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Environment")
             installEnvironment(originFileUri)
         }
     }
@@ -95,14 +95,14 @@ class EnvironmentGatewayImpl @Inject constructor(
         destination: File = defaultEnvironmentLocation,
         destinationFileName: String
     ) {
-        if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()) {
+        if (androidFileSystemCapabilityGatewayImpl.hasEnvironmentDirectory()) {
             androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromUri(
                 originFileByteChannel = originFileByteChannel,
                 pluginRootDirectory = destination,
                 directoryName = destinationFileName
             )
         } else {
-            androidFileSystemCapabilityGatewayImpl.createFileDir("Environment")
+            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Environment")
             installEnvironment(originFileByteChannel, destination, destinationFileName)
         }
     }
