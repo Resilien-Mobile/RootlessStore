@@ -34,13 +34,13 @@ class ObserveOverallStatusUseCase @Inject constructor(
                 }
             val seLinuxStatus = storeStatusRepositoryImpl.getSELinuxStatus()
 
-            val executeContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.observeExecuteContextPreference().first() else null
+            val executionContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.observeExecutionContextPreference().first() else null
 
             val status = when {
-                (executeContextPreference != null) -> {
+                (executionContextPreference != null) -> {
                     Log.d("HosterOverallStatus", "Now At ContextPreference")
-                    Log.d("HosterOverallStatus", executeContextPreference.toString())
-                    executeContextPreference
+                    Log.d("HosterOverallStatus", executionContextPreference.toString())
+                    executionContextPreference
                 }
                 isRoot -> {
                     Log.d("HosterOverallStatus", "Root")

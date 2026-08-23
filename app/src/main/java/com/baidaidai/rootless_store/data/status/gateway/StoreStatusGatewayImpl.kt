@@ -168,7 +168,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     // Preference
-    fun observeExecuteContextPreference(): Flow<HosterOverallStatus> {
+    fun observeExecutionContextPreference(): Flow<HosterOverallStatus> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -178,13 +178,13 @@ class StoreStatusGatewayImpl @Inject constructor(
                 }
             }
             .map { preference ->
-                preference[EXECUTE_CONTEXT]?.let { HosterOverallStatus.valueOf(it) } ?: HosterOverallStatus.LIMITED
+                preference[EXECUTION_CONTEXT]?.let { HosterOverallStatus.valueOf(it) } ?: HosterOverallStatus.LIMITED
             }
     }
 
-    suspend fun setExecuteContextPreference(hosterOverallStatus: HosterOverallStatus) {
+    suspend fun setExecutionContextPreference(hosterOverallStatus: HosterOverallStatus) {
         dataStore.edit { preference ->
-            preference[EXECUTE_CONTEXT] = hosterOverallStatus.name
+            preference[EXECUTION_CONTEXT] = hosterOverallStatus.name
         }
     }
 
@@ -209,7 +209,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     private companion object {
-        val EXECUTE_CONTEXT = stringPreferencesKey("execute_context")
+        val EXECUTION_CONTEXT = stringPreferencesKey("execute_context")
         val ENABLE_CHOOSER = booleanPreferencesKey("enable_chooser")
     }
 

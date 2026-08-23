@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.data.execute.database
+package com.baidaidai.rootless_store.data.execution.database
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -15,11 +15,11 @@ interface PluginExecutionDao {
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPluginExecution(pluginExecuteStatusEntry: PluginExecuteStatusEntry)
+    suspend fun insertPluginExecution(pluginExecutionEntity: PluginExecutionEntity)
 
     // Update
-    @Query("UPDATE PluginExecuteStatusEntry SET executeStatus = :executeStatus WHERE pluginID = :pluginId")
-    suspend fun updatePluginExecutionStateByPluginId(pluginId: String, executeStatus: PluginState)
+    @Query("UPDATE PluginExecuteStatusEntry SET executeStatus = :executionState WHERE pluginID = :pluginId")
+    suspend fun updatePluginExecutionStateByPluginId(pluginId: String, executionState: PluginState)
 
     // Read
     @Query("SELECT executeStatus FROM PluginExecuteStatusEntry WHERE pluginID = :pluginId LIMIT 1")
@@ -29,7 +29,7 @@ interface PluginExecutionDao {
     suspend fun findPluginExecutionPidByPluginId(pluginId: String): Int?
 
     @Query("SELECT * FROM PluginExecuteStatusEntry")
-    suspend fun listPluginExecutions(): List<PluginExecuteStatusEntry>
+    suspend fun listPluginExecutions(): List<PluginExecutionEntity>
 
     // Delete
     @Query("DELETE FROM PluginExecuteStatusEntry WHERE pluginID = :pluginId")

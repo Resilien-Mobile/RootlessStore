@@ -7,7 +7,7 @@ import com.baidaidai.rootless_store.domain.shell.model.AppShellContextConfig
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-class ShellExecuteContextProviderImpl @Inject constructor(
+class ShellExecutionContextProviderImpl @Inject constructor(
     private val shellPreferencesRepositoryImpl: ShellPreferencesRepositoryImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl
 ) {

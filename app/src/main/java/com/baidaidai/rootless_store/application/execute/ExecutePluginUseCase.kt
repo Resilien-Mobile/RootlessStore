@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.application.execute
 
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
-import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,7 @@ class ExecutePluginUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         pluginID: String
-    ): Flow<ExecuteResult> {
+    ): Flow<ExecutionResult> {
 
         val shouldUseShizuku = judgeShouldUseShizuku()
 
@@ -32,15 +32,15 @@ class ExecutePluginUseCase @Inject constructor(
         val enableChooser = storeStatusRepositoryImpl
             .observeEnableChooserPreference()
             .first()
-        val selectedExecuteContext = if (enableChooser) {
+        val selectedExecutionContext = if (enableChooser) {
             storeStatusRepositoryImpl
-                .observeExecuteContextPreference()
+                .observeExecutionContextPreference()
                 .first()
         } else {
             null
         }
 
 
-        return hosterOverallStatus == HosterOverallStatus.ADB && (!enableChooser || selectedExecuteContext == HosterOverallStatus.ADB)
+        return hosterOverallStatus == HosterOverallStatus.ADB && (!enableChooser || selectedExecutionContext == HosterOverallStatus.ADB)
     }
 }

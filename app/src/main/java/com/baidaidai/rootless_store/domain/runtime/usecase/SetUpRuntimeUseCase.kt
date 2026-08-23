@@ -1,30 +1,30 @@
 package com.baidaidai.rootless_store.domain.runtime.usecase
 
-import com.baidaidai.rootless_store.data.execute.gateway.PluginExecuteGatewayImpl
-import com.baidaidai.rootless_store.data.execute.repository.PluginExecuteRepositoryImpl
+import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
+import com.baidaidai.rootless_store.data.execution.repository.PluginExecutionRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import javax.inject.Inject
 
 class SetUpRuntimeUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val pluginExecuteGatewayImpl: PluginExecuteGatewayImpl,
-    private val pluginExecuteRepositoryImpl: PluginExecuteRepositoryImpl,
+    private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
+    private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,
 ) {
     suspend operator fun invoke(){
-        val pluginExecuteStatusList = pluginExecuteRepositoryImpl.getPluginExecuteStatusList()
+        val pluginExecutionStatusList = pluginExecutionRepositoryImpl.listPluginExecutionStatuses()
 
-        pluginExecuteStatusList.forEach { pluginExecuteStatus ->
-            if (pluginExecuteStatus.executeContext == HosterOverallStatus.ADB){
-                val abortResult = pluginExecuteGatewayImpl.abortPluginProcessByShizuku(pluginExecuteStatus.executePID)
+        pluginExecutionStatusList.forEach { pluginExecutionStatus ->
+            if (pluginExecutionStatus.executionContext == HosterOverallStatus.ADB){
+                val abortResult = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
                 if (abortResult){
-                    pluginRepositoryImpl.disablePluginByID(pluginExecuteStatus.pluginID)
-                    pluginExecuteRepositoryImpl.deleteExecuteRecordByPluginID(pluginExecuteStatus.pluginID)
+                    pluginRepositoryImpl.disablePluginByID(pluginExecutionStatus.pluginID)
+                    pluginExecutionRepositoryImpl.deletePluginExecutionByPluginID(pluginExecutionStatus.pluginID)
                 }
             }else{
-                pluginExecuteGatewayImpl.abortPluginProcess(pluginExecuteStatus.executePID)
-                pluginRepositoryImpl.disablePluginByID(pluginExecuteStatus.pluginID)
-                pluginExecuteRepositoryImpl.deleteExecuteRecordByPluginID(pluginExecuteStatus.pluginID)
+                pluginExecutionGatewayImpl.abortPluginProcess(pluginExecutionStatus.executionPid)
+                pluginRepositoryImpl.disablePluginByID(pluginExecutionStatus.pluginID)
+                pluginExecutionRepositoryImpl.deletePluginExecutionByPluginID(pluginExecutionStatus.pluginID)
             }
         }
     }

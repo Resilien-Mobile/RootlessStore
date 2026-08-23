@@ -1,19 +1,19 @@
 package com.baidaidai.rootless_store.application.execute
 
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.execute.database.PluginExecuteStatusEntry
-import com.baidaidai.rootless_store.data.execute.gateway.PluginExecuteGatewayImpl
+import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntity
+import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRepositoryImpl
-import com.baidaidai.rootless_store.domain.execute.model.ExecuteResult
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class ExecutePluginByAppShellUseCase @Inject constructor(
-    private val pluginExecuteGatewayImpl: PluginExecuteGatewayImpl,
+    private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val rootlessStoreDatabase: RootlessStoreDatabase,
@@ -24,29 +24,29 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
 
     suspend operator fun invoke(
         pluginID: String
-    ) : Flow<ExecuteResult> {
+    ) : Flow<ExecutionResult> {
 
         val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
         val enableMonitor = settingPreferenceRepositoryImpl.observeEnableNotifyPluginStatus().first()
 
         var pidSaved = false
-        val pluginExecuteEntryPoint = androidFileSystemCapabilityGatewayImpl.resolvePluginEntryPoint(pluginManifestRoom)
+        val pluginEntryPoint = androidFileSystemCapabilityGatewayImpl.resolvePluginEntryPoint(pluginManifestRoom)
         val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom)
-        return pluginExecuteGatewayImpl
+        return pluginExecutionGatewayImpl
             .executePluginEntryPoint(
-                pluginExecuteEntryPoint,
+                pluginEntryPoint,
                 pluginPackageDirectory,
                 enableMonitor = enableMonitor
             )
-            .onEach { ExecuteResult ->
+            .onEach { executionResult ->
                 if (!pidSaved) {
-                    val content = ExecuteResult.content
+                    val content = executionResult.content
                     val pid = parsePid(content)
                     if (pid != null) {
                         pidSaved = true
                         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
-                        val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
-                        pluginExecutionDao.insertPluginExecution(pluginExecuteStatusEntry) // 写 DAO
+                        val pluginExecutionEntity = PluginExecutionEntity.fromPluginManifest(pluginManifestRoom,pid)
+                        pluginExecutionDao.insertPluginExecution(pluginExecutionEntity) // 写 DAO
                     }
                 }
             }

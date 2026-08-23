@@ -68,8 +68,8 @@ fun HomeScreen(
         HomeScreenContextSwitchDialog(
             onDismissButtonClick = homeScreenViewModel::changeDialogStatus,
             homeScreenViewModel = homeScreenViewModel,
-            onConfirmButtonClick = homeScreenViewModel::setExecuteContextPreference,
-            onRevertButtonClick = homeScreenViewModel::revertExecuteContextPreference
+            onConfirmButtonClick = homeScreenViewModel::setExecutionContextPreference,
+            onRevertButtonClick = homeScreenViewModel::revertExecutionContextPreference
         )
     }
 

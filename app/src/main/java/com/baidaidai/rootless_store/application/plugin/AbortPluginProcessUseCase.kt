@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.application.plugin
 
 import android.net.Uri
-import com.baidaidai.rootless_store.data.execute.repository.PluginExecuteRepositoryImpl
+import com.baidaidai.rootless_store.data.execution.repository.PluginExecutionRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class AbortPluginProcessUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val pluginExecuteRepositoryImpl: PluginExecuteRepositoryImpl,
+    private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
     suspend operator fun invoke(pluginManifestRoom: PluginManifestRoom) {
@@ -20,9 +20,9 @@ class AbortPluginProcessUseCase @Inject constructor(
         val enableChooser = storeStatusRepositoryImpl
             .observeEnableChooserPreference()
             .first()
-        val selectedExecuteContext = if (enableChooser) {
+        val selectedExecutionContext = if (enableChooser) {
             storeStatusRepositoryImpl
-                .observeExecuteContextPreference()
+                .observeExecutionContextPreference()
                 .first()
         } else {
             null
@@ -30,12 +30,12 @@ class AbortPluginProcessUseCase @Inject constructor(
 
         val shouldUseShizuku =
             hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!enableChooser || selectedExecuteContext == HosterOverallStatus.ADB)
+                    (!enableChooser || selectedExecutionContext == HosterOverallStatus.ADB)
 
         if (shouldUseShizuku) {
-            pluginExecuteRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)
+            pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)
         }else{
-            pluginExecuteRepositoryImpl.abortPluginProcess(pluginManifestRoom)
+            pluginExecutionRepositoryImpl.abortPluginProcess(pluginManifestRoom)
         }
     }
 
@@ -47,9 +47,9 @@ class AbortPluginProcessUseCase @Inject constructor(
         val enableChooser = storeStatusRepositoryImpl
             .observeEnableChooserPreference()
             .first()
-        val selectedExecuteContext = if (enableChooser) {
+        val selectedExecutionContext = if (enableChooser) {
             storeStatusRepositoryImpl
-                .observeExecuteContextPreference()
+                .observeExecutionContextPreference()
                 .first()
         } else {
             null
@@ -57,12 +57,12 @@ class AbortPluginProcessUseCase @Inject constructor(
 
         val shouldUseShizuku =
             hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!enableChooser || selectedExecuteContext == HosterOverallStatus.ADB)
+                    (!enableChooser || selectedExecutionContext == HosterOverallStatus.ADB)
 
         if (shouldUseShizuku) {
-            pluginExecuteRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)
+            pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)
         }else{
-            pluginExecuteRepositoryImpl.abortPluginProcess(pluginManifestRoom)
+            pluginExecutionRepositoryImpl.abortPluginProcess(pluginManifestRoom)
         }
     }
 }

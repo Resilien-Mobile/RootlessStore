@@ -2,10 +2,10 @@ package com.baidaidai.rootless_store.data.shell.gateway
 
 import android.util.Log
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.data.shell.provider.ShellExecuteContextProviderImpl
+import com.baidaidai.rootless_store.data.shell.provider.ShellExecutionContextProviderImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
-import com.baidaidai.rootless_store.domain.execute.model.ResultTag
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -20,7 +20,7 @@ import kotlin.text.orEmpty
 class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
-    private val shellExecuteContextProviderImpl: ShellExecuteContextProviderImpl
+    private val shellExecutionContextProviderImpl: ShellExecutionContextProviderImpl
 ) {
 
     private var currentDirectory: String = "/sdcard"
@@ -28,7 +28,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
     fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
         var commandContent = commandContent
 
-        val appShellContextConfig = shellExecuteContextProviderImpl.resolveAppShellContext()
+        val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
 
         if(appShellContextConfig.jumpToDirectory){
             changeDirectoryHandler(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
@@ -59,7 +59,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { result ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.Normal,
+                            resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
                             content = result,
                         )
@@ -72,7 +72,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { error ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.RedLine,
+                            resultTag = ExecutionResultTag.RedLine,
                             command = "~ $commandContent",
                             content = error,
                         )
@@ -87,14 +87,14 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     fun runCommandByADBShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
-        val adbShellContextConfig = shellExecuteContextProviderImpl.resolveAdbShellContext()
+        val adbShellContextConfig = shellExecutionContextProviderImpl.resolveAdbShellContext()
 
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
                 onExecuteCallback = { session ->
                     trySend(
                         ShellResult(
-                            resulTag = ResultTag.Normal,
+                            resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
                             content = session.toString(),
                         )
@@ -103,7 +103,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 onErrorCallback = { error ->
                     trySend(
                         ShellResult(
-                            resulTag = ResultTag.RedLine,
+                            resultTag = ExecutionResultTag.RedLine,
                             command = "~ $commandContent",
                             content = error.toString(),
                         )
@@ -141,7 +141,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { result ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.Normal,
+                            resultTag = ExecutionResultTag.Normal,
                             command = "# $commandContent",
                             content = result,
                         )
@@ -152,7 +152,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { error ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.RedLine,
+                            resultTag = ExecutionResultTag.RedLine,
                             command = "# $commandContent",
                             content = error,
                         )

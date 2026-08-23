@@ -46,7 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.execute.model.ResultTag
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
 import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
@@ -331,7 +331,7 @@ fun ShellScreen(
                         Text(shellResult.command)
                     }
 
-                    if (shellResult.resulTag == ResultTag.RedLine){
+                    if (shellResult.resultTag == ExecutionResultTag.RedLine){
                         Text(
                             shellResult.content,
                             color = Color(Color.RED)
