@@ -16,14 +16,14 @@ class EnvironmentRepositoryImpl @Inject constructor(
 ) {
     private val environmentDao = rootlessStoreDatabase.environmentDao()
 
-    // Create
-    suspend fun insertEnvironment(
+    // Add
+    suspend fun addEnvironment(
         environmentManifestLocal: EnvironmentManifestLocal
     ) {
         val environmentEntity = environmentManifestLocal.toEnvironmentEntity()
         environmentDao.insertEnvironment(environmentEntity)
     }
-    suspend fun insertEnvironment(
+    suspend fun addEnvironment(
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
         val environmentEntity = environmentManifestRemote.toEnvironmentEntity()
@@ -48,11 +48,10 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     fun observeEnvironments(): Flow<List<EnvironmentManifestRoom>> {
-        val environmentManifestList = environmentDao.observeEnvironments()
-        return environmentManifestList
+        return environmentDao.observeEnvironments()
     }
 
-    suspend fun resolveEnvironmentPath(): String {
+    suspend fun resolveEnvironmentRuntimePath(): String {
         return environmentDao.observeEnabledEnvironments()
             .first()
             .joinToString(":") { environmentManifest ->
