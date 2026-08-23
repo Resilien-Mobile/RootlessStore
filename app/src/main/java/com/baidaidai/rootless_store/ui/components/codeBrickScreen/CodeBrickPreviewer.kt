@@ -141,7 +141,7 @@ fun CodeBrickPreviewer(
 @Composable
 private fun _preview_(){
     val codeBrickConfig = CodeBrickConfig(
-        unixTimeStamp = 0L,
+        unixTimestamp = 0L,
         codeBrickTitle = "Test Brick",
         codeBrickEnvironment = HosterOverallStatus.LIMITED,
         codeBrickContent = "whoami"

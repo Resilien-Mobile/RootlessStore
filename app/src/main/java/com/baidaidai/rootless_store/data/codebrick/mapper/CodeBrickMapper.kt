@@ -8,22 +8,22 @@ object CodeBrickMapper {
     // CodeBrickEntity to CodeBrickConfig
     fun CodeBrickEntity.toCodeBrickConfig(): CodeBrickConfig {
         return CodeBrickConfig(
-            unixTimeStamp = unixTimeStamp,
+            unixTimestamp = unixTimestamp,
             codeBrickTitle = codeBrickTitle,
             codeBrickEnvironment = codeBrickEnvironment,
             codeBrickContent = codeBrickContent,
-            bindTileIndex = bindTileIndex
+            boundTileIndex = boundTileIndex
         )
     }
 
     // CodeBrickConfig to CodeBrickEntity
     fun CodeBrickConfig.toCodeBrickEntity(): CodeBrickEntity {
         return CodeBrickEntity(
-            unixTimeStamp = unixTimeStamp,
+            unixTimestamp = unixTimestamp,
             codeBrickTitle = codeBrickTitle,
             codeBrickEnvironment = codeBrickEnvironment,
             codeBrickContent = codeBrickContent,
-            bindTileIndex = bindTileIndex
+            boundTileIndex = boundTileIndex
         )
     }
 

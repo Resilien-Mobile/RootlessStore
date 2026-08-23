@@ -48,7 +48,7 @@ fun CodeBrickScreen(
                     codeBrickTitle = title,
                     codeBrickContent = content,
                     codeBrickContext = context,
-                    bindTileIndex = tileIndex
+                    boundTileIndex = tileIndex
                 )
                 codeBrickViewModel.setBrickEditorVisible(false)
             },
@@ -73,7 +73,7 @@ fun CodeBrickScreen(
                     codeBrickTitle = title,
                     codeBrickContent = content,
                     codeBrickContext = context,
-                    bindTileIndex = tileIndex,
+                    boundTileIndex = tileIndex,
                     oldCodeBrickConfig = oldCodeBrickConfig
                 )
                 codeBrickViewModel.hideBrickSettings(false)

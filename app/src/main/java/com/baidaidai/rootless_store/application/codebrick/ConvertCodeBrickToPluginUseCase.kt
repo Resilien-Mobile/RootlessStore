@@ -36,7 +36,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
     ) {
 
         // Build Plugin Manifest
-        val pluginId = codeBrickConfig.unixTimeStamp.toString()
+        val pluginId = codeBrickConfig.unixTimestamp.toString()
         val pluginManifestLocal = PluginManifestLocal(
             installedVersion = "1.0.0",
             pluginRenderingName = codeBrickConfig.codeBrickTitle,

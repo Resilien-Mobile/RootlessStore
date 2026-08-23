@@ -27,7 +27,7 @@ class AddCodeBrickFromClipboardUseCase @Inject constructor(
 
         // Create CodeBrick Config
         val codeBrickConfig = CodeBrickConfig(
-            unixTimeStamp = System.currentTimeMillis(),
+            unixTimestamp = System.currentTimeMillis(),
             codeBrickTitle = codeBrickJsonPayload.codeBrickTitle,
             codeBrickEnvironment = codeBrickJsonPayload.codeBrickEnvironment,
             codeBrickContent = codeBrickJsonPayload.codeBrickContent

@@ -41,7 +41,7 @@ fun CodeBrickSetting(
     LaunchedEffect(codeBrickConfig) {
         titleContent = codeBrickConfig.codeBrickTitle
         codeContent = codeBrickConfig.codeBrickContent
-        tileIndex = codeBrickConfig.bindTileIndex
+        tileIndex = codeBrickConfig.boundTileIndex
         selectedContext = codeBrickConfig.codeBrickEnvironment
     }
 

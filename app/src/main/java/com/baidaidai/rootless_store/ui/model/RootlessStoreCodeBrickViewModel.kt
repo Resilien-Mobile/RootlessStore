@@ -30,7 +30,7 @@ data class CodeBrickScreenUiState(
     val isBrickSettingsVisible: Boolean = false,
     val isButtonMenuExpanded: Boolean = false,
     val executeResultContent: List<String> = emptyList(),
-    val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimeStamp = 1L,"", HosterOverallStatus.LIMITED,"")
+    val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", HosterOverallStatus.LIMITED,"")
 )
 
 @HiltViewModel
@@ -120,10 +120,10 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
-        bindTileIndex: Int?
+        boundTileIndex: Int?
     ){
         viewModelScope.launch {
-            addCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,bindTileIndex)
+            addCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,boundTileIndex)
         }
     }
 
@@ -141,7 +141,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
         codeBrickTitle: String,
         codeBrickContent: String,
         codeBrickContext: HosterOverallStatus,
-        bindTileIndex: Int?,
+        boundTileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
@@ -149,7 +149,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
                 codeBrickTitle = codeBrickTitle,
                 codeBrickContent = codeBrickContent,
                 codeBrickContext = codeBrickContext,
-                bindTileIndex = bindTileIndex,
+                boundTileIndex = boundTileIndex,
                 oldCodeBrickConfig = oldCodeBrickConfig
             )
         }
