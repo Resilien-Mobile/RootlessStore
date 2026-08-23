@@ -92,7 +92,7 @@ fun RootlessStoreStartScreenContainer(
     ) { uri: Uri? ->
         uri?.let {
             pluginScreenViewModel.setPluginPackageUri(uri)
-            pluginScreenViewModel.installPlugin()
+            pluginScreenViewModel.installLocalPackage()
         }
     }
 
@@ -161,7 +161,7 @@ fun RootlessStoreStartScreenContainer(
 
         navigationBackStack.add(PluginScreenKey)
         pluginScreenViewModel.setPluginPackageUri(uri)
-        pluginScreenViewModel.installPlugin()
+        pluginScreenViewModel.installLocalPackage()
         onFileIntentConsumed()
     }
 

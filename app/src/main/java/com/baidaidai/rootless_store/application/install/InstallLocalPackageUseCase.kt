@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.application.module
+package com.baidaidai.rootless_store.application.install
 
 import android.net.Uri
 import com.baidaidai.rootless_store.application.environment.InstallEnvironmentUseCase
@@ -6,41 +6,41 @@ import com.baidaidai.rootless_store.application.plugin.InstallMagiskPluginUseCas
 import com.baidaidai.rootless_store.application.plugin.InstallPluginUseCase
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
-import com.baidaidai.rootless_store.domain.plugin.model.LocalManifest
+import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
 import javax.inject.Inject
 
-class InstallModuleUseCase @Inject constructor(
+class InstallLocalPackageUseCase @Inject constructor(
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
     private val installPluginUseCase: InstallPluginUseCase,
     private val installEnvironmentUseCase: InstallEnvironmentUseCase,
     private val installMagiskPluginUseCase: InstallMagiskPluginUseCase
 ) {
     suspend operator fun invoke(uri: Uri): PluginError? {
-        return when (judgeModule(uri)) {
-            LocalManifest.PluginManifestLocal -> installPluginUseCase(uri)
-            LocalManifest.EnvironmentManifestLocal -> installEnvironmentUseCase(uri)
-            LocalManifest.MagiskProp -> installMagiskPluginUseCase(uri)
+        return when (resolveLocalPackageType(uri)) {
+            LocalPackageType.Plugin -> installPluginUseCase(uri)
+            LocalPackageType.Environment -> installEnvironmentUseCase(uri)
+            LocalPackageType.MagiskModule -> installMagiskPluginUseCase(uri)
             null -> PluginError(
                 errorMessage = "Neither PluginManifest.json nor EnvironmentManifest.json was found.",
-                errorCause = "Unsupported module package: $uri"
+                errorCause = "Unsupported local package: $uri"
             )
         }
     }
 
-    private fun judgeModule(uri: Uri): LocalManifest? {
+    private fun resolveLocalPackageType(uri: Uri): LocalPackageType? {
         val pluginManifestJson = androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(uri)
         if (pluginManifestJson.isNotBlank()) {
-            return LocalManifest.PluginManifestLocal
+            return LocalPackageType.Plugin
         }
 
         val environmentManifestJson = androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(uri)
         if (environmentManifestJson.isNotBlank()) {
-            return LocalManifest.EnvironmentManifestLocal
+            return LocalPackageType.Environment
         }
 
         val magiskModuleProp = androidFileSystemReadOperatorGatewayImpl.loadRawMagiskModuleProp(uri)
         if (magiskModuleProp.isNotBlank()) {
-            return LocalManifest.MagiskProp
+            return LocalPackageType.MagiskModule
         }
 
         return null
