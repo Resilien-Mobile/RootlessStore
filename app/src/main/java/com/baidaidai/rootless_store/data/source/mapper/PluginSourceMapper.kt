@@ -34,6 +34,16 @@ object PluginSourceMapper {
         )
     }
 
+    fun PluginSource.toPluginSourceEntity(): PluginSourceEntity {
+        return PluginSourceEntity(
+            sourceId = sourceId,
+            sourceName = sourceName,
+            sourceRemoteEndpoint = sourceRemoteEndpoint,
+            accessToken = null,
+            pluginSourceAuthenticationMetadata = pluginSourceAuthenticationMetadata
+        )
+    }
+
     fun PluginSourceAuthenticationResponseDto.toPluginSourceCredentials(): PluginSourceCredentials {
         return PluginSourceCredentials(
             username = username,
