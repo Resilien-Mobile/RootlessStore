@@ -25,11 +25,11 @@ import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuInfoCa
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetDashboard
 import com.baidaidai.rootless_store.ui.components.homeScreen.HosterStatusCircularProgressRow
 import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootlessStorePlugin
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionCheckerContainer
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionTagContainer
+import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionCheckerContainer
+import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionTagContainer
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreHosterStatusBoard
 import com.baidaidai.rootless_store.ui.layout.homeScreen.HomeScreenExpandedLayout
-import com.baidaidai.rootless_store.ui.model.RootLessStoreHomeScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
 
 @Composable
 fun HomeScreen(
@@ -37,7 +37,7 @@ fun HomeScreen(
     rootlessStoreHeightWindowSize: RootlessStoreWindowSize,
     rootlessStoreWidthWindowSize: RootlessStoreWindowSize,
     onChipClick:()-> Unit,
-    homeScreenViewModel: RootLessStoreHomeScreenViewModel = hiltViewModel()
+    homeScreenViewModel: RootlessStoreHomeScreenViewModel = hiltViewModel()
 ){
     val memoryStatus by homeScreenViewModel.memoryStatus.collectAsState()
     val storageStatus by homeScreenViewModel.storageStatus.collectAsState()
@@ -86,13 +86,13 @@ fun HomeScreen(
         ) {
             item {
                 /* Version Tag */
-                RootLessStoreVersionTagContainer()
+                RootlessStoreVersionTagContainer()
             }
 
             if (latestVersionNumber != null && latestVersionNumber != appVersion) {
                 item {
                     /* Version Checker */
-                    RootLessStoreVersionCheckerContainer(
+                    RootlessStoreVersionCheckerContainer(
                         latestVersionNumber = latestVersionNumber!!
                     )
                 }
@@ -129,10 +129,10 @@ fun HomeScreen(
         ){
 
             // Version Tag && Info Flag
-            RootLessStoreVersionTagContainer(Modifier.width(preferWidth))
+            RootlessStoreVersionTagContainer(Modifier.width(preferWidth))
 
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
-                RootLessStoreVersionCheckerContainer(
+                RootlessStoreVersionCheckerContainer(
                     latestVersionNumber = latestVersionNumber!!,
                     modifier = getBasicWidthModifier()
                 )
@@ -149,7 +149,7 @@ fun HomeScreen(
             /* Version Checker */
             // 如果height紧凑，则可用此布局，反之不可使用
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
-                RootLessStoreVersionCheckerContainer(
+                RootlessStoreVersionCheckerContainer(
                     latestVersionNumber = latestVersionNumber!!,
                     modifier = getBasicWidthModifier()
                 )

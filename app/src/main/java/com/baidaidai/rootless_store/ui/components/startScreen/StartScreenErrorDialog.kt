@@ -13,12 +13,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 
 @Composable
 fun StartScreenErrorDialog(
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     sharedEvent: RootlessStoreError?
 ){
     AlertDialog(

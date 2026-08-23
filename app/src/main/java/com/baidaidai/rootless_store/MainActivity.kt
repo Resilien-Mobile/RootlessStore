@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.jvm.java
 
-val RootLessStoreLocalContext = compositionLocalOf<Context>{
+val RootlessStoreLocalContext = compositionLocalOf<Context>{
     error("No Context Provide")
 }
 
@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity(){
 
             RootlessStoreTheme {
                 CompositionLocalProvider(
-                    RootLessStoreLocalContext provides context,
+                    RootlessStoreLocalContext provides context,
                 ) {
                     RootlessStoreStartScreenContainer(
                         fileIntentUri = fileIntentUri,

@@ -49,7 +49,7 @@ import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
-import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreShellScreenViewModel
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.stringResource
 
@@ -57,7 +57,7 @@ import androidx.compose.ui.res.stringResource
 @Composable
 fun ShellScreen(
     contentPaddingValues: PaddingValues,
-    shellScreenViewModel: RootLessStoreShellScreenViewModel,
+    shellScreenViewModel: RootlessStoreShellScreenViewModel,
     lazyColumnState: LazyListState
 ){
     var commandContent by remember { mutableStateOf("") }

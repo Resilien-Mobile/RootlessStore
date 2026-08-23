@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.notification.usecase.AddNotificationPreferenceUseCase
 import com.baidaidai.rootless_store.domain.notification.usecase.FindNotificationPreferenceUseCase
-import com.baidaidai.rootless_store.ui.uistate.RootLessStoreThirdPartyNotificationScreenUiState
+import com.baidaidai.rootless_store.ui.uistate.RootlessStoreThirdPartyNotificationScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
+class RootlessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
     private val addNotificationPreferenceUseCase: AddNotificationPreferenceUseCase,
     private val findNotificationPreferenceUseCase: FindNotificationPreferenceUseCase
 ) : ViewModel() {
@@ -22,7 +22,7 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
         getNotificationPreference()
     }
 
-    private val _thirdPartyNotificationScreenUiState = MutableStateFlow(RootLessStoreThirdPartyNotificationScreenUiState())
+    private val _thirdPartyNotificationScreenUiState = MutableStateFlow(RootlessStoreThirdPartyNotificationScreenUiState())
     val thirdPartyNotificationScreenUiState = _thirdPartyNotificationScreenUiState.asStateFlow()
 
 

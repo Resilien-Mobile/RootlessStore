@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +40,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RootlessStorePluginScreenContainer(
     contentPadding: PaddingValues,
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,
     onAbortPlugin:suspend (pluginId: String) -> Unit,
     onActiveOneTimePlugin: (pluginId: String)-> Unit
@@ -107,7 +107,7 @@ fun RootlessStorePluginScreenContainer(
 fun PluginScreen(
     isBadgeVisible: Boolean,
     renderingList: List<PluginManifestRoom>,
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,isExecutePlugin: Boolean)-> Unit,
     onAbortPlugin: suspend (pluginId: String) -> Unit,
     onButtonClick: (pluginId: String)-> Unit

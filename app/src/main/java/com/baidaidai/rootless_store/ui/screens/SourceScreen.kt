@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAlertDialog
 import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAuthenticationModalBottomSheet
 import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenListItem
@@ -28,7 +28,7 @@ import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenList
 @Composable
 fun SourceScreen(
     contentPadding: PaddingValues,
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     onListItemClick: (pluginSourceInfo: PluginSourceInfo)-> Unit
 ){
     val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()

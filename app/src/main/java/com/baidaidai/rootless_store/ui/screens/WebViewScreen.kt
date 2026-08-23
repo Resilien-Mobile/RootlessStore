@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.webkit.WebViewCompat.addWebMessageListener
-import com.baidaidai.rootless_store.ui.model.RootLessStoreWebViewScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreWebViewScreenViewModel
 import kotlinx.coroutines.launch
 
 private val kernelSuCompatibleScript = """
@@ -35,7 +35,7 @@ private val kernelSuCompatibleScript = """
 fun RootlessStoreWebViewScreen(
     modifier: Modifier = Modifier,
     webUri: String?,
-    webViewScreenViewModel: RootLessStoreWebViewScreenViewModel = hiltViewModel()
+    webViewScreenViewModel: RootlessStoreWebViewScreenViewModel = hiltViewModel()
 ) {
 
     if (webUri == null) return

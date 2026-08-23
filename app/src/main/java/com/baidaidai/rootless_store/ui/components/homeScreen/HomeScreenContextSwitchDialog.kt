@@ -28,7 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
-import com.baidaidai.rootless_store.ui.model.RootLessStoreHomeScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
 import androidx.compose.ui.graphics.*
 
 
@@ -44,7 +44,7 @@ fun HomeScreenContextSwitchDialog(
     onDismissButtonClick: () -> Unit,
     onConfirmButtonClick: ()-> Unit,
     onRevertButtonClick:()-> Unit,
-    homeScreenViewModel: RootLessStoreHomeScreenViewModel
+    homeScreenViewModel: RootlessStoreHomeScreenViewModel
 ){
 
 

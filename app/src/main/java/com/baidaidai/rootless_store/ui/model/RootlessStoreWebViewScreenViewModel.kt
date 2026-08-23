@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
-class RootLessStoreWebViewScreenViewModel @Inject constructor(
+class RootlessStoreWebViewScreenViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val executeAppShellUseCase: ExecuteAppShellUseCase

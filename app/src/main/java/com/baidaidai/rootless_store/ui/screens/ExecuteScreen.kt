@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
-import com.baidaidai.rootless_store.ui.model.RootLessStoreExecuteScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreExecuteScreenViewModel
 
 @Composable
 fun ExecuteScreen(
     contentPaddingValues: PaddingValues,
-    executeScreenViewModel: RootLessStoreExecuteScreenViewModel
+    executeScreenViewModel: RootlessStoreExecuteScreenViewModel
 ){
     val executionLog by executeScreenViewModel.executionLog.collectAsState()
 
