@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.data.plugin.repository
 
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.plugin.mapper.PluginMapper.toPluginInfoEntity
+import com.baidaidai.rootless_store.data.plugin.mapper.PluginMapper.toPluginEntity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.repository.PluginCoreRepository
@@ -16,17 +16,17 @@ class PluginRepositoryImpl @Inject constructor(
     private val pluginDao = rootlessStoreDatabase.pluginDao()
 
     // Create
-    override suspend fun insertPluginInfo(
+    override suspend fun insertPlugin(
         pluginManifestLocal: PluginManifestLocal
     ){
-        val pluginInfoEntity = pluginManifestLocal.toPluginInfoEntity()
-        pluginDao.insertPlugin(pluginInfoEntity)
+        val pluginEntity = pluginManifestLocal.toPluginEntity()
+        pluginDao.insertPlugin(pluginEntity)
     }
-    suspend fun insertPluginInfo(
+    suspend fun insertPlugin(
         pluginManifestRemote: PluginManifestRemote
     ){
-        val pluginInfoEntity = pluginManifestRemote.toPluginInfoEntity()
-        pluginDao.insertPlugin(pluginInfoEntity)
+        val pluginEntity = pluginManifestRemote.toPluginEntity()
+        pluginDao.insertPlugin(pluginEntity)
     }
 
     // Update
@@ -43,7 +43,7 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     // READ
-    override suspend fun findPluginInfo(
+    override suspend fun findPlugin(
         pluginId: String
     ): PluginManifestRoom? {
         val pluginInfo = pluginDao.findPluginById(pluginId)
@@ -69,7 +69,7 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    override suspend fun deletePluginInfoById(pluginId: String) {
+    override suspend fun deletePluginById(pluginId: String) {
         pluginDao.deletePluginById(pluginId)
     }
 

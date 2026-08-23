@@ -9,7 +9,7 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 
 @Entity(tableName = "environmentInfo")
-data class EnvironmentInfoEntity(
+data class EnvironmentEntity(
 
     /**
      * environmentId is primaryKey
@@ -43,15 +43,15 @@ data class EnvironmentInfoEntity(
     companion object {
 
         /**
-         * Create an EnvironmentInfoEntity from EnvironmentManifest.
+         * Create an EnvironmentEntity from EnvironmentManifest.
          *
          * This is the single source of truth for mapping
          * manifest data into database entity.
          */
-        fun fromEnvironmentManifestRoom(
+        fun fromEnvironmentManifest(
             environmentManifestRoom: EnvironmentManifestRoom
-        ): EnvironmentInfoEntity =
-            EnvironmentInfoEntity(
+        ): EnvironmentEntity =
+            EnvironmentEntity(
                 environmentId = environmentManifestRoom.environmentId,
 
                 // Basic Infos

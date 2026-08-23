@@ -13,6 +13,6 @@ class UninstallEnvironmentUseCase @Inject constructor(
         environmentManifestRoom: EnvironmentManifestRoom
     ){
         androidFileSystemCapabilityGatewayImpl.deleteEnvironmentDirectoryByPackageName(environmentManifestRoom.environmentPackageName)
-        environmentRepositoryImpl.deleteEnvironmentInfoById(environmentManifestRoom.environmentId)
+        environmentRepositoryImpl.deleteEnvironmentById(environmentManifestRoom.environmentId)
     }
 }

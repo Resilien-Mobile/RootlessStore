@@ -41,7 +41,7 @@ class AbortPluginProcessUseCase @Inject constructor(
 
     suspend operator fun invoke(pluginId: String) {
 
-        val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginId)!!
+        val pluginManifestRoom = pluginRepositoryImpl.findPlugin(pluginId)!!
 
         val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
         val isExecutionContextChooserEnabled = storeStatusRepositoryImpl

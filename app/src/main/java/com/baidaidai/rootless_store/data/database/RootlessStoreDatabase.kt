@@ -11,18 +11,18 @@ import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntit
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceDao
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceEntity
 import com.baidaidai.rootless_store.data.environment.database.EnvironmentDao
-import com.baidaidai.rootless_store.data.environment.database.EnvironmentInfoEntity
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentEntity
 import com.baidaidai.rootless_store.data.plugin.database.PluginDao
-import com.baidaidai.rootless_store.data.plugin.database.PluginInfoEntity
+import com.baidaidai.rootless_store.data.plugin.database.PluginEntity
 import com.baidaidai.rootless_store.data.source.database.PluginSourceDao
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 
 @Database(
     entities = [
-        PluginInfoEntity::class,
+        PluginEntity::class,
         PluginSourceEntity::class,
         PluginExecutionEntity::class,
-        EnvironmentInfoEntity::class,
+        EnvironmentEntity::class,
         NotificationPreferenceEntity::class,
         CodeBrickEntity::class
         // 其它表也一起加进来
