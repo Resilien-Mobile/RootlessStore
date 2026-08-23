@@ -166,8 +166,8 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
             }  // 只有destinationFilName显式指定，否则不走
 
             else -> {
-                readRawPluginManifest(originFileURI).let { json ->
-                    readManifestJsonContent(json).pluginPackageName
+                loadRawPluginManifest(originFileURI).let { json ->
+                    parsePluginManifest(json).pluginPackageName
                 }.trim()
             }
 
@@ -215,8 +215,8 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
             }  // 只有destinationFilName显式指定，否则不走
 
             else -> {
-                readRawEnvironmentManifest(originFileURI).let { json ->
-                    readEnvironmentManifestJsonContent(json).environmentPackageName
+                loadRawEnvironmentManifest(originFileURI).let { json ->
+                    parseEnvironmentManifest(json).environmentPackageName
                 }.trim()
             }
 
@@ -356,7 +356,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Read FS Operator
-    private fun readRawManifest(uri: Uri, manifestFileName: String): String? {
+    private fun loadRawManifest(uri: Uri, manifestFileName: String): String? {
         context.contentResolver.openInputStream(uri).use { inputStream ->
             ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
                 /**
@@ -388,17 +388,17 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
 
-    fun readRawPluginManifest(uri: Uri): String{
-        return readRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
+    fun loadRawPluginManifest(uri: Uri): String{
+        return loadRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
-    fun readRawEnvironmentManifest(uri: Uri): String{
-        return readRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
+    fun loadRawEnvironmentManifest(uri: Uri): String{
+        return loadRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
-    fun readFileContent(filePath: String): String {
+    fun loadFileContent(filePath: String): String {
         return File(filePath).readText()
     }
 
-    fun readManifestJsonContent(jsonContent: String): PluginManifestLocal {
+    fun parsePluginManifest(jsonContent: String): PluginManifestLocal {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
             isLenient = true
@@ -406,7 +406,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val manifest: PluginManifestLocal = json.decodeFromString(PluginManifestLocal.Companion.serializer(),jsonContent)
         return manifest
     }  // Convert JSON to PluginManifestLocal
-    fun readEnvironmentManifestJsonContent(jsonContent: String): EnvironmentManifestLocal {
+    fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifestLocal {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
             isLenient = true

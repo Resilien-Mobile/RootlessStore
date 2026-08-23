@@ -68,9 +68,9 @@ class EnvironmentGatewayImpl @Inject constructor(
 
 
     // Get Raw EnvironmentManifestLocal
-    fun getRawEnvironmentManifestLocal(originFileURI: Uri): EnvironmentManifestLocal {
-        return androidFileSystemCapabilityGatewayImpl.readRawEnvironmentManifest(uri = originFileURI).let {
-            androidFileSystemCapabilityGatewayImpl.readEnvironmentManifestJsonContent(it)
+    fun loadEnvironmentManifest(originFileURI: Uri): EnvironmentManifestLocal {
+        return androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileURI).let {
+            androidFileSystemCapabilityGatewayImpl.parseEnvironmentManifest(it)
         }
     }
 

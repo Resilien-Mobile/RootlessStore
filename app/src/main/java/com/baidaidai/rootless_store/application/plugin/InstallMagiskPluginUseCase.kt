@@ -40,7 +40,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
         return try {
 
             // Read module.prop
-            val magiskModulePropContent = androidFileSystemReadOperatorGatewayImpl.readRawMagiskModuleProp(uri)
+            val magiskModulePropContent = androidFileSystemReadOperatorGatewayImpl.loadRawMagiskModuleProp(uri)
             if (magiskModulePropContent.isBlank()) {
                 return PluginError(
                     errorMessage = "Magisk module.prop was not found",
@@ -49,7 +49,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             }
 
             // Judge module.prop by IllusionCube
-            val magiskModulePropAvailable = IllusionCube.Prop.judgeIfProp(magiskModulePropContent)
+            val magiskModulePropAvailable = IllusionCube.Prop.validate(magiskModulePropContent)
             if (!magiskModulePropAvailable) {
                 return PluginError(
                     errorMessage = "Magisk module.prop is invalid",

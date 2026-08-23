@@ -2,7 +2,7 @@ package com.baidaidai.illusioncube.application.json
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
-class JudgeIfJsonUseCase(
+class ValidateJsonUseCase(
     private val objectMapper: ObjectMapper = ObjectMapper()
 ) {
 

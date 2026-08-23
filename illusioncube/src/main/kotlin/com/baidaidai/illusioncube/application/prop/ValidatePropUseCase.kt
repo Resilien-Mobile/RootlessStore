@@ -2,14 +2,14 @@ package com.baidaidai.illusioncube.application.prop
 
 import java.util.Properties
 
-class JudgeIfPropUseCase {
+class ValidatePropUseCase {
 
     operator fun invoke(targetContent: String): Boolean {
         if (targetContent.isEmpty()) return false
 
         try {
 
-            // Judge If likes YAML
+            // Reject YAML-like indentation
             val hasIndentedLine = targetContent
                 .lineSequence()
                 .any { line ->
@@ -30,4 +30,3 @@ class JudgeIfPropUseCase {
     }
 
 }
-

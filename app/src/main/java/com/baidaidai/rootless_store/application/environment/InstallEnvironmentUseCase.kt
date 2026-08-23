@@ -12,7 +12,7 @@ class InstallEnvironmentUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(uri: Uri): PluginError? {
         return try {
-            val environmentManifestLocal = environmentGatewayImpl.getRawEnvironmentManifestLocal(uri)
+            val environmentManifestLocal = environmentGatewayImpl.loadEnvironmentManifest(uri)
             // Un-Zip, Install Environment
             environmentGatewayImpl.installEnvironmentFromLocal(uri)
             // Set Execute-able, Made it can call and use

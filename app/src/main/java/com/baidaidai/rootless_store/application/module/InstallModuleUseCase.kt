@@ -28,17 +28,17 @@ class InstallModuleUseCase @Inject constructor(
     }
 
     private fun judgeModule(uri: Uri): LocalManifest? {
-        val pluginManifestJson = androidFileSystemReadOperatorGatewayImpl.readRawPluginManifest(uri)
+        val pluginManifestJson = androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(uri)
         if (pluginManifestJson.isNotBlank()) {
             return LocalManifest.PluginManifestLocal
         }
 
-        val environmentManifestJson = androidFileSystemReadOperatorGatewayImpl.readRawEnvironmentManifest(uri)
+        val environmentManifestJson = androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(uri)
         if (environmentManifestJson.isNotBlank()) {
             return LocalManifest.EnvironmentManifestLocal
         }
 
-        val magiskModuleProp = androidFileSystemReadOperatorGatewayImpl.readRawMagiskModuleProp(uri)
+        val magiskModuleProp = androidFileSystemReadOperatorGatewayImpl.loadRawMagiskModuleProp(uri)
         if (magiskModuleProp.isNotBlank()) {
             return LocalManifest.MagiskProp
         }
