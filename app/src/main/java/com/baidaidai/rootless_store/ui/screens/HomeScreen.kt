@@ -69,7 +69,7 @@ fun HomeScreen(
             onDismissButtonClick = homeScreenViewModel::toggleContextDialogVisibility,
             homeScreenViewModel = homeScreenViewModel,
             onConfirmButtonClick = homeScreenViewModel::setExecutionContextPreference,
-            onRevertButtonClick = homeScreenViewModel::revertExecutionContextPreference
+            onRevertButtonClick = homeScreenViewModel::resetExecutionContextPreference
         )
     }
 

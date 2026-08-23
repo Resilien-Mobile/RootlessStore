@@ -91,7 +91,7 @@ fun RootlessStoreStartScreenContainer(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let {
-            pluginScreenViewModel.updateFileUri(uri)
+            pluginScreenViewModel.setPluginPackageUri(uri)
             pluginScreenViewModel.installPlugin()
         }
     }
@@ -160,7 +160,7 @@ fun RootlessStoreStartScreenContainer(
         val uri = fileIntentUri ?: return@LaunchedEffect
 
         navigationBackStack.add(PluginScreenKey)
-        pluginScreenViewModel.updateFileUri(uri)
+        pluginScreenViewModel.setPluginPackageUri(uri)
         pluginScreenViewModel.installPlugin()
         onHandlerEnded()
     }
@@ -393,8 +393,8 @@ fun RootlessStoreStartScreenContainer(
                             contentPadding = contentPadding,
                             sourceScreenViewModel = sourceScreenViewModel
                         ){ pluginSourceLocal ->
-                            marketScreenViewModel.updatePluginSourceUri(pluginSourceLocal.sourceRemoteEndpoint)
-                            marketScreenViewModel.updateCurrentPluginSource(pluginSourceLocal)
+                            marketScreenViewModel.setPluginSourceEndpoint(pluginSourceLocal.sourceRemoteEndpoint)
+                            marketScreenViewModel.selectPluginSource(pluginSourceLocal)
                             navigationBackStack.add(MarketScreenKey)
                         }
                     }

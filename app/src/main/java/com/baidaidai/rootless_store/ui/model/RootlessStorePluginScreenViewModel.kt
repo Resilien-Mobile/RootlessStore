@@ -48,7 +48,7 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
 ): ViewModel() {
 
 //    private val _pluginInfoList = observePlugins()  // Will change back to PluginManifestLocal feature
-    private val _fileUri = MutableStateFlow<Uri>(value = Uri.EMPTY)
+    private val _pluginPackageUri = MutableStateFlow<Uri>(value = Uri.EMPTY)
     private val _isBadgeVisible = MutableStateFlow(false)
 
     private val _pluginEvent = MutableSharedFlow<PluginError?>()
@@ -72,16 +72,16 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         initialValue = 0
     )
 
-    val fileUri = _fileUri.asStateFlow()
+    val pluginPackageUri = _pluginPackageUri.asStateFlow()
     val isBadgeVisible = _isBadgeVisible.asStateFlow()
 
-    fun updateFileUri(uri: Uri){
-        _fileUri.value = uri
+    fun setPluginPackageUri(pluginPackageUri: Uri){
+        _pluginPackageUri.value = pluginPackageUri
     }
 
     fun installPlugin(){
         viewModelScope.launch {
-            val result = installModuleUseCase(fileUri.value)
+            val result = installModuleUseCase(pluginPackageUri.value)
             if (result is PluginError){
                 _pluginEvent.emit(result)
             }else{
