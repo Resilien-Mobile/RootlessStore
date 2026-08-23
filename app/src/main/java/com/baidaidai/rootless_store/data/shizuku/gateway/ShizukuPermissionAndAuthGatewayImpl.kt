@@ -24,7 +24,7 @@ class ShizukuPermissionAndAuthGatewayImpl @Inject constructor() {
     /**
      * Check if user already granted the Shizuku permission
      */
-    fun checkShizukuPermission(): Boolean{
+    fun hasShizukuPermission(): Boolean{
         return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
     }
 
@@ -32,7 +32,7 @@ class ShizukuPermissionAndAuthGatewayImpl @Inject constructor() {
      * Check Shizuku Permission Granted,
      * Or Try to Access Shizuku Permission
      */
-    suspend fun applyShizukuPermission(): Boolean {
+    suspend fun requestShizukuPermission(): Boolean {
 
         // If Shizuku is no alive, no-need to continue
         if (!Shizuku.pingBinder()) return false

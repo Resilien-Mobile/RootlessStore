@@ -196,7 +196,7 @@ fun ShellScreen(
                             leadingButton = {
                                 Button(
                                     onClick = {
-                                        shellScreenViewModel.runCommand(shellCommandContainer)
+                                        shellScreenViewModel.executeCommand(shellCommandContainer)
                                     },
                                     contentPadding = SplitButtonDefaults.MediumLeadingButtonContentPadding,
                                     shape = SplitButtonDefaults.leadingButtonShapesFor(

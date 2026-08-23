@@ -25,7 +25,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     private var currentDirectory: String = "/sdcard"
 
-    fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
         var commandContent = commandContent
 
         val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
@@ -85,7 +85,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    fun runCommandByAdbShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByAdbShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
         val adbShellContextConfig = shellExecutionContextProviderImpl.resolveAdbShellContext()
 
@@ -124,7 +124,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
         awaitClose {  }
     }
 
-    fun runCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
         var commandContent = commandContent
 

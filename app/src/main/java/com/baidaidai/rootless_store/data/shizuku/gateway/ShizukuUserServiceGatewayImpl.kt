@@ -29,7 +29,7 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         }
     }
 
-    fun tryBindShizukuUserService() {
+    fun startShizukuUserService() {
         val args = Shizuku.UserServiceArgs(
             ComponentName(
                 "com.baidaidai.rootless_store",
