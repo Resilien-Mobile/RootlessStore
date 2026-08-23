@@ -24,7 +24,7 @@ class PluginPagingSource (
             val page = params.key ?: 0
 
             // HTTP Request
-            val response = api.getPlugins(pageNumber = page, pluginSourceUri)
+            val response = api.fetchPlugins(pageNumber = page, pluginSourceUri)
             val pluginPageResponseDTO = response.body<PluginPageResponseDTO>()
             val pluginPageResponse = pluginPageResponseDTO.toPluginPageResponse()
 

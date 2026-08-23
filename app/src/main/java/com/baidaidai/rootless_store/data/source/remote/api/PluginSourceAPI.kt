@@ -17,7 +17,7 @@ class PluginSourceAPI @Inject constructor(
     private val ktorClient: HttpClient
 ) {
     private val client = ktorClient
-    suspend fun getPluginSourceInfo(
+    suspend fun fetchPluginSourceInfo(
         sourceRemoteEndpoint: String
     ): HttpResponse{
         return client.request(
@@ -30,7 +30,7 @@ class PluginSourceAPI @Inject constructor(
         }
     }
 
-    suspend fun getPluginSourceAuthenticationInfo(
+    suspend fun fetchPluginSourceAuthenticationInfo(
         pluginSourceAuthFormInput: PluginSourceAuthFormInput
     ): HttpResponse{
         return client.post(

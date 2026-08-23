@@ -15,7 +15,7 @@ class PluginMarketAPI @Inject constructor(
 ){
     private val client = ktorClient
 
-    suspend fun getPlugins(
+    suspend fun fetchPlugins(
         pageNumber: Int,
         pluginSourceUri: String
     ): HttpResponse {

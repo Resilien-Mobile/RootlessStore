@@ -13,7 +13,7 @@ import javax.inject.Inject
 class PluginMarketGatewayImpl @Inject constructor(
     private val api: PluginMarketAPI
 ) {
-    fun getPlugins(
+    fun fetchPlugins(
         pluginSourceUri: String,
         onError: suspend (MarketError)-> Unit
     ): Flow<PagingData<ModuleManifestCollection>> {

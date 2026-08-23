@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.baidaidai.rootless_store.domain.market.error.MarketError
-import com.baidaidai.rootless_store.domain.market.usecase.GetRemotePluginListUseCase
+import com.baidaidai.rootless_store.domain.market.usecase.FetchRemotePluginsUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.application.environment.InstallEnvironmentFromMarketUseCase
@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootLessStoreMarketScreenViewModel @Inject constructor(
-    private val getRemotePluginListUseCase: GetRemotePluginListUseCase,
+    private val fetchRemotePluginsUseCase: FetchRemotePluginsUseCase,
     private val installPluginFromMarketUseCase: InstallPluginFromMarketUseCase,
     private val installEnvironmentFromMarketUseCase: InstallEnvironmentFromMarketUseCase
 ): ViewModel() {
@@ -59,7 +59,7 @@ class RootLessStoreMarketScreenViewModel @Inject constructor(
 
             Log.d("RootlessStoreMarketScreenViewModel._pluginSourceUri",pluginSourceUri)
 
-            getRemotePluginListUseCase(pluginSourceUri){ marketError ->
+            fetchRemotePluginsUseCase(pluginSourceUri){ marketError ->
                 // Error Callback Lambda
                 _marketEvent.emit(marketError)
             }
