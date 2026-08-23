@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.application.status
 
 import android.util.Log
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
@@ -15,7 +15,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class ObserveOverallStatusUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
-    private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
+    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -26,7 +26,7 @@ class ObserveOverallStatusUseCase @Inject constructor(
             val isExecutionContextChooserEnabled = storeStatusRepositoryImpl.observeExecutionContextChooserEnabled().first()
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.hasShizukuPermission()) {
+                if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
                     shizukuUserServiceGatewayImpl.startShizukuUserService()
                     true
                 } else {

@@ -1,15 +1,15 @@
 package com.baidaidai.rootless_store.application.shizuku
 
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
 import javax.inject.Inject
 
 class EnsureShizukuPermissionUseCase @Inject constructor(
-    private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl
+    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl
 ) {
 
     suspend operator fun invoke(): Result<Boolean> {
         return runCatching {
-            shizukuPermissionAndAuthGatewayImpl.hasShizukuPermission() || shizukuPermissionAndAuthGatewayImpl.requestShizukuPermission()
+            shizukuPermissionGatewayImpl.hasShizukuPermission() || shizukuPermissionGatewayImpl.requestShizukuPermission()
         }
     }
 }
