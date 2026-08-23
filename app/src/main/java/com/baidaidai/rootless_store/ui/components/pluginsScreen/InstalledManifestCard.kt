@@ -152,19 +152,19 @@ fun InstalledManifestCard(
                 modifier = Modifier
                     .padding(24.dp)
             ) {
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_author_label),
                     value = pluginManifestRoom.author
                 )
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
                     value = pluginManifestRoom.origin.toString()
                 )
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),
                     value = pluginManifestRoom.state.toString()
                 )
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_required_label),
                     value = pluginManifestRoom.requiredEnvironment.toString()
                 )
@@ -249,19 +249,19 @@ fun InstalledManifestCard(
                 modifier = Modifier
                     .padding(24.dp)
             ) {
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_author_label),
                     value = environmentManifest.author
                 )
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
                     value = environmentManifest.origin.toString()
                 )
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),
                     value = environmentManifest.state.toString()
                 )
-                PluginInfoRow(
+                ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_required_label),
                     value = environmentManifest.requiredEnvironment.toString()
                 )
@@ -276,7 +276,7 @@ fun InstalledManifestCard(
  * If Problems, Needs Review !
  */
 @Composable
-private fun PluginInfoRow(
+private fun ManifestDetailRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier
