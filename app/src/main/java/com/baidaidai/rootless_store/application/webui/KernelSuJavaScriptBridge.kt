@@ -12,7 +12,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 
-class KernelSuCompatible(
+class KernelSuJavaScriptBridge(
     private val context: Context,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
@@ -24,7 +24,7 @@ class KernelSuCompatible(
         val shizukuUserService = shizukuUserServiceGatewayImpl.findShizukuUserService()
 
         if (shizukuUserService == null) {
-            return result(
+            return createExecutionResultJson(
                 errno = 1,
                 stdout = "",
                 stderr = "Shizuku user service is not available."
@@ -47,7 +47,7 @@ class KernelSuCompatible(
             false
         )
 
-        return result(
+        return createExecutionResultJson(
             errno = if (stderr.isBlank()) 0 else 1,
             stdout = stdout.toString(),
             stderr = stderr.toString()
@@ -55,13 +55,13 @@ class KernelSuCompatible(
     }
 
     @JavascriptInterface
-    fun listPackages(type: String?): String {
+    fun listPackages(packageType: String?): String {
         val packageInfoList = listInstalledPackages()
 
         // Filter, ensure every package is either system or user
         val packageNameList = packageInfoList
             .filter { packageInfo ->
-                when (type?.lowercase()) {
+                when (packageType?.lowercase()) {
                     "user" -> !packageInfo.isSystemPackage()
                     "system" -> packageInfo.isSystemPackage()
                     else -> true
@@ -92,7 +92,7 @@ class KernelSuCompatible(
         return applicationInfoFlags and systemPackageFlags != 0
     }
 
-    private fun result(
+    private fun createExecutionResultJson(
         errno: Int,
         stdout: String,
         stderr: String
