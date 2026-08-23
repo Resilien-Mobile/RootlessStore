@@ -19,7 +19,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickEditor
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickPreviewer
-import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickResult
+import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickExecutionResultDialog
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickSetting
 import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 
@@ -31,7 +31,7 @@ fun CodeBrickScreen(
     onBackgroundClick: ()-> Unit = {}
 ){
 
-    val codeBrickConfigList by codeBrickViewModel.codeBrickConfigList.collectAsState()
+    val codeBricks by codeBrickViewModel.codeBricks.collectAsState()
     val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
 
     // Editor show status
@@ -44,7 +44,7 @@ fun CodeBrickScreen(
                 codeBrickViewModel.setBrickEditorVisible(false)
             },
             onConfirmButtonClick = { title, content, context, tileIndex ->
-                codeBrickViewModel.createCodeBrick(
+                codeBrickViewModel.addCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,
                     codeBrickContext = context,
@@ -54,19 +54,19 @@ fun CodeBrickScreen(
             },
         )
     } else if (codeBrickScreenUiState.isExecutionResultVisible) {
-        CodeBrickResult(
-            resultContent = codeBrickScreenUiState.executeResultContent,
+        CodeBrickExecutionResultDialog(
+            outputLines = codeBrickScreenUiState.executionOutputLines,
             onDismissRequest = codeBrickViewModel::setExecutionResultVisible,
             onConfirmButtonClick = codeBrickViewModel::setExecutionResultVisible
         )
     } else if (codeBrickScreenUiState.isBrickSettingsVisible) {
         CodeBrickSetting(
-            codeBrickConfig = codeBrickScreenUiState.handlingCodeBrickConfig,
+            codeBrickConfig = codeBrickScreenUiState.selectedCodeBrick,
             onDismissRequest = {
-                codeBrickViewModel.hideBrickSettings(false)
+                codeBrickViewModel.hideBrickSettings()
             },
             onDismissButtonClick = {
-                codeBrickViewModel.hideBrickSettings(false)
+                codeBrickViewModel.hideBrickSettings()
             },
             onConfirmButtonClick = { title, content, context, tileIndex, oldCodeBrickConfig ->
                 codeBrickViewModel.updateCodeBrick(
@@ -76,7 +76,7 @@ fun CodeBrickScreen(
                     boundTileIndex = tileIndex,
                     oldCodeBrickConfig = oldCodeBrickConfig
                 )
-                codeBrickViewModel.hideBrickSettings(false)
+                codeBrickViewModel.hideBrickSettings()
             },
             onCodeBrickToPluginButtonClick = { codeBrickConfig -> codeBrickViewModel.convertCodeBrickToPlugin(codeBrickConfig) }
         )
@@ -103,16 +103,13 @@ fun CodeBrickScreen(
             ){ onBackgroundClick() }
     ) {
         itemsIndexed(
-            items = codeBrickConfigList
+            items = codeBricks
         ){ index ,codeBrickConfig ->
             CodeBrickPreviewer(
                 codeBrickConfig = codeBrickConfig,
                 onActionButtonClick = codeBrickViewModel::executeCodeBrick,
                 onSettingButtonClick = {
-                    codeBrickViewModel.showBrickSettings(
-                        codeBrickConfig = codeBrickConfig,
-                        isVisible = true
-                    )
+                    codeBrickViewModel.showBrickSettings(codeBrickConfig)
                 },
                 onDeleteButtonClick = codeBrickViewModel::deleteCodeBrick
             )
