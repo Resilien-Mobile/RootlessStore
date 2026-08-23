@@ -24,7 +24,7 @@ import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.core.i18n.icuString
 
 @Composable
-fun RootlessStoreVersionTagContainer(
+fun RootlessStoreVersionCard(
     modifier: Modifier = Modifier
 ){
 
@@ -74,6 +74,6 @@ fun RootlessStoreVersionTagContainer(
 @Composable
 private fun _preview_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        RootlessStoreVersionTagContainer(Modifier.width(200.dp))
+        RootlessStoreVersionCard(Modifier.width(200.dp))
     }
 }

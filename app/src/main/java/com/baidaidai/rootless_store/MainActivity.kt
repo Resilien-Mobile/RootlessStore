@@ -24,7 +24,7 @@ import coil3.SingletonImageLoader
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import coil3.request.crossfade
 import com.baidaidai.rootless_store.domain.runtime.usecase.RecoverPluginRuntimeStateUseCase
-import com.baidaidai.rootless_store.ui.screens.RootlessStoreStartScreenContainer
+import com.baidaidai.rootless_store.ui.screens.RootlessStoreNavigationScaffold
 import com.baidaidai.rootless_store.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
@@ -96,7 +96,7 @@ class MainActivity : ComponentActivity(){
                 CompositionLocalProvider(
                     RootlessStoreLocalContext provides context,
                 ) {
-                    RootlessStoreStartScreenContainer(
+                    RootlessStoreNavigationScaffold(
                         fileIntentUri = fileIntentUri,
                         onFileIntentConsumed = {
                             fileIntentUri = null

@@ -33,12 +33,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import com.baidaidai.rootless_store.WebViewActivity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionPanel
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.InstalledManifestCard
 import kotlinx.coroutines.launch
 
 @Composable
-fun RootlessStorePluginScreenContainer(
+fun PluginManagementScreen(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
@@ -136,7 +136,7 @@ fun PluginScreen(
 
             if (isActionPanelVisible){
 
-                PluginActionContainer(
+                PluginActionPanel(
                     pluginManifestRoom = pluginManifestRoom,
                     onShareButtonClick = {
                         val shareLink = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
@@ -169,7 +169,7 @@ fun PluginScreen(
 
             }else{
 
-                PluginInfoContainerLocal(
+                InstalledManifestCard(
                     pluginManifestRoom = pluginManifestRoom,
                     onSwitchClick = {
                         pluginScreenViewModel.setPluginEnabled(
