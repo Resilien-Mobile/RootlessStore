@@ -152,7 +152,7 @@ sealed interface PluginManifest: MarketManifest {
 
     }
     interface PluginManifestRemote: PluginManifest {
-        val pluginUri: String
+        val pluginUrl: String
     }
     interface PluginManifestRoom: PluginManifest {
         val isEnabled: Boolean

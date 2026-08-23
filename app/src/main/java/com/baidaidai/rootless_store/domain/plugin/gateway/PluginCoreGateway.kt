@@ -5,6 +5,6 @@ import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 
 interface PluginCoreGateway {
     fun installPluginFromLocal(originFileUri: Uri): Unit
-    suspend fun installPluginFromMarket(pluginUri: String, pluginManifestRemote: PluginManifestRemote)
+    suspend fun installPluginFromMarket(pluginUrl: String, pluginManifestRemote: PluginManifestRemote)
     fun uninstallPlugin(pluginPackageName: String): Unit
 }

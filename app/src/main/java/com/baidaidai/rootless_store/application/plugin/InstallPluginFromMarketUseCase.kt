@@ -10,10 +10,10 @@ class InstallPluginFromMarketUseCase @Inject constructor(
     private val pluginGatewayImpl: PluginGatewayImpl
 ) {
     suspend operator fun invoke(
-        pluginUri: String,
+        pluginUrl: String,
         pluginManifestRemote: PluginManifestRemote
     ) {
-        pluginGatewayImpl.installPluginFromMarket(pluginUri,pluginManifestRemote)
+        pluginGatewayImpl.installPluginFromMarket(pluginUrl,pluginManifestRemote)
         pluginGatewayImpl.setPluginEntryPointExecutable(pluginManifestRemote)
         pluginRepositoryImpl.insertPlugin(pluginManifestRemote)
 

@@ -26,10 +26,10 @@ class EnvironmentGatewayImpl @Inject constructor(
     }
 
     suspend fun installEnvironmentFromMarket(
-        environmentUri: String,
+        environmentUrl: String,
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
-        val remoteEnvironmentContent = marketPackageRemoteDataSource.fetchPackage(environmentUri).bodyAsChannel()
+        val remoteEnvironmentContent = marketPackageRemoteDataSource.fetchPackage(environmentUrl).bodyAsChannel()
         val environmentPackageName = environmentManifestRemote.environmentPackageName
         installEnvironment(
             originFileByteChannel = remoteEnvironmentContent,

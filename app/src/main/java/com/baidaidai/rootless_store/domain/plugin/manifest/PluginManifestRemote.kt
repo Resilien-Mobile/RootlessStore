@@ -19,7 +19,7 @@ data class PluginManifestRemote(
     override val pluginDescription: String,
     override val requiredEnvironment: HosterOverallStatus,
     @SerialName("pluginURI")
-    override val pluginUri: String,
+    override val pluginUrl: String,
     override val entryPoint: String,
 
     override val pluginRunModel: PluginRunModel,
@@ -32,7 +32,7 @@ data class PluginManifestRemote(
             pluginRenderingName = "Test Plugin",
             pluginPackageName = "TestPlugin",
             pluginId = "29bb10c46772264df3c0d0fade57d2eb",
-            pluginUri = "http://test.only.ai/api/v3/assets/plugin?id=29bb10c46772264df3c0d0fade57d2eb",
+            pluginUrl = "http://test.only.ai/api/v3/assets/plugin?id=29bb10c46772264df3c0d0fade57d2eb",
             iconUri = "content://rootless_store/plugin_icon/test",
             author = "Rootless Store(Creater. Bai)",
             requiredEnvironment = HosterOverallStatus.ADB,

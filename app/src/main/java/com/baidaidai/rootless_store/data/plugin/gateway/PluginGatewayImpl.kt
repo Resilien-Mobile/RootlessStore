@@ -26,8 +26,8 @@ class PluginGatewayImpl @Inject constructor(
         _pre_intallPlugin(originFileUri)
     }
 
-    override suspend fun installPluginFromMarket(pluginUri: String, pluginManifestRemote: PluginManifestRemote) {
-        val remotePluginContent: ByteReadChannel = marketPackageRemoteDataSource.fetchPackage(pluginUri).bodyAsChannel()
+    override suspend fun installPluginFromMarket(pluginUrl: String, pluginManifestRemote: PluginManifestRemote) {
+        val remotePluginContent: ByteReadChannel = marketPackageRemoteDataSource.fetchPackage(pluginUrl).bodyAsChannel()
         val pluginPackageName = pluginManifestRemote.pluginPackageName
         _pre_intallPlugin(
             originFileByteChannel = remotePluginContent,
