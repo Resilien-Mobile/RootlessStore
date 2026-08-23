@@ -6,34 +6,33 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CodeBrickDAO {
+interface CodeBrickDao {
     /**
-     * CURD
+     * CRUD
      */
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createOneCodeBrickConfig(codeBrickEntity: CodeBrickEntity)
+    suspend fun insertCodeBrick(codeBrickEntity: CodeBrickEntity)
 
     // Update
     @Update
-    suspend fun updateOneCodeBrickConfig(codeBrickEntity: CodeBrickEntity)
+    suspend fun updateCodeBrick(codeBrickEntity: CodeBrickEntity)
 
     // Read
     @Query("SELECT * FROM CodeBrickEntity WHERE unixTimeStamp = :unixTimeStamp LIMIT 1")
-    suspend fun getOneCodeBrickConfig(unixTimeStamp: Long): CodeBrickEntity?
+    suspend fun findCodeBrickByTimestamp(unixTimeStamp: Long): CodeBrickEntity?
 
     @Query("SELECT * FROM CodeBrickEntity")
-    fun getAllCodeBrickConfig(): Flow<List<CodeBrickEntity>>
+    fun observeCodeBricks(): Flow<List<CodeBrickEntity>>
 
     @Query("SELECT * FROM CodeBrickEntity WHERE bindTileIndex = :tileIndex LIMIT 1")
-    suspend fun getCodeBrickEntityByTileIndex(tileIndex: Int): CodeBrickEntity?
+    suspend fun findCodeBrickByTileIndex(tileIndex: Int): CodeBrickEntity?
 
     // Delete
     @Delete
-    suspend fun deleteOneCodeBrickConfig(codeBrickEntity: CodeBrickEntity)
+    suspend fun deleteCodeBrick(codeBrickEntity: CodeBrickEntity)
 }

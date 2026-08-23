@@ -8,41 +8,41 @@ import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PluginInfoDAO {
+interface PluginDao {
     /**
-     * CURD
+     * CRUD
      */
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOnePluginInfo(pluginInfoEntity: PluginInfoEntity)
+    suspend fun insertPlugin(pluginInfoEntity: PluginInfoEntity)
 
     // Update
-    @Query("UPDATE pluginInfo SET enabled = :enabled WHERE pluginID = :pluginID")
-    suspend fun updateEnabled(pluginID: String, enabled: Boolean)
+    @Query("UPDATE pluginInfo SET enabled = :isEnabled WHERE pluginID = :pluginId")
+    suspend fun updatePluginEnabled(pluginId: String, isEnabled: Boolean)
 
     @Query("UPDATE pluginInfo SET enabled = 0 WHERE enabled = 1")
-    suspend fun disableAllPlugin()
+    suspend fun disableAllPlugins()
 
     // Read
-    @Query("SELECT * FROM pluginInfo WHERE pluginID = :pluginID LIMIT 1")
-    suspend fun getOneEntirePluginInfoByPluginID(pluginID: String): PluginManifestRoom?
+    @Query("SELECT * FROM pluginInfo WHERE pluginID = :pluginId LIMIT 1")
+    suspend fun findPluginById(pluginId: String): PluginManifestRoom?
 
     @Query(value = "SELECT * FROM pluginInfo")
-    fun getEntirePluginManifest(): Flow<List<PluginManifestRoom>>
+    fun observePlugins(): Flow<List<PluginManifestRoom>>
 
     @Query("SELECT COUNT(*) FROM pluginInfo")
-    fun getPluginInfoCount(): Flow<Int>
+    fun observePluginCount(): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM pluginInfo")
-    suspend fun getTotalPluginCount(): Int
+    suspend fun getPluginCount(): Int
 
     @Query("SELECT COUNT(*) FROM pluginInfo WHERE enabled = 1")
     suspend fun getEnabledPluginCount(): Int
 
     // Delete
-    @Query("DELETE FROM pluginInfo WHERE pluginID = :pluginID")
-    suspend fun deleteOnePluginInfoByID(pluginID: String)
+    @Query("DELETE FROM pluginInfo WHERE pluginID = :pluginId")
+    suspend fun deletePluginById(pluginId: String)
 
     /**
      * Other methods, such as update、disable、configuration change,

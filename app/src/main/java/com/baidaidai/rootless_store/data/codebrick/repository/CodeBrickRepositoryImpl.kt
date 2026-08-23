@@ -11,14 +11,14 @@ import javax.inject.Inject
 class CodeBrickRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase
 ) {
-    private val codeBrickDAO = rootlessStoreDatabase.codeBrickDao()
+    private val codeBrickDao = rootlessStoreDatabase.codeBrickDao()
 
     // Create
     suspend fun createOneCodeBrickConfig(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
-        codeBrickDAO.createOneCodeBrickConfig(codeBrickEntity)
+        codeBrickDao.insertCodeBrick(codeBrickEntity)
     }
 
     // Update
@@ -26,21 +26,21 @@ class CodeBrickRepositoryImpl @Inject constructor(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
-        codeBrickDAO.updateOneCodeBrickConfig(codeBrickEntity)
+        codeBrickDao.updateCodeBrick(codeBrickEntity)
     }
 
     // Read
     suspend fun getOneCodeBrickConfig(
         unixTimeStamp: Long
     ): CodeBrickConfig? {
-        return codeBrickDAO
-            .getOneCodeBrickConfig(unixTimeStamp)
+        return codeBrickDao
+            .findCodeBrickByTimestamp(unixTimeStamp)
             ?.toCodeBrickConfig()
     }
 
     fun getAllCodeBrickConfig(): Flow<List<CodeBrickConfig>> {
-        return codeBrickDAO
-            .getAllCodeBrickConfig()
+        return codeBrickDao
+            .observeCodeBricks()
             .map { codeBrickEntityList ->
                 codeBrickEntityList.map { codeBrickEntity ->
                     codeBrickEntity.toCodeBrickConfig()
@@ -49,7 +49,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
     }
 
     suspend fun getCodeBrickConfigByTileIndex(tileIndex: Int): CodeBrickConfig?{
-        val codeBrickConfig = codeBrickDAO.getCodeBrickEntityByTileIndex(tileIndex)?.toCodeBrickConfig()
+        val codeBrickConfig = codeBrickDao.findCodeBrickByTileIndex(tileIndex)?.toCodeBrickConfig()
         return codeBrickConfig
     }
 
@@ -58,6 +58,6 @@ class CodeBrickRepositoryImpl @Inject constructor(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
-        codeBrickDAO.deleteOneCodeBrickConfig(codeBrickEntity)
+        codeBrickDao.deleteCodeBrick(codeBrickEntity)
     }
 }

@@ -6,14 +6,14 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface NotificationPreferenceDAO {
+interface NotificationPreferenceDao {
     /**
-     * CURD
+     * CRUD
      */
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOneNotificationPreference(
+    suspend fun insertNotificationPreference(
         notificationPreferenceEntity: NotificationPreferenceEntity
     )
 
@@ -23,7 +23,7 @@ interface NotificationPreferenceDAO {
             "selfBuiltServer = :selfBuiltServer, criticalWarning = :criticalWarning " +
             "WHERE _primaryKey_ = 'RootlessStoreNotificationPreferenceEntityPrimaryKey'"
     )
-    suspend fun updateOneNotificationPreference(
+    suspend fun updateNotificationPreference(
         apiKey: String,
         notificationTitle: String? = null,
         selfBuiltServer: String? = null,
@@ -35,7 +35,7 @@ interface NotificationPreferenceDAO {
         "SELECT * FROM NotificationPreferenceEntity " +
             "WHERE _primaryKey_ = 'RootlessStoreNotificationPreferenceEntityPrimaryKey' LIMIT 1"
     )
-    suspend fun getOneNotificationPreference(): NotificationPreferenceEntity?
+    suspend fun findNotificationPreference(): NotificationPreferenceEntity?
 
     // Delete
 }
