@@ -8,8 +8,8 @@ import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.usecase.AddSourceByAuthenticationUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.AddSourceByDefaultUseCase
 import com.baidaidai.rootless_store.domain.source.usecase.DeleteSourceUseCase
-import com.baidaidai.rootless_store.domain.source.usecase.GetPluginSourceCountUseCase
-import com.baidaidai.rootless_store.domain.source.usecase.GetWholeSourceUseCase
+import com.baidaidai.rootless_store.domain.source.usecase.ObservePluginSourceCountUseCase
+import com.baidaidai.rootless_store.domain.source.usecase.ObservePluginSourcesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +23,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootLessStoreSourceScreenViewModel @Inject constructor(
-    getWholeSourceUseCase: GetWholeSourceUseCase,
-    getPluginSourceCountUseCase: GetPluginSourceCountUseCase,
+    observePluginSourcesUseCase: ObservePluginSourcesUseCase,
+    observePluginSourceCountUseCase: ObservePluginSourceCountUseCase,
     private val addSourceByDefaultUseCase: AddSourceByDefaultUseCase,
     private val addSourceByAuthenticationUseCase: AddSourceByAuthenticationUseCase,
     private val deleteSourceUseCase: DeleteSourceUseCase,
@@ -32,13 +32,13 @@ class RootLessStoreSourceScreenViewModel @Inject constructor(
 
     var latestPluginSourceEndpoint = ""
 
-    val sourceList = getWholeSourceUseCase().stateIn(
+    val sourceList = observePluginSourcesUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList()
     )
 
-    val sourceCount = getPluginSourceCountUseCase().stateIn(
+    val sourceCount = observePluginSourceCountUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = 0

@@ -28,9 +28,9 @@ interface PluginSourceRepository {
     // Read
     suspend fun findPluginSource(sourceID: String): PluginSourceEntity?
 
-    fun getAllPluginSources(): Flow<List<PluginSourceInfo>?>
+    fun observePluginSources(): Flow<List<PluginSourceInfo>?>
 
-    fun getPluginSourcesCount(): Flow<Int>
+    fun observePluginSourceCount(): Flow<Int>
 
     // Delete
     suspend fun deletePluginSource(pluginSourceEntity: PluginSourceEntity)

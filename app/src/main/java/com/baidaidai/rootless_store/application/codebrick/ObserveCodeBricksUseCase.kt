@@ -5,8 +5,8 @@ import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetAllCodeBrickUseCase @Inject constructor(
+class ObserveCodeBricksUseCase @Inject constructor(
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
-    operator fun invoke(): Flow<List<CodeBrickConfig>> = codeBrickRepositoryImpl.getAllCodeBrickConfig()
+    operator fun invoke(): Flow<List<CodeBrickConfig>> = codeBrickRepositoryImpl.observeCodeBricks()
 }

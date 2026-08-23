@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.data.shell.repository.ShellContextPreference
 import com.baidaidai.rootless_store.data.shell.repository.ShellPreferencesRepositoryImpl
 import javax.inject.Inject
 
-class GetShellContextPreferencesUseCase @Inject constructor(
+class ObserveShellContextPreferencesUseCase @Inject constructor(
     private val shellPreferencesRepositoryImpl: ShellPreferencesRepositoryImpl
 ) {
     val defaultPreferences = ShellContextPreferences()

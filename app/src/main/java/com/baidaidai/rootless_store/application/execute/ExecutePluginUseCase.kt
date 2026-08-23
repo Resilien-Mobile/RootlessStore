@@ -28,13 +28,13 @@ class ExecutePluginUseCase @Inject constructor(
 
     private suspend fun judgeShouldUseShizuku(): Boolean{
 
-        val hosterOverallStatus = storeStatusRepositoryImpl.getOverallStatus().first()
+        val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
         val enableChooser = storeStatusRepositoryImpl
-            .getEnableChooserPreference()
+            .observeEnableChooserPreference()
             .first()
         val selectedExecuteContext = if (enableChooser) {
             storeStatusRepositoryImpl
-                .getExecuteContextPreference()
+                .observeExecuteContextPreference()
                 .first()
         } else {
             null

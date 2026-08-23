@@ -4,10 +4,10 @@ import com.baidaidai.rootless_store.data.source.repository.PluginSourceRepositor
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetPluginSourceCountUseCase @Inject constructor(
+class ObservePluginSourceCountUseCase @Inject constructor(
     private val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ) {
     operator fun invoke(): Flow<Int>{
-        return pluginSourceRepositoryImpl.getPluginSourcesCount()
+        return pluginSourceRepositoryImpl.observePluginSourceCount()
     }
 }

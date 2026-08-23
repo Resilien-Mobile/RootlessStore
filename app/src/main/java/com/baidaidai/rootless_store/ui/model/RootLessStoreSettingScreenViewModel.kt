@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreference
-import com.baidaidai.rootless_store.domain.setting.usecase.GetSettingScreenPreferencesUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.ObserveSettingScreenPreferencesUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetAllowInsecureConnectionUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetEnableAutoUpdateUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetNotifyPluginStatusUseCase
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootLessStoreSettingScreenViewModel @Inject constructor(
-    getSettingPanelPreferencesUseCase: GetSettingScreenPreferencesUseCase,
+    observeSettingScreenPreferencesUseCase: ObserveSettingScreenPreferencesUseCase,
     private val setNotifyPluginStatusUseCase: SetNotifyPluginStatusUseCase,
     private val setUseThirdPartyNotificationPushUseCase: SetUseThirdPartyNotificationPushUseCase,
     private val setAllowInsecureConnectionUseCase: SetAllowInsecureConnectionUseCase,
@@ -27,7 +27,7 @@ class RootLessStoreSettingScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     val settingPanelPreferences: StateFlow<SettingScreenPreference> =
-        getSettingPanelPreferencesUseCase().stateIn(
+        observeSettingScreenPreferencesUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1_000),
             initialValue = SettingScreenPreference()

@@ -7,12 +7,12 @@ import com.baidaidai.rootless_store.application.environment.GetEnvironmentShareL
 import com.baidaidai.rootless_store.application.module.InstallModuleUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.application.plugin.GetWholePluginInfoUseCase
+import com.baidaidai.rootless_store.application.plugin.ObservePluginsUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
 import com.baidaidai.rootless_store.application.plugin.UninstallPluginUseCase
-import com.baidaidai.rootless_store.application.plugin.GetPluginInfoCountUseCase
-import com.baidaidai.rootless_store.application.environment.GetWholeEnvironmentInfoUseCase
+import com.baidaidai.rootless_store.application.plugin.ObservePluginCountUseCase
+import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentsUseCase
 import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnabledUseCase
 import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
 import com.baidaidai.rootless_store.application.environment.UninstallEnvironmentUseCase
@@ -33,8 +33,8 @@ import kotlin.collections.emptyList
 
 @HiltViewModel
 class RootLessStorePluginScreenViewModel @Inject constructor(
-    private val getWholePluginInfoUseCase: GetWholePluginInfoUseCase,
-    private val getWholeEnvironmentInfoUseCase: GetWholeEnvironmentInfoUseCase,
+    private val observePluginsUseCase: ObservePluginsUseCase,
+    private val observeEnvironmentsUseCase: ObserveEnvironmentsUseCase,
     private val installModuleUseCase: InstallModuleUseCase,
     private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
     private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
@@ -44,29 +44,29 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     private val getPluginShareLinkUseCase: GetPluginShareLinkUseCase,
     private val getPluginWebUiUriUseCase: GetPluginWebUiUriUseCase,
     private val getEnvironmentShareLinkUseCase: GetEnvironmentShareLinkUseCase,
-    pluginInfoCountUseCase: GetPluginInfoCountUseCase
+    observePluginCountUseCase: ObservePluginCountUseCase
 ): ViewModel() {
 
-//    private val _pluginInfoList = getAllPlugins()  // Will change back to PluginManifestLocal feature
+//    private val _pluginInfoList = observePlugins()  // Will change back to PluginManifestLocal feature
     private val _fileURI = MutableStateFlow<Uri>(value = Uri.EMPTY)
     private val _badgeShowState = MutableStateFlow(false)
 
     private val _pluginEvent = MutableSharedFlow<PluginError?>()
     val pluginEvent = _pluginEvent.asSharedFlow()
 
-    val pluginInfoList = getWholePluginInfoUseCase().stateIn(
+    val pluginInfoList = observePluginsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList<PluginManifestRoom>()
     )
 
-    val environmentInfoList = getWholeEnvironmentInfoUseCase().stateIn(
+    val environmentInfoList = observeEnvironmentsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList<EnvironmentManifestRoom>()
     )
 
-    val pluginInfoCount = pluginInfoCountUseCase().stateIn(
+    val pluginInfoCount = observePluginCountUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = 0

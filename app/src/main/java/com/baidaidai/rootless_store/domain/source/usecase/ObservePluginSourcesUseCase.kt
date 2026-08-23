@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetWholeSourceUseCase @Inject constructor(
+class ObservePluginSourcesUseCase @Inject constructor(
     private val pluginSourceRepositoryImpl: PluginSourceRepositoryImpl
 ) {
     operator fun invoke(): Flow<List<PluginSourceInfo>>{
-        return pluginSourceRepositoryImpl.getAllPluginSources().map {
+        return pluginSourceRepositoryImpl.observePluginSources().map {
             it.orEmpty()
         }
     }

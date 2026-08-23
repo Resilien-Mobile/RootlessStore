@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 class TemperatureStatusDataSource @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    fun getDeviceTemperatureStatus(): Flow<TempStatus> = callbackFlow {
+    fun observeDeviceTemperatureStatus(): Flow<TempStatus> = callbackFlow {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val executor = ContextCompat.getMainExecutor(context)
 

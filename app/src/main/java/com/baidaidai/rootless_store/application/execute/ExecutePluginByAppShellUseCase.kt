@@ -27,7 +27,7 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
     ) : Flow<ExecuteResult> {
 
         val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
-        val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
+        val enableMonitor = settingPreferenceRepositoryImpl.observeEnableNotifyPluginStatus().first()
 
         var pidSaved = false
         val pluginExecuteEntryPoint = androidFileSystemCapabilityGatewayImpl.getPluginEntryPoint(pluginManifestRoom)

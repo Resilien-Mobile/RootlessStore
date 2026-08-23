@@ -4,8 +4,8 @@ import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatew
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetADBShellStatusUseCase @Inject constructor(
+class ObserveAdbShellStatusUseCase @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
-    operator fun invoke(): Flow<Boolean> = shizukuUserServiceGatewayImpl.getShizukuUserServiceAvailableStatus()
+    operator fun invoke(): Flow<Boolean> = shizukuUserServiceGatewayImpl.observeShizukuUserServiceAvailability()
 }

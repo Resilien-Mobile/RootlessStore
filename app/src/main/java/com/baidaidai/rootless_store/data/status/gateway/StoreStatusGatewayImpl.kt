@@ -54,7 +54,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val dataStore = context.rootlessStorePreferencesDataStore
 
     // Status
-    fun getMemoryStatus(): Flow<MemoryStatus> = flow {
+    fun observeMemoryStatus(): Flow<MemoryStatus> = flow {
         while (true){
             val totalMemory = memoryStatusDataSource.getTotalMemory()
             val usedMemory = memoryStatusDataSource.getUsedMemory()
@@ -63,7 +63,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun getStorageStatus(): Flow<StorageStatus> = flow {
+    fun observeStorageStatus(): Flow<StorageStatus> = flow {
         while (true){
             val usedStorage = storageStatusDataSource.getUsedStorage()
             val totalStorage = storageStatusDataSource.getTotalStorage()
@@ -76,7 +76,7 @@ class StoreStatusGatewayImpl @Inject constructor(
 
     fun getKernelStatus(): String = kernelStatusDataSource.getDeviceKernel()
 
-    fun getTemperatureStatus(): Flow<TempStatus> = temperatureStatusDataSource.getDeviceTemperatureStatus()
+    fun observeTemperatureStatus(): Flow<TempStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 
     fun getAndroidAndAPIStatus(): AndroidAndAPIStatus {
         val androidVersion = androidAndAPIVersionDataSource.getAndroidVersion()
@@ -84,7 +84,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         return AndroidAndAPIStatus(androidVersion,apiVersion)
     }
 
-    fun getHosterOverallStatus():Flow<HosterOverallStatus> = flow {
+    fun observeHosterOverallStatus():Flow<HosterOverallStatus> = flow {
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
@@ -168,7 +168,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     // Preference
-    fun getExecuteContextPreference(): Flow<HosterOverallStatus> {
+    fun observeExecuteContextPreference(): Flow<HosterOverallStatus> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -188,7 +188,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun getEnableChooserPreference(): Flow<Boolean> {
+    fun observeEnableChooserPreference(): Flow<Boolean> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {

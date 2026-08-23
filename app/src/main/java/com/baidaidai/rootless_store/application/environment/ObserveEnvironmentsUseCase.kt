@@ -9,7 +9,7 @@ import java.io.File
 import javax.inject.Inject
 import kotlin.collections.map
 
-class GetWholeEnvironmentInfoUseCase @Inject constructor(
+class ObserveEnvironmentsUseCase @Inject constructor(
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
@@ -17,7 +17,7 @@ class GetWholeEnvironmentInfoUseCase @Inject constructor(
 
         val uriRegex = Regex("^https?://",RegexOption.IGNORE_CASE)
 
-        val environmentManifestRoomListFlow = environmentRepositoryImpl.getWholeEnvironmentInfoRoom()
+        val environmentManifestRoomListFlow = environmentRepositoryImpl.observeEnvironments()
 
         return environmentManifestRoomListFlow.map { environmentManifestRoomList ->
             environmentManifestRoomList.map { environmentManifestRoom ->

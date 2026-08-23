@@ -38,7 +38,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
             ?.toCodeBrickConfig()
     }
 
-    fun getAllCodeBrickConfig(): Flow<List<CodeBrickConfig>> {
+    fun observeCodeBricks(): Flow<List<CodeBrickConfig>> {
         return codeBrickDao
             .observeCodeBricks()
             .map { codeBrickEntityList ->

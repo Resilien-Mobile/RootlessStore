@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class GetOverallStatusUseCase @Inject constructor(
+class ObserveOverallStatusUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
     private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
@@ -23,7 +23,7 @@ class GetOverallStatusUseCase @Inject constructor(
 
         while (true){
 
-            val enableChooserPreference = storeStatusRepositoryImpl.getEnableChooserPreference().first()
+            val enableChooserPreference = storeStatusRepositoryImpl.observeEnableChooserPreference().first()
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
                 if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
@@ -34,7 +34,7 @@ class GetOverallStatusUseCase @Inject constructor(
                 }
             val seLinuxStatus = storeStatusRepositoryImpl.getSELinuxStatus()
 
-            val executeContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.getExecuteContextPreference().first() else null
+            val executeContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.observeExecuteContextPreference().first() else null
 
             val status = when {
                 (executeContextPreference != null) -> {

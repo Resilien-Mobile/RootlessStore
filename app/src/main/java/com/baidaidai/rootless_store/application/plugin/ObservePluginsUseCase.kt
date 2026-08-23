@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.map
 import java.io.File
 import javax.inject.Inject
 
-class GetWholePluginInfoUseCase @Inject constructor(
+class ObservePluginsUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
@@ -22,7 +22,7 @@ class GetWholePluginInfoUseCase @Inject constructor(
 
         val uriRegex = Regex("^https?://",RegexOption.IGNORE_CASE)
 
-        val pluginManifestRoomListFlow = pluginRepositoryImpl.getWholePluginInfo()
+        val pluginManifestRoomListFlow = pluginRepositoryImpl.observePlugins()
 
         return pluginManifestRoomListFlow.map { pluginManifestRoomList ->
             pluginManifestRoomList.map { pluginManifestRoom ->

@@ -10,8 +10,8 @@ interface PluginCoreRepository {
 
     // Read
     suspend fun findPluginInfo(pluginID: String): PluginManifestRoom?
-    fun getWholePluginInfo(): Flow<List<PluginManifestRoom>?>
-    fun getPluginInfoCount(): Flow<Int>
+    fun observePlugins(): Flow<List<PluginManifestRoom>?>
+    fun observePluginCount(): Flow<Int>
     suspend fun getTotalPluginCount(): Int
     suspend fun getEnabledPluginCount(): Int
 

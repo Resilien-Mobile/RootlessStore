@@ -5,9 +5,9 @@ import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreference
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetSettingScreenPreferencesUseCase @Inject constructor(
+class ObserveSettingScreenPreferencesUseCase @Inject constructor(
     private val settingPreferencesRepositoryImpl: SettingPreferenceRepositoryImpl
 ) {
     operator fun invoke(): Flow<SettingScreenPreference> =
-        settingPreferencesRepositoryImpl.getSettingScreenPreference
+        settingPreferencesRepositoryImpl.settingScreenPreferences
 }
