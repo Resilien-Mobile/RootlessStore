@@ -1,6 +1,6 @@
 package com.baidaidai.illusioncube.application.conf
 
-class JudgeIfConfUseCase {
+class ValidateConfUseCase {
 
     operator fun invoke(): Boolean {
         TODO("")

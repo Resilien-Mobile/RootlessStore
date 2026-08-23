@@ -48,8 +48,8 @@ class PluginGatewayImpl @Inject constructor(
     }
 
     fun parsePluginManifest(originFileURI: Uri): PluginManifestLocal {
-        return androidFileSystemCapabilityGatewayImpl.readRawPluginManifest(uri = originFileURI).let {
-            androidFileSystemCapabilityGatewayImpl.readManifestJsonContent(it)
+        return androidFileSystemCapabilityGatewayImpl.loadRawPluginManifest(uri = originFileURI).let {
+            androidFileSystemCapabilityGatewayImpl.parsePluginManifest(it)
         }
     }
 

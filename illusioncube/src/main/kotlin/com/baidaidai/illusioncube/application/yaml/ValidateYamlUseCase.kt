@@ -1,6 +1,6 @@
 package com.baidaidai.illusioncube.application.yaml
 
-class JudgeIfYamlUseCase {
+class ValidateYamlUseCase {
 
     operator fun invoke(): Boolean {
         TODO("")

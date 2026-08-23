@@ -83,8 +83,8 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
             }
 
             else -> {
-                androidFileSystemReadOperatorGatewayImpl.readRawPluginManifest(originFileURI).let { json ->
-                    androidFileSystemReadOperatorGatewayImpl.readManifestJsonContent(json).pluginPackageName
+                androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(originFileURI).let { json ->
+                    androidFileSystemReadOperatorGatewayImpl.parsePluginManifest(json).pluginPackageName
                 }.trim()
             }
         }
@@ -130,8 +130,8 @@ class AndroidFileSystemUnZipOperatorGatewayImpl @Inject constructor(
             }
 
             else -> {
-                androidFileSystemReadOperatorGatewayImpl.readRawEnvironmentManifest(originFileURI).let { json ->
-                    androidFileSystemReadOperatorGatewayImpl.readEnvironmentManifestJsonContent(json).environmentPackageName
+                androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(originFileURI).let { json ->
+                    androidFileSystemReadOperatorGatewayImpl.parseEnvironmentManifest(json).environmentPackageName
                 }.trim()
             }
         }
