@@ -1,9 +1,9 @@
 package com.baidaidai.rootless_store.domain.setting.model
 
 data class SettingScreenPreference(
-    val enableAutoUpdate: Boolean = false,
-    val notifyPluginStatus: Boolean = false,
-    val useThirdPartyNotificationPush: Boolean = false,
-    val allowInsecureConnection: Boolean = false,
-    val useDotProtectedConnection: Boolean = false
+    val isAutoUpdateEnabled: Boolean = false,
+    val isPluginStatusNotificationEnabled: Boolean = false,
+    val isThirdPartyNotificationPushEnabled: Boolean = false,
+    val isInsecureConnectionAllowed: Boolean = false,
+    val isDotProtectedConnectionEnabled: Boolean = false
 )

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.status.ObserveCpuDashboardConfigUseCase
 import com.baidaidai.rootless_store.application.status.ObserveNetDashboardConfigUseCase
 import com.baidaidai.rootless_store.application.status.ObserveOverallStatusUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.ObserveEnableAutoUpdatePreferenceUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.ObserveAutoUpdateEnabledPreferenceUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
@@ -52,7 +52,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     private val observeOverallStatusUseCase: ObserveOverallStatusUseCase,
     private val setExecutionContextPreferenceUseCase: SetExecutionContextPreferenceUseCase,
     private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
-    private val observeEnableAutoUpdatePreferenceUseCase: ObserveEnableAutoUpdatePreferenceUseCase,
+    private val observeAutoUpdateEnabledPreferenceUseCase: ObserveAutoUpdateEnabledPreferenceUseCase,
     private val fetchLatestVersionUseCase: FetchLatestVersionUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
     private val observeCpuDashboardConfigUseCase: ObserveCpuDashboardConfigUseCase,
@@ -191,10 +191,10 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
 
     fun fetchLatestVersion(){
         viewModelScope.launch {
-            val enableAutoUpdate = observeEnableAutoUpdatePreferenceUseCase().first()
-            Log.d("fetchLatestVersion",enableAutoUpdate.toString())
+            val isAutoUpdateEnabled = observeAutoUpdateEnabledPreferenceUseCase().first()
+            Log.d("fetchLatestVersion",isAutoUpdateEnabled.toString())
 
-            if(enableAutoUpdate){
+            if(isAutoUpdateEnabled){
                 val latestVersion = fetchLatestVersionUseCase()
                 _latestVersion.value = latestVersion
             }
