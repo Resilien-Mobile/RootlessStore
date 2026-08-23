@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class JsonCodeBrickConfig(
+data class CodeBrickJsonPayload(
     val codeBrickTitle: String,
     val codeBrickEnvironment: HosterOverallStatus,
     val codeBrickContent: String

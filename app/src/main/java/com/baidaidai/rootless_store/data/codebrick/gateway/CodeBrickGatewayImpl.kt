@@ -2,9 +2,7 @@ package com.baidaidai.rootless_store.data.codebrick.gateway
 
 import android.content.ClipboardManager
 import android.content.Context
-import com.baidaidai.rootless_store.core.util.OutOfStringLike
-import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
-import com.baidaidai.rootless_store.domain.codebrick.model.JsonCodeBrickConfig
+import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickJsonPayload
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
@@ -24,11 +22,11 @@ class CodeBrickGatewayImpl @Inject constructor(
         return clipItem.coerceToText(context)?.toString()
     }
 
-    fun parseCodeBrickConfigFromJson(
+    fun parseCodeBrickJson(
         jsonString: String
-    ): JsonCodeBrickConfig?{
+    ): CodeBrickJsonPayload?{
         return runCatching {
-            json.decodeFromString<JsonCodeBrickConfig>(jsonString)
+            json.decodeFromString<CodeBrickJsonPayload>(jsonString)
         }.getOrNull()
     }
 

@@ -6,35 +6,34 @@ import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import javax.inject.Inject
 
-class AddJsonCodeBrickUseCase @Inject constructor(
+class AddCodeBrickFromClipboardUseCase @Inject constructor(
     private val codeBrickGatewayImpl: CodeBrickGatewayImpl,
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
 
     suspend operator fun invoke(): CodeBrickError? {
 
-        // Get Clip Board
-        val clipBoard = codeBrickGatewayImpl.findClipboardText() ?: return CodeBrickError(
+        // Find Clipboard Content
+        val clipboardText = codeBrickGatewayImpl.findClipboardText() ?: return CodeBrickError(
             errorMessage = "Clipboard is empty.",
             errorCause = "CodeBrick json text is null."
         )
 
-        // Convert from Json to CodeBrick Config
-        val jsonCodeBrickConfig = codeBrickGatewayImpl.parseCodeBrickConfigFromJson(jsonString = clipBoard) ?: return CodeBrickError(
+        // Parse CodeBrick JSON
+        val codeBrickJsonPayload = codeBrickGatewayImpl.parseCodeBrickJson(jsonString = clipboardText) ?: return CodeBrickError(
             errorMessage = "Invalid CodeBrick json.",
-            errorCause = clipBoard
+            errorCause = clipboardText
         )
 
-        // Convert from JsonCodeBrickConfig to CodeBrickConfig
+        // Create CodeBrick Config
         val codeBrickConfig = CodeBrickConfig(
             unixTimeStamp = System.currentTimeMillis(),
-            codeBrickTitle = jsonCodeBrickConfig.codeBrickTitle,
-            codeBrickEnvironment = jsonCodeBrickConfig.codeBrickEnvironment,
-            codeBrickContent = jsonCodeBrickConfig.codeBrickContent
+            codeBrickTitle = codeBrickJsonPayload.codeBrickTitle,
+            codeBrickEnvironment = codeBrickJsonPayload.codeBrickEnvironment,
+            codeBrickContent = codeBrickJsonPayload.codeBrickContent
         )
 
-
-        // Add CodeBrick config
+        // Add CodeBrick Config
         codeBrickRepositoryImpl.createCodeBrickConfig(codeBrickConfig)
 
         return null
