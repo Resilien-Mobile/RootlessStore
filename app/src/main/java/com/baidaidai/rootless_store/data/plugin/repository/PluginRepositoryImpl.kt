@@ -4,25 +4,25 @@ import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.plugin.mapper.PluginMapper.toPluginEntity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
-import com.baidaidai.rootless_store.domain.plugin.repository.PluginCoreRepository
+import com.baidaidai.rootless_store.domain.plugin.repository.PluginRepository
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class PluginRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase,
-): PluginCoreRepository {
+): PluginRepository {
 
     private val pluginDao = rootlessStoreDatabase.pluginDao()
 
-    // Create
-    override suspend fun insertPlugin(
+    // Add
+    override suspend fun addPlugin(
         pluginManifestLocal: PluginManifestLocal
     ){
         val pluginEntity = pluginManifestLocal.toPluginEntity()
         pluginDao.insertPlugin(pluginEntity)
     }
-    suspend fun insertPlugin(
+    suspend fun addPlugin(
         pluginManifestRemote: PluginManifestRemote
     ){
         val pluginEntity = pluginManifestRemote.toPluginEntity()
@@ -51,16 +51,14 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     override fun observePlugins(): Flow<List<PluginManifestRoom>> {
-        val pluginManifestRoomList = pluginDao.observePlugins()
-
-        return pluginManifestRoomList
+        return pluginDao.observePlugins()
     }
 
     override fun observePluginCount(): Flow<Int> {
         return pluginDao.observePluginCount()
     }
 
-    override suspend fun getTotalPluginCount(): Int {
+    override suspend fun getPluginCount(): Int {
         return pluginDao.getPluginCount()
     }
 

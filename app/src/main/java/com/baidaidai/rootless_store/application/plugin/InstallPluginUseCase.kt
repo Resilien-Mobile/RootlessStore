@@ -14,17 +14,17 @@ class InstallPluginUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(uri: Uri): PluginError? {
         return try {
-            val pluginManiFestLocal = pluginGatewayImpl.parsePluginManifest(uri)
+            val pluginManifestLocal = pluginGatewayImpl.parsePluginManifest(uri)
 
-            if (pluginManiFestLocal.requiredEnvironment == HosterOverallStatus.ADB){
+            if (pluginManifestLocal.requiredEnvironment == HosterOverallStatus.ADB){
                 installShellPluginUseCase(uri)
             }else{
                 // Un-Zip, Install Plugin
                 pluginGatewayImpl.installPluginFromLocal(uri)
                 // Set Execute-able, Made it can call and use
-                pluginGatewayImpl.setPluginEntryPointExecutable(pluginManiFestLocal)
+                pluginGatewayImpl.setPluginEntryPointExecutable(pluginManifestLocal)
                 // Add Data, Register Plugin
-                pluginRepositoryImpl.insertPlugin(pluginManiFestLocal)
+                pluginRepositoryImpl.addPlugin(pluginManifestLocal)
 
                 null
             }

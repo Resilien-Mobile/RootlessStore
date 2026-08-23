@@ -145,7 +145,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             }
 
             // Insert result to PluginRepositoryImpl
-            pluginRepositoryImpl.insertPlugin(pluginManifestLocal)
+            pluginRepositoryImpl.addPlugin(pluginManifestLocal)
 
             null
         } catch (error: Throwable) {

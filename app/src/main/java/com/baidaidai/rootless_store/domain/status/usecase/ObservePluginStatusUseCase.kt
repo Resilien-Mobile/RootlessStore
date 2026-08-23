@@ -10,7 +10,7 @@ class ObservePluginStatusUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl
 ){
     operator fun invoke(): Flow<PluginStatus> = flow {
-        val totalPluginCount = pluginRepositoryImpl.getTotalPluginCount()
+        val totalPluginCount = pluginRepositoryImpl.getPluginCount()
         val enabledPluginCount = pluginRepositoryImpl.getEnabledPluginCount()
         emit(PluginStatus(totalCount = totalPluginCount, enabledCount = enabledPluginCount))
     }
