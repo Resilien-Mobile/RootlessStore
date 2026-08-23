@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
 import com.baidaidai.rootless_store.data.status.datasource.AndroidAndApiVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
@@ -45,7 +45,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
     private val androidAndApiVersionDataSource: AndroidAndApiVersionDataSource,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
-    private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
+    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
     private val networkStatusDataSource: NetworkStatusDataSource,
     @ApplicationContext context: Context
@@ -88,7 +88,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.hasShizukuPermission()) {
+                if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
                     Log.d("HosterOverallStatus", "Attempt startShizukuUserService Shizuku Endpoint")
                     val ok = shizukuUserServiceGatewayImpl.startShizukuUserService()
                     Log.d("HosterOverallStatus", "Bind result: $ok")

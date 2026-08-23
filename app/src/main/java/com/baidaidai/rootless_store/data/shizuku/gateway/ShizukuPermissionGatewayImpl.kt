@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShizukuPermissionAndAuthGatewayImpl @Inject constructor() {
+class ShizukuPermissionGatewayImpl @Inject constructor() {
 
     private val requestCode = 1001
 
@@ -15,7 +15,7 @@ class ShizukuPermissionAndAuthGatewayImpl @Inject constructor() {
      * 通过响应 ping 回答，确保 Shizuku 那边的状态还好
      */
     @Deprecated(
-        message = "这个方法不属于 ShizukuPermissionAndAuthManager 的操作范畴，建议尽快转移到更合适的位置。"
+        message = "这个方法不属于 ShizukuPermissionGatewayImpl 的操作范畴，建议尽快转移到更合适的位置。"
     )
     fun pingShizuku(): Boolean{
         return Shizuku.pingBinder()

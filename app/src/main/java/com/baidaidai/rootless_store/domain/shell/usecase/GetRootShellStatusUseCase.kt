@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetRootShellStatusUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
-    operator fun invoke () = storeStatusRepositoryImpl.getRootStatus()
+    operator fun invoke(): Boolean = storeStatusRepositoryImpl.getRootStatus()
 }
