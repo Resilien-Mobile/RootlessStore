@@ -4,14 +4,14 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.baidaidai.rootless_store.core.util.OutOfStringLike
 import com.baidaidai.rootless_store.data.market.mapper.PluginMarketMapper.toPluginPageResponse
-import com.baidaidai.rootless_store.data.market.remote.api.PluginMarketAPI
-import com.baidaidai.rootless_store.data.market.remote.dto.PluginPageResponseDTO
+import com.baidaidai.rootless_store.data.market.remote.api.PluginMarketApi
+import com.baidaidai.rootless_store.data.market.remote.dto.PluginPageResponseDto
 import com.baidaidai.rootless_store.domain.market.error.MarketError
 import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import io.ktor.client.call.body
 
 class PluginPagingSource (
-    private val api: PluginMarketAPI,
+    private val api: PluginMarketApi,
     private val pluginSourceUri: String,
     private val onError: suspend (MarketError)-> Unit
 ) : PagingSource<Int, ModuleManifestCollection>() {
@@ -25,10 +25,10 @@ class PluginPagingSource (
 
             // HTTP Request
             val response = api.fetchPlugins(pageNumber = page, pluginSourceUri)
-            val pluginPageResponseDTO = response.body<PluginPageResponseDTO>()
-            val pluginPageResponse = pluginPageResponseDTO.toPluginPageResponse()
+            val pluginPageResponseDto = response.body<PluginPageResponseDto>()
+            val pluginPageResponse = pluginPageResponseDto.toPluginPageResponse()
 
-            val nextKey = if (pluginPageResponseDTO.meta.hasMore) page + 1 else null
+            val nextKey = if (pluginPageResponseDto.meta.hasMore) page + 1 else null
 
             return LoadResult.Page(
                 data = pluginPageResponse.data,

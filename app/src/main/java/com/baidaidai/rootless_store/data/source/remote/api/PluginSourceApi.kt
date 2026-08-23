@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.data.source.remote.api
 
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationPostDTO
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationPostDto
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
 import io.ktor.client.HttpClient
 import io.ktor.client.request.accept
@@ -13,7 +13,7 @@ import io.ktor.http.appendPathSegments
 import io.ktor.http.contentType
 import javax.inject.Inject
 
-class PluginSourceAPI @Inject constructor(
+class PluginSourceApi @Inject constructor(
     private val ktorClient: HttpClient
 ) {
     private val client = ktorClient
@@ -44,7 +44,7 @@ class PluginSourceAPI @Inject constructor(
             accept(ContentType.Application.Json)
 
             setBody(
-                PluginSourceAuthenticationPostDTO(
+                PluginSourceAuthenticationPostDto(
                     userName = pluginSourceAuthFormInput.userName,
                     passWord = pluginSourceAuthFormInput.passWord
                 )

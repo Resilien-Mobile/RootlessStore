@@ -10,7 +10,7 @@ import io.ktor.http.appendPathSegments
 import javax.inject.Inject
 import io.ktor.http.path
 
-class PluginMarketAPI @Inject constructor(
+class PluginMarketApi @Inject constructor(
     private val ktorClient: HttpClient
 ){
     private val client = ktorClient

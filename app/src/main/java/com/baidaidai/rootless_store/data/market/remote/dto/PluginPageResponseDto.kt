@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PluginPageResponseDTO(
+data class PluginPageResponseDto(
     val data: List<ModuleManifestCollection>,
-    val meta: MetaDTO
+    val meta: MetaDto
 )

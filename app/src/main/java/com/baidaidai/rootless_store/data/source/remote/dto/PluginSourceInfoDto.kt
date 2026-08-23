@@ -3,9 +3,9 @@ package com.baidaidai.rootless_store.data.source.remote.dto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PluginSourceInfoDTO(
+data class PluginSourceInfoDto(
     val sourceID: String,
     val sourceName: String,
     val sourceRemoteEndpoint: String,
-    val sourceAuthenticationInfo: SourceAuthenticationInfoMetaDTO
+    val sourceAuthenticationInfo: SourceAuthenticationInfoMetaDto
 )
