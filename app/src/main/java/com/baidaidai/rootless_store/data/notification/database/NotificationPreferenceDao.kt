@@ -20,14 +20,14 @@ interface NotificationPreferenceDao {
     // Update
     @Query(
         "UPDATE NotificationPreferenceEntity SET apiKey = :apiKey, notificationTitle = :notificationTitle, " +
-            "selfBuiltServer = :selfBuiltServer, criticalWarning = :criticalWarning " +
+            "selfBuiltServer = :selfBuiltServer, criticalWarning = :isCriticalWarningEnabled " +
             "WHERE _primaryKey_ = 'RootlessStoreNotificationPreferenceEntityPrimaryKey'"
     )
     suspend fun updateNotificationPreference(
         apiKey: String,
         notificationTitle: String? = null,
         selfBuiltServer: String? = null,
-        criticalWarning: Boolean,
+        isCriticalWarningEnabled: Boolean,
     )
 
     // Read

@@ -43,9 +43,9 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
             it.copy(selfBuiltServer = selfBuiltServer)
         }
     }
-    fun onWarningNotificationEnabledChanged(enabled: Boolean){
+    fun onWarningNotificationEnabledChanged(isEnabled: Boolean){
         _thirdPartyNotificationScreenUiState.update {
-            it.copy(warningNotificationEnabled = enabled)
+            it.copy(isWarningNotificationEnabled = isEnabled)
         }
     }
 
@@ -57,7 +57,7 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
                 barkApiKey = uiState.barkApiKey,
                 notificationTitle = uiState.notificationTitle,
                 selfBuiltServer = uiState.selfBuiltServer,
-                warningNotificationEnabled = uiState.warningNotificationEnabled
+                isWarningNotificationEnabled = uiState.isWarningNotificationEnabled
             )
         }
     }
@@ -69,7 +69,7 @@ class RootLessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
             _thirdPartyNotificationScreenUiState.update {
                 it.copy(
                     barkApiKey = notificationPreference.apiKey,
-                    warningNotificationEnabled = notificationPreference.criticalWarning
+                    isWarningNotificationEnabled = notificationPreference.isCriticalWarningEnabled
                 )
             }
         }

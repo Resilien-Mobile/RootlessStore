@@ -31,7 +31,8 @@ data class EnvironmentInfoEntity(
     val environmentDescription:String,
 
     // Environment Runtime Infos
-    val enabled: Boolean,
+    @ColumnInfo(name = "enabled")
+    val isEnabled: Boolean,
     val requiredEnvironment: HosterOverallStatus,
     val state: PluginState,
     val source: PluginSource,
@@ -62,7 +63,7 @@ data class EnvironmentInfoEntity(
                 environmentDescription = environmentManifestRoom.environmentDescription,
 
                 // Runtime Infos
-                enabled = false,
+                isEnabled = false,
                 requiredEnvironment = environmentManifestRoom.requiredEnvironment,
                 state = environmentManifestRoom.state,
                 source = environmentManifestRoom.source,

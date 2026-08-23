@@ -25,13 +25,13 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
         apiKey: String,
         notificationTitle: String? = null,
         selfBuiltServer: String? = null,
-        criticalWarning: Boolean
+        isCriticalWarningEnabled: Boolean
     ) {
         notificationPreferenceDao.updateNotificationPreference(
             apiKey = apiKey,
             notificationTitle = notificationTitle,
             selfBuiltServer = selfBuiltServer,
-            criticalWarning = criticalWarning,
+            isCriticalWarningEnabled = isCriticalWarningEnabled,
         )
     }
 

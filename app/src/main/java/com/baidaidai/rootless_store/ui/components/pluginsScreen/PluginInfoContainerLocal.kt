@@ -109,7 +109,7 @@ fun PluginInfoContainerLocal(
                 }
                 if (pluginManifestRoom.pluginRunModel == PluginRunModel.Daemon){
                     Switch(
-                        checked = pluginManifestRoom.enabled,
+                        checked = pluginManifestRoom.isEnabled,
                         onCheckedChange = { onSwitchClick() }
                     )
                 }else{
@@ -230,7 +230,7 @@ fun PluginInfoContainerLocal(
                     )
                 }
                 Switch(
-                    checked = environmentManifest.enabled,
+                    checked = environmentManifest.isEnabled,
                     onCheckedChange = { onSwitchClick() }
                 )
             }

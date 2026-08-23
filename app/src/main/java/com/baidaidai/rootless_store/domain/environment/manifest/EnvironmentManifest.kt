@@ -77,8 +77,8 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
 
     val env: Map<String, String>
 
-    // Runtime state such as `enabled`, `state`, `source` should NOT belong here:
-    // - enabled: Boolean
+    // Runtime state such as `isEnabled`, `state`, `source` should NOT belong here:
+    // - isEnabled: Boolean
     // - state: PluginState
     // - source: PluginSource
     interface EnvironmentManifestLocal: EnvironmentManifest
@@ -86,7 +86,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
         val environmentUri: String
     }
     interface EnvironmentManifestRoom: EnvironmentManifest {
-        val enabled: Boolean
+        val isEnabled: Boolean
         val state: PluginState
         val source: PluginSource
     }

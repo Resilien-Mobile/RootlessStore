@@ -8,9 +8,9 @@ class SetPluginEnabledUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         pluginId: String,
-        pluginEnabledStatus: Boolean
+        isEnabled: Boolean
     ){
-        if (pluginEnabledStatus){
+        if (isEnabled){
             pluginInfoRepository.enablePluginById(pluginId)
         }else{
             pluginInfoRepository.disablePluginById(pluginId)

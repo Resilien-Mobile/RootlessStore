@@ -11,7 +11,7 @@ object EnvironmentMapper {
 
     fun EnvironmentInfoEntity.toEnvironmentManifestRoom (): EnvironmentManifestRoom{
         return EnvironmentManifestRoom(
-            enabled = enabled,
+            isEnabled = isEnabled,
             state = state,
             source = source,
             installedVersion = installedVersion,
@@ -37,7 +37,7 @@ object EnvironmentMapper {
             iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
-            enabled = false,
+            isEnabled = false,
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
             source = PluginSource.Local,
@@ -56,7 +56,7 @@ object EnvironmentMapper {
             iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
-            enabled = false,
+            isEnabled = false,
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
             source = PluginSource.Official,

@@ -130,7 +130,7 @@ fun ThirdPartyNotificationScreen(
                 supportingText = stringResource(R.string.third_party_notification_screen_warning_notification_supporting),
                 trailingContent = {
                     Switch(
-                        checked = thirdPartyNotificationScreenUiState.warningNotificationEnabled,
+                        checked = thirdPartyNotificationScreenUiState.isWarningNotificationEnabled,
                         onCheckedChange = thirdPartyNotificationScreenViewModel::onWarningNotificationEnabledChanged
                     )
                 },

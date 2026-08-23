@@ -11,7 +11,7 @@ class AddNotificationPreferenceUseCase @Inject constructor(
         barkApiKey: String = "",
         notificationTitle: String? = null,
         selfBuiltServer: String? = null,
-        warningNotificationEnabled: Boolean = false
+        isWarningNotificationEnabled: Boolean = false
     ) {
         val notificationPreference = notificationPreferenceRepositoryImpl.findNotificationPreference()
         if(notificationPreference == null){
@@ -19,7 +19,7 @@ class AddNotificationPreferenceUseCase @Inject constructor(
                 apiKey = barkApiKey,
                 notificationTitle = notificationTitle,
                 selfBuiltServer = selfBuiltServer,
-                criticalWarning = warningNotificationEnabled
+                isCriticalWarningEnabled = isWarningNotificationEnabled
             )
             notificationPreferenceRepositoryImpl.insertNotificationPreference(newNotificationPreference)
         }else{
@@ -27,7 +27,7 @@ class AddNotificationPreferenceUseCase @Inject constructor(
                 apiKey = barkApiKey,
                 notificationTitle = notificationTitle,
                 selfBuiltServer = selfBuiltServer,
-                criticalWarning = warningNotificationEnabled
+                isCriticalWarningEnabled = isWarningNotificationEnabled
             )
         }
     }

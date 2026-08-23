@@ -31,7 +31,8 @@ data class PluginInfoEntity(
     val pluginDescription:String,
 
     // Plugin Runtime Infos
-    val enabled: Boolean,
+    @ColumnInfo(name = "enabled")
+    val isEnabled: Boolean,
     val requiredEnvironment: HosterOverallStatus,
     val state: PluginState,
     val source: PluginSource,

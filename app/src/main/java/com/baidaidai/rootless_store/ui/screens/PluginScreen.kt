@@ -174,10 +174,10 @@ fun PluginScreen(
                     onSwitchClick = {
                         pluginScreenViewModel.setPluginEnabled(
                             pluginId = pluginManifestRoom.pluginId,
-                            pluginEnabledStatus = !pluginManifestRoom.enabled
+                            isEnabled = !pluginManifestRoom.isEnabled
                         )
 
-                        if (!pluginManifestRoom.enabled){
+                        if (!pluginManifestRoom.isEnabled){
                             navigateToExecuteScreen(pluginManifestRoom.pluginId,true)
                         }else{
                             coroutineScope.launch {
@@ -187,7 +187,7 @@ fun PluginScreen(
                     },
                     onButtonClick = { onButtonClick(pluginManifestRoom.pluginId) },
                     onCardClick = {
-                        if (pluginManifestRoom.enabled){
+                        if (pluginManifestRoom.isEnabled){
                             navigateToExecuteScreen(pluginManifestRoom.pluginId,false)
                         }
                     },
