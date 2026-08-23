@@ -25,8 +25,8 @@ import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuDashbo
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetworkDashboard
 import com.baidaidai.rootless_store.ui.components.homeScreen.HosterStatusCircularProgressRow
 import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootlessStorePlugin
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionCheckerContainer
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionTagContainer
+import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreUpdateBanner
+import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionCard
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreHosterStatusBoard
 import com.baidaidai.rootless_store.ui.layout.homeScreen.HomeScreenExpandedLayout
 import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
@@ -86,13 +86,13 @@ fun HomeScreen(
         ) {
             item {
                 /* Version Tag */
-                RootlessStoreVersionTagContainer()
+                RootlessStoreVersionCard()
             }
 
             if (latestVersionNumber != null && latestVersionNumber != appVersion) {
                 item {
                     /* Version Checker */
-                    RootlessStoreVersionCheckerContainer(
+                    RootlessStoreUpdateBanner(
                         latestVersionNumber = latestVersionNumber!!
                     )
                 }
@@ -129,10 +129,10 @@ fun HomeScreen(
         ){
 
             // Version Tag && Info Flag
-            RootlessStoreVersionTagContainer(Modifier.width(preferWidth))
+            RootlessStoreVersionCard(Modifier.width(preferWidth))
 
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
-                RootlessStoreVersionCheckerContainer(
+                RootlessStoreUpdateBanner(
                     latestVersionNumber = latestVersionNumber!!,
                     modifier = resolveBasicWidthModifier()
                 )
@@ -149,7 +149,7 @@ fun HomeScreen(
             /* Version Checker */
             // 如果height紧凑，则可用此布局，反之不可使用
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
-                RootlessStoreVersionCheckerContainer(
+                RootlessStoreUpdateBanner(
                     latestVersionNumber = latestVersionNumber!!,
                     modifier = resolveBasicWidthModifier()
                 )

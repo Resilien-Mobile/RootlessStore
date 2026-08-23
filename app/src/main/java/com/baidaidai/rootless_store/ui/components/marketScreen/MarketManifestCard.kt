@@ -33,7 +33,7 @@ import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import com.baidaidai.rootless_store.domain.plugin.model.PluginType
 
 @Composable
-fun PluginInfoContainerRemote(
+fun MarketManifestCard(
     manifest: MarketManifest,
     modifier: Modifier = Modifier,
     onClick: ()-> Unit
@@ -219,6 +219,6 @@ private fun PluginInfoRow(
 
 @Composable
 @PreviewLightDark
-private fun _PluginInfosContainerPreview_(){
-    PluginInfoContainerRemote(manifest = PluginManifestRemote._testOnly_){}
+private fun MarketManifestCardPreview(){
+    MarketManifestCard(manifest = PluginManifestRemote._testOnly_){}
 }

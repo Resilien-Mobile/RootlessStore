@@ -21,7 +21,7 @@ import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 
 @Composable
-fun PluginActionContainer(
+fun PluginActionPanel(
     modifier: Modifier = Modifier,
     pluginManifestRoom: PluginManifestRoom? = null,
     onShareButtonClick: ()-> Unit = {},
@@ -130,7 +130,7 @@ fun PluginActionContainer(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    PluginActionContainer(
+    PluginActionPanel(
         pluginManifestRoom = PluginManifestRoom._testOnly_.copy(webUiEntryPoint = "akjfjdkdjskf"),
         modifier = Modifier
             .size(

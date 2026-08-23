@@ -18,8 +18,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionPanel
+import com.baidaidai.rootless_store.ui.components.pluginsScreen.InstalledManifestCard
 import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 
 @Composable
@@ -51,7 +51,7 @@ fun EnvironmentScreen(
 
             if (isActionPanelVisible){
 
-                PluginActionContainer(
+                PluginActionPanel(
                     onShareButtonClick = {
 
                         val shareLink = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
@@ -76,7 +76,7 @@ fun EnvironmentScreen(
 
             }else{
 
-                PluginInfoContainerLocal(
+                InstalledManifestCard(
                     environmentManifest = environmentManifestRoom,
                     onSwitchClick = {
                         pluginScreenViewModel.setEnvironmentEnabled(

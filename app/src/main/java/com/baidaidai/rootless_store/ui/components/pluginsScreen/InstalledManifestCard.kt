@@ -41,7 +41,7 @@ import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 
 @Composable
-fun PluginInfoContainerLocal(
+fun InstalledManifestCard(
     pluginManifestRoom: PluginManifestRoom,
     onCardSizeChanged: (intSize: IntSize)-> Unit = {},
     onSwitchClick: ()-> Unit,
@@ -174,7 +174,7 @@ fun PluginInfoContainerLocal(
 }
 
 @Composable
-fun PluginInfoContainerLocal(
+fun InstalledManifestCard(
     environmentManifest: EnvironmentManifestRoom,
     onCardSizeChanged: (intSize: IntSize)-> Unit = {},
     onSwitchClick: ()-> Unit,
@@ -303,8 +303,8 @@ private fun PluginInfoRow(
 
 @Composable
 @PreviewLightDark
-private fun _PluginInfosContainerPreview_(){
-    PluginInfoContainerLocal(
+private fun InstalledManifestCardPreview(){
+    InstalledManifestCard(
         pluginManifestRoom = PluginManifestRoom._testOnly_,
         onSwitchClick = {},
         onButtonClick = {},

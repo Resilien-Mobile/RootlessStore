@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.baidaidai.rootless_store.ui.components.marketScreen.PluginInfoContainerRemote
+import com.baidaidai.rootless_store.ui.components.marketScreen.MarketManifestCard
 import com.baidaidai.rootless_store.ui.model.RootlessStoreMarketScreenViewModel
 
 @Composable
@@ -35,7 +35,7 @@ fun MarketScreen(
         ){ manifestIndex ->
 
             val marketManifest = marketManifests[manifestIndex]
-            PluginInfoContainerRemote(
+            MarketManifestCard(
                 manifest = marketManifest!!
             ) {
                 marketScreenViewModel.installMarketManifest(marketManifest)

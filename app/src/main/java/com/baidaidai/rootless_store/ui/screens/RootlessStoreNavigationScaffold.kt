@@ -65,7 +65,7 @@ import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RootlessStoreStartScreenContainer(
+fun RootlessStoreNavigationScaffold(
     pluginScreenViewModel: RootlessStorePluginScreenViewModel = hiltViewModel(),
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel = hiltViewModel(),
     fileIntentUri:Uri?,
@@ -363,7 +363,7 @@ fun RootlessStoreStartScreenContainer(
                         )
                     }
                     entry<PluginScreenKey> {
-                        RootlessStorePluginScreenContainer(
+                        PluginManagementScreen(
                             contentPadding = contentPadding,
                             pluginScreenViewModel = pluginScreenViewModel,
                             navigateToExecuteScreen = { pluginId, shouldExecutePlugin ->
