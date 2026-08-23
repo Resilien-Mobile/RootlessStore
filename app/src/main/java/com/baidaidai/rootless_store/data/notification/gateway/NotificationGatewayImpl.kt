@@ -15,13 +15,13 @@ import com.baidaidai.rootless_store.data.notification.remote.api.BarkNotificatio
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class NotificationManagerGatewayImpl @Inject constructor(
+class NotificationGatewayImpl @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val barkNotificationApi: BarkNotificationApi
 ) {
 
-    fun pushDefaultNotification(
+    fun sendLocalNotification(
         title: String,
         message: String,
         notificationId: Int = 1001
@@ -57,41 +57,39 @@ class NotificationManagerGatewayImpl @Inject constructor(
 
     }
 
-    suspend fun pushNormalNotificationOverBark(
+    suspend fun sendBarkNotification(
         title: String? = null,
         message: String? = null,
         apiKey: String
     ){
-        val title = title ?: defaultNotificationTitle
-        val message = message ?: defaultNotificationContent
+        val title = title ?: DEFAULT_NOTIFICATION_TITLE
+        val message = message ?: DEFAULT_NOTIFICATION_CONTENT
 
-        barkNotificationApi.pushNormalNotification(
+        barkNotificationApi.sendNotification(
             title = title,
             message = message,
             apiKey = apiKey
         )
     }
 
-    suspend fun pushWarningNotificationOverBark(
+    suspend fun sendCriticalBarkNotification(
         title: String? = null,
         message: String? = null,
         apiKey: String
     ){
-        val title = title ?: defaultNotificationTitle
-        val message = message ?: defaultNotificationContent
+        val title = title ?: DEFAULT_NOTIFICATION_TITLE
+        val message = message ?: DEFAULT_NOTIFICATION_CONTENT
 
-        barkNotificationApi.pushWarningNotification(
+        barkNotificationApi.sendCriticalNotification(
             title = title,
             message = message,
             apiKey = apiKey
         )
     }
 
-    companion object {
-
-        val defaultNotificationTitle = "Rootless Store"
-        val defaultNotificationContent = "你有一个插件异常退出，若非本人操作，请及时前往处理"
-
+    private companion object {
+        const val DEFAULT_NOTIFICATION_TITLE = "Rootless Store"
+        const val DEFAULT_NOTIFICATION_CONTENT = "你有一个插件异常退出，若非本人操作，请及时前往处理"
     }
 
 }

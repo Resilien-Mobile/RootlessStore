@@ -11,7 +11,7 @@ class BarkNotificationApi @Inject constructor(
     private val ktorClient: HttpClient
 ) {
 
-    suspend fun pushNormalNotification(
+    suspend fun sendNotification(
         title: String = "Rootless Store",
         message: String = "你有一个插件异常退出，若非本人操作，请及时前往处理",
         apiKey: String
@@ -27,7 +27,7 @@ class BarkNotificationApi @Inject constructor(
         }catch (error: Throwable){}
     }
 
-    suspend fun pushWarningNotification(
+    suspend fun sendCriticalNotification(
         title: String = "Rootless Store",
         message: String = "Rootless有一个插件异常退出，若非本人操作，请及时前往处理",
         apiKey: String,
