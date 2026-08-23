@@ -16,13 +16,13 @@ class AbortPluginProcessUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
     suspend operator fun invoke(pluginManifestRoom: PluginManifestRoom) {
-        val hosterOverallStatus = storeStatusRepositoryImpl.getOverallStatus().first()
+        val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
         val enableChooser = storeStatusRepositoryImpl
-            .getEnableChooserPreference()
+            .observeEnableChooserPreference()
             .first()
         val selectedExecuteContext = if (enableChooser) {
             storeStatusRepositoryImpl
-                .getExecuteContextPreference()
+                .observeExecuteContextPreference()
                 .first()
         } else {
             null
@@ -43,13 +43,13 @@ class AbortPluginProcessUseCase @Inject constructor(
 
         val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
 
-        val hosterOverallStatus = storeStatusRepositoryImpl.getOverallStatus().first()
+        val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
         val enableChooser = storeStatusRepositoryImpl
-            .getEnableChooserPreference()
+            .observeEnableChooserPreference()
             .first()
         val selectedExecuteContext = if (enableChooser) {
             storeStatusRepositoryImpl
-                .getExecuteContextPreference()
+                .observeExecuteContextPreference()
                 .first()
         } else {
             null

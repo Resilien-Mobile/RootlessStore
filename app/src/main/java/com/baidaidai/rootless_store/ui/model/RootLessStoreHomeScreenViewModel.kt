@@ -3,11 +3,11 @@ package com.baidaidai.rootless_store.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.application.status.GetCpuDashboardConfigUseCase
-import com.baidaidai.rootless_store.application.status.GetNetDashboardConfigUseCase
-import com.baidaidai.rootless_store.application.status.GetOverallStatusUseCase
-import com.baidaidai.rootless_store.domain.setting.usecase.GetEnableAutoUpdatePreferenceUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCase
+import com.baidaidai.rootless_store.application.status.ObserveCpuDashboardConfigUseCase
+import com.baidaidai.rootless_store.application.status.ObserveNetDashboardConfigUseCase
+import com.baidaidai.rootless_store.application.status.ObserveOverallStatusUseCase
+import com.baidaidai.rootless_store.domain.setting.usecase.ObserveEnableAutoUpdatePreferenceUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
@@ -16,14 +16,14 @@ import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TempStatus
 import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndAPIStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetExecuteContextPreferenceUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecuteContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetKernelStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetMemoryStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetPluginStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.ObserveMemoryStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.ObservePluginStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetRootStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetSELinuxUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetStorageStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetTemperatureStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.ObserveStorageStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.ObserveTemperatureStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetEnableChooserPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetExecuteContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.update.usecase.GetLatestVersionUseCase
@@ -40,23 +40,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootLessStoreHomeScreenViewModel @Inject constructor(
-    getMemoryStatusUseCase: GetMemoryStatusUseCase,
-    getStorageStatusUseCase: GetStorageStatusUseCase,
-    getPluginStatusUseCase: GetPluginStatusUseCase,
-    getTemperatureStatusUseCase: GetTemperatureStatusUseCase,
+    observeMemoryStatusUseCase: ObserveMemoryStatusUseCase,
+    observeStorageStatusUseCase: ObserveStorageStatusUseCase,
+    observePluginStatusUseCase: ObservePluginStatusUseCase,
+    observeTemperatureStatusUseCase: ObserveTemperatureStatusUseCase,
     getSELinuxUseCase: GetSELinuxUseCase,
     getKernelStatusUseCase: GetKernelStatusUseCase,
     getAndroidAndAPIStatusUseCase: GetAndroidAndAPIStatusUseCase,
-    getExecuteContextPreferenceUseCase: GetExecuteContextPreferenceUseCase,
+    observeExecuteContextPreferenceUseCase: ObserveExecuteContextPreferenceUseCase,
     private val getRootStatusUseCase: GetRootStatusUseCase,
-    private val getOverallStatusUseCase: GetOverallStatusUseCase,
+    private val observeOverallStatusUseCase: ObserveOverallStatusUseCase,
     private val setExecuteContextPreferenceUseCase: SetExecuteContextPreferenceUseCase,
     private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
-    private val getEnableAutoUpdatePreferenceUseCase: GetEnableAutoUpdatePreferenceUseCase,
+    private val observeEnableAutoUpdatePreferenceUseCase: ObserveEnableAutoUpdatePreferenceUseCase,
     private val getLatestVersionUseCase: GetLatestVersionUseCase,
-    private val getADBShellStatusUseCase: GetADBShellStatusUseCase,
-    private val getCpuDashboardConfigUseCase: GetCpuDashboardConfigUseCase,
-    private val getNetDashboardConfigUseCase: GetNetDashboardConfigUseCase
+    private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
+    private val observeCpuDashboardConfigUseCase: ObserveCpuDashboardConfigUseCase,
+    private val observeNetDashboardConfigUseCase: ObserveNetDashboardConfigUseCase
 ) : ViewModel() {
 
     init {
@@ -73,35 +73,35 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
 
 
     val memoryStatus: StateFlow<MemoryStatus> =
-        getMemoryStatusUseCase().stateIn(
+        observeMemoryStatusUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
             initialValue = MemoryStatus()
         )
 
     val storageStatus: StateFlow<StorageStatus> =
-        getStorageStatusUseCase().stateIn(
+        observeStorageStatusUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
             initialValue = StorageStatus()
         )
 
     val pluginStatus: StateFlow<PluginStatus> =
-        getPluginStatusUseCase().stateIn(
+        observePluginStatusUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
             initialValue = PluginStatus()
         )
 
     val temperatureStatus: StateFlow<TempStatus?> =
-        getTemperatureStatusUseCase()
+        observeTemperatureStatusUseCase()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(1000),
                 initialValue = TempStatus.ERROR
             )
 
-    val executeContextPreference = getExecuteContextPreferenceUseCase()
+    val executeContextPreference = observeExecuteContextPreferenceUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
@@ -123,7 +123,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
         initialValue = HosterOverallStatus.LIMITED
     )
 
-    val adbStatus = getADBShellStatusUseCase()
+    val adbStatus = observeAdbShellStatusUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -142,19 +142,19 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     private val _androidAndAPIStatus = MutableStateFlow(getAndroidAndAPIStatusUseCase())
     val androidAndAPIStatus = _androidAndAPIStatus.asStateFlow()
 
-    val overallStatus = getOverallStatusUseCase().stateIn(
+    val overallStatus = observeOverallStatusUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
         initialValue = HosterOverallStatus.LIMITED
     )
 
-    val cpuStatus = getCpuDashboardConfigUseCase().stateIn(
+    val cpuStatus = observeCpuDashboardConfigUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
         initialValue = CpuDashboardConfig._testOnly_
     )
 
-    val netStatus = getNetDashboardConfigUseCase().stateIn(
+    val netStatus = observeNetDashboardConfigUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
         initialValue = NetDashboardConfig._testOnly_
@@ -191,7 +191,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
 
     fun getLatestVersion(){
         viewModelScope.launch {
-            val enableAutoUpdate = getEnableAutoUpdatePreferenceUseCase().first()
+            val enableAutoUpdate = observeEnableAutoUpdatePreferenceUseCase().first()
             Log.d("getLatestVersion",enableAutoUpdate.toString())
 
             if(enableAutoUpdate){

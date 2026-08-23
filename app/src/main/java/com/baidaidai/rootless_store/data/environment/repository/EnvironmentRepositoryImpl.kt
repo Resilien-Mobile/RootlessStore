@@ -47,7 +47,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
         return environmentInfoRoom
     }
 
-    fun getWholeEnvironmentInfoRoom(): Flow<List<EnvironmentManifestRoom>> {
+    fun observeEnvironments(): Flow<List<EnvironmentManifestRoom>> {
         val environmentManifestList = environmentDao.observeEnvironments()
         return environmentManifestList
     }

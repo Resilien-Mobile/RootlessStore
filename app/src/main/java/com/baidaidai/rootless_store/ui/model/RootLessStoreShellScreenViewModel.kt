@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
-import com.baidaidai.rootless_store.domain.shell.usecase.GetADBShellStatusUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.GetShellContextPreferencesUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.ObserveShellContextPreferencesUseCase
 import com.baidaidai.rootless_store.application.shell.RunCommandUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.SetShellJumpToDirectoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,23 +22,23 @@ import javax.inject.Inject
 class RootLessStoreShellScreenViewModel @Inject constructor(
     private val runCommandUseCase: RunCommandUseCase,
     private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
-    private val getADBShellStatusUseCase: GetADBShellStatusUseCase,
-    getShellContextPreferencesUseCase: GetShellContextPreferencesUseCase,
+    private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
+    observeShellContextPreferencesUseCase: ObserveShellContextPreferencesUseCase,
     private val setShellJumpToDirectoryUseCase: SetShellJumpToDirectoryUseCase
 ) : ViewModel(){
 
     private var _shellOutputList = MutableStateFlow(emptyList<ShellResult>())
     private val _rootShellStatus = MutableStateFlow(getRootShellStatusUseCase())
     private var _lastCommandContent = MutableStateFlow("")
-    val shellContextPreferences = getShellContextPreferencesUseCase()
+    val shellContextPreferences = observeShellContextPreferencesUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = getShellContextPreferencesUseCase.defaultPreferences
+            initialValue = observeShellContextPreferencesUseCase.defaultPreferences
         )
     val shellOutputList = _shellOutputList.asStateFlow()
     val rootShellStatus = _rootShellStatus.asStateFlow()
-    val adbShellStatus = getADBShellStatusUseCase()
+    val adbShellStatus = observeAdbShellStatusUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

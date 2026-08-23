@@ -6,7 +6,7 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetPluginStatusUseCase @Inject constructor(
+class ObservePluginStatusUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl
 ){
     operator fun invoke(): Flow<PluginStatus> = flow {

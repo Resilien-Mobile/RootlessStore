@@ -12,7 +12,7 @@ import kotlinx.coroutines.isActive
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class GetNetDashboardConfigUseCase @Inject constructor(
+class ObserveNetDashboardConfigUseCase @Inject constructor(
     private val storeStatusGatewayImpl: StoreStatusGatewayImpl
 ) {
     operator fun invoke(): Flow<NetDashboardConfig> {

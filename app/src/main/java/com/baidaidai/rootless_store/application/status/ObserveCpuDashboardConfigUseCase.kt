@@ -13,7 +13,7 @@ import kotlinx.coroutines.isActive
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class GetCpuDashboardConfigUseCase @Inject constructor(
+class ObserveCpuDashboardConfigUseCase @Inject constructor(
     private val storeStatusGatewayImpl: StoreStatusGatewayImpl,
 ) {
     operator fun invoke(): Flow<CpuDashboardConfig> {

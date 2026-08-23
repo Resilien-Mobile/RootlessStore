@@ -18,7 +18,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     // Read
-    val getSettingScreenPreference: Flow<SettingScreenPreference> =
+    val settingScreenPreferences: Flow<SettingScreenPreference> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -37,7 +37,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
                 )
             }
 
-    fun getEnableAutoUpdatePreference(): Flow<Boolean> =
+    fun observeEnableAutoUpdatePreference(): Flow<Boolean> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -50,7 +50,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
                 preferences[ENABLE_AUTO_UPDATE] ?: false
             }
 
-    fun getEnableNotifyPluginStatus(): Flow<Boolean> =
+    fun observeEnableNotifyPluginStatus(): Flow<Boolean> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {

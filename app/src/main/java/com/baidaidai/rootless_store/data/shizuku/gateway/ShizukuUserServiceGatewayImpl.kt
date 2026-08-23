@@ -50,7 +50,7 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         return shizukuUserService
     }
 
-    fun getShizukuUserServiceAvailableStatus(): Flow<Boolean> = flow {
+    fun observeShizukuUserServiceAvailability(): Flow<Boolean> = flow {
         while (true){
             emit(shizukuUserService != null)
             delay(3000.milliseconds)

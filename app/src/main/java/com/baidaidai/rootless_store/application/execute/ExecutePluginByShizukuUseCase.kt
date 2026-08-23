@@ -25,7 +25,7 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
     ): Flow<ExecuteResult> {
 
         val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginID)!!
-        val enableMonitor = settingPreferenceRepositoryImpl.getEnableNotifyPluginStatus().first()
+        val enableMonitor = settingPreferenceRepositoryImpl.observeEnableNotifyPluginStatus().first()
 
         // Dispatch to PluginExecuteGateway.executePluginWithoutEnvironmentByShizuku
         var pidSaved = false

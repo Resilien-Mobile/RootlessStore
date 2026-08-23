@@ -136,7 +136,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
         return pluginSourceDao.findPluginSourceById(sourceID)
     }
 
-    override fun getAllPluginSources(): Flow<List<PluginSourceInfo>?> {
+    override fun observePluginSources(): Flow<List<PluginSourceInfo>?> {
         val pluginSourceEntry = pluginSourceDao.observePluginSources()
 
         val pluginSource = pluginSourceEntry.map { list ->
@@ -148,7 +148,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
         return pluginSource
     }
 
-    override fun getPluginSourcesCount(): Flow<Int> {
+    override fun observePluginSourceCount(): Flow<Int> {
         return pluginSourceDao.observePluginSourceCount()
     }
 

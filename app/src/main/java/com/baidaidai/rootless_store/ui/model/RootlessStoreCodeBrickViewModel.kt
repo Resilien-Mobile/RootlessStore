@@ -8,7 +8,7 @@ import com.baidaidai.rootless_store.application.codebrick.AddJsonCodeBrickUseCas
 import com.baidaidai.rootless_store.application.codebrick.ConvertCodeBrickToPluginUseCase
 import com.baidaidai.rootless_store.application.codebrick.DeleteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.GetAllCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ObserveCodeBricksUseCase
 import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
@@ -36,7 +36,7 @@ data class CodeBrickScreenUIState(
 @HiltViewModel
 class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val addCodeBrickUseCase: AddCodeBrickUseCase,
-    private val getAllCodeBrickUseCase: GetAllCodeBrickUseCase,
+    private val observeCodeBricksUseCase: ObserveCodeBricksUseCase,
     private val executeCodeBrickUseCase: ExecuteCodeBrickUseCase,
     private val deleteCodeBrickUseCase: DeleteCodeBrickUseCase,
     private val updateCodeBrickUseCase: UpdateCodeBrickUseCase,
@@ -50,7 +50,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val _codeBrickEvent = MutableSharedFlow<CodeBrickError?>()
     val codeBrickEvent = _codeBrickEvent.asSharedFlow()
 
-    val codeBrickConfigList = getAllCodeBrickUseCase()
+    val codeBrickConfigList = observeCodeBricksUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),

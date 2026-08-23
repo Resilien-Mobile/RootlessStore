@@ -50,13 +50,13 @@ class PluginRepositoryImpl @Inject constructor(
         return pluginInfo
     }
 
-    override fun getWholePluginInfo(): Flow<List<PluginManifestRoom>> {
+    override fun observePlugins(): Flow<List<PluginManifestRoom>> {
         val pluginManifestRoomList = pluginDao.observePlugins()
 
         return pluginManifestRoomList
     }
 
-    override fun getPluginInfoCount(): Flow<Int> {
+    override fun observePluginCount(): Flow<Int> {
         return pluginDao.observePluginCount()
     }
 
