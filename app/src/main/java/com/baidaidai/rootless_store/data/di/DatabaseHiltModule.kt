@@ -13,10 +13,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataBaseHiltModule {
+object DatabaseHiltModule {
     @Provides
     @Singleton
-    fun provideRootlessStoreDataBase(
+    fun provideRootlessStoreDatabase(
         @ApplicationContext
         context: Context
     ): RootlessStoreDatabase{

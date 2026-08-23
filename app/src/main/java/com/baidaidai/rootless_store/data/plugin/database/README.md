@@ -24,11 +24,11 @@ Room 是基于 SQLite 的 Jetpack 持久化层，主要提供：
 
 ---
 
-## DataBase
+## Database
 `AppDatabase` 是 Room 数据库定义：
 - 包含 `PluginEntity`
 - 版本号为 1，`exportSchema = true`
 - 通过 `pluginDao()` 暴露 DAO
 
-通过 `Room.databaseBuilder(...)` 创建数据库实例。`PluginInfoDataBase.kt`
+通过 `Room.databaseBuilder(...)` 创建数据库实例。`RootlessStoreDatabase.kt`
 里注释掉的 Hilt 模块提供了一个常见配置示例。
