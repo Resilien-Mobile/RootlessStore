@@ -69,7 +69,7 @@ fun RootlessStoreStartScreenContainer(
     pluginScreenViewModel: RootlessStorePluginScreenViewModel = hiltViewModel(),
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel = hiltViewModel(),
     fileIntentUri:Uri?,
-    onHandlerEnded:()-> Unit
+    onFileIntentConsumed:()-> Unit
 ){
     // VM & VM Data
     val marketScreenViewModel = hiltViewModel<RootlessStoreMarketScreenViewModel>()
@@ -162,21 +162,21 @@ fun RootlessStoreStartScreenContainer(
         navigationBackStack.add(PluginScreenKey)
         pluginScreenViewModel.setPluginPackageUri(uri)
         pluginScreenViewModel.installPlugin()
-        onHandlerEnded()
+        onFileIntentConsumed()
     }
 
 
     @Composable
-    fun executeViewModelBuilder(pluginId: String): RootlessStoreExecuteScreenViewModel {
+    fun resolveExecuteScreenViewModel(pluginId: String): RootlessStoreExecuteScreenViewModel {
         val viewModel = hiltViewModel<RootlessStoreExecuteScreenViewModel>(viewModelStoreOwner = viewModelStoreOwner, key = pluginId)
         return viewModel
     }
 
     val currentExecuteViewModel =
         if (currentDestination is ExecuteScreenKey) {
-            executeViewModelBuilder(currentDestination.pluginId)
+            resolveExecuteScreenViewModel(currentDestination.pluginId)
         }else{
-            executeViewModelBuilder("abc")
+            resolveExecuteScreenViewModel("abc")
         }
 
     Row(modifier = Modifier.fillMaxSize()) {

@@ -32,7 +32,7 @@ abstract class RootlessStoreTileService: TileService() {
 
         serviceScope.launch {
             _codeBrickConfig = findCodeBrickByTileIndexUseCase(tileIndex)
-            updateTitleContent()
+            refreshTileContent()
         }
     }
 
@@ -52,7 +52,7 @@ abstract class RootlessStoreTileService: TileService() {
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun updateTitleContent(){
+    private fun refreshTileContent(){
         val codeBrickConfig = _codeBrickConfig
 
         if (codeBrickConfig != null){
