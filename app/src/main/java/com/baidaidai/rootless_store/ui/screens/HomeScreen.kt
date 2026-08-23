@@ -134,7 +134,7 @@ fun HomeScreen(
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
                 RootlessStoreVersionCheckerContainer(
                     latestVersionNumber = latestVersionNumber!!,
-                    modifier = getBasicWidthModifier()
+                    modifier = resolveBasicWidthModifier()
                 )
             }
 
@@ -143,7 +143,7 @@ fun HomeScreen(
                 hosterStatus = rootlessStoreHosterStatus,
                 onChipClick = onChipClick,
                 onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility,
-                modifier = getBasicWidthModifier()
+                modifier = resolveBasicWidthModifier()
             )
 
             /* Version Checker */
@@ -151,30 +151,30 @@ fun HomeScreen(
             if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
                 RootlessStoreVersionCheckerContainer(
                     latestVersionNumber = latestVersionNumber!!,
-                    modifier = getBasicWidthModifier()
+                    modifier = resolveBasicWidthModifier()
                 )
             }
             // 如果height紧凑，则可用此布局，反之不可使用
             if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
                 /* How to Make Plugin */
-                HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+                HowToDevelopRootlessStorePlugin(resolveBasicWidthModifier())
             }
 
             /* Hoster Status */
             RootlessStoreHosterStatusBoard(
                 hosterStatus = rootlessStoreHosterStatus,
-                modifier = getBasicWidthModifier()
+                modifier = resolveBasicWidthModifier()
             )
 
             if (rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact){
                 /* How to Make Plugin */
-                HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+                HowToDevelopRootlessStorePlugin(resolveBasicWidthModifier())
             }
 
 
             HomeScreenCpuDashboardCard(
                 cpuDashboardConfig = cpuDashboardConfig,
-                modifier = getBasicWidthModifier(Modifier.height(280.dp))
+                modifier = resolveBasicWidthModifier(Modifier.height(280.dp))
             )
 
             HomeScreenNetworkDashboard(
@@ -183,7 +183,7 @@ fun HomeScreen(
                 modifier = if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
                     Modifier.fillMaxHeight()
                 }else{
-                    getBasicWidthModifier()
+                    resolveBasicWidthModifier()
                 }
             )
 

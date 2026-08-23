@@ -42,7 +42,7 @@ import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificati
 object StartScreenNecessaryComponents {
 
     @Composable
-    private fun getNavBarItemsSpecList(): List<NavBarItemSpec>{
+    private fun listNavigationBarItems(): List<NavBarItemSpec>{
         return listOf(
             NavBarItemSpec(
                 number = 0,
@@ -107,7 +107,7 @@ object StartScreenNecessaryComponents {
         currentDestination: RootlessNavigationKey,
         onNavigate:(RootlessNavigationKey)-> Unit
     ) {
-        val navigationBarRenderingList = getNavBarItemsSpecList()
+        val navigationBarRenderingList = listNavigationBarItems()
         NavigationBar {
             navigationBarRenderingList.forEach { navBarItemSpec ->
                 NavigationBarItem(
@@ -127,7 +127,7 @@ object StartScreenNecessaryComponents {
         currentDestination: RootlessNavigationKey,
         onNavigate:(RootlessNavigationKey)-> Unit
     ) {
-        val navigationBarRenderingList = getNavBarItemsSpecList()
+        val navigationBarRenderingList = listNavigationBarItems()
         NavigationRail(
         ){
             Column(
@@ -162,7 +162,7 @@ object StartScreenNecessaryComponents {
         onNavigate:(RootlessNavigationKey)-> Unit
     ) {
 
-        val navBarItemsList = getNavBarItemsSpecList()
+        val navBarItemsList = listNavigationBarItems()
 
         NavigationRail{
             Column(

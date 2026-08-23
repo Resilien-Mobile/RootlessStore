@@ -56,7 +56,7 @@ class KernelSuCompatible(
 
     @JavascriptInterface
     fun listPackages(type: String?): String {
-        val packageInfoList = getInstalledPackages()
+        val packageInfoList = listInstalledPackages()
 
         // Filter, ensure every package is either system or user
         val packageNameList = packageInfoList
@@ -74,7 +74,7 @@ class KernelSuCompatible(
         return JSONArray(packageNameList).toString()
     }
 
-    private fun getInstalledPackages(): List<PackageInfo> {
+    private fun listInstalledPackages(): List<PackageInfo> {
         val packageManager = context.packageManager
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

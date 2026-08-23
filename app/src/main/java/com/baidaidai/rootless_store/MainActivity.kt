@@ -82,12 +82,12 @@ class MainActivity : ComponentActivity(){
 
         // save Intent if hot-start from an implicit invocation
         if (fileIntentUri == null){
-            handleFileIntent(intent)
+            setFileIntentUriFromIntent(intent)
         }
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        applyNotificationChannel(this)
+        registerNotificationChannel(this)
 
         setContent {
             val context = LocalContext.current
@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity(){
                 ) {
                     RootlessStoreStartScreenContainer(
                         fileIntentUri = fileIntentUri,
-                        onHandlerEnded = {
+                        onFileIntentConsumed = {
                             fileIntentUri = null
                         }
                     )
@@ -114,10 +114,10 @@ class MainActivity : ComponentActivity(){
         setIntent(intent)
 
         // save Intent if cold-start from an implicit invocation
-        handleFileIntent(intent)
+        setFileIntentUriFromIntent(intent)
     }
 
-    private fun handleFileIntent(intent: Intent?) {
+    private fun setFileIntentUriFromIntent(intent: Intent?) {
         if (intent?.action != Intent.ACTION_SEND) {
             this.fileIntentUri = null
         }
@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity(){
 
         fileIntentUri = uri
     }
-    private fun applyNotificationChannel(context: Context){
+    private fun registerNotificationChannel(context: Context){
 
         val channel_id = context.getString(R.string.notification_channel_id)
 
