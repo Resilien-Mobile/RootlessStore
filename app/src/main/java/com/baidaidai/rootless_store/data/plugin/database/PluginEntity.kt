@@ -15,7 +15,7 @@ data class PluginEntity(
      * pluginId is primaryKey
      *
      * See more infos
-     * @example com.baidaidai.rootless_store.domain.pluginManiFest.model.PluginMainFest
+     * @example com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
     */
     @PrimaryKey
     @ColumnInfo(name = "pluginID")

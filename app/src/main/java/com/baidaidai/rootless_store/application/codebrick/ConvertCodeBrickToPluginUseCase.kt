@@ -88,7 +88,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
         pluginGatewayImpl.setPluginEntryPointExecutable(pluginManifestLocal)
 
         // Insert result to PluginRepositoryImpl
-        pluginRepositoryImpl.insertPlugin(pluginManifestLocal)
+        pluginRepositoryImpl.addPlugin(pluginManifestLocal)
     }
 
     private suspend fun convertShellCodeBrick(
@@ -152,7 +152,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
         }
 
         // Insert result to PluginRepositoryImpl
-        pluginRepositoryImpl.insertPlugin(pluginManifestLocal)
+        pluginRepositoryImpl.addPlugin(pluginManifestLocal)
 
     }
 
