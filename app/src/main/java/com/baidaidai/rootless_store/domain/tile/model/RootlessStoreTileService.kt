@@ -24,14 +24,14 @@ abstract class RootlessStoreTileService: TileService() {
 
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private var _codeBrickConfig: CodeBrickConfig? = null
+    private var codeBrickConfig: CodeBrickConfig? = null
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartListening() {
         super.onStartListening()
 
         serviceScope.launch {
-            _codeBrickConfig = findCodeBrickByTileIndexUseCase(tileIndex)
+            codeBrickConfig = findCodeBrickByTileIndexUseCase(tileIndex)
             refreshTileContent()
         }
     }
@@ -40,7 +40,7 @@ abstract class RootlessStoreTileService: TileService() {
         super.onClick()
 
         serviceScope.launch {
-            val codeBrickConfig = _codeBrickConfig
+            val codeBrickConfig = codeBrickConfig
             if (codeBrickConfig != null){
                 val resultFlow = executeCodeBrickUseCase(codeBrickConfig)
                 resultFlow.collect {
@@ -53,7 +53,7 @@ abstract class RootlessStoreTileService: TileService() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun refreshTileContent(){
-        val codeBrickConfig = _codeBrickConfig
+        val codeBrickConfig = codeBrickConfig
 
         if (codeBrickConfig != null){
             qsTile?.apply {

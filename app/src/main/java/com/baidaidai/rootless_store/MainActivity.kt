@@ -132,14 +132,14 @@ class MainActivity : ComponentActivity(){
     }
     private fun registerNotificationChannel(context: Context){
 
-        val channel_id = context.getString(R.string.notification_channel_id)
+        val channelId = context.getString(R.string.notification_channel_id)
 
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.
         val name = "插件存活通知"
         val descriptionText = "当插件因为各种原因死掉了，Rootless Store将会提醒你"
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel(channel_id, name, importance).apply {
+        val channel = NotificationChannel(channelId, name, importance).apply {
             description = descriptionText
         }
         // Register the channel with the system.

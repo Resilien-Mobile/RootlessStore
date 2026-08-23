@@ -31,7 +31,7 @@ class NotificationGatewayImpl @Inject constructor(
 
         val pendingIntent = PendingIntent.getActivity(context,0,intent,PendingIntent.FLAG_IMMUTABLE)
 
-        val channel_id = context.getString(R.string.notification_channel_id)
+        val channelId = context.getString(R.string.notification_channel_id)
 
         if (
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
@@ -42,7 +42,7 @@ class NotificationGatewayImpl @Inject constructor(
         ) {
             return
         }
-        val notification = NotificationCompat.Builder(context, channel_id)
+        val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.material_symbols_directions_run)
             .setContentTitle(title)
             .setContentText(message)

@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCap
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReZipOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
@@ -20,7 +20,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemReZipOperatorGatewayImpl: AndroidFileSystemReZipOperatorGatewayImpl,
+    private val androidFileSystemRezipOperatorGatewayImpl: AndroidFileSystemRezipOperatorGatewayImpl,
     private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
@@ -124,7 +124,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
 
         // Re-Zip Temporary Shell Plugin Package Directory to _template_.zip
         val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
-        androidFileSystemReZipOperatorGatewayImpl.rezipFromFile(
+        androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
             originPluginFile = temporaryShellPluginPackageDirectory,
             targetZipFile = shellPluginStagingFile
         )

@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.application.plugin
 import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReZipOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemSearchOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
@@ -16,7 +16,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemSearchOperatorGatewayImpl: AndroidFileSystemSearchOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemReZipOperatorGatewayImpl: AndroidFileSystemReZipOperatorGatewayImpl,
+    private val androidFileSystemRezipOperatorGatewayImpl: AndroidFileSystemRezipOperatorGatewayImpl,
     private val androidFileSystemShareOperatorGatewayImpl: AndroidFileSystemShareOperatorGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
@@ -45,7 +45,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
         val zipFile = androidFileSystemCreateOperatorGatewayImpl.resolveChildFile(defaultPluginCacheDirectory,"${pluginManifestRoom.pluginPackageName}.zip")
 
         // Write Zip Byte
-        androidFileSystemReZipOperatorGatewayImpl.rezipFromFile(
+        androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
             originPluginFile = File(pluginPackageDirectory),
             targetZipFile = zipFile
         )

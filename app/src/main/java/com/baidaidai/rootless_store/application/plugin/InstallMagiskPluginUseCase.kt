@@ -7,8 +7,8 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCre
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReZipOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnZipOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
@@ -24,8 +24,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemUnZipOperatorGatewayImpl: AndroidFileSystemUnZipOperatorGatewayImpl,
-    private val androidFileSystemReZipOperatorGatewayImpl: AndroidFileSystemReZipOperatorGatewayImpl,
+    private val androidFileSystemUnzipOperatorGatewayImpl: AndroidFileSystemUnzipOperatorGatewayImpl,
+    private val androidFileSystemRezipOperatorGatewayImpl: AndroidFileSystemRezipOperatorGatewayImpl,
     private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl
@@ -92,7 +92,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             ) // Delete _template_.zip, Avoid old content
             magiskTemplateDirectory.mkdirs()
 
-            androidFileSystemUnZipOperatorGatewayImpl.unzipFromFileToDirectory(
+            androidFileSystemUnzipOperatorGatewayImpl.unzipFromFileToDirectory(
                 originFileUri = uri,
                 targetDirectory = magiskTemplateDirectory
             )
@@ -103,7 +103,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
                 content = pluginManifestJson
             )
 
-            androidFileSystemReZipOperatorGatewayImpl.rezipFromFile(
+            androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
                 originPluginFile = magiskTemplateDirectory,
                 targetZipFile = magiskTemplateZipFile
             )
