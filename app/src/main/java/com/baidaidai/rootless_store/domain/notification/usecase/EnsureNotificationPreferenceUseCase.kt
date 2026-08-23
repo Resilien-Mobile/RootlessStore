@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.data.notification.repository.NotificationPre
 import com.baidaidai.rootless_store.domain.notification.model.NotificationPreference
 import javax.inject.Inject
 
-class AddNotificationPreferenceUseCase @Inject constructor(
+class EnsureNotificationPreferenceUseCase @Inject constructor(
     private val notificationPreferenceRepositoryImpl: NotificationPreferenceRepositoryImpl
 ) {
     suspend operator fun invoke(
@@ -21,7 +21,7 @@ class AddNotificationPreferenceUseCase @Inject constructor(
                 selfBuiltServer = selfBuiltServer,
                 isCriticalWarningEnabled = isWarningNotificationEnabled
             )
-            notificationPreferenceRepositoryImpl.insertNotificationPreference(newNotificationPreference)
+            notificationPreferenceRepositoryImpl.addNotificationPreference(newNotificationPreference)
         }else{
             notificationPreferenceRepositoryImpl.updateNotificationPreference(
                 apiKey = barkApiKey,

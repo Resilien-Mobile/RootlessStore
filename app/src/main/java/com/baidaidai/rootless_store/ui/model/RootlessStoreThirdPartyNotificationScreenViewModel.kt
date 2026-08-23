@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.notification.usecase.AddNotificationPreferenceUseCase
+import com.baidaidai.rootless_store.domain.notification.usecase.EnsureNotificationPreferenceUseCase
 import com.baidaidai.rootless_store.domain.notification.usecase.FindNotificationPreferenceUseCase
 import com.baidaidai.rootless_store.ui.uistate.RootlessStoreThirdPartyNotificationScreenUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootlessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
-    private val addNotificationPreferenceUseCase: AddNotificationPreferenceUseCase,
+    private val ensureNotificationPreferenceUseCase: EnsureNotificationPreferenceUseCase,
     private val findNotificationPreferenceUseCase: FindNotificationPreferenceUseCase
 ) : ViewModel() {
 
@@ -53,7 +53,7 @@ class RootlessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val uiState = thirdPartyNotificationScreenUiState.value
 
-            addNotificationPreferenceUseCase(
+            ensureNotificationPreferenceUseCase(
                 barkApiKey = uiState.barkApiKey,
                 notificationTitle = uiState.notificationTitle,
                 selfBuiltServer = uiState.selfBuiltServer,
