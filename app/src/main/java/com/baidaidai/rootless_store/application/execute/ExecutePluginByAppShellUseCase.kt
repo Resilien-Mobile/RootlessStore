@@ -30,8 +30,8 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
         val enableMonitor = settingPreferenceRepositoryImpl.observeEnableNotifyPluginStatus().first()
 
         var pidSaved = false
-        val pluginExecuteEntryPoint = androidFileSystemCapabilityGatewayImpl.getPluginEntryPoint(pluginManifestRoom)
-        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
+        val pluginExecuteEntryPoint = androidFileSystemCapabilityGatewayImpl.resolvePluginEntryPoint(pluginManifestRoom)
+        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom)
         return pluginExecuteGatewayImpl
             .executePluginEntryPoint(
                 pluginExecuteEntryPoint,

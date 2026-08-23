@@ -48,13 +48,13 @@ class EnvironmentGatewayImpl @Inject constructor(
     }
 
     // Environment Config Getter
-    fun getEnvironmentRuntimePATH(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentRuntimePath(environmentManifest: EnvironmentManifest): String {
         val environmentPackageName = environmentManifest.environmentPackageName
 
         return "$defaultEnvironmentLocation/$environmentPackageName"
     }
 
-    fun getEnvironmentLDPATH(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentLdPath(environmentManifest: EnvironmentManifest): String {
         val environmentPackageName = environmentManifest.environmentPackageName
 
         return environmentManifest.ldLibraryPath.joinToString(":") { libraryPath ->
@@ -62,7 +62,7 @@ class EnvironmentGatewayImpl @Inject constructor(
         }
     }
 
-    fun getEnvironmentConfig(environmentManifest: EnvironmentManifest): Map<String, String> {
+    fun resolveEnvironmentConfig(environmentManifest: EnvironmentManifest): Map<String, String> {
         return environmentManifest.env
     }
 

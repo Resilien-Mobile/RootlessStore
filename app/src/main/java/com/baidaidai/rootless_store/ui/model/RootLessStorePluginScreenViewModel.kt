@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.application.environment.GetEnvironmentShareLinkUseCase
+import com.baidaidai.rootless_store.application.environment.ResolveEnvironmentShareUriUseCase
 import com.baidaidai.rootless_store.application.module.InstallModuleUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
@@ -16,8 +16,8 @@ import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentsU
 import com.baidaidai.rootless_store.application.environment.SetEnvironmentEnabledUseCase
 import com.baidaidai.rootless_store.application.plugin.SetPluginEnabledUseCase
 import com.baidaidai.rootless_store.application.environment.UninstallEnvironmentUseCase
-import com.baidaidai.rootless_store.application.plugin.GetPluginShareLinkUseCase
-import com.baidaidai.rootless_store.application.plugin.GetPluginWebUiUriUseCase
+import com.baidaidai.rootless_store.application.plugin.ResolvePluginShareUriUseCase
+import com.baidaidai.rootless_store.application.plugin.ResolvePluginWebUiUriUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,9 +41,9 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
     private val uninstallPluginUseCase: UninstallPluginUseCase,
     private val uninstallEnvironmentUseCase: UninstallEnvironmentUseCase,
     private val abortPluginProcessUseCase: AbortPluginProcessUseCase,
-    private val getPluginShareLinkUseCase: GetPluginShareLinkUseCase,
-    private val getPluginWebUiUriUseCase: GetPluginWebUiUriUseCase,
-    private val getEnvironmentShareLinkUseCase: GetEnvironmentShareLinkUseCase,
+    private val resolvePluginShareUriUseCase: ResolvePluginShareUriUseCase,
+    private val resolvePluginWebUiUriUseCase: ResolvePluginWebUiUriUseCase,
+    private val resolveEnvironmentShareUriUseCase: ResolveEnvironmentShareUriUseCase,
     observePluginCountUseCase: ObservePluginCountUseCase
 ): ViewModel() {
 
@@ -131,24 +131,24 @@ class RootLessStorePluginScreenViewModel @Inject constructor(
         _badgeShowState.update { !it }
     }
 
-    fun getPluginShareLink(
+    fun resolvePluginShareUri(
         pluginManifestRoom: PluginManifestRoom
     ): Uri {
-        val shareLink = getPluginShareLinkUseCase(pluginManifestRoom)
+        val shareLink = resolvePluginShareUriUseCase(pluginManifestRoom)
         return shareLink
     }
 
-    fun getPluginWebUiUri(
+    fun resolvePluginWebUiUri(
         pluginManifestRoom: PluginManifestRoom
     ): String {
-        val webUiUri = getPluginWebUiUriUseCase(pluginManifestRoom)
+        val webUiUri = resolvePluginWebUiUriUseCase(pluginManifestRoom)
         return webUiUri
     }
 
-    fun getEnvironmentShareLink(
+    fun resolveEnvironmentShareUri(
         environmentManifestRoom: EnvironmentManifestRoom
     ): Uri {
-        val shareLink = getEnvironmentShareLinkUseCase(environmentManifestRoom)
+        val shareLink = resolveEnvironmentShareUriUseCase(environmentManifestRoom)
         return shareLink
     }
 

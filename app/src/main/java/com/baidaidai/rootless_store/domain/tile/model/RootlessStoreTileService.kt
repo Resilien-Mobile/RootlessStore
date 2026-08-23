@@ -4,7 +4,7 @@ import android.os.Build
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.GetCodeBrickConfigByTileIndexUseCase
+import com.baidaidai.rootless_store.application.codebrick.FindCodeBrickByTileIndexUseCase
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ abstract class RootlessStoreTileService: TileService() {
     abstract val tileIndex: Int
 
     @Inject
-    lateinit var getCodeBrickConfigByTileIndexUseCase: GetCodeBrickConfigByTileIndexUseCase
+    lateinit var findCodeBrickByTileIndexUseCase: FindCodeBrickByTileIndexUseCase
 
     @Inject
     lateinit var executeCodeBrickUseCase: ExecuteCodeBrickUseCase
@@ -31,7 +31,7 @@ abstract class RootlessStoreTileService: TileService() {
         super.onStartListening()
 
         serviceScope.launch {
-            _codeBrickConfig = getCodeBrickConfigByTileIndexUseCase(tileIndex)
+            _codeBrickConfig = findCodeBrickByTileIndexUseCase(tileIndex)
             updateTitleContent()
         }
     }

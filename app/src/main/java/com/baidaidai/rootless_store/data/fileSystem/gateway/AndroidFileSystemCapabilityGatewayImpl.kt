@@ -65,13 +65,13 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val shellPluginStagingDirectory = File("/sdcard/RootlessStore")
         return shellPluginStagingDirectory
     } // /sdcard/RootlessStore
-    fun getPluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String{
+    fun resolvePluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String{
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         val pluginEntryPoint = pluginManifestRoom.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     }  // /File/Plugin/PLUGIN/entry
-    fun getPluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
@@ -84,7 +84,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun getCacheEnvironmentDirectoryFile(): File{
         return getEnvironmentCacheDirectory()
     } // /Cache/Environment: File
-    fun getEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
+    fun resolveEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
         val environmentPackageName = environmentManifestRoom.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
@@ -458,7 +458,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Share FS Operator
-    fun getShareUriFromFile(file: File): Uri{
+    fun resolveShareUriFromFile(file: File): Uri{
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
 

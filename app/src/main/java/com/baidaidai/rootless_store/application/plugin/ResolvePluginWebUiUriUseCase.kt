@@ -4,13 +4,13 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDef
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import javax.inject.Inject
 
-class GetPluginWebUiUriUseCase @Inject constructor(
+class ResolvePluginWebUiUriUseCase @Inject constructor(
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl
 ) {
     operator fun invoke(
         pluginManifestRoom: PluginManifestRoom
     ): String {
-        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.getPluginPackageDirectory(
+        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.resolvePluginPackageDirectory(
             pluginManifestRoom
         )
         val webUIEntryPoint = pluginManifestRoom.webUIEntryPoint!!

@@ -12,7 +12,7 @@ import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import java.io.File
 import javax.inject.Inject
 
-class GetPluginShareLinkUseCase @Inject constructor(
+class ResolvePluginShareUriUseCase @Inject constructor(
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemSearchOperatorGatewayImpl: AndroidFileSystemSearchOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
@@ -25,13 +25,13 @@ class GetPluginShareLinkUseCase @Inject constructor(
     ): Uri {
 
         if (pluginManifestRoom.requiredEnvironment == HosterOverallStatus.ADB) {
-            return getShellPluginShareLink(pluginManifestRoom)
+            return resolveShellPluginShareUri(pluginManifestRoom)
         }
 
         val defaultPluginCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getCachePluginDirectoryFile()
 
         // Get plugin package directory -> /file/Plugin/PLUGIN_DIRECTORY
-        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.getPluginPackageDirectory(pluginManifestRoom)
+        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom)
 
         // Detect if cache/plugin available -> /cache/Plugin
         val pluginCacheDirectoryAvailable = androidFileSystemSearchOperatorGatewayImpl.confirmPluginCacheExists()
@@ -54,13 +54,13 @@ class GetPluginShareLinkUseCase @Inject constructor(
 //      TODO("Check Zip integrity")
 
         // Convert from zip to ShareLink
-        val shareLink = androidFileSystemShareOperatorGatewayImpl.getShareUriFromFile(zipFile)
+        val shareLink = androidFileSystemShareOperatorGatewayImpl.resolveShareUriFromFile(zipFile)
 
         return shareLink
 
     }
 
-    private fun getShellPluginShareLink(
+    private fun resolveShellPluginShareUri(
         pluginManifestRoom: PluginManifestRoom
     ): Uri {
 
@@ -86,7 +86,7 @@ class GetPluginShareLinkUseCase @Inject constructor(
 //      TODO("Check Zip integrity")
 
         // Convert from zip to ShareLink
-        val shareLink = androidFileSystemShareOperatorGatewayImpl.getShareUriFromFile(shellPluginExportZipFile)
+        val shareLink = androidFileSystemShareOperatorGatewayImpl.resolveShareUriFromFile(shellPluginExportZipFile)
 
         return shareLink
 

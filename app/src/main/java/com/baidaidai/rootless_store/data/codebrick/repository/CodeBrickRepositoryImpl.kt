@@ -48,7 +48,7 @@ class CodeBrickRepositoryImpl @Inject constructor(
             }
     }
 
-    suspend fun getCodeBrickConfigByTileIndex(tileIndex: Int): CodeBrickConfig?{
+    suspend fun findCodeBrickByTileIndex(tileIndex: Int): CodeBrickConfig?{
         val codeBrickConfig = codeBrickDao.findCodeBrickByTileIndex(tileIndex)?.toCodeBrickConfig()
         return codeBrickConfig
     }

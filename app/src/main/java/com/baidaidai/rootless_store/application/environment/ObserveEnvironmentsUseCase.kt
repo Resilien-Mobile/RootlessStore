@@ -24,7 +24,7 @@ class ObserveEnvironmentsUseCase @Inject constructor(
 
                 // If user provide icon uri
                 if (environmentManifestRoom.iconURI != null && !uriRegex.containsMatchIn(environmentManifestRoom.iconURI)){
-                    val environmentPackageDirectory = File(androidFileSystemCapabilityGatewayImpl.getEnvironmentPackageDirectory(environmentManifestRoom))
+                    val environmentPackageDirectory = File(androidFileSystemCapabilityGatewayImpl.resolveEnvironmentPackageDirectory(environmentManifestRoom))
                     val environmentIconURI = File(environmentPackageDirectory,environmentManifestRoom.iconURI).toURI()
 
                     environmentManifestRoom.copy(

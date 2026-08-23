@@ -52,38 +52,38 @@ class EnvironmentRepositoryImpl @Inject constructor(
         return environmentManifestList
     }
 
-    suspend fun getAvailableEnvironmentPath(): String {
+    suspend fun resolveEnvironmentPath(): String {
         return environmentDao.observeEnabledEnvironments()
             .first()
             .joinToString(":") { environmentManifest ->
-                environmentGatewayImpl.getEnvironmentRuntimePATH(environmentManifest)
+                environmentGatewayImpl.resolveEnvironmentRuntimePath(environmentManifest)
             }
     }
 
-    suspend fun getAvailableEnvironmentLDPATH(): String {
+    suspend fun resolveEnvironmentLdPath(): String {
         return environmentDao.observeEnabledEnvironments()
             .first()
             .joinToString(":") { environmentManifest ->
-                environmentGatewayImpl.getEnvironmentLDPATH(environmentManifest)
+                environmentGatewayImpl.resolveEnvironmentLdPath(environmentManifest)
             }
     }
 
-    suspend fun getAvailableEnvironmentConfig(): Map<String, String> {
+    suspend fun resolveEnvironmentConfig(): Map<String, String> {
         val environmentManifests = environmentDao.observeEnabledEnvironments().first()
 
         return buildMap {
             environmentManifests.forEach { environmentManifest ->
-                putAll(environmentGatewayImpl.getEnvironmentConfig(environmentManifest))
+                putAll(environmentGatewayImpl.resolveEnvironmentConfig(environmentManifest))
             }
         }
     }
 
-    suspend fun getEnvironmentConfigKeyList(): List<String> {
-        return getAvailableEnvironmentConfig().keys.toList()
+    suspend fun resolveEnvironmentConfigKeys(): List<String> {
+        return resolveEnvironmentConfig().keys.toList()
     }
 
-    suspend fun getEnvironmentConfigValueList(): List<String> {
-        return getAvailableEnvironmentConfig().values.toList()
+    suspend fun resolveEnvironmentConfigValues(): List<String> {
+        return resolveEnvironmentConfig().values.toList()
     }
 
     // Delete

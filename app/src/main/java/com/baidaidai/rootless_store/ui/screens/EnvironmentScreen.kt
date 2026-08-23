@@ -54,7 +54,7 @@ fun EnvironmentScreen(
                 PluginActionContainer(
                     onShareButtonClick = {
 
-                        val shareLink = pluginScreenViewModel.getEnvironmentShareLink(environmentManifestRoom)
+                        val shareLink = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/zip"

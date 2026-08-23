@@ -79,14 +79,14 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
 
-    fun getPluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         val pluginEntryPoint = pluginManifestRoom.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     } // /File/Plugin/PLUGIN/entry
 
-    fun getPluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
@@ -101,7 +101,7 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getEnvironmentCacheDirectory()
     } // /Cache/Environment: File
 
-    fun getEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
+    fun resolveEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
         val environmentPackageName = environmentManifestRoom.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
