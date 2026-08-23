@@ -19,7 +19,7 @@ class RootlessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        getNotificationPreference()
+        loadNotificationPreference()
     }
 
     private val _thirdPartyNotificationScreenUiState = MutableStateFlow(RootlessStoreThirdPartyNotificationScreenUiState())
@@ -62,7 +62,7 @@ class RootlessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
         }
     }
 
-    private fun getNotificationPreference(){
+    private fun loadNotificationPreference(){
         viewModelScope.launch {
             val notificationPreference = findNotificationPreferenceUseCase() ?: return@launch
 

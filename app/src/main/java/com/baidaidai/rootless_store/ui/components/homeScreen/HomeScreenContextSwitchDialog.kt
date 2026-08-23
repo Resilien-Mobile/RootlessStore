@@ -115,7 +115,7 @@ fun HomeScreenContextSwitchDialog(
                     HomeScreenContextSwitchDialogItem(
                         currentSelected = currentSelected.name,
                         onClick = {
-                            homeScreenViewModel.setCurrentExecutionContextSelected(spec.option)
+                            homeScreenViewModel.selectExecutionContext(spec.option)
                         },
                         homeScreenContextSwitchDialogSpec = spec
                     )

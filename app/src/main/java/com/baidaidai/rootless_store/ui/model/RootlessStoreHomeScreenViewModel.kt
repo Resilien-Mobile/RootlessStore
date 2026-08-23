@@ -162,7 +162,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
 
     // Saves the user's selected execute context for now.
     // This is only for the UI and is not saved to preferences yet.
-    fun setCurrentExecutionContextSelected(hosterOverallStatus: HosterOverallStatus) {
+    fun selectExecutionContext(hosterOverallStatus: HosterOverallStatus) {
         _currentExecutionContextSelected.value = hosterOverallStatus
     }
 
@@ -176,10 +176,10 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         toggleContextDialogVisibility()
     }
 
-    fun revertExecutionContextPreference() {
+    fun resetExecutionContextPreference() {
         viewModelScope.launch {
             setExecutionContextChooserEnabledUseCase(false)
-            setCurrentExecutionContextSelected(hosterOverallStatus = overallStatus.first())
+            selectExecutionContext(hosterOverallStatus = overallStatus.first())
         }
 
         toggleContextDialogVisibility()

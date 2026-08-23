@@ -34,14 +34,14 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
     /**
      *  ClickSourceList
      *  ⬇️
-     *  updatePluginSourceUri
+     *  setPluginSourceEndpoint
      *  ⬇️
      *  navigate("MarketScreen")
      *  ⬇️
      *  remotePluginList
      */
 
-    private var _pluginSourceUri = MutableStateFlow<String?>(null)
+    private val _pluginSourceEndpoint = MutableStateFlow<String?>(null)
 
     // Market Error Handler
     private val _marketEvent = MutableSharedFlow<MarketError?>()
@@ -53,13 +53,13 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
     val currentPluginSource = _currentPluginSource.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val remoteModuleList = _pluginSourceUri
+    val remoteModuleList = _pluginSourceEndpoint
         .filterNotNull()
-        .flatMapLatest { pluginSourceUri ->  // Use the latest value
+        .flatMapLatest { pluginSourceEndpoint ->  // Use the latest value
 
-            Log.d("RootlessStoreMarketScreenViewModel._pluginSourceUri",pluginSourceUri)
+            Log.d("RootlessStoreMarketScreenViewModel._pluginSourceEndpoint",pluginSourceEndpoint)
 
-            fetchRemotePluginsUseCase(pluginSourceUri){ marketError ->
+            fetchRemotePluginsUseCase(pluginSourceEndpoint){ marketError ->
                 // Error Callback Lambda
                 _marketEvent.emit(marketError)
             }
@@ -68,20 +68,20 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
         // cachedIn 一般放最后，缓存 PagingData 以及其上游变换结果
         .cachedIn(viewModelScope)
 
-    fun updatePluginSourceUri(
-        pluginSourceUri: String
+    fun setPluginSourceEndpoint(
+        pluginSourceEndpoint: String
     ){
-        _pluginSourceUri.update { old ->
-            if (pluginSourceUri != old){
-                Log.d("null2",pluginSourceUri)
-                pluginSourceUri
+        _pluginSourceEndpoint.update { old ->
+            if (pluginSourceEndpoint != old){
+                Log.d("null2",pluginSourceEndpoint)
+                pluginSourceEndpoint
             }else{
                 old
             }
         }
     }
 
-    fun updateCurrentPluginSource(
+    fun selectPluginSource(
         pluginSource: PluginSource
     ){
         _currentPluginSource.update { old ->
