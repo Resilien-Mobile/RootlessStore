@@ -8,41 +8,41 @@ import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManif
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface EnvironmentInfoDAO {
+interface EnvironmentDao {
     /**
-     * CURD
+     * CRUD
      */
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOneEnvironmentInfo(environmentInfoEntity: EnvironmentInfoEntity)
+    suspend fun insertEnvironment(environmentInfoEntity: EnvironmentInfoEntity)
 
     // Update
-    @Query("UPDATE environmentInfo SET enabled = :enabled WHERE environmentID = :environmentID")
-    suspend fun updateEnabled(environmentID: String, enabled: Boolean)
+    @Query("UPDATE environmentInfo SET enabled = :isEnabled WHERE environmentID = :environmentId")
+    suspend fun updateEnvironmentEnabled(environmentId: String, isEnabled: Boolean)
 
     // Read
-    @Query("SELECT * FROM environmentInfo WHERE environmentID = :environmentID LIMIT 1")
-    suspend fun getOneEntireEnvironmentInfoByEnvironmentID(environmentID: String): EnvironmentManifestRoom?
+    @Query("SELECT * FROM environmentInfo WHERE environmentID = :environmentId LIMIT 1")
+    suspend fun findEnvironmentById(environmentId: String): EnvironmentManifestRoom?
 
     @Query(value = "SELECT * FROM environmentInfo")
-    fun getEntireEnvironmentManifest(): Flow<List<EnvironmentManifestRoom>>
+    fun observeEnvironments(): Flow<List<EnvironmentManifestRoom>>
 
     @Query("SELECT COUNT(*) FROM environmentInfo")
-    fun getEnvironmentInfoCount(): Flow<Int>
+    fun observeEnvironmentCount(): Flow<Int>
 
     @Query("SELECT COUNT(*) FROM environmentInfo")
-    suspend fun getTotalEnvironmentCount(): Int
+    suspend fun getEnvironmentCount(): Int
 
     @Query("SELECT COUNT(*) FROM environmentInfo WHERE enabled = 1")
     suspend fun getEnabledEnvironmentCount(): Int
 
     @Query("SELECT * FROM environmentInfo WHERE enabled = 1")
-    fun getEnabledEnvironment(): Flow<List<EnvironmentManifestRoom>>
+    fun observeEnabledEnvironments(): Flow<List<EnvironmentManifestRoom>>
 
     // Delete
-    @Query("DELETE FROM environmentInfo WHERE environmentID = :environmentID")
-    suspend fun deleteOneEnvironmentInfoByID(environmentID: String)
+    @Query("DELETE FROM environmentInfo WHERE environmentID = :environmentId")
+    suspend fun deleteEnvironmentById(environmentId: String)
 
     /**
      * Other methods, such as update、disable、configuration change,

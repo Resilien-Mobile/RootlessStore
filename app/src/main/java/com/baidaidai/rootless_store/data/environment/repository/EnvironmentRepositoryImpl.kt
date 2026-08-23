@@ -14,46 +14,46 @@ class EnvironmentRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase,
     private val environmentGatewayImpl: EnvironmentGatewayImpl
 ) {
-    private val environmentInfoDAO = rootlessStoreDatabase.environmentInfoDao()
+    private val environmentDao = rootlessStoreDatabase.environmentDao()
 
     // Create
     suspend fun insertOneEnvironmentInfo(
         environmentManifestLocal: EnvironmentManifestLocal
     ) {
         val environmentInfoEntity = environmentManifestLocal.toEnvironmentInfoEntity()
-        environmentInfoDAO.insertOneEnvironmentInfo(environmentInfoEntity)
+        environmentDao.insertEnvironment(environmentInfoEntity)
     }
     suspend fun insertOneEnvironmentInfo(
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
         val environmentInfoEntity = environmentManifestRemote.toEnvironmentInfoEntity()
-        environmentInfoDAO.insertOneEnvironmentInfo(environmentInfoEntity)
+        environmentDao.insertEnvironment(environmentInfoEntity)
     }
 
     // Update
     suspend fun enableEnvironmentByID(environmentID: String) {
-        environmentInfoDAO.updateEnabled(environmentID = environmentID, enabled = true)
+        environmentDao.updateEnvironmentEnabled(environmentId = environmentID, isEnabled = true)
     }
 
     suspend fun disableEnvironmentByID(environmentID: String) {
-        environmentInfoDAO.updateEnabled(environmentID = environmentID, enabled = false)
+        environmentDao.updateEnvironmentEnabled(environmentId = environmentID, isEnabled = false)
     }
 
     // Read
     suspend fun getOneEnvironmentInfoRoomByID(
         environmentID: String
     ): EnvironmentManifestRoom? {
-        val environmentInfoRoom = environmentInfoDAO.getOneEntireEnvironmentInfoByEnvironmentID(environmentID)
+        val environmentInfoRoom = environmentDao.findEnvironmentById(environmentID)
         return environmentInfoRoom
     }
 
     fun getWholeEnvironmentInfoRoom(): Flow<List<EnvironmentManifestRoom>> {
-        val environmentManifestList = environmentInfoDAO.getEntireEnvironmentManifest()
+        val environmentManifestList = environmentDao.observeEnvironments()
         return environmentManifestList
     }
 
     suspend fun getAvailableEnvironmentPath(): String {
-        return environmentInfoDAO.getEnabledEnvironment()
+        return environmentDao.observeEnabledEnvironments()
             .first()
             .joinToString(":") { environmentManifest ->
                 environmentGatewayImpl.getEnvironmentRuntimePATH(environmentManifest)
@@ -61,7 +61,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     suspend fun getAvailableEnvironmentLDPATH(): String {
-        return environmentInfoDAO.getEnabledEnvironment()
+        return environmentDao.observeEnabledEnvironments()
             .first()
             .joinToString(":") { environmentManifest ->
                 environmentGatewayImpl.getEnvironmentLDPATH(environmentManifest)
@@ -69,7 +69,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     suspend fun getAvailableEnvironmentConfig(): Map<String, String> {
-        val environmentManifests = environmentInfoDAO.getEnabledEnvironment().first()
+        val environmentManifests = environmentDao.observeEnabledEnvironments().first()
 
         return buildMap {
             environmentManifests.forEach { environmentManifest ->
@@ -88,6 +88,6 @@ class EnvironmentRepositoryImpl @Inject constructor(
 
     // Delete
     suspend fun deleteOneEnvironmentInfoByID(environmentID: String) {
-        environmentInfoDAO.deleteOneEnvironmentInfoByID(environmentID)
+        environmentDao.deleteEnvironmentById(environmentID)
     }
 }

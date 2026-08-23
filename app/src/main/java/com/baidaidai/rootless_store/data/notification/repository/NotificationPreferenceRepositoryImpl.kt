@@ -10,14 +10,14 @@ import javax.inject.Inject
 class NotificationPreferenceRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase
 ) {
-    private val notificationPreferenceDAO = rootlessStoreDatabase.notificationPreferenceDao()
+    private val notificationPreferenceDao = rootlessStoreDatabase.notificationPreferenceDao()
 
     // Create
     suspend fun insertOneNotificationPreference(
         notificationPreference: NotificationPreference
     ) {
         val notificationPreferenceEntity = notificationPreference.toNotificationPreferenceEntity()
-        notificationPreferenceDAO.insertOneNotificationPreference(notificationPreferenceEntity)
+        notificationPreferenceDao.insertNotificationPreference(notificationPreferenceEntity)
     }
 
     // Update
@@ -27,7 +27,7 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
         selfBuiltServer: String? = null,
         criticalWarning: Boolean
     ) {
-        notificationPreferenceDAO.updateOneNotificationPreference(
+        notificationPreferenceDao.updateNotificationPreference(
             apiKey = apiKey,
             notificationTitle = notificationTitle,
             selfBuiltServer = selfBuiltServer,
@@ -37,7 +37,7 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
 
     // Read
     suspend fun getOneNotificationPreference(): NotificationPreference? {
-        return notificationPreferenceDAO.getOneNotificationPreference()?.toNotificationPreference()
+        return notificationPreferenceDao.findNotificationPreference()?.toNotificationPreference()
     }
 
     // Delete

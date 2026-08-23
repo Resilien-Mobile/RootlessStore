@@ -44,9 +44,9 @@ class ExecuteOnePluginByAppShellUseCase @Inject constructor(
                     val pid = parsePid(content)
                     if (pid != null) {
                         pidSaved = true
-                        val pluginExecuteStatusDao = rootlessStoreDatabase.pluginExecuteStatusDao()
+                        val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
                         val pluginExecuteStatusEntry = PluginExecuteStatusEntry.fromPluginManifest(pluginManifestRoom,pid)
-                        pluginExecuteStatusDao.insertOnePluginExecuteStatus(pluginExecuteStatusEntry) // 写 DAO
+                        pluginExecutionDao.insertPluginExecution(pluginExecuteStatusEntry) // 写 DAO
                     }
                 }
             }

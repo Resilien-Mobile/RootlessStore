@@ -8,35 +8,35 @@ import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PluginSourceDAO {
+interface PluginSourceDao {
     /**
-     * CURD
+     * CRUD
      */
 
     // Create
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOnePluginSource(pluginSourceEntity: PluginSourceEntity)
+    suspend fun insertPluginSource(pluginSourceEntity: PluginSourceEntity)
 
     // Update
     @Query(
         "UPDATE pluginSource SET sourceName = :sourceName, sourceRemoteEndpoint = :sourceRemoteEndpoint " +
-            "WHERE sourceID = :sourceID"
+            "WHERE sourceID = :sourceId"
     )
-    suspend fun updateOnePluginSource(sourceID: String, sourceName: String, sourceRemoteEndpoint: String)
+    suspend fun updatePluginSource(sourceId: String, sourceName: String, sourceRemoteEndpoint: String)
 
     // Read
-    @Query("SELECT * FROM pluginSource WHERE sourceID = :sourceID LIMIT 1")
-    suspend fun getOnePluginSourceBySourceID(sourceID: String): PluginSourceEntity?
+    @Query("SELECT * FROM pluginSource WHERE sourceID = :sourceId LIMIT 1")
+    suspend fun findPluginSourceById(sourceId: String): PluginSourceEntity?
 
     @Query(value = "SELECT * FROM pluginSource")
-    fun getAllPluginSources(): Flow<List<PluginSourceEntity>?>
+    fun observePluginSources(): Flow<List<PluginSourceEntity>?>
 
     @Query("SELECT COUNT(*) FROM pluginSource")
-    fun getPluginSourcesCount(): Flow<Int>
+    fun observePluginSourceCount(): Flow<Int>
 
     // Delete
     @Delete
-    suspend fun deleteOnePluginSource(pluginSourceEntity: PluginSourceEntity)
+    suspend fun deletePluginSource(pluginSourceEntity: PluginSourceEntity)
 
     /**
      * Other methods will be added in the future.

@@ -45,8 +45,8 @@ class ExecuteOnePluginByShizukuUseCase @Inject constructor(
                         .fromPluginManifest(pluginManifestRoom, pid)
                         .copy(executeContext = HosterOverallStatus.ADB)
                     rootlessStoreDatabase
-                        .pluginExecuteStatusDao()
-                        .insertOnePluginExecuteStatus(pluginExecuteStatusEntry)
+                        .pluginExecutionDao()
+                        .insertPluginExecution(pluginExecuteStatusEntry)
                 }
             }
         }

@@ -25,7 +25,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
     override val appDatabase = rootlessStoreDatabase
 
-    private val pluginSourceDAO = appDatabase.pluginSourceDao()
+    private val pluginSourceDao = appDatabase.pluginSourceDao()
 
     // Create
     override suspend fun insertOnePluginSourceByDefault(
@@ -45,7 +45,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
             val newPluginSourceEntity = PluginSourceEntity.fromPluginSourceLocal(pluginSource)
 
-            pluginSourceDAO.insertOnePluginSource(newPluginSourceEntity)
+            pluginSourceDao.insertPluginSource(newPluginSourceEntity)
 
             return PluginSourceEvent.Success
 
@@ -76,7 +76,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
                         .fromPluginSourceLocal(pluginSource)
                         .copy(userAccessToken = sourceAuthenticationResult.userAccessToken)
 
-                    pluginSourceDAO.insertOnePluginSource(pluginSourceEntity)
+                    pluginSourceDao.insertPluginSource(pluginSourceEntity)
 
                     PluginSourceEvent.Success
                 }
@@ -122,8 +122,8 @@ class PluginSourceRepositoryImpl @Inject constructor(
         sourceName: String,
         sourceRemoteEndpoint: String
     ) {
-        pluginSourceDAO.updateOnePluginSource(
-            sourceID = sourceID,
+        pluginSourceDao.updatePluginSource(
+            sourceId = sourceID,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint
         )
@@ -133,11 +133,11 @@ class PluginSourceRepositoryImpl @Inject constructor(
     override suspend fun getOnePluginSource(
         sourceID: String
     ): PluginSourceEntity? {
-        return pluginSourceDAO.getOnePluginSourceBySourceID(sourceID)
+        return pluginSourceDao.findPluginSourceById(sourceID)
     }
 
     override fun getAllPluginSources(): Flow<List<PluginSourceInfo>?> {
-        val pluginSourceEntry = pluginSourceDAO.getAllPluginSources()
+        val pluginSourceEntry = pluginSourceDao.observePluginSources()
 
         val pluginSource = pluginSourceEntry.map { list ->
             list?.map { content ->
@@ -149,14 +149,14 @@ class PluginSourceRepositoryImpl @Inject constructor(
     }
 
     override fun getPluginSourcesCount(): Flow<Int> {
-        return pluginSourceDAO.getPluginSourcesCount()
+        return pluginSourceDao.observePluginSourceCount()
     }
 
     // Delete
     override suspend fun deleteOnePluginSource(
         pluginSourceEntity: PluginSourceEntity
     ) {
-        pluginSourceDAO.deleteOnePluginSource(pluginSourceEntity)
+        pluginSourceDao.deletePluginSource(pluginSourceEntity)
     }
 
 }

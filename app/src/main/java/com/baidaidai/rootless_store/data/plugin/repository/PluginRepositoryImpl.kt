@@ -13,64 +13,64 @@ class PluginRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase,
 ): PluginCoreRepository {
 
-    private val pluginInfoDAO = rootlessStoreDatabase.pluginInfoDao()
+    private val pluginDao = rootlessStoreDatabase.pluginDao()
 
     // Create
     override suspend fun insertOnePluginInfo(
         pluginManifestLocal: PluginManifestLocal
     ){
         val pluginInfoEntity = pluginManifestLocal.toPluginInfoEntity()
-        pluginInfoDAO.insertOnePluginInfo(pluginInfoEntity)
+        pluginDao.insertPlugin(pluginInfoEntity)
     }
     suspend fun insertOnePluginInfo(
         pluginManifestRemote: PluginManifestRemote
     ){
         val pluginInfoEntity = pluginManifestRemote.toPluginInfoEntity()
-        pluginInfoDAO.insertOnePluginInfo(pluginInfoEntity)
+        pluginDao.insertPlugin(pluginInfoEntity)
     }
 
     // Update
     override suspend fun enablePluginByID(pluginID: String) {
-        pluginInfoDAO.updateEnabled(pluginID = pluginID, enabled = true)
+        pluginDao.updatePluginEnabled(pluginId = pluginID, isEnabled = true)
     }
 
     override suspend fun disablePluginByID(pluginID: String) {
-        pluginInfoDAO.updateEnabled(pluginID = pluginID, enabled = false)
+        pluginDao.updatePluginEnabled(pluginId = pluginID, isEnabled = false)
     }
 
     override suspend fun disableAllPlugin() {
-        pluginInfoDAO.disableAllPlugin()
+        pluginDao.disableAllPlugins()
     }
 
     // READ
     override suspend fun getOnePluginInfo(
         pluginID: String
     ): PluginManifestRoom? {
-        val pluginInfo = pluginInfoDAO.getOneEntirePluginInfoByPluginID(pluginID)
+        val pluginInfo = pluginDao.findPluginById(pluginID)
         return pluginInfo
     }
 
     override fun getWholePluginInfo(): Flow<List<PluginManifestRoom>> {
-        val pluginManifestRoomList = pluginInfoDAO.getEntirePluginManifest()
+        val pluginManifestRoomList = pluginDao.observePlugins()
 
         return pluginManifestRoomList
     }
 
     override fun getPluginInfoCount(): Flow<Int> {
-        return pluginInfoDAO.getPluginInfoCount()
+        return pluginDao.observePluginCount()
     }
 
     override suspend fun getTotalPluginCount(): Int {
-        return pluginInfoDAO.getTotalPluginCount()
+        return pluginDao.getPluginCount()
     }
 
     override suspend fun getEnabledPluginCount(): Int {
-        return pluginInfoDAO.getEnabledPluginCount()
+        return pluginDao.getEnabledPluginCount()
     }
 
     // Delete
     override suspend fun deleteOnePluginInfoByID(pluginID: String) {
-        pluginInfoDAO.deleteOnePluginInfoByID(pluginID)
+        pluginDao.deletePluginById(pluginID)
     }
 
 }
