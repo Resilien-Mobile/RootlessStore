@@ -17,10 +17,10 @@ class AbortPluginProcessUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(pluginManifestRoom: PluginManifestRoom) {
         val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
-        val enableChooser = storeStatusRepositoryImpl
-            .observeEnableChooserPreference()
+        val isExecutionContextChooserEnabled = storeStatusRepositoryImpl
+            .observeExecutionContextChooserEnabled()
             .first()
-        val selectedExecutionContext = if (enableChooser) {
+        val selectedExecutionContext = if (isExecutionContextChooserEnabled) {
             storeStatusRepositoryImpl
                 .observeExecutionContextPreference()
                 .first()
@@ -30,7 +30,7 @@ class AbortPluginProcessUseCase @Inject constructor(
 
         val shouldUseShizuku =
             hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!enableChooser || selectedExecutionContext == HosterOverallStatus.ADB)
+                    (!isExecutionContextChooserEnabled || selectedExecutionContext == HosterOverallStatus.ADB)
 
         if (shouldUseShizuku) {
             pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)
@@ -44,10 +44,10 @@ class AbortPluginProcessUseCase @Inject constructor(
         val pluginManifestRoom = pluginRepositoryImpl.findPluginInfo(pluginId)!!
 
         val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
-        val enableChooser = storeStatusRepositoryImpl
-            .observeEnableChooserPreference()
+        val isExecutionContextChooserEnabled = storeStatusRepositoryImpl
+            .observeExecutionContextChooserEnabled()
             .first()
-        val selectedExecutionContext = if (enableChooser) {
+        val selectedExecutionContext = if (isExecutionContextChooserEnabled) {
             storeStatusRepositoryImpl
                 .observeExecutionContextPreference()
                 .first()
@@ -57,7 +57,7 @@ class AbortPluginProcessUseCase @Inject constructor(
 
         val shouldUseShizuku =
             hosterOverallStatus == HosterOverallStatus.ADB &&
-                    (!enableChooser || selectedExecutionContext == HosterOverallStatus.ADB)
+                    (!isExecutionContextChooserEnabled || selectedExecutionContext == HosterOverallStatus.ADB)
 
         if (shouldUseShizuku) {
             pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginManifestRoom)

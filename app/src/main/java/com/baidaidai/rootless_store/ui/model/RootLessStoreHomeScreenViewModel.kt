@@ -24,7 +24,7 @@ import com.baidaidai.rootless_store.domain.status.usecase.GetRootStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetSeLinuxStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveStorageStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveTemperatureStatusUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.SetEnableChooserPreferenceUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.SetExecutionContextChooserEnabledUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetExecutionContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.update.usecase.FetchLatestVersionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -51,7 +51,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     private val getRootStatusUseCase: GetRootStatusUseCase,
     private val observeOverallStatusUseCase: ObserveOverallStatusUseCase,
     private val setExecutionContextPreferenceUseCase: SetExecutionContextPreferenceUseCase,
-    private val setEnableChooserPreferenceUseCase: SetEnableChooserPreferenceUseCase,
+    private val setExecutionContextChooserEnabledUseCase: SetExecutionContextChooserEnabledUseCase,
     private val observeAutoUpdateEnabledPreferenceUseCase: ObserveAutoUpdateEnabledPreferenceUseCase,
     private val fetchLatestVersionUseCase: FetchLatestVersionUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
@@ -169,7 +169,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
     // The real context setting for preferences
     fun setExecutionContextPreference() {
         viewModelScope.launch {
-            setEnableChooserPreferenceUseCase(true)
+            setExecutionContextChooserEnabledUseCase(true)
             setExecutionContextPreferenceUseCase(_currentExecutionContextSelected.value ?: HosterOverallStatus.LIMITED)
         }
 
@@ -178,7 +178,7 @@ class RootLessStoreHomeScreenViewModel @Inject constructor(
 
     fun revertExecutionContextPreference() {
         viewModelScope.launch {
-            setEnableChooserPreferenceUseCase(false)
+            setExecutionContextChooserEnabledUseCase(false)
             setCurrentExecutionContextSelected(hosterOverallStatus = overallStatus.first())
         }
 

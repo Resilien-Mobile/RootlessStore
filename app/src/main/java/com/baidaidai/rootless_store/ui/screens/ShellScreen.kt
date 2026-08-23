@@ -165,8 +165,8 @@ fun ShellScreen(
                             ){
                                 Text(stringResource(R.string.shell_screen_enable_run_as_label))
                                 Checkbox(
-                                    checked = shellContextPreferences.jumpToDirectory,
-                                    onCheckedChange = shellScreenViewModel::setJumpToDirectory
+                                    checked = shellContextPreferences.shouldJumpToDirectory,
+                                    onCheckedChange = shellScreenViewModel::setDirectoryJumpEnabled
                                 )
                             }
                         }
@@ -180,8 +180,8 @@ fun ShellScreen(
                             ){
                                 Text(stringResource(R.string.shell_screen_jump_to_directory_label))
                                 Checkbox(
-                                    checked = shellContextPreferences.jumpToDirectory,
-                                    onCheckedChange = shellScreenViewModel::setJumpToDirectory
+                                    checked = shellContextPreferences.shouldJumpToDirectory,
+                                    onCheckedChange = shellScreenViewModel::setDirectoryJumpEnabled
                                 )
                             }
                         }

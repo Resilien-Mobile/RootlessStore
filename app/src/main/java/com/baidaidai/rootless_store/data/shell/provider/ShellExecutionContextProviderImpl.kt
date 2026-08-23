@@ -19,7 +19,7 @@ class ShellExecutionContextProviderImpl @Inject constructor(
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
 
         return AppShellContextConfig(
-            jumpToDirectory = preferences.jumpToDirectory,
+            shouldJumpToDirectory = preferences.shouldJumpToDirectory,
             environmentPath = environmentPath,
             environmentLdPath = environmentLdPath,
             environmentConfig = environmentConfig,
@@ -35,7 +35,7 @@ class ShellExecutionContextProviderImpl @Inject constructor(
         val environmentConfigValueList = environmentRepositoryImpl.resolveEnvironmentConfigValues()
 
         return AdbShellContextConfig(
-            jumpToDirectory = preferences.jumpToDirectory,
+            shouldJumpToDirectory = preferences.shouldJumpToDirectory,
             environmentPath = environmentPath,
             environmentLdPath = environmentLdPath,
             environmentConfig = environmentConfig,

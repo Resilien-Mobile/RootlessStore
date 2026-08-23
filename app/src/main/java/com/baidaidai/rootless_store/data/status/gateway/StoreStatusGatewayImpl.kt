@@ -188,7 +188,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun observeEnableChooserPreference(): Flow<Boolean> {
+    fun observeExecutionContextChooserEnabled(): Flow<Boolean> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -198,19 +198,19 @@ class StoreStatusGatewayImpl @Inject constructor(
                 }
             }
             .map { preference ->
-                preference[ENABLE_CHOOSER] ?: false
+                preference[EXECUTION_CONTEXT_CHOOSER_ENABLED] ?: false
             }
     }
 
-    suspend fun setEnableChooserPreference(enableStatus: Boolean) {
+    suspend fun setExecutionContextChooserEnabled(isEnabled: Boolean) {
         dataStore.edit { preference ->
-            preference[ENABLE_CHOOSER] = enableStatus
+            preference[EXECUTION_CONTEXT_CHOOSER_ENABLED] = isEnabled
         }
     }
 
     private companion object {
         val EXECUTION_CONTEXT = stringPreferencesKey("execute_context")
-        val ENABLE_CHOOSER = booleanPreferencesKey("enable_chooser")
+        val EXECUTION_CONTEXT_CHOOSER_ENABLED = booleanPreferencesKey("enable_chooser")
     }
 
 }

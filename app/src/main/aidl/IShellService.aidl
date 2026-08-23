@@ -4,13 +4,13 @@ interface IShellService {
     void exec(
         String pluginDirectory,
         String pluginEntryPoint,
-        boolean enableMonitor,
+        boolean shouldMonitor,
         IShellCallback callback
     );
     void command(
         String commandContent,
         IShellCallback callback,
-        boolean jumpToDirectory
+        boolean shouldJumpToDirectory
     );
     boolean kill(int progressPid);
     boolean installShellPlugin(

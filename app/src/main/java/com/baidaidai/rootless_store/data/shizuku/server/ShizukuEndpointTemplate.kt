@@ -21,7 +21,7 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
     override fun exec(
         pluginDirectory: String,
         pluginEntryPoint: String,
-        enableMonitor: Boolean,
+        shouldMonitor: Boolean,
         callback: IShellCallback,
     ) {
 
@@ -49,7 +49,7 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
                     }
                 }
 
-            if (enableMonitor){
+            if (shouldMonitor){
                 coroutineScope.launch {
                     val exitCode = process.waitFor()
                     callback.onProcessExited(exitCode)
@@ -73,12 +73,12 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
     override fun command(
         commandContent: String,
         callback: IShellCallback,
-        jumpToDirectory: Boolean
+        shouldJumpToDirectory: Boolean
     ) {
 
         var commandContent = commandContent
 
-        if(jumpToDirectory){
+        if(shouldJumpToDirectory){
             changeDirectoryHandler("/data/user_de/0/com.android.shell/RootlessStore/Plugin")
         }
         if(commandContent.startsWith("cd ")){

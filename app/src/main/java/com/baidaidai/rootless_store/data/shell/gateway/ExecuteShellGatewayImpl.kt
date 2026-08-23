@@ -30,7 +30,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
         val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
 
-        if(appShellContextConfig.jumpToDirectory){
+        if(appShellContextConfig.shouldJumpToDirectory){
             changeDirectoryHandler(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
         }
         if(commandContent.startsWith("cd ")){
@@ -118,7 +118,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 ?.command(
                     commandContent,
                     callback,
-                    adbShellContextConfig.jumpToDirectory
+                    adbShellContextConfig.shouldJumpToDirectory
                 )
         }
         awaitClose {  }

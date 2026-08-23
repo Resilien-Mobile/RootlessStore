@@ -29,10 +29,10 @@ class ExecutePluginUseCase @Inject constructor(
     private suspend fun judgeShouldUseShizuku(): Boolean{
 
         val hosterOverallStatus = storeStatusRepositoryImpl.observeOverallStatus().first()
-        val enableChooser = storeStatusRepositoryImpl
-            .observeEnableChooserPreference()
+        val isExecutionContextChooserEnabled = storeStatusRepositoryImpl
+            .observeExecutionContextChooserEnabled()
             .first()
-        val selectedExecutionContext = if (enableChooser) {
+        val selectedExecutionContext = if (isExecutionContextChooserEnabled) {
             storeStatusRepositoryImpl
                 .observeExecutionContextPreference()
                 .first()
@@ -41,6 +41,6 @@ class ExecutePluginUseCase @Inject constructor(
         }
 
 
-        return hosterOverallStatus == HosterOverallStatus.ADB && (!enableChooser || selectedExecutionContext == HosterOverallStatus.ADB)
+        return hosterOverallStatus == HosterOverallStatus.ADB && (!isExecutionContextChooserEnabled || selectedExecutionContext == HosterOverallStatus.ADB)
     }
 }

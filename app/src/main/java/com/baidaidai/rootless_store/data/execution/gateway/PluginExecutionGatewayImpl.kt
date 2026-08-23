@@ -33,7 +33,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
     fun executePluginEntryPoint(
         pluginEntryPoint: String,
         pluginPackageDirectory: String,
-        enableMonitor: Boolean = false
+        shouldMonitor: Boolean = false
     ): Flow<ExecutionResult> = callbackFlow {
         val processBuilder = ProcessBuilder(
             rootEnvironmentSwitch(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginEntryPoint"
@@ -57,7 +57,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
         val process = processBuilder.start()
 
-        if (enableMonitor){
+        if (shouldMonitor){
             processMonitor(process)
         }
 
@@ -92,7 +92,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
     fun executePluginWithoutEnvironmentByShizuku(
         pluginDirectory: String,
         pluginEntryPoint: String,
-        enableMonitor: Boolean
+        shouldMonitor: Boolean
     ): Flow<ExecutionResult> = callbackFlow {
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
@@ -119,7 +119,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
             shizukuUserServiceGatewayImpl
                 .getShizukuUserService()
-                ?.exec(pluginDirectory,pluginEntryPoint,enableMonitor,callback)
+                ?.exec(pluginDirectory,pluginEntryPoint,shouldMonitor,callback)
         }
         awaitClose {  }
     }

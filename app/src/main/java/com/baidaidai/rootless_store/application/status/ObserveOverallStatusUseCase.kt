@@ -23,7 +23,7 @@ class ObserveOverallStatusUseCase @Inject constructor(
 
         while (true){
 
-            val enableChooserPreference = storeStatusRepositoryImpl.observeEnableChooserPreference().first()
+            val isExecutionContextChooserEnabled = storeStatusRepositoryImpl.observeExecutionContextChooserEnabled().first()
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
                 if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
@@ -34,7 +34,7 @@ class ObserveOverallStatusUseCase @Inject constructor(
                 }
             val seLinuxStatus = storeStatusRepositoryImpl.getSeLinuxStatus()
 
-            val executionContextPreference = if (enableChooserPreference) storeStatusRepositoryImpl.observeExecutionContextPreference().first() else null
+            val executionContextPreference = if (isExecutionContextChooserEnabled) storeStatusRepositoryImpl.observeExecutionContextPreference().first() else null
 
             val status = when {
                 (executionContextPreference != null) -> {

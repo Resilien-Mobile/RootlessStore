@@ -4,8 +4,8 @@ import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ObserveEnableChooserPreferenceUseCase @Inject constructor(
+class ObserveExecutionContextChooserEnabledUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
-    operator fun invoke(): Flow<Boolean> = storeStatusRepositoryImpl.observeEnableChooserPreference()
+    operator fun invoke(): Flow<Boolean> = storeStatusRepositoryImpl.observeExecutionContextChooserEnabled()
 }
