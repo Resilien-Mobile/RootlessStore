@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.plugin.gateway
 import android.content.Context
 import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.data.plugin.remote.datasource.ModulePackageRemoteDataSource
+import com.baidaidai.rootless_store.data.market.remote.datasource.MarketPackageRemoteDataSource
 import com.baidaidai.rootless_store.domain.plugin.gateway.PluginCoreGateway
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class PluginGatewayImpl @Inject constructor(
     @ApplicationContext val context: Context,
-    private val modulePackageRemoteDataSource: ModulePackageRemoteDataSource,
+    private val marketPackageRemoteDataSource: MarketPackageRemoteDataSource,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ): PluginCoreGateway {
     private val defaultPluginLocation = File(context.getExternalFilesDir(null), "Plugin")
@@ -27,7 +27,7 @@ class PluginGatewayImpl @Inject constructor(
     }
 
     override suspend fun installPluginFromMarket(pluginUri: String, pluginManifestRemote: PluginManifestRemote) {
-        val remotePluginContent: ByteReadChannel = modulePackageRemoteDataSource.fetchPackage(pluginUri).bodyAsChannel()
+        val remotePluginContent: ByteReadChannel = marketPackageRemoteDataSource.fetchPackage(pluginUri).bodyAsChannel()
         val pluginPackageName = pluginManifestRemote.pluginPackageName
         _pre_intallPlugin(
             originFileByteChannel = remotePluginContent,

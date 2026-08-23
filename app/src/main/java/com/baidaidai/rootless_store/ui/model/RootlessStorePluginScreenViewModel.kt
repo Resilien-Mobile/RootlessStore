@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.environment.ResolveEnvironmentShareUriUseCase
-import com.baidaidai.rootless_store.application.module.InstallModuleUseCase
+import com.baidaidai.rootless_store.application.install.InstallLocalPackageUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.application.plugin.ObservePluginsUseCase
@@ -35,7 +35,7 @@ import kotlin.collections.emptyList
 class RootlessStorePluginScreenViewModel @Inject constructor(
     private val observePluginsUseCase: ObservePluginsUseCase,
     private val observeEnvironmentsUseCase: ObserveEnvironmentsUseCase,
-    private val installModuleUseCase: InstallModuleUseCase,
+    private val installLocalPackageUseCase: InstallLocalPackageUseCase,
     private val setPluginEnabledUseCase: SetPluginEnabledUseCase,
     private val setEnvironmentEnabledUseCase: SetEnvironmentEnabledUseCase,
     private val uninstallPluginUseCase: UninstallPluginUseCase,
@@ -79,9 +79,9 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         _pluginPackageUri.value = pluginPackageUri
     }
 
-    fun installPlugin(){
+    fun installLocalPackage(){
         viewModelScope.launch {
-            val result = installModuleUseCase(pluginPackageUri.value)
+            val result = installLocalPackageUseCase(pluginPackageUri.value)
             if (result is PluginError){
                 _pluginEvent.emit(result)
             }else{
