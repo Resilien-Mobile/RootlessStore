@@ -1,31 +1,26 @@
 package com.baidaidai.rootless_store.data.source.repository
 
-import android.content.Context
 import com.baidaidai.rootless_store.core.util.OutOfStringLike
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 import com.baidaidai.rootless_store.data.source.gateway.PluginSourceGatewayImpl
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEndpointInput
 import com.baidaidai.rootless_store.domain.source.repository.PluginSourceRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSource
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceEntity
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import kotlinx.coroutines.flow.map
 
 class PluginSourceRepositoryImpl @Inject constructor(
-    @ApplicationContext context: Context,
     rootlessStoreDatabase: RootlessStoreDatabase,
-    val pluginSourceGatewayImpl: PluginSourceGatewayImpl
+    private val pluginSourceGatewayImpl: PluginSourceGatewayImpl
 ): PluginSourceRepository {
 
-    override val appDatabase = rootlessStoreDatabase
-
-    private val pluginSourceDao = appDatabase.pluginSourceDao()
+    private val pluginSourceDao = rootlessStoreDatabase.pluginSourceDao()
 
     // Add
     override suspend fun addPluginSource(
@@ -43,7 +38,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
             }
 
 
-            val newPluginSourceEntity = PluginSourceEntity.fromPluginSource(pluginSource)
+            val newPluginSourceEntity = pluginSource.toPluginSourceEntity()
 
             pluginSourceDao.insertPluginSource(newPluginSourceEntity)
 
@@ -72,8 +67,8 @@ class PluginSourceRepositoryImpl @Inject constructor(
              */
             return when(authenticationResult){
                 is PluginSourceAuthenticationResult.Success -> {
-                    val pluginSourceEntity = PluginSourceEntity
-                        .fromPluginSource(pluginSource)
+                    val pluginSourceEntity = pluginSource
+                        .toPluginSourceEntity()
                         .copy(accessToken = authenticationResult.accessToken)
 
                     pluginSourceDao.insertPluginSource(pluginSourceEntity)
@@ -132,20 +127,16 @@ class PluginSourceRepositoryImpl @Inject constructor(
     // Read
     override suspend fun findPluginSource(
         sourceId: String
-    ): PluginSourceEntity? {
-        return pluginSourceDao.findPluginSourceById(sourceId)
+    ): PluginSource? {
+        return pluginSourceDao.findPluginSourceById(sourceId)?.toPluginSource()
     }
 
-    override fun observePluginSources(): Flow<List<PluginSource>?> {
-        val pluginSourceEntry = pluginSourceDao.observePluginSources()
-
-        val pluginSource = pluginSourceEntry.map { list ->
-            list?.map { content ->
-               content.toPluginSource()
+    override fun observePluginSources(): Flow<List<PluginSource>> {
+        return pluginSourceDao.observePluginSources().map { pluginSourceEntities ->
+            pluginSourceEntities.map { pluginSourceEntity ->
+                pluginSourceEntity.toPluginSource()
             }
         }
-
-        return pluginSource
     }
 
     override fun observePluginSourceCount(): Flow<Int> {
@@ -154,9 +145,9 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
     // Delete
     override suspend fun deletePluginSource(
-        pluginSourceEntity: PluginSourceEntity
+        pluginSource: PluginSource
     ) {
-        pluginSourceDao.deletePluginSource(pluginSourceEntity)
+        pluginSourceDao.deletePluginSource(pluginSource.toPluginSourceEntity())
     }
 
 }

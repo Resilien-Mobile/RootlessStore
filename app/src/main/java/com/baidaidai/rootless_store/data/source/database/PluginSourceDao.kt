@@ -29,7 +29,7 @@ interface PluginSourceDao {
     suspend fun findPluginSourceById(sourceId: String): PluginSourceEntity?
 
     @Query(value = "SELECT * FROM pluginSource")
-    fun observePluginSources(): Flow<List<PluginSourceEntity>?>
+    fun observePluginSources(): Flow<List<PluginSourceEntity>>
 
     @Query("SELECT COUNT(*) FROM pluginSource")
     fun observePluginSourceCount(): Flow<Int>
