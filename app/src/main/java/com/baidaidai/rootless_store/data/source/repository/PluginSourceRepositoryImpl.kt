@@ -13,7 +13,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSource
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import kotlinx.coroutines.flow.map
 
@@ -39,7 +39,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
              * 验证，拉起WebView
              */
             if (authenticationMetadata.needsAuthentication){
-                return PluginSourceEvent.SourceAuthentication
+                return PluginSourceEvent.AuthenticationRequired
             }
 
 
@@ -60,21 +60,21 @@ class PluginSourceRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addAuthenticatedPluginSource(
-        pluginSourceAuthFormInput: PluginSourceAuthFormInput
+        authenticationInput: PluginSourceAuthenticationInput
     ): PluginSourceEvent {
         try{
 
-            val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceRemoteEndpoint = pluginSourceAuthFormInput.sourceRemoteEndpoint)
-            val sourceAuthenticationResult = pluginSourceGatewayImpl.fetchPluginSourceAuthenticationResult(pluginSourceAuthFormInput)
+            val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceRemoteEndpoint = authenticationInput.sourceRemoteEndpoint)
+            val authenticationResult = pluginSourceGatewayImpl.fetchPluginSourceAuthenticationResult(authenticationInput)
 
             /**
              * 验证，打断异常会话
              */
-            return when(sourceAuthenticationResult){
+            return when(authenticationResult){
                 is PluginSourceAuthenticationResult.Success -> {
                     val pluginSourceEntity = PluginSourceEntity
                         .fromPluginSource(pluginSource)
-                        .copy(userAccessToken = sourceAuthenticationResult.userAccessToken)
+                        .copy(accessToken = authenticationResult.accessToken)
 
                     pluginSourceDao.insertPluginSource(pluginSourceEntity)
 
@@ -83,7 +83,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
                 is PluginSourceAuthenticationResult.AccessDenied -> {
                     PluginSourceEvent.SourceError(
                         errorMessage = "Verification failed",
-                        errorCause = sourceAuthenticationResult.errorMessage
+                        errorCause = authenticationResult.errorMessage
                     )
                 }
                 is PluginSourceAuthenticationResult.ServerError -> {

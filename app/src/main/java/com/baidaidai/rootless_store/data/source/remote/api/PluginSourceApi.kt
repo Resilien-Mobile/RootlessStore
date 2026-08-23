@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.data.source.remote.api
 
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationPostDto
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationRequestDto
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import io.ktor.client.HttpClient
 import io.ktor.client.request.accept
 import io.ktor.client.request.post
@@ -30,11 +30,11 @@ class PluginSourceApi @Inject constructor(
         }
     }
 
-    suspend fun fetchPluginSourceAuthentication(
-        pluginSourceAuthFormInput: PluginSourceAuthFormInput
+    suspend fun fetchPluginSourceCredentials(
+        authenticationInput: PluginSourceAuthenticationInput
     ): HttpResponse{
         return client.post(
-            urlString = pluginSourceAuthFormInput.sourceRemoteEndpoint
+            urlString = authenticationInput.sourceRemoteEndpoint
         ) {
             contentType(ContentType.Application.Json)
             url {
@@ -44,9 +44,9 @@ class PluginSourceApi @Inject constructor(
             accept(ContentType.Application.Json)
 
             setBody(
-                PluginSourceAuthenticationPostDto(
-                    userName = pluginSourceAuthFormInput.userName,
-                    passWord = pluginSourceAuthFormInput.passWord
+                PluginSourceAuthenticationRequestDto(
+                    username = authenticationInput.username,
+                    password = authenticationInput.password
                 )
             )
         }

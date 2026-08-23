@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.data.source.mapper
 
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
-import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationDto
+import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationResponseDto
 import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceDto
 import com.baidaidai.rootless_store.data.source.remote.dto.PluginSourceAuthenticationMetadataDto
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthentication
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceCredentials
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationMetadata
 
 object PluginSourceMapper {
@@ -34,10 +34,10 @@ object PluginSourceMapper {
         )
     }
 
-    fun PluginSourceAuthenticationDto.toPluginSourceAuthentication(): PluginSourceAuthentication {
-        return PluginSourceAuthentication(
-            userName = userName,
-            userAccessToken = userAccessToken
+    fun PluginSourceAuthenticationResponseDto.toPluginSourceCredentials(): PluginSourceCredentials {
+        return PluginSourceCredentials(
+            username = username,
+            accessToken = accessToken
         )
     }
 
