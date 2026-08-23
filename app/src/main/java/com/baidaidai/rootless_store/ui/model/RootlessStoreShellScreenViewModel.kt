@@ -8,7 +8,7 @@ import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveShellContextPreferencesUseCase
-import com.baidaidai.rootless_store.application.shell.RunCommandUseCase
+import com.baidaidai.rootless_store.application.shell.ExecuteShellCommandUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.SetShellDirectoryJumpEnabledUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootlessStoreShellScreenViewModel @Inject constructor(
-    private val runCommandUseCase: RunCommandUseCase,
+    private val executeShellCommandUseCase: ExecuteShellCommandUseCase,
     private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
     observeShellContextPreferencesUseCase: ObserveShellContextPreferencesUseCase,
@@ -46,9 +46,9 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
         )
     val lastCommandContent = _lastCommandContent.asStateFlow()
 
-    fun runCommand(shellCommandContainer: ShellCommandContainer){
+    fun executeCommand(shellCommandContainer: ShellCommandContainer){
         viewModelScope.launch {
-            val shellOutput = runCommandUseCase(shellCommandContainer)
+            val shellOutput = executeShellCommandUseCase(shellCommandContainer)
             shellOutput.collect { shellResult ->
 
                 Log.d("ShellViewModel","shellResult.command: ${shellResult.command}")

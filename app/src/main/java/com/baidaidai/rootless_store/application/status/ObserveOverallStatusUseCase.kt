@@ -26,8 +26,8 @@ class ObserveOverallStatusUseCase @Inject constructor(
             val isExecutionContextChooserEnabled = storeStatusRepositoryImpl.observeExecutionContextChooserEnabled().first()
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
-                    shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
+                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.hasShizukuPermission()) {
+                    shizukuUserServiceGatewayImpl.startShizukuUserService()
                     true
                 } else {
                     false

@@ -2,8 +2,8 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.application.shizuku.ActiveShizukuUserServiceUseCase
-import com.baidaidai.rootless_store.application.shizuku.AuthShizukuPermissionUseCase
+import com.baidaidai.rootless_store.application.shizuku.StartShizukuUserServiceUseCase
+import com.baidaidai.rootless_store.application.shizuku.EnsureShizukuPermissionUseCase
 import com.baidaidai.rootless_store.core.util.OutOfStringLike
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,14 +16,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
-    private val activeShizukuUserServiceUseCase: ActiveShizukuUserServiceUseCase,
-    private val authShizukuPermissionUseCase: AuthShizukuPermissionUseCase
+    private val startShizukuUserServiceUseCase: StartShizukuUserServiceUseCase,
+    private val ensureShizukuPermissionUseCase: EnsureShizukuPermissionUseCase
 ): ViewModel() {
 
-    private val _shizukuActived = MutableStateFlow(false)
-    private val _endpointActived = MutableStateFlow(false)
-    val shizukuActived = _shizukuActived.asStateFlow()
-    val endpointActived = _endpointActived.asStateFlow()
+    private val _isShizukuActive = MutableStateFlow(false)
+    private val _isEndpointActive = MutableStateFlow(false)
+    val isShizukuActive = _isShizukuActive.asStateFlow()
+    val isEndpointActive = _isEndpointActive.asStateFlow()
 
     private val _shizukuEvent = MutableSharedFlow<PluginError?>()
     val shizukuEvent = _shizukuEvent.asSharedFlow()
@@ -33,23 +33,19 @@ class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
         _shizukuEvent.emit(null)
     }
 
-    fun authShizukuPermission() {
+    fun ensureShizukuPermission() {
         viewModelScope.launch {
-            authShizukuPermissionUseCase()
-                .onSuccess { shizukuActived -> _shizukuActived.value = shizukuActived }
+            ensureShizukuPermissionUseCase()
+                .onSuccess { isShizukuActive -> _isShizukuActive.value = isShizukuActive }
                 .onFailure { error -> _shizukuEvent.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
         }
     }
 
-    /**
-     * Active and connect to Shizuku UserService
-     *
-     * Although
-     */
-    fun activeShizukuUserService() {
+    /** Starts and connects to the Shizuku user service. */
+    fun startShizukuUserService() {
         viewModelScope.launch {
-            activeShizukuUserServiceUseCase()
-                .onSuccess { _endpointActived.value = true }
+            startShizukuUserServiceUseCase()
+                .onSuccess { _isEndpointActive.value = true }
                 .onFailure { error -> _shizukuEvent.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
         }
     }

@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
 import javax.inject.Inject
 
-class SetUpRuntimeUseCase @Inject constructor(
+class RecoverPluginRuntimeStateUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
     private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,

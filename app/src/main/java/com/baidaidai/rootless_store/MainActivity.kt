@@ -23,7 +23,7 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import coil3.request.crossfade
-import com.baidaidai.rootless_store.domain.runtime.usecase.SetUpRuntimeUseCase
+import com.baidaidai.rootless_store.domain.runtime.usecase.RecoverPluginRuntimeStateUseCase
 import com.baidaidai.rootless_store.ui.screens.RootlessStoreStartScreenContainer
 import com.baidaidai.rootless_store.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +47,7 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
     @Inject
     lateinit var ktorClient: HttpClient
     @Inject
-    lateinit var setUpRuntimeUseCase: SetUpRuntimeUseCase
+    lateinit var recoverPluginRuntimeStateUseCase: RecoverPluginRuntimeStateUseCase
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -67,7 +67,7 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         applicationScope.launch {
-            setUpRuntimeUseCase()
+            recoverPluginRuntimeStateUseCase()
         }
     }
 }

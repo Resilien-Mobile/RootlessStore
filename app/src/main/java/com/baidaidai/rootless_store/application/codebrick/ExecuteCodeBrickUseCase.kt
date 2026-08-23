@@ -15,10 +15,10 @@ class ExecuteCodeBrickUseCase @Inject constructor(
         Log.d("ExecuteCodeBrickUseCase, codeBrickContent",codeBrickConfig.codeBrickContent)
         return when(codeBrickConfig.codeBrickEnvironment){
             HosterOverallStatus.LIMITED,
-            HosterOverallStatus.PERMISSIVE -> executeShellGatewayImpl.runCommandByAppShell(codeBrickConfig.codeBrickContent)
+            HosterOverallStatus.PERMISSIVE -> executeShellGatewayImpl.executeCommandByAppShell(codeBrickConfig.codeBrickContent)
 
-            HosterOverallStatus.ADB -> executeShellGatewayImpl.runCommandByAdbShell(codeBrickConfig.codeBrickContent)
-            HosterOverallStatus.ROOTD -> executeShellGatewayImpl.runCommandByRootShell(codeBrickConfig.codeBrickContent)
+            HosterOverallStatus.ADB -> executeShellGatewayImpl.executeCommandByAdbShell(codeBrickConfig.codeBrickContent)
+            HosterOverallStatus.ROOTD -> executeShellGatewayImpl.executeCommandByRootShell(codeBrickConfig.codeBrickContent)
         }
     }
 }

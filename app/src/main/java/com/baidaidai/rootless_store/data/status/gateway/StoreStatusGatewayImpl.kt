@@ -88,9 +88,9 @@ class StoreStatusGatewayImpl @Inject constructor(
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
-                    Log.d("HosterOverallStatus", "Attempt tryBindShizukuUserService Shizuku Endpoint")
-                    val ok = shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
+                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.hasShizukuPermission()) {
+                    Log.d("HosterOverallStatus", "Attempt startShizukuUserService Shizuku Endpoint")
+                    val ok = shizukuUserServiceGatewayImpl.startShizukuUserService()
                     Log.d("HosterOverallStatus", "Bind result: $ok")
                     true
                 } else {
@@ -126,7 +126,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     }
 
     fun getShizukuStatus(): Boolean {
-        shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
+        shizukuUserServiceGatewayImpl.startShizukuUserService()
         return true
         // MVP后马上删，会抛error不稳定
     }
