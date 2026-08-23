@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.domain.shell.model
 
-data class ShellCommandContainer(
+data class ShellCommand(
     val shellEnvironment: ShellEnvironment,
     val commandContent: String
 )

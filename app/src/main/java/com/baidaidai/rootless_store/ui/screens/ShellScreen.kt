@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
-import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
+import com.baidaidai.rootless_store.domain.shell.model.ShellCommand
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShellScreenViewModel
 import androidx.compose.ui.graphics.*
@@ -109,8 +109,8 @@ fun ShellScreen(
             }
         }
 
-        val shellCommandContainer = remember(key1 = commandContent, key2 = shellEnvironment) {
-            ShellCommandContainer(shellEnvironment, commandContent = commandContent)
+        val shellCommand = remember(key1 = commandContent, key2 = shellEnvironment) {
+            ShellCommand(shellEnvironment, commandContent = commandContent)
         }
 
         Box(
@@ -196,7 +196,7 @@ fun ShellScreen(
                             leadingButton = {
                                 Button(
                                     onClick = {
-                                        shellScreenViewModel.executeCommand(shellCommandContainer)
+                                        shellScreenViewModel.executeCommand(shellCommand)
                                     },
                                     contentPadding = SplitButtonDefaults.MediumLeadingButtonContentPadding,
                                     shape = SplitButtonDefaults.leadingButtonShapesFor(

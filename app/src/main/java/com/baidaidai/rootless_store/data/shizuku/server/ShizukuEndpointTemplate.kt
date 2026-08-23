@@ -79,15 +79,15 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         var commandContent = commandContent
 
         if(shouldJumpToDirectory){
-            changeDirectoryHandler("/data/user_de/0/com.android.shell/RootlessStore/Plugin")
+            prepareWorkingDirectoryCommand("/data/user_de/0/com.android.shell/RootlessStore/Plugin")
         }
         if(commandContent.startsWith("cd ")){
             val targetDirectory = commandContent.removePrefix("cd ").trim()
-            changeDirectoryHandler(targetDirectory)
+            prepareWorkingDirectoryCommand(targetDirectory)
             commandContent = "exit"
         }
 
-        val processBuilder = ProcessBuilder("sh","-c","${changeDirectoryHandler()}$commandContent")
+        val processBuilder = ProcessBuilder("sh","-c","${prepareWorkingDirectoryCommand()}$commandContent")
         val process = processBuilder.start()
 
         process
@@ -336,7 +336,7 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
         }
     }
 
-    private fun changeDirectoryHandler(directory: String = currentDirectory): String{
+    private fun prepareWorkingDirectoryCommand(directory: String = currentDirectory): String{
 
         currentDirectory = when {
             directory.startsWith("/") -> {

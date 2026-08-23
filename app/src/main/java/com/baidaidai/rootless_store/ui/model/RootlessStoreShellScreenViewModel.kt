@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
+import com.baidaidai.rootless_store.domain.shell.model.ShellCommand
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
@@ -46,9 +46,9 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
         )
     val lastCommandContent = _lastCommandContent.asStateFlow()
 
-    fun executeCommand(shellCommandContainer: ShellCommandContainer){
+    fun executeCommand(shellCommand: ShellCommand){
         viewModelScope.launch {
-            val shellOutput = executeShellCommandUseCase(shellCommandContainer)
+            val shellOutput = executeShellCommandUseCase(shellCommand)
             shellOutput.collect { shellResult ->
 
                 Log.d("ShellViewModel","shellResult.command: ${shellResult.command}")
@@ -73,7 +73,7 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
         _lastCommandContent.value = ""
     }
 
-    fun cleanShellOutputList() {
+    fun resetShellOutput() {
         _shellOutputList.value =  emptyList()
     }
 
