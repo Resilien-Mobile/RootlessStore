@@ -27,11 +27,11 @@ fun SourceScreenListItem(
     isDeleteActionVisible: Boolean,
     pluginSource: PluginSource,
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
-    onListItemClick:(pluginSourceEndpoint: String)-> Unit
+    onPluginSourceClick: (pluginSource: PluginSource)-> Unit
 ){
     ListItem(
         onClick = {
-            onListItemClick(pluginSource.sourceRemoteEndpoint)
+            onPluginSourceClick(pluginSource)
         },
         supportingContent = {
             Text(pluginSource.sourceRemoteEndpoint)
