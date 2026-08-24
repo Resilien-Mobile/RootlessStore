@@ -47,8 +47,8 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val _codeBrickScreenUiState = MutableStateFlow(CodeBrickScreenUiState())
     val codeBrickScreenUiState = _codeBrickScreenUiState.asStateFlow()
 
-    private val _codeBrickEvent = MutableSharedFlow<CodeBrickError?>()
-    val codeBrickEvent = _codeBrickEvent.asSharedFlow()
+    private val _codeBrickError = MutableSharedFlow<CodeBrickError?>()
+    val codeBrickError = _codeBrickError.asSharedFlow()
 
     val codeBricks = observeCodeBricksUseCase()
         .stateIn(
@@ -126,9 +126,9 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
 
     fun addCodeBrickFromClipboard(){
         viewModelScope.launch {
-            val codeBrickError = addCodeBrickFromClipboardUseCase()
-            if (codeBrickError != null){
-                _codeBrickEvent.emit(codeBrickError)
+            val error = addCodeBrickFromClipboardUseCase()
+            if (error != null){
+                _codeBrickError.emit(error)
             }
         }
     }

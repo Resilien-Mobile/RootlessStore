@@ -137,23 +137,23 @@ fun RootlessStoreNavigationScaffold(
 
     // Effects
     LaunchedEffect(0) {
-        sourceScreenViewModel.sourceEvent.collect { event ->
-            currentError = event
+        sourceScreenViewModel.sourceError.collect { error ->
+            currentError = error
         }
     }
     LaunchedEffect(1) {
-        pluginScreenViewModel.pluginEvent.collect{ event ->
-            currentError = event
+        pluginScreenViewModel.pluginError.collect{ error ->
+            currentError = error
         }
     }
     LaunchedEffect(2) {
-        marketScreenViewModel.marketEvent.collect{ event ->
-            currentError = event
+        marketScreenViewModel.marketError.collect{ error ->
+            currentError = error
         }
     }
     LaunchedEffect(3) {
-        codeBrickViewModel.codeBrickEvent.collect { event ->
-            currentError = event
+        codeBrickViewModel.codeBrickError.collect { error ->
+            currentError = error
         }
     }
     LaunchedEffect(incomingPackageUri) {

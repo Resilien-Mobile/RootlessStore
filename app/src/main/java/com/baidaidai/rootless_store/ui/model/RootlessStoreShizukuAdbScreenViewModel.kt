@@ -25,19 +25,19 @@ class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
     val isShizukuActive = _isShizukuActive.asStateFlow()
     val isEndpointActive = _isEndpointActive.asStateFlow()
 
-    private val _shizukuEvent = MutableSharedFlow<PluginError?>()
-    val shizukuEvent = _shizukuEvent.asSharedFlow()
+    private val _shizukuError = MutableSharedFlow<PluginError?>()
+    val shizukuError = _shizukuError.asSharedFlow()
 
 
     fun dismissShizukuError() = viewModelScope.launch {
-        _shizukuEvent.emit(null)
+        _shizukuError.emit(null)
     }
 
     fun ensureShizukuPermission() {
         viewModelScope.launch {
             ensureShizukuPermissionUseCase()
                 .onSuccess { isShizukuActive -> _isShizukuActive.value = isShizukuActive }
-                .onFailure { error -> _shizukuEvent.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
+                .onFailure { error -> _shizukuError.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
         }
     }
 
@@ -46,7 +46,7 @@ class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
         viewModelScope.launch {
             startShizukuUserServiceUseCase()
                 .onSuccess { _isEndpointActive.value = true }
-                .onFailure { error -> _shizukuEvent.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
+                .onFailure { error -> _shizukuError.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
         }
     }
 }

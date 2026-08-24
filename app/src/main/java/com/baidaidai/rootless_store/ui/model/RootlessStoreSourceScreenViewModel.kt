@@ -44,8 +44,8 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
         initialValue = 0
     )
 
-    val _sourceEvent = MutableSharedFlow<PluginSourceEvent.SourceError?>()
-    val sourceEvent = _sourceEvent.asSharedFlow()
+    val _sourceError = MutableSharedFlow<PluginSourceEvent.SourceError?>()
+    val sourceError = _sourceError.asSharedFlow()
 
     private val _isDeleteActionVisible = MutableStateFlow(false)
     val isDeleteActionVisible = _isDeleteActionVisible.asStateFlow()
@@ -67,13 +67,13 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
 
             when(result){
                 is PluginSourceEvent.SourceError -> {
-                    _sourceEvent.emit(result)
+                    _sourceError.emit(result)
                 }
                 is PluginSourceEvent.AuthenticationRequired -> {
                     _isAuthenticationDialogVisible.value = true
                 }
                 is PluginSourceEvent.Success -> {
-                    _sourceEvent.emit(null)
+                    _sourceError.emit(null)
                 }
             }
         }
@@ -91,14 +91,14 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
 
             when(result){
                 is PluginSourceEvent.SourceError -> {
-                    _sourceEvent.emit(result)
+                    _sourceError.emit(result)
                     cancelSourceAuthentication()
                 }
                 is PluginSourceEvent.AuthenticationRequired -> {
 
                 }
                 is PluginSourceEvent.Success -> {
-                    _sourceEvent.emit(null)
+                    _sourceError.emit(null)
                     cancelSourceAuthentication()
                 }
             }
@@ -107,7 +107,7 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
 
     fun dismissSourceError(){
         viewModelScope.launch {
-            _sourceEvent.emit(null)
+            _sourceError.emit(null)
         }
     }
 

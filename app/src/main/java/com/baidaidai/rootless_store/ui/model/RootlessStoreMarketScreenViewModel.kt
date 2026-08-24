@@ -33,10 +33,10 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
 
     private val _pluginSourceEndpoint = MutableStateFlow<String?>(null)
 
-    // Market events
-    private val _marketEvent = MutableSharedFlow<MarketError?>()
+    // Market errors
+    private val _marketError = MutableSharedFlow<MarketError?>()
 
-    val marketEvent = _marketEvent.asSharedFlow()
+    val marketError = _marketError.asSharedFlow()
 
     private val _currentPluginSource = MutableStateFlow<PluginSource?>(null)
 
@@ -49,9 +49,9 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
 
             Log.d("RootlessStoreMarketScreenViewModel._pluginSourceEndpoint",pluginSourceEndpoint)
 
-            fetchMarketManifestsUseCase(pluginSourceEndpoint){ marketError ->
+            fetchMarketManifestsUseCase(pluginSourceEndpoint){ error ->
                 // Error Callback Lambda
-                _marketEvent.emit(marketError)
+                _marketError.emit(error)
             }
 
         }
