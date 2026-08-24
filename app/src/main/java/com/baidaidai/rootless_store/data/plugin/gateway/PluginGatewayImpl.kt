@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.market.remote.datasource.MarketPackageRemoteDataSource
-import com.baidaidai.rootless_store.domain.plugin.gateway.PluginCoreGateway
+import com.baidaidai.rootless_store.domain.plugin.gateway.PluginGateway
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
@@ -18,7 +18,7 @@ class PluginGatewayImpl @Inject constructor(
     @ApplicationContext val context: Context,
     private val marketPackageRemoteDataSource: MarketPackageRemoteDataSource,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
-): PluginCoreGateway {
+): PluginGateway {
     private val defaultPluginLocation = File(context.getExternalFilesDir(null), "Plugin")
 
     // Create
