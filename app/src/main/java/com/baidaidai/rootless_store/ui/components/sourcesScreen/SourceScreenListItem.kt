@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
-import com.baidaidai.rootless_store.ui.theme.colorscheme.SourceListItemColor
+import com.baidaidai.rootless_store.ui.theme.colorscheme.sourceListItemColors
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -42,7 +42,7 @@ fun SourceScreenListItem(
                 contentDescription = stringResource(R.string.sources_screen_list_item_go_to_content_description)
             )
         },
-        colors = SourceListItemColor(),
+        colors = sourceListItemColors(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
         leadingContent = {
             Row(
