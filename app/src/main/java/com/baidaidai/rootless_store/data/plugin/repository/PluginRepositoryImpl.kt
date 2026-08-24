@@ -39,7 +39,7 @@ class PluginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun disableAllPlugins() {
-        pluginDao.disableAllPlugins()
+        pluginDao.updateAllPluginsEnabled(isEnabled = false)
     }
 
     // READ
