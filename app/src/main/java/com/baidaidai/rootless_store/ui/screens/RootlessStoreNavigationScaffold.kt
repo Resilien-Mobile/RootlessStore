@@ -392,9 +392,9 @@ fun RootlessStoreNavigationScaffold(
                         SourceScreen(
                             contentPadding = contentPadding,
                             sourceScreenViewModel = sourceScreenViewModel
-                        ){ pluginSourceLocal ->
-                            marketScreenViewModel.setPluginSourceEndpoint(pluginSourceLocal.sourceRemoteEndpoint)
-                            marketScreenViewModel.selectPluginSource(pluginSourceLocal)
+                        ){ pluginSource ->
+                            marketScreenViewModel.setPluginSourceEndpoint(pluginSource.sourceRemoteEndpoint)
+                            marketScreenViewModel.selectPluginSource(pluginSource)
                             navigationBackStack.add(MarketScreenKey)
                         }
                     }
