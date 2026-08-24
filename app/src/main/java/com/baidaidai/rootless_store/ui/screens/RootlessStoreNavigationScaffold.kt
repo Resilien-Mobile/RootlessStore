@@ -357,7 +357,7 @@ fun RootlessStoreNavigationScaffold(
                             contentPadding = contentPadding,
                             rootlessStoreHeightWindowSize = rootlessStoreHeightWindowSize,
                             rootlessStoreWidthWindowSize = rootlessStoreWidthWindowSize,
-                            onChipClick = {
+                            onOpenShizukuSetup = {
                                 context.startActivity(Intent(context, ShizukuActivity::class.java))
                             }
                         )
