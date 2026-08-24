@@ -42,7 +42,7 @@ fun PluginScreen(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
-    onAbortPlugin:suspend (pluginId: String) -> Unit,
+    onAbortPluginProcess: suspend (pluginId: String) -> Unit,
     onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
     val plugins by pluginScreenViewModel.plugins.collectAsState()
@@ -88,7 +88,7 @@ fun PluginScreen(
                     plugins = plugins,
                     pluginScreenViewModel = pluginScreenViewModel,
                     onNavigateToExecuteScreen = onNavigateToExecuteScreen,
-                    onAbortPlugin = onAbortPlugin,
+                    onAbortPluginProcess = onAbortPluginProcess,
                     onExecuteOneTimePlugin = onExecuteOneTimePlugin
                 )
             }
@@ -109,7 +109,7 @@ fun InstalledPluginList(
     plugins: List<PluginManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
-    onAbortPlugin: suspend (pluginId: String) -> Unit,
+    onAbortPluginProcess: suspend (pluginId: String) -> Unit,
     onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
@@ -181,7 +181,7 @@ fun InstalledPluginList(
                             onNavigateToExecuteScreen(pluginManifestRoom.pluginId,true)
                         }else{
                             coroutineScope.launch {
-                                onAbortPlugin(pluginManifestRoom.pluginId)
+                                onAbortPluginProcess(pluginManifestRoom.pluginId)
                             }
                         }
                     },
