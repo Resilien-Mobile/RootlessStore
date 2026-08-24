@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommand
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
-import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellAvailabilityUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellAvailabilityUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveShellContextPreferencesUseCase
 import com.baidaidai.rootless_store.application.shell.ExecuteShellCommandUseCase
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class RootlessStoreShellScreenViewModel @Inject constructor(
     private val executeShellCommandUseCase: ExecuteShellCommandUseCase,
     private val getRootShellAvailabilityUseCase: GetRootShellAvailabilityUseCase,
-    private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
+    private val observeAdbShellAvailabilityUseCase: ObserveAdbShellAvailabilityUseCase,
     observeShellContextPreferencesUseCase: ObserveShellContextPreferencesUseCase,
     private val setShellDirectoryJumpEnabledUseCase: SetShellDirectoryJumpEnabledUseCase
 ) : ViewModel(){
@@ -38,7 +38,7 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
         )
     val shellOutputs = _shellOutputs.asStateFlow()
     val isRootShellAvailable = _isRootShellAvailable.asStateFlow()
-    val isAdbShellAvailable = observeAdbShellStatusUseCase()
+    val isAdbShellAvailable = observeAdbShellAvailabilityUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
