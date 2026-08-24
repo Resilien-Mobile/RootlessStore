@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 @Entity
 data class NotificationPreferenceEntity(
     @PrimaryKey
-    val _primaryKey_: String = "RootlessStoreNotificationPreferenceEntityPrimaryKey",
+    @ColumnInfo(name = "_primaryKey_")
+    val primaryKey: String = "RootlessStoreNotificationPreferenceEntityPrimaryKey",
 
     val apiKey: String,
     val notificationTitle:String? = null,
