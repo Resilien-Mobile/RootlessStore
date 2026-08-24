@@ -8,7 +8,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ProcessMonitor @Inject constructor(
+class PluginProcessMonitor @Inject constructor(
     private val notificationGatewayImpl: NotificationGatewayImpl,
     private val sendPluginExitNotificationUseCase: SendPluginExitNotificationUseCase
 ) {
