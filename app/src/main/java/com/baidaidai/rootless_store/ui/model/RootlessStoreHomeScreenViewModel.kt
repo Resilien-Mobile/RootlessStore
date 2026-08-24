@@ -15,7 +15,7 @@ import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
-import com.baidaidai.rootless_store.domain.status.model.TempStatus
+import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndApiStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecutionContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetKernelStatusUseCase
@@ -93,12 +93,12 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
             initialValue = PluginStatus()
         )
 
-    val temperatureStatus: StateFlow<TempStatus?> =
+    val temperatureStatus: StateFlow<TemperatureStatus?> =
         observeTemperatureStatusUseCase()
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(1000),
-                initialValue = TempStatus.ERROR
+                initialValue = TemperatureStatus.ERROR
             )
 
     val executionContextPreference = observeExecutionContextPreferenceUseCase()

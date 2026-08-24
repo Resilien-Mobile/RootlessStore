@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
-import com.baidaidai.rootless_store.domain.status.model.TempStatus
+import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -22,7 +22,7 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun getKernelStatus(): String = storeStatusGatewayImpl.getKernelStatus()
 
-    fun observeTemperatureStatus(): Flow<TempStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
+    fun observeTemperatureStatus(): Flow<TemperatureStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
 
     fun getAndroidAndApiStatus(): AndroidAndApiStatus = storeStatusGatewayImpl.getAndroidAndApiStatus()
 

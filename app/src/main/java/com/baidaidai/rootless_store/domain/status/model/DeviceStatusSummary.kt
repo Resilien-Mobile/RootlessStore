@@ -11,5 +11,5 @@ data class DeviceStatusSummary(
     ),
     val memoryStatus: MemoryStatus = MemoryStatus(),
     val storageStatus: StorageStatus = StorageStatus(),
-    val temperatureStatus: TempStatus? = null,
+    val temperatureStatus: TemperatureStatus? = null,
 )
