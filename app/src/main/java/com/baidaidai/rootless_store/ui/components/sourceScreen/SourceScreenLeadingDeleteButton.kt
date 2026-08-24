@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.ui.components.sourcesScreen
+package com.baidaidai.rootless_store.ui.components.sourceScreen
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

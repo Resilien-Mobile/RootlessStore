@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.ui.components.pluginsScreen
+package com.baidaidai.rootless_store.ui.components.pluginScreen
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi

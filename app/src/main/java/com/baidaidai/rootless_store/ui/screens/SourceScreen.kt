@@ -20,9 +20,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAlertDialog
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAuthenticationModalBottomSheet
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenListItem
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenAlertDialog
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenAuthenticationModalBottomSheet
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenListItem
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
