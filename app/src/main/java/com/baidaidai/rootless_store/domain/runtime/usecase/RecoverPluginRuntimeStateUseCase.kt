@@ -12,9 +12,9 @@ class RecoverPluginRuntimeStateUseCase @Inject constructor(
     private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,
 ) {
     suspend operator fun invoke(){
-        val pluginExecutionStatusList = pluginExecutionRepositoryImpl.listPluginExecutionStatuses()
+        val pluginExecutionStatuses = pluginExecutionRepositoryImpl.listPluginExecutionStatuses()
 
-        pluginExecutionStatusList.forEach { pluginExecutionStatus ->
+        pluginExecutionStatuses.forEach { pluginExecutionStatus ->
             if (pluginExecutionStatus.executionContext == ExecutionContext.ADB){
                 val abortResult = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
                 if (abortResult){
