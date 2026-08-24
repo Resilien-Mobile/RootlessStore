@@ -77,7 +77,7 @@ fun RootlessStoreNavigationScaffold(
     val thirdPartyNotificationScreenViewModel = hiltViewModel<RootlessStoreThirdPartyNotificationScreenViewModel>()
     val codeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>()
     val pluginCount by pluginScreenViewModel.pluginCount.collectAsState()
-    val sourceCount by sourceScreenViewModel.sourceCount.collectAsState()
+    val pluginSourceCount by sourceScreenViewModel.pluginSourceCount.collectAsState()
 
     // Navigation
     val navigationBackStack = rememberNavBackStack(HomeScreenKey)
@@ -214,7 +214,7 @@ fun RootlessStoreNavigationScaffold(
                         textButtonOnClick = {
                             sourceScreenViewModel.toggleDeleteActionVisibility()
                         },
-                        sourceCount = sourceCount
+                        pluginSourceCount = pluginSourceCount
                     )
                     is ExecuteScreenKey -> {
                         ExecuteScreenNecessaryComponents.ExecuteScreenTopAppBar(
