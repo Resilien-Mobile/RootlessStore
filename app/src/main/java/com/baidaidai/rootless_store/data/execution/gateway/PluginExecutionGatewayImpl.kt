@@ -107,7 +107,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                 onErrorCallback = { error ->
                     trySend(
                         ExecutionResult(
-                            resultTag = ExecutionResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             output = "- ${error.toString()}"
                         )
                     )

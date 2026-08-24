@@ -72,7 +72,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { error ->
                     send(
                         ShellResult(
-                            resultTag = ExecutionResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             command = "~ $commandContent",
                             output = error,
                         )
@@ -103,7 +103,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 onErrorCallback = { error ->
                     trySend(
                         ShellResult(
-                            resultTag = ExecutionResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             command = "~ $commandContent",
                             output = error.toString(),
                         )
@@ -152,7 +152,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { error ->
                     send(
                         ShellResult(
-                            resultTag = ExecutionResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             command = "# $commandContent",
                             output = error,
                         )

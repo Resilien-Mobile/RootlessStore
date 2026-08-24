@@ -38,7 +38,7 @@ fun ExecuteScreen(
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
-                ExecutionResultTag.RedLine -> {
+                ExecutionResultTag.Error -> {
                     Text(
                         text = executionResult.output,
                         style = MaterialTheme.typography.bodySmall,
