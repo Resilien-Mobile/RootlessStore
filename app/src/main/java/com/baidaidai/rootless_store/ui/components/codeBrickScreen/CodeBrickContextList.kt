@@ -27,15 +27,15 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickContextConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun CodeBrickContextList(
     modifier: Modifier = Modifier,
-    currentSelectedContext: CodeBrickContextConfig,
-    brickContextConfigList: List<CodeBrickContextConfig>,
-    onListItemClick: (codeBrickContextConfig: CodeBrickContextConfig)-> Unit
+    selectedContext: CodeBrickContextConfig,
+    codeBrickContexts: List<CodeBrickContextConfig>,
+    onContextSelected: (codeBrickContextConfig: CodeBrickContextConfig)-> Unit
 ){
 
     val focusedListItemStyle = ListItemColors(
@@ -91,10 +91,10 @@ fun CodeBrickContextList(
         draggedSupportingContentColor = MaterialTheme.colorScheme.onSurface,
     )
 
-    var contextListContentCanSee by remember { mutableStateOf(false) }
+    var isContextListExpanded by remember { mutableStateOf(false) }
 
     fun contextListItemColors(index: Int): ListItemColors{
-        return if (brickContextConfigList[index].contextType == currentSelectedContext.contextType){
+        return if (codeBrickContexts[index].contextType == selectedContext.contextType){
             focusedListItemStyle
         }else{
             unfocusedListItemStyle
@@ -106,7 +106,7 @@ fun CodeBrickContextList(
             .clip(RoundedCornerShape(16.dp))
     ) {
         ListItem(
-            onClick = { contextListContentCanSee = !contextListContentCanSee },
+            onClick = { isContextListExpanded = !isContextListExpanded },
             trailingContent = {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
@@ -120,13 +120,13 @@ fun CodeBrickContextList(
                 style = MaterialTheme.typography.titleMedium
             )
         }
-        if (contextListContentCanSee){
+        if (isContextListExpanded){
             Spacer(modifier = Modifier.height(2.dp))
-            brickContextConfigList.forEachIndexed { index, codeBrickContextConfig ->
+            codeBrickContexts.forEachIndexed { index, codeBrickContextConfig ->
                 val contextText = stringResource(codeBrickContextConfig.contextTextResource)
 
                 ListItem(
-                    onClick = { onListItemClick(codeBrickContextConfig) },
+                    onClick = { onContextSelected(codeBrickContextConfig) },
                     leadingContent = {
                         Icon(
                             painter = painterResource(codeBrickContextConfig .contextIcon),
@@ -152,29 +152,29 @@ fun CodeBrickContextList(
 @Composable
 private fun _CodeBrickContextListPreview_() {
 
-    val brickContextConfigList = listOf(
+    val codeBrickContexts = listOf(
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.LIMITED,
+            contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
-            contextIcon = R.drawable.material_symbols_applicaitons
+            contextIcon = R.drawable.material_symbols_applications
         ),
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.ADB,
+            contextType = ExecutionContext.ADB,
             contextTextResource = R.string.code_brick_screen_editor_context_adb_shell_label,
             contextIcon = R.drawable.material_symbols_adb
         ),
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.ROOTD,
+            contextType = ExecutionContext.ROOTD,
             contextTextResource = R.string.code_brick_screen_editor_context_root_shell_label,
             contextIcon = R.drawable.material_symbols_cyclone
         )
     )
 
-    var currentSelectedContext by remember { mutableStateOf(brickContextConfigList[0]) }
+    var selectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
 
     CodeBrickContextList(
-        currentSelectedContext = currentSelectedContext,
-        brickContextConfigList = brickContextConfigList,
+        selectedContext = selectedContext,
+        codeBrickContexts = codeBrickContexts,
         modifier = Modifier
             .width(300.dp)
             .background(color = MaterialTheme.colorScheme.surface)

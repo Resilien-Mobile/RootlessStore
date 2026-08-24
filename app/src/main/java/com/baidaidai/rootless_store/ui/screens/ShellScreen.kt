@@ -46,10 +46,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.execute.model.ResultTag
-import com.baidaidai.rootless_store.domain.shell.model.ShellCommandContainer
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
+import com.baidaidai.rootless_store.domain.shell.model.ShellCommand
 import com.baidaidai.rootless_store.domain.shell.model.ShellEnvironment
-import com.baidaidai.rootless_store.ui.model.RootLessStoreShellScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreShellScreenViewModel
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.stringResource
 
@@ -57,27 +57,27 @@ import androidx.compose.ui.res.stringResource
 @Composable
 fun ShellScreen(
     contentPaddingValues: PaddingValues,
-    shellScreenViewModel: RootLessStoreShellScreenViewModel,
+    shellScreenViewModel: RootlessStoreShellScreenViewModel,
     lazyColumnState: LazyListState
 ){
     var commandContent by remember { mutableStateOf("") }
     var shellEnvironment by remember { mutableStateOf(ShellEnvironment.AppShell) }
-    var trailingButtonStatus by remember { mutableStateOf(false) }
+    var isEnvironmentMenuExpanded by remember { mutableStateOf(false) }
 
-    val shellOutputList by shellScreenViewModel.shellOutputList.collectAsState()
-    val rootShellStatus by shellScreenViewModel.rootShellStatus.collectAsState()
-    val adbShellStatus by shellScreenViewModel.adbShellStatus.collectAsState()
+    val shellOutputs by shellScreenViewModel.shellOutputs.collectAsState()
+    val isRootShellAvailable by shellScreenViewModel.isRootShellAvailable.collectAsState()
+    val isAdbShellAvailable by shellScreenViewModel.isAdbShellAvailable.collectAsState()
     val shellContextPreferences by shellScreenViewModel.shellContextPreferences.collectAsState()
 
-    LaunchedEffect(shellOutputList.size) {
-        if (shellOutputList.isNotEmpty()) {
-            lazyColumnState.scrollToItem(shellOutputList.lastIndex)
+    LaunchedEffect(shellOutputs.size) {
+        if (shellOutputs.isNotEmpty()) {
+            lazyColumnState.scrollToItem(shellOutputs.lastIndex)
         }
     }
 
     val shellEnvironmentSymbol = remember(shellEnvironment){
         when(shellEnvironment){
-            ShellEnvironment.AppShell, ShellEnvironment.ADBShell -> "~"
+            ShellEnvironment.AppShell, ShellEnvironment.AdbShell -> "~"
             ShellEnvironment.RootShell -> "#"
         }
     }
@@ -89,28 +89,28 @@ fun ShellScreen(
             .fillMaxSize()
     ) {
 
-        val trailingButtonContentPaddingAfterClick = PaddingValues(start = 15.dp, end = 15.dp)
-        val trailingButtonContentPaddingBeforeClick = PaddingValues(start = 13.dp, end = 17.dp)
-        val trailingButtonSizeBeforeClick = SplitButtonDefaults.trailingButtonShapesFor(56.dp).shape
+        val expandedTrailingButtonContentPadding = PaddingValues(start = 15.dp, end = 15.dp)
+        val collapsedTrailingButtonContentPadding = PaddingValues(start = 13.dp, end = 17.dp)
+        val collapsedTrailingButtonShape = SplitButtonDefaults.trailingButtonShapesFor(56.dp).shape
 
-        val trailingButtonContentPadding = remember(trailingButtonStatus) {
-            if (trailingButtonStatus){
-                trailingButtonContentPaddingAfterClick
+        val trailingButtonContentPadding = remember(isEnvironmentMenuExpanded) {
+            if (isEnvironmentMenuExpanded){
+                expandedTrailingButtonContentPadding
             }else{
-                trailingButtonContentPaddingBeforeClick
+                collapsedTrailingButtonContentPadding
             }
         }
 
-        val trailingButtonSize = remember(trailingButtonStatus) {
-            if (trailingButtonStatus){
+        val trailingButtonShape = remember(isEnvironmentMenuExpanded) {
+            if (isEnvironmentMenuExpanded){
                 CircleShape
             }else{
-                trailingButtonSizeBeforeClick
+                collapsedTrailingButtonShape
             }
         }
 
-        val shellCommandContainer = remember(key1 = commandContent, key2 = shellEnvironment) {
-            ShellCommandContainer(shellEnvironment, commandContent = commandContent)
+        val shellCommand = remember(key1 = commandContent, key2 = shellEnvironment) {
+            ShellCommand(shellEnvironment, commandContent = commandContent)
         }
 
         Box(
@@ -155,7 +155,7 @@ fun ShellScreen(
                         .height(56.dp)
                 ){
                     when(shellEnvironment){
-                        ShellEnvironment.ADBShell -> {
+                        ShellEnvironment.AdbShell -> {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.Center,
@@ -165,8 +165,8 @@ fun ShellScreen(
                             ){
                                 Text(stringResource(R.string.shell_screen_enable_run_as_label))
                                 Checkbox(
-                                    checked = shellContextPreferences.jumpToDirectory,
-                                    onCheckedChange = shellScreenViewModel::setJumpToDirectory
+                                    checked = shellContextPreferences.shouldJumpToDirectory,
+                                    onCheckedChange = shellScreenViewModel::setDirectoryJumpEnabled
                                 )
                             }
                         }
@@ -180,8 +180,8 @@ fun ShellScreen(
                             ){
                                 Text(stringResource(R.string.shell_screen_jump_to_directory_label))
                                 Checkbox(
-                                    checked = shellContextPreferences.jumpToDirectory,
-                                    onCheckedChange = shellScreenViewModel::setJumpToDirectory
+                                    checked = shellContextPreferences.shouldJumpToDirectory,
+                                    onCheckedChange = shellScreenViewModel::setDirectoryJumpEnabled
                                 )
                             }
                         }
@@ -196,7 +196,7 @@ fun ShellScreen(
                             leadingButton = {
                                 Button(
                                     onClick = {
-                                        shellScreenViewModel.runCommand(shellCommandContainer)
+                                        shellScreenViewModel.executeCommand(shellCommand)
                                     },
                                     contentPadding = SplitButtonDefaults.MediumLeadingButtonContentPadding,
                                     shape = SplitButtonDefaults.leadingButtonShapesFor(
@@ -222,9 +222,9 @@ fun ShellScreen(
                                 Column{
                                     Button(
                                         onClick = {
-                                            trailingButtonStatus = !trailingButtonStatus
+                                            isEnvironmentMenuExpanded = !isEnvironmentMenuExpanded
                                         },
-                                        shape = trailingButtonSize,
+                                        shape = trailingButtonShape,
                                         contentPadding = trailingButtonContentPadding,
                                         modifier = Modifier
                                             .height(56.dp)
@@ -234,13 +234,13 @@ fun ShellScreen(
                                             contentDescription = "Expand More",
                                             modifier = Modifier
                                                 .size(26.dp)
-                                                .rotate(if (trailingButtonStatus) 0f else -90f )
+                                                .rotate(if (isEnvironmentMenuExpanded) 0f else -90f )
                                         )
                                     }
 
                                     DropdownMenuPopup(
-                                        expanded = trailingButtonStatus,
-                                        onDismissRequest = { trailingButtonStatus = !trailingButtonStatus},
+                                        expanded = isEnvironmentMenuExpanded,
+                                        onDismissRequest = { isEnvironmentMenuExpanded = !isEnvironmentMenuExpanded},
                                         offset = DpOffset(x = 0.dp, y = 8.dp)
                                     ) {
                                         DropdownMenuGroup(
@@ -252,7 +252,7 @@ fun ShellScreen(
                                                 shapes = MenuDefaults.itemShape(1,4),
                                                 leadingIcon = {
                                                     Icon(
-                                                        painterResource(R.drawable.material_symbols_applicaitons),
+                                                        painterResource(R.drawable.material_symbols_applications),
                                                         contentDescription = "App shell"
                                                     )
                                                 },
@@ -265,8 +265,8 @@ fun ShellScreen(
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
                                             DropdownMenuItem(
-                                                enabled = adbShellStatus,
-                                                selected = shellEnvironment == ShellEnvironment.ADBShell,
+                                                enabled = isAdbShellAvailable,
+                                                selected = shellEnvironment == ShellEnvironment.AdbShell,
                                                 shapes = MenuDefaults.itemShape(2,4),
                                                 leadingIcon = {
                                                     Icon(
@@ -278,12 +278,12 @@ fun ShellScreen(
                                                     Text("ADB shell")
                                                 },
                                                 onClick = {
-                                                    shellEnvironment = ShellEnvironment.ADBShell
+                                                    shellEnvironment = ShellEnvironment.AdbShell
                                                 }
                                             )
                                             Spacer(modifier = Modifier.height(2.dp))
                                             DropdownMenuItem(
-                                                enabled = rootShellStatus,
+                                                enabled = isRootShellAvailable,
                                                 selected = shellEnvironment == ShellEnvironment.RootShell,
                                                 shapes = MenuDefaults.itemShape(3,4),
                                                 leadingIcon = {
@@ -325,20 +325,20 @@ fun ShellScreen(
                     .padding(horizontal = 25.dp, vertical = 15.dp)
             ){
                 items(
-                    items = shellOutputList
+                    items = shellOutputs
                 ){ shellResult ->
                     if(shellResult.command != null){
                         Text(shellResult.command)
                     }
 
-                    if (shellResult.resulTag == ResultTag.RedLine){
+                    if (shellResult.resultTag == ExecutionResultTag.Error){
                         Text(
-                            shellResult.content,
+                            shellResult.output,
                             color = Color(Color.RED)
                         )
                     }else{
                         Text(
-                            shellResult.content,
+                            shellResult.output,
                         )
                     }
                 }

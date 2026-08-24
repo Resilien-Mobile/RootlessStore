@@ -29,7 +29,7 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         }
     }
 
-    fun tryBindShizukuUserService() {
+    fun startShizukuUserService() {
         val args = Shizuku.UserServiceArgs(
             ComponentName(
                 "com.baidaidai.rootless_store",
@@ -46,11 +46,11 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         Log.d("ShizukuEndpointManager","shizukuEndpoint != null: ${shizukuUserService != null}")
     }
 
-    fun getShizukuUserService(): IShellService? {
+    fun findShizukuUserService(): IShellService? {
         return shizukuUserService
     }
 
-    fun getShizukuUserServiceAvailableStatus(): Flow<Boolean> = flow {
+    fun observeShizukuUserServiceAvailability(): Flow<Boolean> = flow {
         while (true){
             emit(shizukuUserService != null)
             delay(3000.milliseconds)

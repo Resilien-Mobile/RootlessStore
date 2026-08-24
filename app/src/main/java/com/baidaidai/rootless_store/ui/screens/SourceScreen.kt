@@ -18,41 +18,41 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAlertDialog
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenAuthenticationModalBottomSheet
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenListItem
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenAlertDialog
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenAuthenticationModalBottomSheet
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenListItem
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SourceScreen(
     contentPadding: PaddingValues,
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
-    onListItemClick: (pluginSourceInfo: PluginSourceInfo)-> Unit
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
+    onPluginSourceSelected: (pluginSource: PluginSource) -> Unit
 ){
-    val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()
-    val sourceScreenLeadingDeleteButtonStatus by sourceScreenViewModel.deleterShowStatus.collectAsState()
+    val pluginSources by sourceScreenViewModel.pluginSources.collectAsState()
+    val isDeleteActionVisible by sourceScreenViewModel.isDeleteActionVisible.collectAsState()
 
-    val authenticationBottomSheetShowStatus by sourceScreenViewModel.authenticationBottomSheetShowStatus.collectAsState()
-    val authenticationAlertDialogShowStatus by sourceScreenViewModel.authenticationAlertDialogShowStatus.collectAsState()
+    val isAuthenticationSheetVisible by sourceScreenViewModel.isAuthenticationSheetVisible.collectAsState()
+    val isAuthenticationDialogVisible by sourceScreenViewModel.isAuthenticationDialogVisible.collectAsState()
 
 
 
-    if(authenticationAlertDialogShowStatus){
+    if(isAuthenticationDialogVisible){
         SourceScreenAlertDialog(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
-            onConfirmButtonClick = sourceScreenViewModel::startSourceAuthentication,
-            onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication
+            onStartAuthentication = sourceScreenViewModel::startSourceAuthentication,
+            onCancelAuthentication = sourceScreenViewModel::cancelSourceAuthentication
         )
     }
 
-    if (authenticationBottomSheetShowStatus){
+    if (isAuthenticationSheetVisible){
         SourceScreenAuthenticationModalBottomSheet(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
-            onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication,
-        ) { userName, passWord ->
-            sourceScreenViewModel.addOneSourceByAuthentication(userName,passWord)
+            onCancelAuthentication = sourceScreenViewModel::cancelSourceAuthentication,
+        ) { username, password ->
+            sourceScreenViewModel.addAuthenticatedPluginSource(username,password)
         }
     }
 
@@ -66,17 +66,16 @@ fun SourceScreen(
         ) {
             LazyColumn{
                 itemsIndexed(
-                    items = pluginSourceList
+                    items = pluginSources
                 ){ listIndex, pluginSource ->
                     Column {
                         SourceScreenListItem(
-                            sourceScreenLeadingDeleteButtonStatus,
-                            pluginSourceInfo = pluginSource,
-                            sourceScreenViewModel
-                        ) {
-                            onListItemClick(pluginSource)
-                        }
-                        if (listIndex!=pluginSourceList.size-1){
+                            isDeleteActionVisible = isDeleteActionVisible,
+                            pluginSource = pluginSource,
+                            sourceScreenViewModel = sourceScreenViewModel,
+                            onPluginSourceSelected = onPluginSourceSelected
+                        )
+                        if (listIndex!=pluginSources.size-1){
                             Spacer(modifier = Modifier.height(2.dp))
                         }
                     }

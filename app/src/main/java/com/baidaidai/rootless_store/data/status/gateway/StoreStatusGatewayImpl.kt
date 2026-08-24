@@ -8,24 +8,24 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionAndAuthGatewayImpl
-import com.baidaidai.rootless_store.data.status.datasource.AndroidAndAPIVersionDataSource
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
+import com.baidaidai.rootless_store.data.status.datasource.AndroidPlatformVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
-import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.KernelVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
-import com.baidaidai.rootless_store.data.status.datasource.NetStatusDataSource
-import com.baidaidai.rootless_store.data.status.datasource.SELinuxStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.NetworkStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.SeLinuxStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.StorageStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.TemperatureStatusDataSource
-import com.baidaidai.rootless_store.domain.status.model.AndroidAndAPIStatus
-import com.baidaidai.rootless_store.domain.status.model.CoreInfo
+import com.baidaidai.rootless_store.domain.status.model.AndroidPlatformVersion
+import com.baidaidai.rootless_store.domain.status.model.CpuCoreMetrics
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
-import com.baidaidai.rootless_store.domain.status.model.PortInfo
-import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
+import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
-import com.baidaidai.rootless_store.domain.status.model.TempStatus
+import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import com.topjohnwu.superuser.Shell
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
@@ -40,21 +40,21 @@ import kotlin.time.Duration
 class StoreStatusGatewayImpl @Inject constructor(
     private val memoryStatusDataSource: MemoryStatusDataSource,
     private val storageStatusDataSource: StorageStatusDataSource,
-    private val selinuxStatusDataSource: SELinuxStatusDataSource,
-    private val kernelStatusDataSource: KernelStatusDataSource,
+    private val seLinuxStatusDataSource: SeLinuxStatusDataSource,
+    private val kernelVersionDataSource: KernelVersionDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
-    private val androidAndAPIVersionDataSource: AndroidAndAPIVersionDataSource,
+    private val androidPlatformVersionDataSource: AndroidPlatformVersionDataSource,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
-    private val shizukuPermissionAndAuthGatewayImpl: ShizukuPermissionAndAuthGatewayImpl,
+    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
-    private val netStatusDataSource: NetStatusDataSource,
+    private val networkStatusDataSource: NetworkStatusDataSource,
     @ApplicationContext context: Context
 ) {
 
     private val dataStore = context.rootlessStorePreferencesDataStore
 
     // Status
-    fun getMemoryStatus(): Flow<MemoryStatus> = flow {
+    fun observeMemoryStatus(): Flow<MemoryStatus> = flow {
         while (true){
             val totalMemory = memoryStatusDataSource.getTotalMemory()
             val usedMemory = memoryStatusDataSource.getUsedMemory()
@@ -63,7 +63,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun getStorageStatus(): Flow<StorageStatus> = flow {
+    fun observeStorageStatus(): Flow<StorageStatus> = flow {
         while (true){
             val usedStorage = storageStatusDataSource.getUsedStorage()
             val totalStorage = storageStatusDataSource.getTotalStorage()
@@ -72,103 +72,103 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun getSELinuxStatus(): SELinuxStatus = selinuxStatusDataSource.returnSELinuxStatus()
+    fun getSeLinuxStatus(): SeLinuxStatus = seLinuxStatusDataSource.getSeLinuxStatus()
 
-    fun getKernelStatus(): String = kernelStatusDataSource.getDeviceKernel()
+    fun getKernelVersion(): String = kernelVersionDataSource.getKernelVersion()
 
-    fun getTemperatureStatus(): Flow<TempStatus> = temperatureStatusDataSource.getDeviceTemperatureStatus()
+    fun observeTemperatureStatus(): Flow<TemperatureStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 
-    fun getAndroidAndAPIStatus(): AndroidAndAPIStatus {
-        val androidVersion = androidAndAPIVersionDataSource.getAndroidVersion()
-        val apiVersion = androidAndAPIVersionDataSource.getAndroidAPIVersion()
-        return AndroidAndAPIStatus(androidVersion,apiVersion)
+    fun getAndroidPlatformVersion(): AndroidPlatformVersion {
+        val releaseLabel = androidPlatformVersionDataSource.getReleaseLabel()
+        val apiLevelLabel = androidPlatformVersionDataSource.getApiLevelLabel()
+        return AndroidPlatformVersion(releaseLabel, apiLevelLabel)
     }
 
-    fun getHosterOverallStatus():Flow<HosterOverallStatus> = flow {
+    fun observeAvailableExecutionContext(): Flow<ExecutionContext> = flow {
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionAndAuthGatewayImpl.pingShizuku() && shizukuPermissionAndAuthGatewayImpl.checkShizukuPermission()) {
-                    Log.d("HosterOverallStatus", "Attempt tryBindShizukuUserService Shizuku Endpoint")
-                    val ok = shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
-                    Log.d("HosterOverallStatus", "Bind result: $ok")
+                if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
+                    Log.d("ExecutionContext", "Attempt startShizukuUserService Shizuku Endpoint")
+                    val isUserServiceStarted = shizukuUserServiceGatewayImpl.startShizukuUserService()
+                    Log.d("ExecutionContext", "Bind result: $isUserServiceStarted")
                     true
                 } else {
                     false
                 }
 
-            val status = when {
+            val availableExecutionContext = when {
                 isRoot -> {
-                    Log.d("HosterOverallStatus", "Root")
-                    HosterOverallStatus.ROOTD
+                    Log.d("ExecutionContext", "Root")
+                    ExecutionContext.ROOTD
                 }
                 isShizukuAvailable -> {
-                    Log.d("HosterOverallStatus", "Shizuku")
-                    HosterOverallStatus.ADB
+                    Log.d("ExecutionContext", "Shizuku")
+                    ExecutionContext.ADB
                 }
-                getSELinuxStatus() == SELinuxStatus.Permissive -> {
-                    Log.d("HosterOverallStatus", "Permissive")
-                    HosterOverallStatus.PERMISSIVE
+                getSeLinuxStatus() == SeLinuxStatus.Permissive -> {
+                    Log.d("ExecutionContext", "Permissive")
+                    ExecutionContext.PERMISSIVE
                 }
                 else -> {
-                    Log.d("HosterOverallStatus", "Limited")
-                    HosterOverallStatus.LIMITED
+                    Log.d("ExecutionContext", "Limited")
+                    ExecutionContext.LIMITED
                 }
             }
 
-            emit(status)
+            emit(availableExecutionContext)
             delay(3000)
         }
     }
 
-    fun getRootStatus(): Boolean {
+    fun isRootShellAvailable(): Boolean {
         return Shell.getShell().isRoot
     }
 
-    fun getShizukuStatus(): Boolean {
-        shizukuUserServiceGatewayImpl.tryBindShizukuUserService()
+    fun isShizukuAvailable(): Boolean {
+        shizukuUserServiceGatewayImpl.startShizukuUserService()
         return true
         // MVP后马上删，会抛error不稳定
     }
 
     // CPU Status
-    suspend fun getCoreInfo(cpuCoreIndex: Int? = null): CoreInfo? {
+    suspend fun findCpuCoreMetrics(cpuCoreIndex: Int? = null): CpuCoreMetrics? {
         return cpuStatusDataSource(cpuCoreIndex)
     }
 
-    suspend fun getCpuCoreCount(): Int? {
-        return cpuStatusDataSource.getCpuCoreCount()
+    suspend fun findCpuCoreCount(): Int? {
+        return cpuStatusDataSource.findCpuCoreCount()
     }
 
-    suspend fun getSystemUptime(): Duration? {
-        return cpuStatusDataSource.getSystemUptime()
+    suspend fun findSystemUptime(): Duration? {
+        return cpuStatusDataSource.findSystemUptime()
     }
 
     // Network Status
-    suspend fun getPortInfo(
+    suspend fun findNetworkInterfaceMetrics(
         networkInterfaceName: String = "wlan0"
-    ): PortInfo? {
-        return netStatusDataSource(networkInterfaceName)
+    ): NetworkInterfaceMetrics? {
+        return networkStatusDataSource(networkInterfaceName)
     }
 
     fun isCarrierAvailable(): Boolean {
-        return netStatusDataSource.isCarrierAvailable()
+        return networkStatusDataSource.isCarrierAvailable()
     }
 
     fun isVpnAvailable(): Boolean {
-        return netStatusDataSource.isVpnAvailable()
+        return networkStatusDataSource.isVpnAvailable()
     }
 
-    fun getCarrierNetworkInterfaceName(): String? {
-        return netStatusDataSource.getCarrierNetworkInterfaceName()
+    fun findCarrierNetworkInterfaceName(): String? {
+        return networkStatusDataSource.findCarrierNetworkInterfaceName()
     }
 
-    fun getVpnNetworkInterfaceName(): String? {
-        return netStatusDataSource.getVpnNetworkInterfaceName()
+    fun findVpnNetworkInterfaceName(): String? {
+        return networkStatusDataSource.findVpnNetworkInterfaceName()
     }
 
     // Preference
-    fun getExecuteContextPreference(): Flow<HosterOverallStatus> {
+    fun observeExecutionContextPreference(): Flow<ExecutionContext> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -178,17 +178,17 @@ class StoreStatusGatewayImpl @Inject constructor(
                 }
             }
             .map { preference ->
-                preference[EXECUTE_CONTEXT]?.let { HosterOverallStatus.valueOf(it) } ?: HosterOverallStatus.LIMITED
+                preference[EXECUTION_CONTEXT]?.let { ExecutionContext.valueOf(it) } ?: ExecutionContext.LIMITED
             }
     }
 
-    suspend fun setExecuteContextPreference(hosterOverallStatus: HosterOverallStatus) {
+    suspend fun setExecutionContextPreference(executionContext: ExecutionContext) {
         dataStore.edit { preference ->
-            preference[EXECUTE_CONTEXT] = hosterOverallStatus.name
+            preference[EXECUTION_CONTEXT] = executionContext.name
         }
     }
 
-    fun getEnableChooserPreference(): Flow<Boolean> {
+    fun observeExecutionContextChooserEnabled(): Flow<Boolean> {
         return dataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -198,19 +198,19 @@ class StoreStatusGatewayImpl @Inject constructor(
                 }
             }
             .map { preference ->
-                preference[ENABLE_CHOOSER] ?: false
+                preference[EXECUTION_CONTEXT_CHOOSER_ENABLED] ?: false
             }
     }
 
-    suspend fun setEnableChooserPreference(enableStatus: Boolean) {
+    suspend fun setExecutionContextChooserEnabled(isEnabled: Boolean) {
         dataStore.edit { preference ->
-            preference[ENABLE_CHOOSER] = enableStatus
+            preference[EXECUTION_CONTEXT_CHOOSER_ENABLED] = isEnabled
         }
     }
 
     private companion object {
-        val EXECUTE_CONTEXT = stringPreferencesKey("execute_context")
-        val ENABLE_CHOOSER = booleanPreferencesKey("enable_chooser")
+        val EXECUTION_CONTEXT = stringPreferencesKey("execute_context")
+        val EXECUTION_CONTEXT_CHOOSER_ENABLED = booleanPreferencesKey("enable_chooser")
     }
 
 }

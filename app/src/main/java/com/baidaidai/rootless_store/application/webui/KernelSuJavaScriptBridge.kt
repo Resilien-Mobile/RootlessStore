@@ -1,0 +1,107 @@
+package com.baidaidai.rootless_store.application.webui
+
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.os.Build
+import android.webkit.JavascriptInterface
+import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
+import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
+import org.json.JSONArray
+import org.json.JSONObject
+
+
+class KernelSuJavaScriptBridge(
+    private val context: Context,
+    private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
+) {
+
+    @JavascriptInterface
+    fun exec(command: String): String {
+        val stdout = StringBuilder()
+        val stderr = StringBuilder()
+        val shizukuUserService = shizukuUserServiceGatewayImpl.findShizukuUserService()
+
+        if (shizukuUserService == null) {
+            return createExecutionResultJson(
+                errno = 1,
+                stdout = "",
+                stderr = "Shizuku user service is not available."
+            )
+        }
+
+        val callback = ShizukuEndpointCallback(
+            onOutput = { output ->
+                stdout.appendLine(output.orEmpty())
+            },
+            onError = { error ->
+                stderr.appendLine(error.orEmpty())
+            },
+            onProcessExit = {}
+        )
+
+        shizukuUserService.command(
+            command,
+            callback,
+            false
+        )
+
+        return createExecutionResultJson(
+            errno = if (stderr.isBlank()) 0 else 1,
+            stdout = stdout.toString(),
+            stderr = stderr.toString()
+        )
+    }
+
+    @JavascriptInterface
+    fun listPackages(packageType: String?): String {
+        val packageInfos = listInstalledPackages()
+
+        // Filter, ensure every package is either system or user
+        val packageNames = packageInfos
+            .filter { packageInfo ->
+                when (packageType?.lowercase()) {
+                    "user" -> !packageInfo.isSystemPackage()
+                    "system" -> packageInfo.isSystemPackage()
+                    else -> true
+                }
+            }
+            .map { packageInfo ->
+                packageInfo.packageName
+            }
+
+        return JSONArray(packageNames).toString()
+    }
+
+    private fun listInstalledPackages(): List<PackageInfo> {
+        val packageManager = context.packageManager
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(0))
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getInstalledPackages(0)
+        }
+    }
+
+    private fun PackageInfo.isSystemPackage(): Boolean {
+        val systemPackageFlags = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
+        val applicationInfoFlags = applicationInfo?.flags ?: 0
+
+        return applicationInfoFlags and systemPackageFlags != 0
+    }
+
+    private fun createExecutionResultJson(
+        errno: Int,
+        stdout: String,
+        stderr: String
+    ): String {
+        return JSONObject()
+            .put("errno", errno)
+            .put("stdout", stdout)
+            .put("stderr", stderr)
+            .toString()
+    }
+
+}

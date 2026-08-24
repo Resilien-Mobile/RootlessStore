@@ -1,30 +1,30 @@
 package com.baidaidai.illusioncube
 
-import com.baidaidai.illusioncube.application.conf.JudgeIfConfUseCase
-import com.baidaidai.illusioncube.application.json.JudgeIfJsonUseCase
-import com.baidaidai.illusioncube.application.prop.ConvertPropToJsonUseCase
-import com.baidaidai.illusioncube.application.prop.JudgeIfPropUseCase
-import com.baidaidai.illusioncube.application.yaml.JudgeIfYamlUseCase
+import com.baidaidai.illusioncube.application.conf.ValidateConfUseCase
+import com.baidaidai.illusioncube.application.json.ValidateJsonUseCase
+import com.baidaidai.illusioncube.application.prop.EncodePropAsJsonUseCase
+import com.baidaidai.illusioncube.application.prop.ValidatePropUseCase
+import com.baidaidai.illusioncube.application.yaml.ValidateYamlUseCase
 import com.baidaidai.illusioncube.domain.type.ConfigType
 
 class IllusionCube (
     private val rawConfig: String,
 ){
-    private var _configType: ConfigType? = null
-    val configType = _configType
+    private var resolvedConfigType: ConfigType? = null
+    val configType = resolvedConfigType
 
-    fun judge(): ConfigType {
+    fun resolveConfigType(): ConfigType {
         when{
-            Json.judgeIfJson(rawConfig) -> {
-                _configType = ConfigType.Json
+            Json.validate(rawConfig) -> {
+                resolvedConfigType = ConfigType.Json
                 return ConfigType.Json
             }
-            Prop.judgeIfProp(rawConfig) -> {
-                _configType = ConfigType.Prop
+            Prop.validate(rawConfig) -> {
+                resolvedConfigType = ConfigType.Prop
                 return ConfigType.Prop
             }
             else -> {
-                _configType = ConfigType.Error
+                resolvedConfigType = ConfigType.Error
                 return ConfigType.Error
             }
         }
@@ -35,9 +35,9 @@ class IllusionCube (
         private val rawConfig: String
     ){
         companion object {
-            fun judgeIfJson(rawConfig: String): Boolean{
-                val judgeIfJsonUseCase = JudgeIfJsonUseCase()
-                return judgeIfJsonUseCase(rawConfig)
+            fun validate(rawConfig: String): Boolean{
+                val validateJsonUseCase = ValidateJsonUseCase()
+                return validateJsonUseCase(rawConfig)
             }
         }
     }
@@ -46,14 +46,14 @@ class IllusionCube (
     class Prop(
         private val rawConfig: String
     ){
-        fun convertPropToJson(): String{
-            val convertPropToJsonUseCase = ConvertPropToJsonUseCase()
-            return convertPropToJsonUseCase(rawConfig)
+        fun encodeAsJson(): String{
+            val encodePropAsJsonUseCase = EncodePropAsJsonUseCase()
+            return encodePropAsJsonUseCase(rawConfig)
         }
         companion object {
-            fun judgeIfProp(rawConfig: String): Boolean{
-                val judgeIfPropUseCase = JudgeIfPropUseCase()
-                return judgeIfPropUseCase(rawConfig)
+            fun validate(rawConfig: String): Boolean{
+                val validatePropUseCase = ValidatePropUseCase()
+                return validatePropUseCase(rawConfig)
             }
         }
 
@@ -62,9 +62,9 @@ class IllusionCube (
     // Yaml
     class Yaml(){
         companion object {
-            fun judgeIfYaml(): Boolean{
-                val judgeIfYamlUseCase = JudgeIfYamlUseCase()
-                return judgeIfYamlUseCase()
+            fun validate(): Boolean{
+                val validateYamlUseCase = ValidateYamlUseCase()
+                return validateYamlUseCase()
             }
         }
 
@@ -73,9 +73,9 @@ class IllusionCube (
     // Conf
     class Conf(){
         companion object {
-            fun judgeIfConf(): Boolean{
-                val judgeIfConfUseCase = JudgeIfConfUseCase()
-                return judgeIfConfUseCase()
+            fun validate(): Boolean{
+                val validateConfUseCase = ValidateConfUseCase()
+                return validateConfUseCase()
             }
         }
 

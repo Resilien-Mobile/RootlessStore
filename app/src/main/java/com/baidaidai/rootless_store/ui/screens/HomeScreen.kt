@@ -18,58 +18,58 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
+import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenContextSwitchDialog
-import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuInfoCard
-import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetDashboard
-import com.baidaidai.rootless_store.ui.components.homeScreen.HosterStatusCircularProgressRow
+import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuDashboardCard
+import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetworkDashboard
+import com.baidaidai.rootless_store.ui.components.homeScreen.HomeStatusOverview
 import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootlessStorePlugin
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionCheckerContainer
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootLessStoreVersionTagContainer
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreHosterStatusBoard
+import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreUpdateBanner
+import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionCard
+import com.baidaidai.rootless_store.ui.components.homeScreen.DeviceStatusBoard
 import com.baidaidai.rootless_store.ui.layout.homeScreen.HomeScreenExpandedLayout
-import com.baidaidai.rootless_store.ui.model.RootLessStoreHomeScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
 
 @Composable
 fun HomeScreen(
     contentPadding: PaddingValues,
     rootlessStoreHeightWindowSize: RootlessStoreWindowSize,
     rootlessStoreWidthWindowSize: RootlessStoreWindowSize,
-    onChipClick:()-> Unit,
-    homeScreenViewModel: RootLessStoreHomeScreenViewModel = hiltViewModel()
+    onOpenShizukuSetup: () -> Unit,
+    homeScreenViewModel: RootlessStoreHomeScreenViewModel = hiltViewModel()
 ){
     val memoryStatus by homeScreenViewModel.memoryStatus.collectAsState()
     val storageStatus by homeScreenViewModel.storageStatus.collectAsState()
     val pluginStatus by homeScreenViewModel.pluginStatus.collectAsState()
     val temperatureStatus by homeScreenViewModel.temperatureStatus.collectAsState()
     val seLinuxStatus by homeScreenViewModel.seLinuxStatus.collectAsState()
-    val kernelStatus by homeScreenViewModel.kernelStatus.collectAsState()
-    val androidAndAPIStatus by homeScreenViewModel.androidAndAPIStatus.collectAsState()
-    val hosterOverallStatus by homeScreenViewModel.overallStatus.collectAsState()
-    val dialogStats by homeScreenViewModel.dialogStatus.collectAsState()
-    val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
-    val cpuStatus by homeScreenViewModel.cpuStatus.collectAsState()
-    val netStatus by homeScreenViewModel.netStatus.collectAsState()
-    val appVersion = stringResource(R.string.app_version)
+    val kernelVersion by homeScreenViewModel.kernelVersion.collectAsState()
+    val androidPlatformVersion by homeScreenViewModel.androidPlatformVersion.collectAsState()
+    val executionContext by homeScreenViewModel.executionContext.collectAsState()
+    val isContextDialogVisible by homeScreenViewModel.isContextDialogVisible.collectAsState()
+    val latestVersionTag by homeScreenViewModel.latestVersionTag.collectAsState()
+    val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
+    val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
+    val currentVersionTag = stringResource(R.string.app_version)
 
-    val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
-        hosterOverallStatus = hosterOverallStatus,
-        osAndAPIVersion = androidAndAPIStatus,
-        kernelVersion = kernelStatus,
-        selinuxStatus = seLinuxStatus,
+    val deviceStatusSummary = DeviceStatusSummary(
+        executionContext = executionContext,
+        androidPlatformVersion = androidPlatformVersion,
+        kernelVersion = kernelVersion,
+        seLinuxStatus = seLinuxStatus,
         pluginStatus = pluginStatus,
         memoryStatus = memoryStatus,
         storageStatus = storageStatus,
-        tempStatus = temperatureStatus
+        temperatureStatus = temperatureStatus
     )
 
-    if (dialogStats){
+    if (isContextDialogVisible){
         HomeScreenContextSwitchDialog(
-            onDismissButtonClick = homeScreenViewModel::changeDialogStatus,
+            onDismissRequest = homeScreenViewModel::toggleContextDialogVisibility,
             homeScreenViewModel = homeScreenViewModel,
-            onConfirmButtonClick = homeScreenViewModel::setExecuteContextPreference,
-            onRevertButtonClick = homeScreenViewModel::revertExecuteContextPreference
+            onApplyExecutionContext = homeScreenViewModel::setExecutionContextPreference,
+            onResetExecutionContextPreference = homeScreenViewModel::resetExecutionContextPreference
         )
     }
 
@@ -86,31 +86,31 @@ fun HomeScreen(
         ) {
             item {
                 /* Version Tag */
-                RootLessStoreVersionTagContainer()
+                RootlessStoreVersionCard()
             }
 
-            if (latestVersionNumber != null && latestVersionNumber != appVersion) {
+            if (latestVersionTag != null && latestVersionTag != currentVersionTag) {
                 item {
                     /* Version Checker */
-                    RootLessStoreVersionCheckerContainer(
-                        latestVersionNumber = latestVersionNumber!!
+                    RootlessStoreUpdateBanner(
+                        latestVersionTag = latestVersionTag!!
                     )
                 }
             }
 
             item {
-                /* Hoster Circular Progress */
-                HosterStatusCircularProgressRow(
-                    hosterStatus = rootlessStoreHosterStatus,
-                    onChipClick = onChipClick,
-                    onChipLongClick = homeScreenViewModel::changeDialogStatus
+                /* Device Status Overview */
+                HomeStatusOverview(
+                    deviceStatus = deviceStatusSummary,
+                    onOpenShizukuSetup = onOpenShizukuSetup,
+                    onOpenExecutionContextChooser = homeScreenViewModel::toggleContextDialogVisibility
                 )
             }
 
             item {
-                /* Hoster Status */
-                RootlessStoreHosterStatusBoard(
-                    hosterStatus = rootlessStoreHosterStatus
+                /* Device Status */
+                DeviceStatusBoard(
+                    deviceStatus = deviceStatusSummary
                 )
             }
 
@@ -128,62 +128,62 @@ fun HomeScreen(
                 .horizontalScroll(rememberScrollState())
         ){
 
-            // Version Tag && Info Flag
-            RootLessStoreVersionTagContainer(Modifier.width(preferWidth))
+            // Version and update status
+            RootlessStoreVersionCard(Modifier.width(preferWidth))
 
-            if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
-                RootLessStoreVersionCheckerContainer(
-                    latestVersionNumber = latestVersionNumber!!,
-                    modifier = getBasicWidthModifier()
+            if (latestVersionTag != null && latestVersionTag != currentVersionTag && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
+                RootlessStoreUpdateBanner(
+                    latestVersionTag = latestVersionTag!!,
+                    modifier = resolveBasicWidthModifier()
                 )
             }
 
-            /* Hoster Circular Progress */
-            HosterStatusCircularProgressRow(
-                hosterStatus = rootlessStoreHosterStatus,
-                onChipClick = onChipClick,
-                onChipLongClick = homeScreenViewModel::changeDialogStatus,
-                modifier = getBasicWidthModifier()
+            /* Device Status Overview */
+            HomeStatusOverview(
+                deviceStatus = deviceStatusSummary,
+                onOpenShizukuSetup = onOpenShizukuSetup,
+                onOpenExecutionContextChooser = homeScreenViewModel::toggleContextDialogVisibility,
+                modifier = resolveBasicWidthModifier()
             )
 
             /* Version Checker */
             // 如果height紧凑，则可用此布局，反之不可使用
-            if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
-                RootLessStoreVersionCheckerContainer(
-                    latestVersionNumber = latestVersionNumber!!,
-                    modifier = getBasicWidthModifier()
+            if (latestVersionTag != null && latestVersionTag != currentVersionTag && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
+                RootlessStoreUpdateBanner(
+                    latestVersionTag = latestVersionTag!!,
+                    modifier = resolveBasicWidthModifier()
                 )
             }
             // 如果height紧凑，则可用此布局，反之不可使用
             if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
                 /* How to Make Plugin */
-                HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+                HowToDevelopRootlessStorePlugin(resolveBasicWidthModifier())
             }
 
-            /* Hoster Status */
-            RootlessStoreHosterStatusBoard(
-                hosterStatus = rootlessStoreHosterStatus,
-                modifier = getBasicWidthModifier()
+            /* Device Status */
+            DeviceStatusBoard(
+                deviceStatus = deviceStatusSummary,
+                modifier = resolveBasicWidthModifier()
             )
 
             if (rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact){
                 /* How to Make Plugin */
-                HowToDevelopRootlessStorePlugin(getBasicWidthModifier())
+                HowToDevelopRootlessStorePlugin(resolveBasicWidthModifier())
             }
 
 
-            HomeScreenCpuInfoCard(
-                cpuDashboardConfig = cpuStatus,
-                modifier = getBasicWidthModifier(Modifier.height(280.dp))
+            HomeScreenCpuDashboardCard(
+                cpuDashboardConfig = cpuDashboardConfig,
+                modifier = resolveBasicWidthModifier(Modifier.height(280.dp))
             )
 
-            HomeScreenNetDashboard(
-                netDashboardConfig = netStatus,
+            HomeScreenNetworkDashboard(
+                networkDashboardConfig = networkDashboardConfig,
                 rootlessStoreHeightWindowSize = rootlessStoreHeightWindowSize,
                 modifier = if (rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact){
                     Modifier.fillMaxHeight()
                 }else{
-                    getBasicWidthModifier()
+                    resolveBasicWidthModifier()
                 }
             )
 

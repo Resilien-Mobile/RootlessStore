@@ -1,24 +1,24 @@
 package com.baidaidai.rootless_store.data.environment.mapper
 
-import com.baidaidai.rootless_store.data.environment.database.EnvironmentInfoEntity
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentEntity
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 
 object EnvironmentMapper {
 
-    fun EnvironmentInfoEntity.toEnvironmentManifestRoom (): EnvironmentManifestRoom{
+    fun EnvironmentEntity.toEnvironmentManifestRoom (): EnvironmentManifestRoom{
         return EnvironmentManifestRoom(
-            enabled = enabled,
+            isEnabled = isEnabled,
             state = state,
-            source = source,
+            origin = origin,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
             environmentPackageName = environmentPackageName,
-            environmentID = environmentID,
-            iconURI = iconURI,
+            environmentId = environmentId,
+            iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
             requiredEnvironment = requiredEnvironment,
@@ -28,38 +28,38 @@ object EnvironmentMapper {
         )
     }
 
-    fun EnvironmentManifestLocal.toEnvironmentInfoEntity(): EnvironmentInfoEntity{
-        return EnvironmentInfoEntity(
-            environmentID = environmentID,
+    fun EnvironmentManifestLocal.toEnvironmentEntity(): EnvironmentEntity{
+        return EnvironmentEntity(
+            environmentId = environmentId,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
             environmentPackageName = environmentPackageName,
-            iconURI = iconURI,
+            iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
-            enabled = false,
+            isEnabled = false,
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
-            source = PluginSource.Local,
+            origin = PluginOrigin.Local,
             entryPoint = entryPoint,
             ldLibraryPath = ldLibraryPath,
             env = env
         )
     }
 
-    fun EnvironmentManifestRemote.toEnvironmentInfoEntity(): EnvironmentInfoEntity {
-        return EnvironmentInfoEntity(
-            environmentID = environmentID,
+    fun EnvironmentManifestRemote.toEnvironmentEntity(): EnvironmentEntity {
+        return EnvironmentEntity(
+            environmentId = environmentId,
             installedVersion = installedVersion,
             environmentRenderingName = environmentRenderingName,
             environmentPackageName = environmentPackageName,
-            iconURI = iconURI,
+            iconUri = iconUri,
             author = author,
             environmentDescription = environmentDescription,
-            enabled = false,
+            isEnabled = false,
             requiredEnvironment = requiredEnvironment,
             state = PluginState.Great,
-            source = PluginSource.Official,
+            origin = PluginOrigin.Official,
             entryPoint = entryPoint,
             ldLibraryPath = ldLibraryPath,
             env = env

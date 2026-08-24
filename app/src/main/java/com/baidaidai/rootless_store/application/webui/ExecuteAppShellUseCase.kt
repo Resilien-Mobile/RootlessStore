@@ -12,7 +12,7 @@ class ExecuteAppShellUseCase @Inject constructor(
     operator fun invoke(
         commandContent: String
     ): Flow<ShellResult> {
-        return executeShellGatewayImpl.runCommandByAppShell(commandContent)
+        return executeShellGatewayImpl.executeCommandByAppShell(commandContent)
     }
 
 }

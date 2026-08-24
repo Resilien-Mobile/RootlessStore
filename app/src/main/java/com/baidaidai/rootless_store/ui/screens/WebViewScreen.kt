@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.webkit.WebViewCompat.addWebMessageListener
-import com.baidaidai.rootless_store.ui.model.RootLessStoreWebViewScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreWebViewScreenViewModel
 import kotlinx.coroutines.launch
 
-private val kernelSuCompatibleScript = """
+private val kernelSuCompatibilityScript = """
     (function() {
         window.ksu = window.ksu || {};
         window.ksu.exec = async function(command, options) {
@@ -35,7 +35,7 @@ private val kernelSuCompatibleScript = """
 fun RootlessStoreWebViewScreen(
     modifier: Modifier = Modifier,
     webUri: String?,
-    webViewScreenViewModel: RootLessStoreWebViewScreenViewModel = hiltViewModel()
+    webViewScreenViewModel: RootlessStoreWebViewScreenViewModel = hiltViewModel()
 ) {
 
     if (webUri == null) return
@@ -58,14 +58,14 @@ fun RootlessStoreWebViewScreen(
 
                 addWebMessageListener(this, "AppShell",setOf("*")){ _, message, _, _, proxy ->
                     coroutineScope.launch {
-                        webViewScreenViewModel.executeAppShellUseCase(message.data).collect { ShellResult->
-                            proxy.postMessage(ShellResult.content)
+                        webViewScreenViewModel.executeAppShell(message.data).collect { shellResult ->
+                            proxy.postMessage(shellResult.output)
                         }
                     }
                 } // Newest JavaScript Native Bridge
 
                 addJavascriptInterface(
-                    webViewScreenViewModel.createKernelSuCompatible(),
+                    webViewScreenViewModel.createKernelSuJavaScriptBridge(),
                     "__rootless_ksu"
                 ) // Oldest Inject JavaScript Native Bridge
 
@@ -73,7 +73,7 @@ fun RootlessStoreWebViewScreen(
                     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                         super.onPageStarted(view, url, favicon)
 
-                        view?.evaluateJavascript(kernelSuCompatibleScript, null)  // Inject JavaScript KernelSU API grammar adaptor support
+                        view?.evaluateJavascript(kernelSuCompatibilityScript, null)  // Inject JavaScript KernelSU API grammar adaptor support
 
                     }
                 }

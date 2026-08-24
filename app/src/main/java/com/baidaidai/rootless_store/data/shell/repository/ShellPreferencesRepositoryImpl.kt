@@ -13,13 +13,13 @@ import java.io.IOException
 import javax.inject.Inject
 
 data class ShellContextPreferences(
-    val jumpToDirectory: Boolean = false
+    val shouldJumpToDirectory: Boolean = false
 )
 
 class ShellPreferencesRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    val shellContextPreferences: Flow<ShellContextPreferences> =
+    fun observeShellContextPreferences(): Flow<ShellContextPreferences> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -30,17 +30,17 @@ class ShellPreferencesRepositoryImpl @Inject constructor(
             }
             .map { preferences ->
                 ShellContextPreferences(
-                    jumpToDirectory = preferences[JUMP_TO_DIRECTORY] ?: false
+                    shouldJumpToDirectory = preferences[SHOULD_JUMP_TO_DIRECTORY] ?: false
                 )
             }
 
-    suspend fun setJumpToDirectory(enabled: Boolean) {
+    suspend fun setDirectoryJumpEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
-            preferences[JUMP_TO_DIRECTORY] = enabled
+            preferences[SHOULD_JUMP_TO_DIRECTORY] = isEnabled
         }
     }
 
     private companion object {
-        val JUMP_TO_DIRECTORY = booleanPreferencesKey("shell_jump_to_directory")
+        val SHOULD_JUMP_TO_DIRECTORY = booleanPreferencesKey("shell_jump_to_directory")
     }
 }

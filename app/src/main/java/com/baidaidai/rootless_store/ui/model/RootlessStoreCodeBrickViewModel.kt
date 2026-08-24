@@ -3,16 +3,16 @@ package com.baidaidai.rootless_store.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.application.codebrick.AddOneCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.AddOneJsonCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.ConvertOneCodeBrickToPluginUseCase
-import com.baidaidai.rootless_store.application.codebrick.DeleteOneCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.ExecuteOneCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.GetAllCodeBrickUseCase
-import com.baidaidai.rootless_store.application.codebrick.UpdateOneCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickFromClipboardUseCase
+import com.baidaidai.rootless_store.application.codebrick.InstallPluginFromCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.DeleteCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
+import com.baidaidai.rootless_store.application.codebrick.ObserveCodeBricksUseCase
+import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,178 +24,175 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class CodeBrickScreenUIState(
-    val brickEditorCanShow: Boolean = false,
-    val executeResultCanShow: Boolean = false,
-    val brickSettingCanShow: Boolean = false,
-    val buttonMenuExpandStatus: Boolean = false,
-    val executeResultContent: List<String> = emptyList(),
-    val handlingCodeBrickConfig: CodeBrickConfig = CodeBrickConfig(unixTimeStamp = 1L,"", HosterOverallStatus.LIMITED,"")
+data class CodeBrickScreenUiState(
+    val isCodeBrickEditorVisible: Boolean = false,
+    val isExecutionResultVisible: Boolean = false,
+    val isCodeBrickSettingsVisible: Boolean = false,
+    val isCreationMenuExpanded: Boolean = false,
+    val executionOutputLines: List<String> = emptyList(),
+    val selectedCodeBrick: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", ExecutionContext.LIMITED,"")
 )
 
 @HiltViewModel
 class RootlessStoreCodeBrickViewModel @Inject constructor(
-    private val addOneCodeBrickUseCase: AddOneCodeBrickUseCase,
-    private val getAllCodeBrickUseCase: GetAllCodeBrickUseCase,
-    private val executeOneCodeBrickUseCase: ExecuteOneCodeBrickUseCase,
-    private val deleteOneCodeBrickUseCase: DeleteOneCodeBrickUseCase,
-    private val updateOneCodeBrickUseCase: UpdateOneCodeBrickUseCase,
-    private val addOneJsonCodeBrickUseCase: AddOneJsonCodeBrickUseCase,
-    private val convertOneCodeBrickToPluginUseCase: ConvertOneCodeBrickToPluginUseCase
+    private val addCodeBrickUseCase: AddCodeBrickUseCase,
+    private val observeCodeBricksUseCase: ObserveCodeBricksUseCase,
+    private val executeCodeBrickUseCase: ExecuteCodeBrickUseCase,
+    private val deleteCodeBrickUseCase: DeleteCodeBrickUseCase,
+    private val updateCodeBrickUseCase: UpdateCodeBrickUseCase,
+    private val addCodeBrickFromClipboardUseCase: AddCodeBrickFromClipboardUseCase,
+    private val installPluginFromCodeBrickUseCase: InstallPluginFromCodeBrickUseCase
 ): ViewModel() {
 
-    private val _codeBrickScreenUIState = MutableStateFlow(CodeBrickScreenUIState())
-    val codeBrickScreenUIState = _codeBrickScreenUIState.asStateFlow()
+    private val _codeBrickScreenUiState = MutableStateFlow(CodeBrickScreenUiState())
+    val codeBrickScreenUiState = _codeBrickScreenUiState.asStateFlow()
 
-    private val _codeBrickEvent = MutableSharedFlow<CodeBrickError?>()
-    val codeBrickEvent = _codeBrickEvent.asSharedFlow()
+    private val _codeBrickError = MutableSharedFlow<CodeBrickError?>()
+    val codeBrickError = _codeBrickError.asSharedFlow()
 
-    val codeBrickConfigList = getAllCodeBrickUseCase()
+    val codeBricks = observeCodeBricksUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
             initialValue = emptyList()
         )
 
-    fun changeEditorShowStatus(
-        showStatus: Boolean = false
+    fun setCodeBrickEditorVisible(
+        isVisible: Boolean = false
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
-                brickEditorCanShow = showStatus
+                isCodeBrickEditorVisible = isVisible
             )
         }
     }
-    fun openSettingShowStatus(
-        codeBrickConfig: CodeBrickConfig,
-        settingShowStatus: Boolean = true,
+    fun showCodeBrickSettings(
+        codeBrickConfig: CodeBrickConfig
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
-                brickSettingCanShow = settingShowStatus,
-                handlingCodeBrickConfig = codeBrickConfig
+                isCodeBrickSettingsVisible = true,
+                selectedCodeBrick = codeBrickConfig
             )
         }
     }
-    fun closeSettingShowStatus(
-        settingShowStatus: Boolean = false,
-    ){
-        _codeBrickScreenUIState.update {
+    fun hideCodeBrickSettings(){
+        _codeBrickScreenUiState.update {
             it.copy(
-                brickSettingCanShow = settingShowStatus,
+                isCodeBrickSettingsVisible = false,
             )
         }
     }
-    fun changeResultShowStatus(
-        showStatus: Boolean = false
+    fun setExecutionResultVisible(
+        isVisible: Boolean = false
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
-                executeResultCanShow = showStatus
+                isExecutionResultVisible = isVisible
             )
         }
     }
-    fun changeButtonMenuStatus(
-        showStatus: Boolean = false
+    fun setCreationMenuExpanded(
+        isExpanded: Boolean = false
     ){
-        _codeBrickScreenUIState.update {
+        _codeBrickScreenUiState.update {
             it.copy(
-                buttonMenuExpandStatus = showStatus
+                isCreationMenuExpanded = isExpanded
             )
         }
     }
 
-    fun convertOneCodeBrickToPlugin(
+    fun installPluginFromCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            convertOneCodeBrickToPluginUseCase(codeBrickConfig)
+            installPluginFromCodeBrickUseCase(codeBrickConfig)
         }
     }
 
     // CUDE
 
     // Create
-    fun createOneCodeBrick(
+    fun addCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
-        codeBrickContext: HosterOverallStatus,
-        bindTileIndex: Int?
+        codeBrickContext: ExecutionContext,
+        boundTileIndex: Int?
     ){
         viewModelScope.launch {
-            addOneCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,bindTileIndex)
+            addCodeBrickUseCase(codeBrickTitle,codeBrickContent,codeBrickContext,boundTileIndex)
         }
     }
 
-    fun createOneCodeBrickByJson(){
+    fun addCodeBrickFromClipboard(){
         viewModelScope.launch {
-            val codeBrickError = addOneJsonCodeBrickUseCase()
-            if (codeBrickError != null){
-                _codeBrickEvent.emit(codeBrickError)
+            val error = addCodeBrickFromClipboardUseCase()
+            if (error != null){
+                _codeBrickError.emit(error)
             }
         }
     }
 
     // Update
-    fun updateOneCodeBrick(
+    fun updateCodeBrick(
         codeBrickTitle: String,
         codeBrickContent: String,
-        codeBrickContext: HosterOverallStatus,
-        bindTileIndex: Int?,
+        codeBrickContext: ExecutionContext,
+        boundTileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            updateOneCodeBrickUseCase(
+            updateCodeBrickUseCase(
                 codeBrickTitle = codeBrickTitle,
                 codeBrickContent = codeBrickContent,
                 codeBrickContext = codeBrickContext,
-                bindTileIndex = bindTileIndex,
+                boundTileIndex = boundTileIndex,
                 oldCodeBrickConfig = oldCodeBrickConfig
             )
         }
     }
 
     // Delete
-    fun deleteOneCodeBrick(
+    fun deleteCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            deleteOneCodeBrickUseCase(codeBrickConfig)
+            deleteCodeBrickUseCase(codeBrickConfig)
         }
     }
 
     // Execute
-    fun executeOneCodeBrick(
+    fun executeCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ){
         viewModelScope.launch {
-            Log.d("codeBrickScreenUIState.executeResultContent", codeBrickScreenUIState.value.executeResultContent.toString())
+            Log.d("CodeBrickExecution", codeBrickScreenUiState.value.executionOutputLines.toString())
 
             // Clean Up
-            _codeBrickScreenUIState.update { codeBrickScreenUIState ->
+            _codeBrickScreenUiState.update { codeBrickScreenUiState ->
                 // Clean the cache
-                val voidUIState = codeBrickScreenUIState.copy(
-                    executeResultContent = emptyList()
+                val clearedUiState = codeBrickScreenUiState.copy(
+                    executionOutputLines = emptyList()
                 )
                 // Fill the Void Content
-                voidUIState.copy(
-                    executeResultContent = voidUIState.executeResultContent + "Void"
+                clearedUiState.copy(
+                    executionOutputLines = clearedUiState.executionOutputLines + "Void"
                 )
             }
 
-            changeResultShowStatus(true)
+            setExecutionResultVisible(true)
 
-            executeOneCodeBrickUseCase(codeBrickConfig).collect { shellResult ->
-                _codeBrickScreenUIState.update { codeBrickScreenUIState ->
+            executeCodeBrickUseCase(codeBrickConfig).collect { shellResult ->
+                _codeBrickScreenUiState.update { codeBrickScreenUiState ->
 
                     // Clean the Void-Chars cache
-                    val voidUIState = codeBrickScreenUIState.copy(
-                        executeResultContent = codeBrickScreenUIState.executeResultContent - "Void"
+                    val clearedUiState = codeBrickScreenUiState.copy(
+                        executionOutputLines = codeBrickScreenUiState.executionOutputLines - "Void"
                     )
 
                     // Add results
-                    voidUIState.copy(
-                        executeResultContent = voidUIState.executeResultContent + shellResult.content
+                    clearedUiState.copy(
+                        executionOutputLines = clearedUiState.executionOutputLines + shellResult.output
                     )
                 }
             }

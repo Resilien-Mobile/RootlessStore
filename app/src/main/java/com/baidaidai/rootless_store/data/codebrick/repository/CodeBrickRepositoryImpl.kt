@@ -11,53 +11,53 @@ import javax.inject.Inject
 class CodeBrickRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase
 ) {
-    private val codeBrickDAO = rootlessStoreDatabase.codeBrickDao()
+    private val codeBrickDao = rootlessStoreDatabase.codeBrickDao()
 
     // Create
-    suspend fun createOneCodeBrickConfig(
+    suspend fun addCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
-        codeBrickDAO.createOneCodeBrickConfig(codeBrickEntity)
+        codeBrickDao.insertCodeBrick(codeBrickEntity)
     }
 
     // Update
-    suspend fun updateOneCodeBrickConfig(
+    suspend fun updateCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
-        codeBrickDAO.updateOneCodeBrickConfig(codeBrickEntity)
+        codeBrickDao.updateCodeBrick(codeBrickEntity)
     }
 
     // Read
-    suspend fun getOneCodeBrickConfig(
-        unixTimeStamp: Long
+    suspend fun findCodeBrick(
+        unixTimestamp: Long
     ): CodeBrickConfig? {
-        return codeBrickDAO
-            .getOneCodeBrickConfig(unixTimeStamp)
+        return codeBrickDao
+            .findCodeBrickByTimestamp(unixTimestamp)
             ?.toCodeBrickConfig()
     }
 
-    fun getAllCodeBrickConfig(): Flow<List<CodeBrickConfig>> {
-        return codeBrickDAO
-            .getAllCodeBrickConfig()
-            .map { codeBrickEntityList ->
-                codeBrickEntityList.map { codeBrickEntity ->
+    fun observeCodeBricks(): Flow<List<CodeBrickConfig>> {
+        return codeBrickDao
+            .observeCodeBricks()
+            .map { codeBrickEntities ->
+                codeBrickEntities.map { codeBrickEntity ->
                     codeBrickEntity.toCodeBrickConfig()
                 }
             }
     }
 
-    suspend fun getCodeBrickConfigByTileIndex(tileIndex: Int): CodeBrickConfig?{
-        val codeBrickConfig = codeBrickDAO.getCodeBrickEntityByTileIndex(tileIndex)?.toCodeBrickConfig()
+    suspend fun findCodeBrickByTileIndex(tileIndex: Int): CodeBrickConfig?{
+        val codeBrickConfig = codeBrickDao.findCodeBrickByTileIndex(tileIndex)?.toCodeBrickConfig()
         return codeBrickConfig
     }
 
     // Delete
-    suspend fun deleteOneCodeBrickConfig(
+    suspend fun deleteCodeBrick(
         codeBrickConfig: CodeBrickConfig
     ) {
         val codeBrickEntity = codeBrickConfig.toCodeBrickEntity()
-        codeBrickDAO.deleteOneCodeBrickConfig(codeBrickEntity)
+        codeBrickDao.deleteCodeBrick(codeBrickEntity)
     }
 }

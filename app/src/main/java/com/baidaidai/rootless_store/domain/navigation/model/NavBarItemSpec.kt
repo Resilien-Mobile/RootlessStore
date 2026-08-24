@@ -6,8 +6,8 @@ import kotlin.reflect.KClass
 
 data class NavBarItemSpec(
     val number: Int,
-    val pattern: Painter,
-    val contentDeprecated: String,
+    val icon: Painter,
+    val label: String,
     val targetDestination: RootlessNavigationKey,
-    val compatibleDestinationList: List<KClass<out RootlessNavigationKey>>
+    val compatibleDestinations: List<KClass<out RootlessNavigationKey>>
 )

@@ -6,16 +6,16 @@
     <string name="home_screen_version_checker_container_new_version_icon_content_description">新版本</string>
     <string name="home_screen_version_checker_container_new_version_headline">新版本可用</string>
 
-    <string name="home_screen_hoster_status_board_icon_content_description">宿主状态</string>
-    <string name="home_screen_hoster_status_board_title">宿主状态</string>
-    <string name="home_screen_hoster_status_board_overall">总体状态：%1$s</string>
-    <string name="home_screen_hoster_status_board_memory_label">内存</string>
-    <string name="home_screen_hoster_status_board_storage_label">存储</string>
-    <string name="home_screen_hoster_status_board_version_label">版本</string>
-    <string name="home_screen_hoster_status_board_kernel_label">内核</string>
-    <string name="home_screen_hoster_status_board_selinux_label">SELinux</string>
-    <string name="home_screen_hoster_status_board_plugins_label">插件</string>
-    <string name="home_screen_hoster_status_board_temp_label">温度</string>
+    <string name="home_screen_device_status_icon_content_description">设备状态</string>
+    <string name="home_screen_device_status_title">设备状态</string>
+    <string name="home_screen_device_status_overall">总体状态：%1$s</string>
+    <string name="home_screen_device_status_memory_label">内存</string>
+    <string name="home_screen_device_status_storage_label">存储</string>
+    <string name="home_screen_device_status_version_label">版本</string>
+    <string name="home_screen_device_status_kernel_label">内核</string>
+    <string name="home_screen_device_status_selinux_label">SELinux</string>
+    <string name="home_screen_device_status_plugins_label">插件</string>
+    <string name="home_screen_device_status_temp_label">温度</string>
 
     <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">开发图标</string>
     <string name="home_screen_how_to_develop_rootless_store_plugin_headline">了解 Rootless Store</string>

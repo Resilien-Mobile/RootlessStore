@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.data.environment.gateway
 import android.content.Context
 import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.data.plugin.remote.datasource.DownloadPluginPackage
+import com.baidaidai.rootless_store.data.market.remote.datasource.MarketPackageRemoteDataSource
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
@@ -15,21 +15,21 @@ import javax.inject.Inject
 
 class EnvironmentGatewayImpl @Inject constructor(
     @ApplicationContext val context: Context,
-    private val downloadPluginPackage: DownloadPluginPackage,
+    private val marketPackageRemoteDataSource: MarketPackageRemoteDataSource,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
-    private val defaultEnvironmentLocation = File(context.filesDir, "Environment")
+    private val defaultEnvironmentDirectory = File(context.filesDir, "Environment")
 
     // Install Environment
-    fun installEnvironmentFromLocal(originFileURI: Uri) {
-        installEnvironment(originFileURI)
+    fun installEnvironmentFromLocal(originFileUri: Uri) {
+        installEnvironment(originFileUri)
     }
 
     suspend fun installEnvironmentFromMarket(
-        environmentURI: String,
+        environmentUrl: String,
         environmentManifestRemote: EnvironmentManifestRemote
     ) {
-        val remoteEnvironmentContent = downloadPluginPackage.usePluginURI(environmentURI).bodyAsChannel()
+        val remoteEnvironmentContent = marketPackageRemoteDataSource.fetchPackage(environmentUrl).bodyAsChannel()
         val environmentPackageName = environmentManifestRemote.environmentPackageName
         installEnvironment(
             originFileByteChannel = remoteEnvironmentContent,
@@ -48,62 +48,62 @@ class EnvironmentGatewayImpl @Inject constructor(
     }
 
     // Environment Config Getter
-    fun getEnvironmentRuntimePATH(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentRuntimePath(environmentManifest: EnvironmentManifest): String {
         val environmentPackageName = environmentManifest.environmentPackageName
 
-        return "$defaultEnvironmentLocation/$environmentPackageName"
+        return "$defaultEnvironmentDirectory/$environmentPackageName"
     }
 
-    fun getEnvironmentLDPATH(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentLdPath(environmentManifest: EnvironmentManifest): String {
         val environmentPackageName = environmentManifest.environmentPackageName
 
         return environmentManifest.ldLibraryPath.joinToString(":") { libraryPath ->
-            "$defaultEnvironmentLocation/$environmentPackageName/$libraryPath"
+            "$defaultEnvironmentDirectory/$environmentPackageName/$libraryPath"
         }
     }
 
-    fun getEnvironmentConfig(environmentManifest: EnvironmentManifest): Map<String, String> {
+    fun resolveEnvironmentConfig(environmentManifest: EnvironmentManifest): Map<String, String> {
         return environmentManifest.env
     }
 
 
-    // Get Raw EnvironmentManifestLocal
-    fun getRawEnvironmentManifestLocal(originFileURI: Uri): EnvironmentManifestLocal {
-        return androidFileSystemCapabilityGatewayImpl.readRawEnvironmentManifest(uri = originFileURI).let {
-            androidFileSystemCapabilityGatewayImpl.readEnvironmentManifestJsonContent(it)
+    // Parse local environment manifest
+    fun parseEnvironmentManifest(originFileUri: Uri): EnvironmentManifestLocal {
+        return androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileUri).let {
+            androidFileSystemCapabilityGatewayImpl.parseEnvironmentManifest(it)
         }
     }
 
     // Only Un-Zip operation, which from given zip file
     private fun installEnvironment(
-        originFileURI: Uri,
-        destination: File = defaultEnvironmentLocation
+        originFileUri: Uri,
+        destinationDirectory: File = defaultEnvironmentDirectory
     ) {
-        if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()) {
+        if (androidFileSystemCapabilityGatewayImpl.hasEnvironmentDirectory()) {
             androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromFile(
-                originFileURI = originFileURI,
-                pluginRootDirectory = destination
+                originFileUri = originFileUri,
+                pluginRootDirectory = destinationDirectory
             )
         } else {
-            androidFileSystemCapabilityGatewayImpl.createFileDir("Environment")
-            installEnvironment(originFileURI)
+            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Environment")
+            installEnvironment(originFileUri)
         }
     }
 
     private fun installEnvironment(
         originFileByteChannel: ByteReadChannel,
-        destination: File = defaultEnvironmentLocation,
+        destinationDirectory: File = defaultEnvironmentDirectory,
         destinationFileName: String
     ) {
-        if (androidFileSystemCapabilityGatewayImpl.confirmEnvironmentPathExists()) {
-            androidFileSystemCapabilityGatewayImpl.unZipEnvironmentFromURI(
+        if (androidFileSystemCapabilityGatewayImpl.hasEnvironmentDirectory()) {
+            androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromUri(
                 originFileByteChannel = originFileByteChannel,
-                pluginRootDirectory = destination,
+                pluginRootDirectory = destinationDirectory,
                 directoryName = destinationFileName
             )
         } else {
-            androidFileSystemCapabilityGatewayImpl.createFileDir("Environment")
-            installEnvironment(originFileByteChannel, destination, destinationFileName)
+            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Environment")
+            installEnvironment(originFileByteChannel, destinationDirectory, destinationFileName)
         }
     }
 }

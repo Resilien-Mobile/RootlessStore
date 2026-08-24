@@ -10,34 +10,34 @@ import javax.inject.Inject
 class NotificationPreferenceRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase
 ) {
-    private val notificationPreferenceDAO = rootlessStoreDatabase.notificationPreferenceDao()
+    private val notificationPreferenceDao = rootlessStoreDatabase.notificationPreferenceDao()
 
-    // Create
-    suspend fun insertOneNotificationPreference(
+    // Add
+    suspend fun addNotificationPreference(
         notificationPreference: NotificationPreference
     ) {
         val notificationPreferenceEntity = notificationPreference.toNotificationPreferenceEntity()
-        notificationPreferenceDAO.insertOneNotificationPreference(notificationPreferenceEntity)
+        notificationPreferenceDao.insertNotificationPreference(notificationPreferenceEntity)
     }
 
     // Update
-    suspend fun updateOneNotificationPreference(
+    suspend fun updateNotificationPreference(
         apiKey: String,
         notificationTitle: String? = null,
         selfBuiltServer: String? = null,
-        criticalWarning: Boolean
+        isCriticalWarningEnabled: Boolean
     ) {
-        notificationPreferenceDAO.updateOneNotificationPreference(
+        notificationPreferenceDao.updateNotificationPreference(
             apiKey = apiKey,
             notificationTitle = notificationTitle,
             selfBuiltServer = selfBuiltServer,
-            criticalWarning = criticalWarning,
+            isCriticalWarningEnabled = isCriticalWarningEnabled,
         )
     }
 
     // Read
-    suspend fun getOneNotificationPreference(): NotificationPreference? {
-        return notificationPreferenceDAO.getOneNotificationPreference()?.toNotificationPreference()
+    suspend fun findNotificationPreference(): NotificationPreference? {
+        return notificationPreferenceDao.findNotificationPreference()?.toNotificationPreference()
     }
 
     // Delete

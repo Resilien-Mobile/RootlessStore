@@ -15,33 +15,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CodeBrickSetting(
     codeBrickConfig: CodeBrickConfig,
     onDismissRequest: () -> Unit,
-    onDismissButtonClick: ()-> Unit,
-    onConfirmButtonClick: (
+    onCancelClick: ()-> Unit,
+    onUpdateClick: (
         title: String,
         content: String,
-        context: HosterOverallStatus,
+        context: ExecutionContext,
         tileIndex: Int?,
         oldCodeBrickConfig: CodeBrickConfig
     )-> Unit,
-    onCodeBrickToPluginButtonClick: (codeBrickConfig: CodeBrickConfig)-> Unit
+    onInstallPluginClick: (codeBrickConfig: CodeBrickConfig)-> Unit
 ){
 
     var titleContent by remember { mutableStateOf("") }
     var codeContent by remember { mutableStateOf("") }
     var tileIndex: Int? by remember { mutableStateOf(null) }
-    var selectedContext by remember { mutableStateOf(HosterOverallStatus.LIMITED) }
+    var selectedContext by remember { mutableStateOf(ExecutionContext.LIMITED) }
 
     LaunchedEffect(codeBrickConfig) {
         titleContent = codeBrickConfig.codeBrickTitle
         codeContent = codeBrickConfig.codeBrickContent
-        tileIndex = codeBrickConfig.bindTileIndex
+        tileIndex = codeBrickConfig.boundTileIndex
         selectedContext = codeBrickConfig.codeBrickEnvironment
     }
 
@@ -52,7 +52,7 @@ fun CodeBrickSetting(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(
-                onClick = onDismissButtonClick
+                onClick = onCancelClick
             ) {
                 Text(stringResource(R.string.code_brick_screen_editor_cancel_button))
             }
@@ -60,7 +60,7 @@ fun CodeBrickSetting(
         confirmButton = {
             Button(
                 onClick = {
-                    onConfirmButtonClick(
+                    onUpdateClick(
                         titleContent,
                         codeContent,
                         selectedContext,
@@ -82,7 +82,7 @@ fun CodeBrickSetting(
                 onCodeBrickContentValueChange = { codeContent = it },
                 onCodeBrickContextValueChange = { selectedContext = it },
                 onCodeBrickTileValueChange = { tileIndex = it },
-                onCodeBrickToPluginButtonClick = { onCodeBrickToPluginButtonClick(codeBrickConfig) }
+                onInstallPluginClick = { onInstallPluginClick(codeBrickConfig) }
             )
         },
         containerColor = MaterialTheme.colorScheme.surface

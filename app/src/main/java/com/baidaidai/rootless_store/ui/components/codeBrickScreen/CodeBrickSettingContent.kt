@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickContextConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Composable
 fun CodeBrickSettingContent(
@@ -25,35 +25,35 @@ fun CodeBrickSettingContent(
     titleContent: String,
     codeContent: String,
     tileIndex: Int?,
-    brickContext: HosterOverallStatus,
+    brickContext: ExecutionContext,
     onCodeBrickTitleValueChange: (value: String)-> Unit,
     onCodeBrickContentValueChange: (value: String)-> Unit,
-    onCodeBrickContextValueChange: (hosterOverallStatus: HosterOverallStatus) -> Unit,
+    onCodeBrickContextValueChange: (executionContext: ExecutionContext) -> Unit,
     onCodeBrickTileValueChange: (value: Int?) -> Unit,
-    onCodeBrickToPluginButtonClick: ()-> Unit
+    onInstallPluginClick: ()-> Unit
 ){
 
-    val brickContextConfigList = listOf(
+    val codeBrickContexts = listOf(
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.LIMITED,
+            contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
-            contextIcon = R.drawable.material_symbols_applicaitons
+            contextIcon = R.drawable.material_symbols_applications
         ),
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.ADB,
+            contextType = ExecutionContext.ADB,
             contextTextResource = R.string.code_brick_screen_editor_context_adb_shell_label,
             contextIcon = R.drawable.material_symbols_adb
         ),
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.ROOTD,
+            contextType = ExecutionContext.ROOTD,
             contextTextResource = R.string.code_brick_screen_editor_context_root_shell_label,
             contextIcon = R.drawable.material_symbols_cyclone
         )
     )
 
-    val currentSelectedContext = brickContextConfigList.firstOrNull { codeBrickContextConfig ->
+    val selectedContext = codeBrickContexts.firstOrNull { codeBrickContextConfig ->
         codeBrickContextConfig.contextType == brickContext
-    } ?: brickContextConfigList.first()
+    } ?: codeBrickContexts.first()
 
     Column(modifier) {
 
@@ -79,9 +79,9 @@ fun CodeBrickSettingContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         CodeBrickContextList(
-            currentSelectedContext = currentSelectedContext,
-            brickContextConfigList = brickContextConfigList,
-            onListItemClick = { codeBrickContextConfig ->
+            selectedContext = selectedContext,
+            codeBrickContexts = codeBrickContexts,
+            onContextSelected = { codeBrickContextConfig ->
                 onCodeBrickContextValueChange(codeBrickContextConfig.contextType)
             }
         )
@@ -96,8 +96,8 @@ fun CodeBrickSettingContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CodeBrickToPluginButton(
-            onClick = onCodeBrickToPluginButtonClick
+        InstallCodeBrickAsPluginButton(
+            onClick = onInstallPluginClick
         )
     }
 }
@@ -115,11 +115,11 @@ private fun _CodeBrickSettingContentPreview_(){
         titleContent = "Brick",
         codeContent =  "echo hello",
         tileIndex = 1,
-        brickContext = HosterOverallStatus.ADB,
+        brickContext = ExecutionContext.ADB,
         onCodeBrickTitleValueChange =  {},
         onCodeBrickContentValueChange = {},
         onCodeBrickContextValueChange = {},
         onCodeBrickTileValueChange = {},
-        onCodeBrickToPluginButtonClick = {}
+        onInstallPluginClick = {}
     )
 }

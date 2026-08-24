@@ -22,7 +22,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
     }
 
     // Read FS Operator
-    private fun readRawManifest(uri: Uri, manifestFileName: String): String? {
+    private fun loadRawManifest(uri: Uri, manifestFileName: String): String? {
         context.contentResolver.openInputStream(uri).use { inputStream ->
             ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
                 /**
@@ -53,7 +53,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    fun confirmFileExistsInZip(uri: Uri, fileName: String): Boolean {
+    fun hasFileInZip(uri: Uri, fileName: String): Boolean {
         context.contentResolver.openInputStream(uri).use { inputStream ->
             ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
                 var zipEntry = zipInputStream.nextEntry
@@ -77,23 +77,23 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     } // Confirm File Exists in Zip
 
-    fun readRawMagiskModuleProp(uri: Uri): String {
-        return readRawManifest(uri, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
+    fun loadRawMagiskModuleProp(uri: Uri): String {
+        return loadRawManifest(uri, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
     } // Get Magisk module.prop File
 
-    fun readRawPluginManifest(uri: Uri): String {
-        return readRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
+    fun loadRawPluginManifest(uri: Uri): String {
+        return loadRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     } // Get JSON File
 
-    fun readRawEnvironmentManifest(uri: Uri): String {
-        return readRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
+    fun loadRawEnvironmentManifest(uri: Uri): String {
+        return loadRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     } // Get JSON File
 
-    fun readFileContent(filePath: String): String {
+    fun loadFileContent(filePath: String): String {
         return File(filePath).readText()
     }
 
-    fun readManifestJsonContent(jsonContent: String): PluginManifestLocal {
+    fun parsePluginManifest(jsonContent: String): PluginManifestLocal {
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
@@ -105,7 +105,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         return manifest
     } // Convert JSON to PluginManifestLocal
 
-    fun readEnvironmentManifestJsonContent(jsonContent: String): EnvironmentManifestLocal {
+    fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifestLocal {
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true

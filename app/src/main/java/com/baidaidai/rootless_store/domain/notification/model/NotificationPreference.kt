@@ -4,5 +4,5 @@ data class NotificationPreference(
     val apiKey: String,
     val notificationTitle:String? = null,
     val selfBuiltServer: String? = null,
-    val criticalWarning: Boolean,
+    val isCriticalWarningEnabled: Boolean,
 )

@@ -23,10 +23,10 @@ class AndroidFileSystemDeleteOperatorGatewayImpl @Inject constructor(
 
     // Delete FS Operator
     @Deprecated(
-        message = "Recommended to use deleteDirectoryByPackageName method, instead of the deleteOneFile method",
+        message = "Recommended to use deleteDirectoryByPackageName method, instead of the deleteFile method",
         replaceWith = ReplaceWith("deleteDirectoryByPackageName(pluginPackageName)")
     )
-    fun deleteOneFile(pluginPackageName: String): Boolean {
+    fun deleteFile(pluginPackageName: String): Boolean {
         val targetFile = File(getInternalPluginRootDirectory(), "${pluginPackageName}.zip")
 
         return targetFile.delete()

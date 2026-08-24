@@ -1,0 +1,41 @@
+package com.baidaidai.rootless_store.data.notification.database
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+
+@Dao
+interface NotificationPreferenceDao {
+    /**
+     * CRUD
+     */
+
+    // Create
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertNotificationPreference(
+        notificationPreferenceEntity: NotificationPreferenceEntity
+    )
+
+    // Update
+    @Query(
+        "UPDATE NotificationPreferenceEntity SET apiKey = :apiKey, notificationTitle = :notificationTitle, " +
+            "selfBuiltServer = :selfBuiltServer, criticalWarning = :isCriticalWarningEnabled " +
+            "WHERE _primaryKey_ = 'RootlessStoreNotificationPreferenceEntityPrimaryKey'"
+    )
+    suspend fun updateNotificationPreference(
+        apiKey: String,
+        notificationTitle: String? = null,
+        selfBuiltServer: String? = null,
+        isCriticalWarningEnabled: Boolean,
+    )
+
+    // Read
+    @Query(
+        "SELECT * FROM NotificationPreferenceEntity " +
+            "WHERE _primaryKey_ = 'RootlessStoreNotificationPreferenceEntityPrimaryKey' LIMIT 1"
+    )
+    suspend fun findNotificationPreference(): NotificationPreferenceEntity?
+
+    // Delete
+}

@@ -4,7 +4,7 @@ import IShellService
 import android.os.RemoteException
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
-import com.baidaidai.rootless_store.domain.status.model.CoreInfo
+import com.baidaidai.rootless_store.domain.status.model.CpuCoreMetrics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
@@ -21,11 +21,11 @@ class CpuStatusDataSource @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
 
-    suspend operator fun invoke(cpuCoreIndex: Int? = null): CoreInfo? {
+    suspend operator fun invoke(cpuCoreIndex: Int? = null): CpuCoreMetrics? {
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read the first CPU snapshot
         val firstCpuSnapshot = readCpuSnapshot(
@@ -43,17 +43,17 @@ class CpuStatusDataSource @Inject constructor(
         ) ?: return null
 
         // Convert the two snapshots into CPU delta information
-        return calculateCoreInfo(
+        return calculateCpuCoreMetrics(
             firstCpuSnapshot = firstCpuSnapshot,
             secondCpuSnapshot = secondCpuSnapshot
         )
     }
 
-    suspend fun getCpuCoreCount(): Int? {
+    suspend fun findCpuCoreCount(): Int? {
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read CPU core count
         val cpuCoreCountCommandResult = executeSingleLineCommand(
@@ -69,11 +69,11 @@ class CpuStatusDataSource @Inject constructor(
         return cpuCoreCount
     }
 
-    suspend fun getSystemUptime(): Duration? {
+    suspend fun findSystemUptime(): Duration? {
 
         // Get Shizuku user service
         val shizukuUserService =
-            shizukuUserServiceGatewayImpl.getShizukuUserService() ?: return null
+            shizukuUserServiceGatewayImpl.findShizukuUserService() ?: return null
 
         // Read system uptime
         val systemUptimeCommandResult = executeSingleLineCommand(
@@ -121,13 +121,13 @@ class CpuStatusDataSource @Inject constructor(
         val commandResult = withTimeoutOrNull(CPU_READ_TIMEOUT_MILLIS.milliseconds) {
             callbackFlow {
                 val callback = ShizukuEndpointCallback(
-                    onExecuteCallback = { session ->
-                        trySend(session)
+                    onOutput = { output ->
+                        trySend(output)
                     },
-                    onErrorCallback = {
+                    onError = {
                         trySend(null)
                     },
-                    onProcessExitedCallback = {}
+                    onProcessExit = {}
                 )
 
                 launch(Dispatchers.IO) {
@@ -174,10 +174,10 @@ class CpuStatusDataSource @Inject constructor(
         }
     }
 
-    private fun calculateCoreInfo(
+    private fun calculateCpuCoreMetrics(
         firstCpuSnapshot: CpuSnapshot,
         secondCpuSnapshot: CpuSnapshot
-    ): CoreInfo {
+    ): CpuCoreMetrics {
         val userDelta = calculateDelta(
             firstValue = firstCpuSnapshot.user + firstCpuSnapshot.nice,
             secondValue = secondCpuSnapshot.user + secondCpuSnapshot.nice
@@ -205,7 +205,7 @@ class CpuStatusDataSource @Inject constructor(
             (totalDelta - idleDelta).toFloat() / totalDelta.toFloat()
         }
 
-        return CoreInfo(
+        return CpuCoreMetrics(
             userDelta = userDelta.toInt(),
             systemDelta = systemDelta.toInt(),
             idleDelta = idleDelta.toInt(),

@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSettingScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSettingScreenViewModel
 import androidx.core.net.toUri
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenListItemDefault
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenListItemPermission
@@ -37,11 +37,11 @@ import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenLis
 @Composable
 fun SettingScreen(
     contentPaddingValues: PaddingValues,
-    settingScreenViewModel: RootLessStoreSettingScreenViewModel = hiltViewModel(),
+    settingScreenViewModel: RootlessStoreSettingScreenViewModel = hiltViewModel(),
     onThirdPartyNotificationSettingClick: ()-> Unit
 ){
 
-    val settingPanelPreferences by settingScreenViewModel.settingPanelPreferences.collectAsState()
+    val settingScreenPreferences by settingScreenViewModel.settingScreenPreferences.collectAsState()
     val context = LocalContext.current
 
     LazyColumn(
@@ -69,8 +69,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_check_latest_version_headline),
                     supportingText = stringResource(R.string.setting_screen_general_check_latest_version_supporting),
-                    checked = settingPanelPreferences.enableAutoUpdate,
-                    onSwitchClicked = settingScreenViewModel::setEnableAutoUpdate,
+                    isChecked = settingScreenPreferences.isAutoUpdateEnabled,
+                    onCheckedChange = settingScreenViewModel::setAutoUpdateEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_upgrade),
@@ -82,8 +82,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_notify_plugin_status_headline),
                     supportingText = stringResource(R.string.setting_screen_general_notify_plugin_status_supporting),
-                    checked = settingPanelPreferences.notifyPluginStatus,
-                    onSwitchClicked = settingScreenViewModel::setNotifyPluginStatus,
+                    isChecked = settingScreenPreferences.isPluginStatusNotificationEnabled,
+                    onCheckedChange = settingScreenViewModel::setPluginStatusNotificationEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_notification),
@@ -95,8 +95,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_third_party_push_headline),
                     supportingText = stringResource(R.string.setting_screen_general_third_party_push_supporting),
-                    checked = settingPanelPreferences.useThirdPartyNotificationPush,
-                    onSwitchClicked = settingScreenViewModel::setUseThirdPartyNotificationPush,
+                    isChecked = settingScreenPreferences.isThirdPartyNotificationPushEnabled,
+                    onCheckedChange = settingScreenViewModel::setThirdPartyNotificationPushEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_notification_add),
@@ -136,8 +136,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_allow_insecure_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_allow_insecure_connection_supporting),
-                    checked = settingPanelPreferences.allowInsecureConnection,
-                    onSwitchClicked = settingScreenViewModel::setAllowInsecureConnection,
+                    isChecked = settingScreenPreferences.isInsecureConnectionAllowed,
+                    onCheckedChange = settingScreenViewModel::setInsecureConnectionAllowed,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_safety_check),
@@ -149,8 +149,8 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_supporting),
-                    checked = settingPanelPreferences.useDotProtectedConnection,
-                    onSwitchClicked = settingScreenViewModel::setUseDotProtectedConnection,
+                    isChecked = settingScreenPreferences.isDotProtectedConnectionEnabled,
+                    onCheckedChange = settingScreenViewModel::setDotProtectedConnectionEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_cloud_lock),
@@ -186,7 +186,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_all_files_access_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToAllFilesAccess(context) }
+                    onOpenSettings = { SystemSettingsActions.openAllFilesAccessSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -198,7 +198,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_stop_restrict_child_process_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToStopRestrictChildProcess(context) }
+                    onOpenSettings = { SystemSettingsActions.openDeveloperOptions(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -210,7 +210,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_notification_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToNotificationPermission(context) }
+                    onOpenSettings = { SystemSettingsActions.openAppNotificationSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -222,7 +222,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_battery_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToBatteryPermission(context) }
+                    onOpenSettings = { SystemSettingsActions.requestBatteryOptimizationExemption(context) }
                 )
             }
         }
@@ -246,8 +246,8 @@ fun SettingScreen(
     }
 }
 
-private object SettingPermission {
-    fun jumpToAllFilesAccess(context: Context){
+private object SystemSettingsActions {
+    fun openAllFilesAccessSettings(context: Context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
                 data = "package:${context.packageName}".toUri()
@@ -257,14 +257,14 @@ private object SettingPermission {
         }
     }
 
-    fun jumpToStopRestrictChildProcess(context: Context){
+    fun openDeveloperOptions(context: Context){
         val intent = Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(intent)
     }
 
-    fun jumpToNotificationPermission(context: Context){
+    fun openAppNotificationSettings(context: Context){
         val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
             putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -272,7 +272,7 @@ private object SettingPermission {
         context.startActivity(intent)
     }
 
-    fun jumpToBatteryPermission(context: Context){
+    fun requestBatteryOptimizationExemption(context: Context){
         val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
             data = "package:${context.packageName}".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -26,12 +26,12 @@ fun SettingScreenListItemPermission(
     headlineText: String,
     supportingText: String,
     leadingContent: @Composable (() -> Unit)? = null,
-    onIconButtonClick: ()-> Unit = {}
+    onOpenSettings: () -> Unit = {}
 ){
     ListItem(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
-            .clickable(onClick = onIconButtonClick),
+            .clickable(onClick = onOpenSettings),
         headlineContent = {
             Text(
                 text = headlineText,
@@ -51,7 +51,7 @@ fun SettingScreenListItemPermission(
         leadingContent = leadingContent,
         trailingContent = {
             IconButton(
-                onClick = onIconButtonClick
+                onClick = onOpenSettings
             ) {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_arrow_outward),
@@ -59,12 +59,12 @@ fun SettingScreenListItemPermission(
                 )
             }
         },
-        colors = ListItemColors()
+        colors = listItemColors()
     )
 }
 
 @Composable
-private fun ListItemColors(): ListItemColors {
+private fun listItemColors(): ListItemColors {
     return ListItemDefaults.colors().copy(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),

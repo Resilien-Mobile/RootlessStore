@@ -10,16 +10,16 @@
     <string name="home_screen_version_checker_container_new_version_icon_content_description">New version</string>
     <string name="home_screen_version_checker_container_new_version_headline">New Version Available</string>
 
-    <string name="home_screen_hoster_status_board_icon_content_description">Hoster Status</string>
-    <string name="home_screen_hoster_status_board_title">Hoster Status</string>
-    <string name="home_screen_hoster_status_board_overall">Overall: %1$s</string>
-    <string name="home_screen_hoster_status_board_memory_label">Memory</string>
-    <string name="home_screen_hoster_status_board_storage_label">Storage</string>
-    <string name="home_screen_hoster_status_board_version_label">Version</string>
-    <string name="home_screen_hoster_status_board_kernel_label">Kernel</string>
-    <string name="home_screen_hoster_status_board_selinux_label">SELinux</string>
-    <string name="home_screen_hoster_status_board_plugins_label">Plugins</string>
-    <string name="home_screen_hoster_status_board_temp_label">Temp</string>
+    <string name="home_screen_device_status_icon_content_description">Device Status</string>
+    <string name="home_screen_device_status_title">Device Status</string>
+    <string name="home_screen_device_status_overall">Overall: %1$s</string>
+    <string name="home_screen_device_status_memory_label">Memory</string>
+    <string name="home_screen_device_status_storage_label">Storage</string>
+    <string name="home_screen_device_status_version_label">Version</string>
+    <string name="home_screen_device_status_kernel_label">Kernel</string>
+    <string name="home_screen_device_status_selinux_label">SELinux</string>
+    <string name="home_screen_device_status_plugins_label">Plugins</string>
+    <string name="home_screen_device_status_temp_label">Temp</string>
 
     <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">Develop Icon</string>
     <string name="home_screen_how_to_develop_rootless_store_plugin_headline">Learn Rootless Store</string>

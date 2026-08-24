@@ -1,0 +1,307 @@
+package com.baidaidai.rootless_store.ui.components.homeScreen
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
+import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
+import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
+
+@Composable
+fun HomeScreenNetworkDashboard(
+    modifier: Modifier = Modifier,
+    networkDashboardConfig: NetworkDashboardConfig,
+    rootlessStoreHeightWindowSize: RootlessStoreWindowSize
+){
+    val downloadRateHistory = rememberSaveable { mutableStateListOf(0f,0f,0f,0f,0f,0f,0f,0f) }
+
+    LaunchedEffect(networkDashboardConfig.currentDownloadRate) {
+        downloadRateHistory.removeAt(0)
+        downloadRateHistory.add(networkDashboardConfig.currentDownloadRate)
+    }
+
+    val dynamicallyAdjustedModifier = when(rootlessStoreHeightWindowSize){
+        RootlessStoreWindowSize.Compact -> modifier.fillMaxHeight()
+        else -> modifier.height(280.dp)
+    }
+
+    if (rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact){
+        Column(
+            modifier = dynamicallyAdjustedModifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(20.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(4))
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        shape = RoundedCornerShape(4)
+                    )
+            ){
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 5.dp, bottom = 10.dp)
+                ) {
+                    val maxValue = downloadRateHistory.maxOrNull() ?: return@Canvas
+                    val minValue = downloadRateHistory.minOrNull() ?: return@Canvas
+                    val valueRange = (maxValue - minValue).takeIf { it > 0f } ?: 1f
+                    val stepX = size.width / downloadRateHistory.lastIndex
+                    val path = Path()
+
+                    downloadRateHistory.forEachIndexed { index, float ->
+                        val x = stepX * index
+                        val progress = (float - minValue) / valueRange
+                        val y = size.height * (1f - progress)
+                        if (index == 0) {
+                            path.moveTo(x, y)
+                        } else {
+                            path.lineTo(x, y)
+                        }
+
+                    }
+                    drawPath(
+                        path = path,
+                        color = Color(0xFF49679E),
+                        style = Stroke(
+                            width = 2f,
+                            cap = StrokeCap.Round,
+                            join = StrokeJoin.Round,
+                        )
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                networkDashboardConfig.networkInterfaces.forEachIndexed { index, networkInterfaceMetrics ->
+                    HomeScreenNetworkInterfaceRow(networkInterfaceMetrics = networkInterfaceMetrics)
+                    if (index != networkDashboardConfig.networkInterfaces.size-1){
+                        Spacer(modifier = Modifier.height(10.dp))
+                        HorizontalDivider(Modifier
+                            .fillMaxWidth()
+                            .height(1.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                }
+            }
+        }
+    }else{
+        Row(
+            modifier = dynamicallyAdjustedModifier
+                .clip(RoundedCornerShape(16.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainer)
+                .padding(20.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .aspectRatio(1f, matchHeightConstraintsFirst = true)
+                    .clip(RoundedCornerShape(4))
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        shape = RoundedCornerShape(4)
+                    )
+            ){
+                Canvas(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 5.dp, bottom = 10.dp)
+                ) {
+                    val maxValue = downloadRateHistory.maxOrNull() ?: return@Canvas
+                    val minValue = downloadRateHistory.minOrNull() ?: return@Canvas
+                    val valueRange = (maxValue - minValue).takeIf { it > 0f } ?: 1f
+                    val stepX = size.width / downloadRateHistory.lastIndex
+                    val path = Path()
+
+                    downloadRateHistory.forEachIndexed { index, float ->
+                        val x = stepX * index
+                        val progress = (float - minValue) / valueRange
+                        val y = size.height * (1f - progress)
+                        if (index == 0) {
+                            path.moveTo(x, y)
+                        } else {
+                            path.lineTo(x, y)
+                        }
+
+                    }
+                    drawPath(
+                        path = path,
+                        color = Color(0xFF49679E),
+                        style = Stroke(
+                            width = 2f,
+                            cap = StrokeCap.Round,
+                            join = StrokeJoin.Round,
+                        )
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(15.dp))
+
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+            ) {
+                networkDashboardConfig.networkInterfaces.forEachIndexed { index, networkInterfaceMetrics ->
+                    HomeScreenNetworkInterfaceRow(networkInterfaceMetrics = networkInterfaceMetrics)
+                    if (index != networkDashboardConfig.networkInterfaces.size-1){
+                        Spacer(modifier = Modifier.height(10.dp))
+                        HorizontalDivider(Modifier.height(1.dp))
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeScreenNetworkInterfaceRow(
+    modifier: Modifier = Modifier,
+    networkInterfaceMetrics: NetworkInterfaceMetrics
+){
+    Column(modifier = modifier) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(networkInterfaceMetrics.interfaceIcon),
+                    contentDescription = networkInterfaceMetrics.interfaceName
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(networkInterfaceMetrics.interfaceName)
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(networkInterfaceMetrics.interfaceAddress)
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(intrinsicSize = IntrinsicSize.Min)
+        ) {
+            HomeScreenMetricCell(
+                title = "↑/S",
+                value = "${"%.1f".format(networkInterfaceMetrics.currentUploadRate)} M/s"
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            HomeScreenMetricCell(
+                title = "↓/S",
+                value = "${"%.1f".format(networkInterfaceMetrics.currentDownloadRate)} M/s"
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            Row {
+                Column {
+                    Row(verticalAlignment = Alignment.CenterVertically) { Text("↑") ; Spacer(modifier = Modifier.width(10.dp)) ; Text("${"%.1f".format(networkInterfaceMetrics.totalUploadedMebibytes)} M")}
+                    Row(verticalAlignment = Alignment.CenterVertically) { Text("↓") ; Spacer(modifier = Modifier.width(10.dp)) ; Text("${"%.1f".format(networkInterfaceMetrics.totalDownloadedMebibytes)} M")}
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                CircularProgressIndicator(
+                    progress = {
+                        (networkInterfaceMetrics.totalUploadedMebibytes/(networkInterfaceMetrics.totalDownloadedMebibytes+networkInterfaceMetrics.totalUploadedMebibytes))
+                    },
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .aspectRatio(1f,true)
+                )
+            }
+        }
+
+    }
+}
+
+@Preview(
+    widthDp = 500,
+    heightDp = 220
+)
+@Composable
+private fun _previewBoardCompact_() {
+    Column(modifier = Modifier.width(500.dp)) {
+        HomeScreenNetworkDashboard(
+            networkDashboardConfig = NetworkDashboardConfig._testOnly_,
+            rootlessStoreHeightWindowSize = RootlessStoreWindowSize.Compact,
+            modifier = Modifier
+                .height(500.dp)
+                .width(500.dp)
+        )
+    }
+
+}
+@Preview(
+    widthDp = 500,
+    heightDp = 500
+)
+@Composable
+private fun _previewBoardExpanded_() {
+    Column(modifier = Modifier.width(500.dp)) {
+        HomeScreenNetworkDashboard(
+            networkDashboardConfig = NetworkDashboardConfig._testOnly_,
+            rootlessStoreHeightWindowSize = RootlessStoreWindowSize.Expanded,
+            modifier = Modifier
+                .height(500.dp)
+                .width(500.dp)
+        )
+    }
+
+}
+
+@PreviewLightDark
+@Composable
+private fun _previewNetworkInterfaceRow_() {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        HomeScreenNetworkInterfaceRow(
+            networkInterfaceMetrics = NetworkDashboardConfig._testOnly_.networkInterfaces[0],
+            modifier = Modifier
+                .width(200.dp)
+                .background(MaterialTheme.colorScheme.background)
+        )
+    }
+
+}

@@ -1,19 +1,19 @@
 package com.baidaidai.rootless_store.data.shizuku.server
 
 class ShizukuEndpointCallback(
-    private val onExecuteCallback:(session:String?)-> Unit,
-    private val onErrorCallback: (error:String?)-> Unit,
-    private val onProcessExitedCallback: (exitCode: Int) -> Unit
+    private val onOutput: (output: String?) -> Unit,
+    private val onError: (error: String?) -> Unit,
+    private val onProcessExit: (exitCode: Int) -> Unit
 ):IShellCallback.Stub() {
     override fun onExecute(session: String?) {
-        onExecuteCallback(session)
+        onOutput(session)
     }
 
     override fun onError(error: String?) {
-        onErrorCallback(error)
+        onError(error)
     }
 
     override fun onProcessExited(exitCode: Int){
-        onProcessExitedCallback(exitCode)
+        onProcessExit(exitCode)
     }
 }

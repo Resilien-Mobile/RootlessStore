@@ -20,8 +20,8 @@ fun SettingScreenListItemDefault(
     headlineText: String,
     supportingText: String,
     leadingContent: @Composable (() -> Unit)? = null,
-    checked: Boolean = false,
-    onSwitchClicked: (Boolean)-> Unit = {},
+    isChecked: Boolean = false,
+    onCheckedChange: (Boolean) -> Unit = {},
     trailingContent: @Composable (()-> Unit)? = null
 ){
     ListItem(
@@ -49,17 +49,17 @@ fun SettingScreenListItemDefault(
                 trailingContent()
             }else{
                 Switch(
-                    checked = checked,
-                    onCheckedChange = onSwitchClicked,
+                    checked = isChecked,
+                    onCheckedChange = onCheckedChange,
                 )
             }
         },
-        colors = ListItemColors()
+        colors = listItemColors()
     )
 }
 
 @Composable
-private fun ListItemColors(): ListItemColors {
+private fun listItemColors(): ListItemColors {
     return ListItemDefaults.colors().copy(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
