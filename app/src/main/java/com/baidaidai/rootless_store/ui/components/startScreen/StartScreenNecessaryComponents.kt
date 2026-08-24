@@ -202,13 +202,13 @@ object StartScreenNecessaryComponents {
         isEnabled: Boolean = true,
         label: @Composable (() -> Unit)? = null,
     ){
-        val buttonColorsSelected = ButtonColors(
+        val selectedButtonColors = ButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
-        val buttonColorsNoSelected = ButtonColors(
+        val unselectedButtonColors = ButtonColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
             disabledContainerColor = MaterialTheme.colorScheme.surface,
@@ -218,7 +218,7 @@ object StartScreenNecessaryComponents {
         Button(
             onClick = { if (isEnabled){ onClick() } },
             contentPadding = PaddingValues(horizontal = 24.dp),
-            colors = if (isSelected) buttonColorsSelected else buttonColorsNoSelected,
+            colors = if (isSelected) selectedButtonColors else unselectedButtonColors,
             modifier = modifier
                 .height(56.dp)
         ) {

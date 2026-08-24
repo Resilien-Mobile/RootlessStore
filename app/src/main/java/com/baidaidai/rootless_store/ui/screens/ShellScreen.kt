@@ -89,23 +89,23 @@ fun ShellScreen(
             .fillMaxSize()
     ) {
 
-        val trailingButtonContentPaddingAfterClick = PaddingValues(start = 15.dp, end = 15.dp)
-        val trailingButtonContentPaddingBeforeClick = PaddingValues(start = 13.dp, end = 17.dp)
-        val trailingButtonSizeBeforeClick = SplitButtonDefaults.trailingButtonShapesFor(56.dp).shape
+        val expandedTrailingButtonContentPadding = PaddingValues(start = 15.dp, end = 15.dp)
+        val collapsedTrailingButtonContentPadding = PaddingValues(start = 13.dp, end = 17.dp)
+        val collapsedTrailingButtonShape = SplitButtonDefaults.trailingButtonShapesFor(56.dp).shape
 
         val trailingButtonContentPadding = remember(isEnvironmentMenuExpanded) {
             if (isEnvironmentMenuExpanded){
-                trailingButtonContentPaddingAfterClick
+                expandedTrailingButtonContentPadding
             }else{
-                trailingButtonContentPaddingBeforeClick
+                collapsedTrailingButtonContentPadding
             }
         }
 
-        val trailingButtonSize = remember(isEnvironmentMenuExpanded) {
+        val trailingButtonShape = remember(isEnvironmentMenuExpanded) {
             if (isEnvironmentMenuExpanded){
                 CircleShape
             }else{
-                trailingButtonSizeBeforeClick
+                collapsedTrailingButtonShape
             }
         }
 
@@ -224,7 +224,7 @@ fun ShellScreen(
                                         onClick = {
                                             isEnvironmentMenuExpanded = !isEnvironmentMenuExpanded
                                         },
-                                        shape = trailingButtonSize,
+                                        shape = trailingButtonShape,
                                         contentPadding = trailingButtonContentPadding,
                                         modifier = Modifier
                                             .height(56.dp)

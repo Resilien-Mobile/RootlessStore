@@ -115,8 +115,8 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     val selectedExecutionContext: StateFlow<ExecutionContext> = combine(
         executionContextPreference,
         _pendingExecutionContext
-    ) { contextPreference, contextSelected ->
-        contextSelected ?: contextPreference
+    ) { contextPreference, pendingContext ->
+        pendingContext ?: contextPreference
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(1_000),
