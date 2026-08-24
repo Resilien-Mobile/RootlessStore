@@ -51,7 +51,7 @@ fun HomeScreen(
     val latestVersionTag by homeScreenViewModel.latestVersionTag.collectAsState()
     val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
     val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
-    val appVersion = stringResource(R.string.app_version)
+    val currentVersionTag = stringResource(R.string.app_version)
 
     val deviceStatusSummary = DeviceStatusSummary(
         executionContext = executionContext,
@@ -89,7 +89,7 @@ fun HomeScreen(
                 RootlessStoreVersionCard()
             }
 
-            if (latestVersionTag != null && latestVersionTag != appVersion) {
+            if (latestVersionTag != null && latestVersionTag != currentVersionTag) {
                 item {
                     /* Version Checker */
                     RootlessStoreUpdateBanner(
@@ -131,7 +131,7 @@ fun HomeScreen(
             // Version and update status
             RootlessStoreVersionCard(Modifier.width(preferWidth))
 
-            if (latestVersionTag != null && latestVersionTag != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
+            if (latestVersionTag != null && latestVersionTag != currentVersionTag && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
                 RootlessStoreUpdateBanner(
                     latestVersionTag = latestVersionTag!!,
                     modifier = resolveBasicWidthModifier()
@@ -148,7 +148,7 @@ fun HomeScreen(
 
             /* Version Checker */
             // 如果height紧凑，则可用此布局，反之不可使用
-            if (latestVersionTag != null && latestVersionTag != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
+            if (latestVersionTag != null && latestVersionTag != currentVersionTag && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
                 RootlessStoreUpdateBanner(
                     latestVersionTag = latestVersionTag!!,
                     modifier = resolveBasicWidthModifier()

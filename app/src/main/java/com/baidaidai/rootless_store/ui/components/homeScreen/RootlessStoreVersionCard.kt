@@ -28,7 +28,7 @@ fun RootlessStoreVersionCard(
     modifier: Modifier = Modifier
 ){
 
-    val versionNumber = stringResource(R.string.app_version)
+    val currentVersionTag = stringResource(R.string.app_version)
 
     val cardColors = CardDefaults.cardColors(
         containerColor = colorScheme.primaryContainer,
@@ -60,7 +60,7 @@ fun RootlessStoreVersionCard(
                     Text(
                         text = icuString(
                             R.string.home_screen_version_checker_container_supporting,
-                            mapOf("version" to versionNumber)
+                            mapOf("version" to currentVersionTag)
                         ),
                         style = MaterialTheme.typography.titleSmall
                     )
