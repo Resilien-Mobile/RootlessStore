@@ -19,7 +19,7 @@ object SourceScreenNecessaryComponents {
     fun SourceScreenTopAppBar(
         textButtonOnClick:()-> Unit = {},
         iconButtonOnClick:()-> Unit = {},
-        sourceCount: Int = 0
+        pluginSourceCount: Int = 0
     ){
         LargeFlexibleTopAppBar(
             title = {
@@ -29,7 +29,7 @@ object SourceScreenNecessaryComponents {
                 Text(
                     text = icuString(
                         R.string.sources_screen_top_app_bar_subtitle,
-                        mapOf("sourceCount" to sourceCount)
+                        mapOf("sourceCount" to pluginSourceCount)
                     )
                 )
             },

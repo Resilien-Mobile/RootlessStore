@@ -32,13 +32,13 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
 
     var latestPluginSourceEndpoint = ""
 
-    val sourceList = observePluginSourcesUseCase().stateIn(
+    val pluginSources = observePluginSourcesUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = emptyList()
     )
 
-    val sourceCount = observePluginSourceCountUseCase().stateIn(
+    val pluginSourceCount = observePluginSourceCountUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = 0

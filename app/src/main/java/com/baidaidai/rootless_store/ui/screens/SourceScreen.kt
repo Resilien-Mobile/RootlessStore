@@ -31,7 +31,7 @@ fun SourceScreen(
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     onListItemClick: (pluginSource: PluginSource)-> Unit
 ){
-    val pluginSourceList by sourceScreenViewModel.sourceList.collectAsState()
+    val pluginSources by sourceScreenViewModel.pluginSources.collectAsState()
     val isDeleteActionVisible by sourceScreenViewModel.isDeleteActionVisible.collectAsState()
 
     val isAuthenticationSheetVisible by sourceScreenViewModel.isAuthenticationSheetVisible.collectAsState()
@@ -66,7 +66,7 @@ fun SourceScreen(
         ) {
             LazyColumn{
                 itemsIndexed(
-                    items = pluginSourceList
+                    items = pluginSources
                 ){ listIndex, pluginSource ->
                     Column {
                         SourceScreenListItem(
@@ -76,7 +76,7 @@ fun SourceScreen(
                         ) {
                             onListItemClick(pluginSource)
                         }
-                        if (listIndex!=pluginSourceList.size-1){
+                        if (listIndex!=pluginSources.size-1){
                             Spacer(modifier = Modifier.height(2.dp))
                         }
                     }
