@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.jvm.java
 
-val RootlessStoreLocalContext = compositionLocalOf<Context>{
+val LocalRootlessStoreContext = compositionLocalOf<Context>{
     error("No Context Provide")
 }
 
@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity(){
 
             RootlessStoreTheme {
                 CompositionLocalProvider(
-                    RootlessStoreLocalContext provides context,
+                    LocalRootlessStoreContext provides context,
                 ) {
                     RootlessStoreNavigationScaffold(
                         fileIntentUri = fileIntentUri,
