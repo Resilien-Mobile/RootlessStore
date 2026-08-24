@@ -8,7 +8,7 @@ import com.baidaidai.rootless_store.application.status.ObserveNetworkDashboardCo
 import com.baidaidai.rootless_store.application.status.ObserveExecutionContextUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.ObserveAutoUpdateEnabledPreferenceUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellAvailabilityUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellAvailabilityUseCase
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
@@ -54,7 +54,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     private val setExecutionContextChooserEnabledUseCase: SetExecutionContextChooserEnabledUseCase,
     private val observeAutoUpdateEnabledPreferenceUseCase: ObserveAutoUpdateEnabledPreferenceUseCase,
     private val fetchLatestVersionUseCase: FetchLatestVersionUseCase,
-    private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
+    private val observeAdbShellAvailabilityUseCase: ObserveAdbShellAvailabilityUseCase,
     private val observeCpuDashboardConfigUseCase: ObserveCpuDashboardConfigUseCase,
     private val observeNetworkDashboardConfigUseCase: ObserveNetworkDashboardConfigUseCase
 ) : ViewModel() {
@@ -123,7 +123,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         initialValue = ExecutionContext.LIMITED
     )
 
-    val isAdbShellAvailable = observeAdbShellStatusUseCase()
+    val isAdbShellAvailable = observeAdbShellAvailabilityUseCase()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
