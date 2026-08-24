@@ -54,12 +54,12 @@ fun SettingScreenListItemDefault(
                 )
             }
         },
-        colors = ListItemColors()
+        colors = listItemColors()
     )
 }
 
 @Composable
-private fun ListItemColors(): ListItemColors {
+private fun listItemColors(): ListItemColors {
     return ListItemDefaults.colors().copy(
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
