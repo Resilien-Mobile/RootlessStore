@@ -38,7 +38,7 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
         // Handle PID and other status
         return pluginExecutionResult.onEach { executionResult ->
             if (!pidSaved) {
-                val pid = parsePid(executionResult.content)
+                val pid = parsePid(executionResult.output)
                 if (pid != null) {
                     pidSaved = true
                     val pluginExecutionEntity = PluginExecutionEntity

@@ -61,7 +61,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         ShellResult(
                             resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
-                            content = result,
+                            output = result,
                         )
                     )
                 }
@@ -74,7 +74,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         ShellResult(
                             resultTag = ExecutionResultTag.RedLine,
                             command = "~ $commandContent",
-                            content = error,
+                            output = error,
                         )
                     )
                 }
@@ -96,7 +96,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         ShellResult(
                             resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
-                            content = session.toString(),
+                            output = session.toString(),
                         )
                     )
                 },
@@ -105,7 +105,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         ShellResult(
                             resultTag = ExecutionResultTag.RedLine,
                             command = "~ $commandContent",
-                            content = error.toString(),
+                            output = error.toString(),
                         )
                     )
                 },
@@ -143,7 +143,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         ShellResult(
                             resultTag = ExecutionResultTag.Normal,
                             command = "# $commandContent",
-                            content = result,
+                            output = result,
                         )
                     )
                 }
@@ -154,7 +154,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         ShellResult(
                             resultTag = ExecutionResultTag.RedLine,
                             command = "# $commandContent",
-                            content = error,
+                            output = error,
                         )
                     )
                 }

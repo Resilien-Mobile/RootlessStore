@@ -67,7 +67,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                     send(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.Normal,
-                            content = "- ${result.toString()}"
+                            output = "- ${result.toString()}"
                         )
                     )
                 }
@@ -77,7 +77,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                     send(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.Normal,
-                            content = "- ${error.toString()}"
+                            output = "- ${error.toString()}"
                         )
                     )
                 }
@@ -100,7 +100,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                     trySend(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.Normal,
-                            content = "- ${session.toString()}"
+                            output = "- ${session.toString()}"
                         )
                     )
                 },
@@ -108,7 +108,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                     trySend(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.RedLine,
-                            content = "- ${error.toString()}"
+                            output = "- ${error.toString()}"
                         )
                     )
                 },

@@ -37,7 +37,7 @@ class RootlessStoreExecuteScreenViewModel @Inject constructor(
     }
 
     fun exportExecutionLog(executionLog: List<ExecutionResult> = _executionLog.value): String{
-        return executionLog.joinToString(separator = "\n") { it.content }
+        return executionLog.joinToString(separator = "\n") { it.output }
     }
 
 }

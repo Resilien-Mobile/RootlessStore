@@ -40,8 +40,8 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
             )
             .onEach { executionResult ->
                 if (!pidSaved) {
-                    val content = executionResult.content
-                    val pid = parsePid(content)
+                    val output = executionResult.output
+                    val pid = parsePid(output)
                     if (pid != null) {
                         pidSaved = true
                         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
