@@ -18,16 +18,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
+import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenContextSwitchDialog
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuDashboardCard
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetworkDashboard
-import com.baidaidai.rootless_store.ui.components.homeScreen.HosterStatusCircularProgressRow
+import com.baidaidai.rootless_store.ui.components.homeScreen.HomeStatusOverview
 import com.baidaidai.rootless_store.ui.components.homeScreen.HowToDevelopRootlessStorePlugin
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreUpdateBanner
 import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreVersionCard
-import com.baidaidai.rootless_store.ui.components.homeScreen.RootlessStoreHosterStatusBoard
+import com.baidaidai.rootless_store.ui.components.homeScreen.DeviceStatusBoard
 import com.baidaidai.rootless_store.ui.layout.homeScreen.HomeScreenExpandedLayout
 import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
 
@@ -53,15 +53,15 @@ fun HomeScreen(
     val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
     val appVersion = stringResource(R.string.app_version)
 
-    val rootlessStoreHosterStatus = RootlessStoreHosterStatus(
+    val deviceStatusSummary = DeviceStatusSummary(
         executionContext = executionContext,
-        osAndApiVersion = androidAndApiStatus,
+        androidAndApiStatus = androidAndApiStatus,
         kernelVersion = kernelStatus,
         seLinuxStatus = seLinuxStatus,
         pluginStatus = pluginStatus,
         memoryStatus = memoryStatus,
         storageStatus = storageStatus,
-        tempStatus = temperatureStatus
+        temperatureStatus = temperatureStatus
     )
 
     if (isContextDialogVisible){
@@ -99,18 +99,18 @@ fun HomeScreen(
             }
 
             item {
-                /* Hoster Circular Progress */
-                HosterStatusCircularProgressRow(
-                    hosterStatus = rootlessStoreHosterStatus,
+                /* Device Status Overview */
+                HomeStatusOverview(
+                    deviceStatus = deviceStatusSummary,
                     onChipClick = onChipClick,
                     onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility
                 )
             }
 
             item {
-                /* Hoster Status */
-                RootlessStoreHosterStatusBoard(
-                    hosterStatus = rootlessStoreHosterStatus
+                /* Device Status */
+                DeviceStatusBoard(
+                    deviceStatus = deviceStatusSummary
                 )
             }
 
@@ -138,9 +138,9 @@ fun HomeScreen(
                 )
             }
 
-            /* Hoster Circular Progress */
-            HosterStatusCircularProgressRow(
-                hosterStatus = rootlessStoreHosterStatus,
+            /* Device Status Overview */
+            HomeStatusOverview(
+                deviceStatus = deviceStatusSummary,
                 onChipClick = onChipClick,
                 onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility,
                 modifier = resolveBasicWidthModifier()
@@ -160,9 +160,9 @@ fun HomeScreen(
                 HowToDevelopRootlessStorePlugin(resolveBasicWidthModifier())
             }
 
-            /* Hoster Status */
-            RootlessStoreHosterStatusBoard(
-                hosterStatus = rootlessStoreHosterStatus,
+            /* Device Status */
+            DeviceStatusBoard(
+                deviceStatus = deviceStatusSummary,
                 modifier = resolveBasicWidthModifier()
             )
 

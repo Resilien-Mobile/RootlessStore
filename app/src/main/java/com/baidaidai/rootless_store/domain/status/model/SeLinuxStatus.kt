@@ -4,5 +4,5 @@ enum class SeLinuxStatus {
     Enforcing,
     Permissive,
     Disabled,
-    Unknow,
+    Unknown,
 }

@@ -26,13 +26,13 @@ import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
-import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
+import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 
 @Composable
-fun HosterStatusCircularProgressRow(
+fun HomeStatusOverview(
     modifier: Modifier = Modifier,
-    hosterStatus: RootlessStoreHosterStatus,
+    deviceStatus: DeviceStatusSummary,
     onChipClick: ()-> Unit = {},
     onChipLongClick: ()-> Unit = {}
 ){
@@ -85,8 +85,8 @@ fun HosterStatusCircularProgressRow(
                             .height(4.dp)
                     )
                     Row {
-                        OverallStatusChip(
-                            hosterStatus = hosterStatus,
+                        ExecutionContextChip(
+                            deviceStatus = deviceStatus,
                             onLongClick = onChipLongClick,
                             onClick = onChipClick,
                         )
@@ -103,15 +103,15 @@ fun HosterStatusCircularProgressRow(
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                HosterStatusCircularProgress(
+                StatusCircularProgress(
                     label = stringResource(R.string.home_screen_hoster_status_board_memory_label),
-                    currentValue = hosterStatus.memoryStatus.usedMemory,
-                    maxValue = hosterStatus.memoryStatus.totalMemory
+                    currentValue = deviceStatus.memoryStatus.usedMemory,
+                    maxValue = deviceStatus.memoryStatus.totalMemory
                 )
-                HosterStatusCircularProgress(
+                StatusCircularProgress(
                     label = stringResource(R.string.home_screen_hoster_status_board_storage_label),
-                    currentValue = hosterStatus.storageStatus.usedStorage,
-                    maxValue = hosterStatus.storageStatus.totalStorage
+                    currentValue = deviceStatus.storageStatus.usedStorage,
+                    maxValue = deviceStatus.storageStatus.totalStorage
                 )
             }
         }
@@ -122,9 +122,9 @@ fun HosterStatusCircularProgressRow(
 @Composable
 private fun _preview_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        HosterStatusCircularProgressRow(
+        HomeStatusOverview(
             modifier = Modifier.width(300.dp),
-            hosterStatus = RootlessStoreHosterStatus()
+            deviceStatus = DeviceStatusSummary()
                 .copy(
                     executionContext = ExecutionContext.LIMITED,
                     memoryStatus = MemoryStatus(totalMemory = 256.01, usedMemory = 128.64),

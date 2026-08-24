@@ -102,7 +102,7 @@ fun HomeScreenCpuDashboardCard(
                 title = "UPTIME",
                 value = "${cpuDashboardConfig.uptime.inWholeSeconds} S"
             )
-            HosterStatusCircularProgress(label = "Pressure", percentage = cpuDashboardConfig.aggregateMetrics.totalPercent)
+            StatusCircularProgress(label = "Pressure", percentage = cpuDashboardConfig.aggregateMetrics.totalPercent)
         }
 
     }

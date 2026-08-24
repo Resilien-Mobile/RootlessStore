@@ -17,12 +17,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
+import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 
 @Composable
-fun RootlessStoreHosterStatusBoard(
+fun DeviceStatusBoard(
     modifier: Modifier = Modifier,
-    hosterStatus: RootlessStoreHosterStatus
+    deviceStatus: DeviceStatusSummary
 ){
     val cardColors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -41,41 +41,41 @@ fun RootlessStoreHosterStatusBoard(
                 modifier = Modifier
                     .padding(horizontal = 30.dp, vertical = 20.dp)
             ) {
-                HosterStatusRow(
+                DeviceStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_version_label),
-                    "${hosterStatus.osAndApiVersion?.androidVersion} (${hosterStatus.osAndApiVersion?.apiVersion})"
+                    "${deviceStatus.androidAndApiStatus?.androidVersion} (${deviceStatus.androidAndApiStatus?.apiVersion})"
                 )
                 Spacer(
                     modifier = Modifier
                         .height(8.dp)
                 )
-                HosterStatusRow(
+                DeviceStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_kernel_label),
-                    hosterStatus.kernelVersion ?: "null"
+                    deviceStatus.kernelVersion ?: "null"
                 )
                 Spacer(
                     modifier = Modifier
                         .height(8.dp)
                 )
-                HosterStatusRow(
+                DeviceStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_selinux_label),
-                    hosterStatus.seLinuxStatus.toString()
+                    deviceStatus.seLinuxStatus.toString()
                 )
                 Spacer(
                     modifier = Modifier
                         .height(8.dp)
                 )
-                HosterStatusRow(
+                DeviceStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_plugins_label),
-                    "${hosterStatus.pluginStatus.enabledCount}/${hosterStatus.pluginStatus.totalCount}"
+                    "${deviceStatus.pluginStatus.enabledCount}/${deviceStatus.pluginStatus.totalCount}"
                 )
                 Spacer(
                     modifier = Modifier
                         .height(8.dp)
                 )
-                HosterStatusRow(
+                DeviceStatusRow(
                     stringResource(R.string.home_screen_hoster_status_board_temp_label),
-                    hosterStatus.tempStatus?.toString() ?: "null"
+                    deviceStatus.temperatureStatus?.toString() ?: "null"
                 )
             }
         }
@@ -86,8 +86,8 @@ fun RootlessStoreHosterStatusBoard(
 @Composable
 private fun _preview_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        RootlessStoreHosterStatusBoard(
-            hosterStatus = RootlessStoreHosterStatus(),
+        DeviceStatusBoard(
+            deviceStatus = DeviceStatusSummary(),
             modifier = Modifier.width(200.dp)
         )
     }

@@ -15,11 +15,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.domain.status.model.RootlessStoreHosterStatus
+import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 
 @Composable
-fun OverallStatusChip(
-    hosterStatus: RootlessStoreHosterStatus,
+fun ExecutionContextChip(
+    deviceStatus: DeviceStatusSummary,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -44,7 +44,7 @@ fun OverallStatusChip(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Overall: ${hosterStatus.executionContext}",
+                text = "Overall: ${deviceStatus.executionContext}",
                 maxLines = 1,
                 softWrap = false,
                 style = MaterialTheme.typography.labelLarge,
@@ -57,8 +57,8 @@ fun OverallStatusChip(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    OverallStatusChip(
-        hosterStatus = RootlessStoreHosterStatus(),
+    ExecutionContextChip(
+        deviceStatus = DeviceStatusSummary(),
         onClick = {},
         onLongClick = {}
     )

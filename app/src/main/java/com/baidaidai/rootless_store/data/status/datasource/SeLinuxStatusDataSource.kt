@@ -22,7 +22,7 @@ class SeLinuxStatusDataSource @Inject constructor() {
                 "Enforcing" -> SeLinuxStatus.Enforcing
                 "Permissive" -> SeLinuxStatus.Permissive
                 "Disabled" -> SeLinuxStatus.Disabled
-                else -> SeLinuxStatus.Unknow
+                else -> SeLinuxStatus.Unknown
             }
         }
 
@@ -31,7 +31,7 @@ class SeLinuxStatusDataSource @Inject constructor() {
         } else {
             Log.d("err",result.err.isEmpty().toString())
             Log.d("out",result.out.isEmpty().toString())
-            SeLinuxStatus.Unknow
+            SeLinuxStatus.Unknown
         }
     }
 }
