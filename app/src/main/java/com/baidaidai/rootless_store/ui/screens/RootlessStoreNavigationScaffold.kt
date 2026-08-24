@@ -68,8 +68,8 @@ import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 fun RootlessStoreNavigationScaffold(
     pluginScreenViewModel: RootlessStorePluginScreenViewModel = hiltViewModel(),
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel = hiltViewModel(),
-    fileIntentUri:Uri?,
-    onFileIntentConsumed:()-> Unit
+    incomingPackageUri: Uri?,
+    onIncomingPackageConsumed: () -> Unit
 ){
     // VM & VM Data
     val marketScreenViewModel = hiltViewModel<RootlessStoreMarketScreenViewModel>()
@@ -91,7 +91,7 @@ fun RootlessStoreNavigationScaffold(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         uri?.let {
-            pluginScreenViewModel.setPluginPackageUri(uri)
+            pluginScreenViewModel.setPendingLocalPackageUri(uri)
             pluginScreenViewModel.installLocalPackage()
         }
     }
@@ -156,13 +156,13 @@ fun RootlessStoreNavigationScaffold(
             sharedEvent = event
         }
     }
-    LaunchedEffect(fileIntentUri) {
-        val uri = fileIntentUri ?: return@LaunchedEffect
+    LaunchedEffect(incomingPackageUri) {
+        val uri = incomingPackageUri ?: return@LaunchedEffect
 
         navigationBackStack.add(PluginScreenKey)
-        pluginScreenViewModel.setPluginPackageUri(uri)
+        pluginScreenViewModel.setPendingLocalPackageUri(uri)
         pluginScreenViewModel.installLocalPackage()
-        onFileIntentConsumed()
+        onIncomingPackageConsumed()
     }
 
 

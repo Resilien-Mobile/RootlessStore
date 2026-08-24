@@ -75,14 +75,14 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(){
 
-    private var fileIntentUri: Uri? by mutableStateOf(null)
+    private var incomingPackageUri: Uri? by mutableStateOf(null)
 
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // save Intent if hot-start from an implicit invocation
-        if (fileIntentUri == null){
-            setFileIntentUriFromIntent(intent)
+        if (incomingPackageUri == null){
+            setIncomingPackageUriFromIntent(intent)
         }
 
         super.onCreate(savedInstanceState)
@@ -97,9 +97,9 @@ class MainActivity : ComponentActivity(){
                     LocalRootlessStoreContext provides context,
                 ) {
                     RootlessStoreNavigationScaffold(
-                        fileIntentUri = fileIntentUri,
-                        onFileIntentConsumed = {
-                            fileIntentUri = null
+                        incomingPackageUri = incomingPackageUri,
+                        onIncomingPackageConsumed = {
+                            incomingPackageUri = null
                         }
                     )
                 }
@@ -114,12 +114,12 @@ class MainActivity : ComponentActivity(){
         setIntent(intent)
 
         // save Intent if cold-start from an implicit invocation
-        setFileIntentUriFromIntent(intent)
+        setIncomingPackageUriFromIntent(intent)
     }
 
-    private fun setFileIntentUriFromIntent(intent: Intent?) {
+    private fun setIncomingPackageUriFromIntent(intent: Intent?) {
         if (intent?.action != Intent.ACTION_SEND) {
-            this.fileIntentUri = null
+            incomingPackageUri = null
         }
         val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity(){
             intent?.getParcelableExtra(Intent.EXTRA_STREAM)
         }
 
-        fileIntentUri = uri
+        incomingPackageUri = uri
     }
     private fun registerNotificationChannel(context: Context){
 
