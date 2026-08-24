@@ -137,12 +137,12 @@ class PluginExecutionGatewayImpl @Inject constructor(
             Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.findShizukuUserService() == null}")
             Log.d("pid","$pluginProcessPid")
 
-            val result = shizukuUserServiceGatewayImpl.findShizukuUserService()
+            val processAbortResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.kill(pluginProcessPid)
 
-            Log.d("kill pid result",result.toString())
+            Log.d("kill pid result",processAbortResult.toString())
 
-            result != null
+            processAbortResult != null
         }else{
             false
         }

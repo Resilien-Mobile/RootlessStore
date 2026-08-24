@@ -29,8 +29,8 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         replaceWith = ReplaceWith("resolveChildFile(destinationDirectory, fileNameWithoutExtension + \".zip\").createNewFile()")
     )
     fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean {
-        val result = File(destinationDirectory, "$fileNameWithoutExtension.zip").createNewFile()
-        return result
+        val isZipFileCreated = File(destinationDirectory, "$fileNameWithoutExtension.zip").createNewFile()
+        return isZipFileCreated
     }
 
     fun resolveChildFile(parentDirectory: File, childName: String): File {

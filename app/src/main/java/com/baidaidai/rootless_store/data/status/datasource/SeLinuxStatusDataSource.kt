@@ -12,13 +12,13 @@ class SeLinuxStatusDataSource @Inject constructor() {
             .build("sh")
 
         val outputLines = ArrayList<String>()
-        val result = shell.use {
+        val commandResult = shell.use {
             it.newJob().add("getenforce").to(outputLines, outputLines).exec()
         }
-        val output = result.out.joinToString("\n").trim()
+        val commandOutput = commandResult.out.joinToString("\n").trim()
 
-        if (result.isSuccess) {
-            return when (output) {
+        if (commandResult.isSuccess) {
+            return when (commandOutput) {
                 "Enforcing" -> SeLinuxStatus.Enforcing
                 "Permissive" -> SeLinuxStatus.Permissive
                 "Disabled" -> SeLinuxStatus.Disabled
@@ -26,11 +26,11 @@ class SeLinuxStatusDataSource @Inject constructor() {
             }
         }
 
-        return if (output.endsWith("Permission denied")) {
+        return if (commandOutput.endsWith("Permission denied")) {
             SeLinuxStatus.Enforcing
         } else {
-            Log.d("err",result.err.isEmpty().toString())
-            Log.d("out",result.out.isEmpty().toString())
+            Log.d("err",commandResult.err.isEmpty().toString())
+            Log.d("out",commandResult.out.isEmpty().toString())
             SeLinuxStatus.Unknown
         }
     }

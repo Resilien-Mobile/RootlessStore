@@ -84,9 +84,9 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
 
     fun installLocalPackage(){
         viewModelScope.launch {
-            val result = installLocalPackageUseCase(pendingLocalPackageUri.value)
-            if (result is PluginError){
-                _pluginError.emit(result)
+            val installationError = installLocalPackageUseCase(pendingLocalPackageUri.value)
+            if (installationError is PluginError){
+                _pluginError.emit(installationError)
             }else{
                 _pluginError.emit(null)
             }

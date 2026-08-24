@@ -63,11 +63,11 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
         pendingPluginSourceEndpoint = sourceRemoteEndpoint
 
         viewModelScope.launch {
-            val result = addPluginSourceUseCase(sourceRemoteEndpoint)
+            val sourceEvent = addPluginSourceUseCase(sourceRemoteEndpoint)
 
-            when(result){
+            when(sourceEvent){
                 is PluginSourceEvent.SourceError -> {
-                    _sourceError.emit(result)
+                    _sourceError.emit(sourceEvent)
                 }
                 is PluginSourceEvent.AuthenticationRequired -> {
                     _isAuthenticationDialogVisible.value = true
@@ -87,11 +87,11 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
         )
 
         viewModelScope.launch {
-            val result = addAuthenticatedPluginSourceUseCase(authenticationInput)
+            val sourceEvent = addAuthenticatedPluginSourceUseCase(authenticationInput)
 
-            when(result){
+            when(sourceEvent){
                 is PluginSourceEvent.SourceError -> {
-                    _sourceError.emit(result)
+                    _sourceError.emit(sourceEvent)
                     cancelSourceAuthentication()
                 }
                 is PluginSourceEvent.AuthenticationRequired -> {

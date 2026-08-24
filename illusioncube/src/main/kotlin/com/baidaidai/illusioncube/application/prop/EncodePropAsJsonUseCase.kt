@@ -17,11 +17,11 @@ class EncodePropAsJsonUseCase(
         }
 
         // Convert prop object to map
-        val map = properties
+        val propertyMap = properties
             .stringPropertyNames()
             .associateWith(properties::getProperty)
 
         // Return a string
-        return objectMapper.writeValueAsString(map)
+        return objectMapper.writeValueAsString(propertyMap)
     }
 }
