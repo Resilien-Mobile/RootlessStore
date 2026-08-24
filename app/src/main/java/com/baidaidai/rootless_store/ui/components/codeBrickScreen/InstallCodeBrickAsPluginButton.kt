@@ -18,7 +18,7 @@ import com.baidaidai.rootless_store.R
 
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
-fun CodeBrickToPluginButton(
+fun InstallCodeBrickAsPluginButton(
     modifier: Modifier = Modifier,
     onClick:()-> Unit = {}
 ){
@@ -73,5 +73,5 @@ fun CodeBrickToPluginButton(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    CodeBrickToPluginButton()
+    InstallCodeBrickAsPluginButton()
 }

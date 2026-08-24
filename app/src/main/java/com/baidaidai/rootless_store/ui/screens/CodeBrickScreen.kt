@@ -78,7 +78,7 @@ fun CodeBrickScreen(
                 )
                 codeBrickViewModel.hideBrickSettings()
             },
-            onCodeBrickToPluginButtonClick = { codeBrickConfig -> codeBrickViewModel.convertCodeBrickToPlugin(codeBrickConfig) }
+            onInstallPluginClick = codeBrickViewModel::installPluginFromCodeBrick
         )
     }
 

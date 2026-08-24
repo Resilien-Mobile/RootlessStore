@@ -30,7 +30,7 @@ fun CodeBrickSettingContent(
     onCodeBrickContentValueChange: (value: String)-> Unit,
     onCodeBrickContextValueChange: (executionContext: ExecutionContext) -> Unit,
     onCodeBrickTileValueChange: (value: Int?) -> Unit,
-    onCodeBrickToPluginButtonClick: ()-> Unit
+    onInstallPluginClick: ()-> Unit
 ){
 
     val codeBrickContexts = listOf(
@@ -96,8 +96,8 @@ fun CodeBrickSettingContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        CodeBrickToPluginButton(
-            onClick = onCodeBrickToPluginButtonClick
+        InstallCodeBrickAsPluginButton(
+            onClick = onInstallPluginClick
         )
     }
 }
@@ -120,6 +120,6 @@ private fun _CodeBrickSettingContentPreview_(){
         onCodeBrickContentValueChange = {},
         onCodeBrickContextValueChange = {},
         onCodeBrickTileValueChange = {},
-        onCodeBrickToPluginButtonClick = {}
+        onInstallPluginClick = {}
     )
 }

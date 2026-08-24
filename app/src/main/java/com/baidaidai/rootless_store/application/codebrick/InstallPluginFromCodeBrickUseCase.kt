@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
 
-class ConvertCodeBrickToPluginUseCase @Inject constructor(
+class InstallPluginFromCodeBrickUseCase @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
@@ -52,7 +52,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
         val pluginManifestJson = json.encodeToString(pluginManifestLocal)
 
         if (pluginManifestLocal.requiredEnvironment == ExecutionContext.ADB){
-            convertShellCodeBrick(
+            installShellPluginFromCodeBrick(
                 codeBrickConfig = codeBrickConfig,
                 pluginManifestLocal = pluginManifestLocal,
                 pluginManifestJson = pluginManifestJson
@@ -91,7 +91,7 @@ class ConvertCodeBrickToPluginUseCase @Inject constructor(
         pluginRepositoryImpl.addPlugin(pluginManifestLocal)
     }
 
-    private suspend fun convertShellCodeBrick(
+    private suspend fun installShellPluginFromCodeBrick(
         codeBrickConfig: CodeBrickConfig,
         pluginManifestLocal: PluginManifestLocal,
         pluginManifestJson: String
