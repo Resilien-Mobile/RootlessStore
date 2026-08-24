@@ -18,7 +18,7 @@ import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndApiStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecutionContextPreferenceUseCase
-import com.baidaidai.rootless_store.domain.status.usecase.GetKernelStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.GetKernelVersionUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveMemoryStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObservePluginStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetSeLinuxStatusUseCase
@@ -45,7 +45,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     observePluginStatusUseCase: ObservePluginStatusUseCase,
     observeTemperatureStatusUseCase: ObserveTemperatureStatusUseCase,
     getSeLinuxStatusUseCase: GetSeLinuxStatusUseCase,
-    getKernelStatusUseCase: GetKernelStatusUseCase,
+    getKernelVersionUseCase: GetKernelVersionUseCase,
     getAndroidAndApiStatusUseCase: GetAndroidAndApiStatusUseCase,
     observeExecutionContextPreferenceUseCase: ObserveExecutionContextPreferenceUseCase,
     private val getRootShellAvailabilityUseCase: GetRootShellAvailabilityUseCase,
@@ -136,8 +136,8 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     private val _seLinuxStatus = MutableStateFlow(getSeLinuxStatusUseCase())
     val seLinuxStatus = _seLinuxStatus.asStateFlow()
 
-    private val _kernelStatus = MutableStateFlow(getKernelStatusUseCase())
-    val kernelStatus = _kernelStatus.asStateFlow()
+    private val _kernelVersion = MutableStateFlow(getKernelVersionUseCase())
+    val kernelVersion = _kernelVersion.asStateFlow()
 
     private val _androidAndApiStatus = MutableStateFlow(getAndroidAndApiStatusUseCase())
     val androidAndApiStatus = _androidAndApiStatus.asStateFlow()

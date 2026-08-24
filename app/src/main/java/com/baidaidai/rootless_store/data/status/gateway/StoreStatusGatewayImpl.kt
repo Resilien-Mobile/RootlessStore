@@ -11,7 +11,7 @@ import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatew
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
 import com.baidaidai.rootless_store.data.status.datasource.AndroidAndApiVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
-import com.baidaidai.rootless_store.data.status.datasource.KernelStatusDataSource
+import com.baidaidai.rootless_store.data.status.datasource.KernelVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.NetworkStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.SeLinuxStatusDataSource
@@ -41,7 +41,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val memoryStatusDataSource: MemoryStatusDataSource,
     private val storageStatusDataSource: StorageStatusDataSource,
     private val seLinuxStatusDataSource: SeLinuxStatusDataSource,
-    private val kernelStatusDataSource: KernelStatusDataSource,
+    private val kernelVersionDataSource: KernelVersionDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
     private val androidAndApiVersionDataSource: AndroidAndApiVersionDataSource,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
@@ -74,7 +74,7 @@ class StoreStatusGatewayImpl @Inject constructor(
 
     fun getSeLinuxStatus(): SeLinuxStatus = seLinuxStatusDataSource.getSeLinuxStatus()
 
-    fun getKernelStatus(): String = kernelStatusDataSource.getDeviceKernel()
+    fun getKernelVersion(): String = kernelVersionDataSource.getKernelVersion()
 
     fun observeTemperatureStatus(): Flow<TemperatureStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 

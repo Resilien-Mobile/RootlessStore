@@ -20,7 +20,7 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun getSeLinuxStatus(): SeLinuxStatus = storeStatusGatewayImpl.getSeLinuxStatus()
 
-    fun getKernelStatus(): String = storeStatusGatewayImpl.getKernelStatus()
+    fun getKernelVersion(): String = storeStatusGatewayImpl.getKernelVersion()
 
     fun observeTemperatureStatus(): Flow<TemperatureStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
 

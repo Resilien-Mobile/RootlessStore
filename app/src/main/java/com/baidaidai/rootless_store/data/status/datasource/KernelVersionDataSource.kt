@@ -3,10 +3,10 @@ package com.baidaidai.rootless_store.data.status.datasource
 import com.topjohnwu.superuser.Shell
 import javax.inject.Inject
 
-class KernelStatusDataSource @Inject constructor(
+class KernelVersionDataSource @Inject constructor(
 
 ) {
-    fun getDeviceKernel(): String{
+    fun getKernelVersion(): String{
         val process = ProcessBuilder("sh", "-c", "uname -r")
             .redirectErrorStream(true)
             .start()
