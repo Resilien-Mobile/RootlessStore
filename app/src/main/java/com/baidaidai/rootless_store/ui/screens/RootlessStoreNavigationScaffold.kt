@@ -363,7 +363,7 @@ fun RootlessStoreNavigationScaffold(
                         )
                     }
                     entry<PluginScreenKey> {
-                        PluginManagementScreen(
+                        PluginScreen(
                             contentPadding = contentPadding,
                             pluginScreenViewModel = pluginScreenViewModel,
                             navigateToExecuteScreen = { pluginId, shouldExecutePlugin ->
