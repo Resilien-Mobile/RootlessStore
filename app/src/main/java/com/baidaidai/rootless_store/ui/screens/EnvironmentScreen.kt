@@ -52,7 +52,7 @@ fun InstalledEnvironmentList(
             if (isActionPanelVisible){
 
                 PluginActionPanel(
-                    onShareButtonClick = {
+                    onShareClick = {
 
                         val shareLink = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
 
@@ -65,8 +65,8 @@ fun InstalledEnvironmentList(
                         context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
 
                     },
-                    onDeleteButtonClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
-                    onBackButtonClick = { isActionPanelVisible = !isActionPanelVisible },
+                    onUninstallClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
+                    onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
                     modifier = Modifier
                         .size(
                             width = with(density) { cardSize.width.toDp() },

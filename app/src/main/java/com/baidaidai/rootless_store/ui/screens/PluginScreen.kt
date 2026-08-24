@@ -138,7 +138,7 @@ fun InstalledPluginList(
 
                 PluginActionPanel(
                     pluginManifestRoom = pluginManifestRoom,
-                    onShareButtonClick = {
+                    onShareClick = {
                         val shareLink = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -149,7 +149,7 @@ fun InstalledPluginList(
 
                         context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
                     },
-                    onWebUiButtonClick = {
+                    onOpenWebUiClick = {
 
                         val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifestRoom)
 
@@ -158,8 +158,8 @@ fun InstalledPluginList(
                         }
                         context.startActivity(webUiIntent)
                     },
-                    onDeleteButtonClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
-                    onBackButtonClick = { isActionPanelVisible = !isActionPanelVisible },
+                    onUninstallClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
+                    onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
                     modifier = Modifier
                         .size(
                             width = with(density) { cardSize.width.toDp() },
