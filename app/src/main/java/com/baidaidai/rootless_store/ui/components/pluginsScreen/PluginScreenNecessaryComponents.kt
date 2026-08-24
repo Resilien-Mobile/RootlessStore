@@ -19,8 +19,8 @@ object PluginScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
     fun PluginScreenTopAppBar(
-        textButtonOnClick:()-> Unit = {},
-        iconButtonOnClick:()-> Unit = {},
+        onEditClick:()-> Unit = {},
+        onFilterClick:()-> Unit = {},
         pluginCount: Int = 0,
         scrollBehavior: TopAppBarScrollBehavior
     ){
@@ -38,14 +38,14 @@ object PluginScreenNecessaryComponents {
             },
             navigationIcon = {
                 TextButton(
-                    onClick = textButtonOnClick
+                    onClick = onEditClick
                 ) {
                     Text(stringResource(R.string.plugin_screen_top_app_bar_edit_button))
                 }
             },
             actions = {
                 IconButton(
-                    onClick = iconButtonOnClick
+                    onClick = onFilterClick
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_filter_list),

@@ -199,7 +199,7 @@ fun RootlessStoreNavigationScaffold(
                 when(currentDestination){
                     PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenTopAppBar(
                         pluginCount = pluginCount,
-                        textButtonOnClick = {
+                        onEditClick = {
                             pluginScreenViewModel.toggleBadgeVisibility()
                         },
                         scrollBehavior = scrollBehavior
@@ -208,10 +208,10 @@ fun RootlessStoreNavigationScaffold(
                         scrollBehavior = scrollBehavior
                     )
                     SourceScreenKey -> SourceScreenNecessaryComponents.SourceScreenTopAppBar(
-                        iconButtonOnClick = {
+                        onAddClick = {
                             isSourceDialogVisible = !isSourceDialogVisible
                         },
-                        textButtonOnClick = {
+                        onEditClick = {
                             sourceScreenViewModel.toggleDeleteActionVisibility()
                         },
                         pluginSourceCount = pluginSourceCount

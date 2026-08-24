@@ -17,8 +17,8 @@ object SourceScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
     fun SourceScreenTopAppBar(
-        textButtonOnClick:()-> Unit = {},
-        iconButtonOnClick:()-> Unit = {},
+        onEditClick:()-> Unit = {},
+        onAddClick:()-> Unit = {},
         pluginSourceCount: Int = 0
     ){
         LargeFlexibleTopAppBar(
@@ -35,14 +35,14 @@ object SourceScreenNecessaryComponents {
             },
             navigationIcon = {
                 TextButton(
-                    onClick = textButtonOnClick
+                    onClick = onEditClick
                 ) {
                     Text(stringResource(R.string.sources_screen_top_app_bar_edit_button))
                 }
             },
             actions = {
                 IconButton(
-                    onClick = iconButtonOnClick
+                    onClick = onAddClick
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_24px),
