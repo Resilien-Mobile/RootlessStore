@@ -43,7 +43,7 @@ fun PluginScreen(
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin:suspend (pluginId: String) -> Unit,
-    onActivateOneTimePlugin: (pluginId: String)-> Unit
+    onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
     val plugins by pluginScreenViewModel.plugins.collectAsState()
     val environments by pluginScreenViewModel.environments.collectAsState()
@@ -89,7 +89,7 @@ fun PluginScreen(
                     pluginScreenViewModel = pluginScreenViewModel,
                     onNavigateToExecuteScreen = onNavigateToExecuteScreen,
                     onAbortPlugin = onAbortPlugin,
-                    onActivateOneTimePlugin = onActivateOneTimePlugin
+                    onExecuteOneTimePlugin = onExecuteOneTimePlugin
                 )
             }
             1 -> {
@@ -110,7 +110,7 @@ fun InstalledPluginList(
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin: suspend (pluginId: String) -> Unit,
-    onActivateOneTimePlugin: (pluginId: String)-> Unit
+    onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -185,7 +185,7 @@ fun InstalledPluginList(
                             }
                         }
                     },
-                    onExecuteClick = { onActivateOneTimePlugin(pluginManifestRoom.pluginId) },
+                    onExecuteClick = { onExecuteOneTimePlugin(pluginManifestRoom.pluginId) },
                     onClick = {
                         if (pluginManifestRoom.isEnabled){
                             onNavigateToExecuteScreen(pluginManifestRoom.pluginId,false)
