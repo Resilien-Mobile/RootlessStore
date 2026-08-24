@@ -370,7 +370,7 @@ fun RootlessStoreNavigationScaffold(
                                 navigationBackStack
                                     .add(ExecuteScreenKey(pluginId,shouldExecutePlugin))
                             },
-                            onAbortPlugin = { pluginId ->
+                            onAbortPluginProcess = { pluginId ->
                                 currentExecuteViewModel.abortPluginProcess(pluginId)
                             },
                             onExecuteOneTimePlugin = { pluginId ->
