@@ -40,7 +40,7 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
             if (availableCpuCoreCount <= 0) {
                 return@coroutineScope null
             }
-            val cpuCoreIndexList = (0 until availableCpuCoreCount).toList()
+            val cpuCoreIndices = (0 until availableCpuCoreCount).toList()
 
             // Start total CPU sampling
             val aggregateMetricsDeferred = async {
@@ -48,7 +48,7 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
             }
 
             // Start each CPU core sampling
-            val coreMetricsDeferredList = cpuCoreIndexList.map { cpuCoreIndex ->
+            val coreMetricsDeferred = cpuCoreIndices.map { cpuCoreIndex ->
                 async {
                     storeStatusGatewayImpl.findCpuCoreMetrics(cpuCoreIndex = cpuCoreIndex)
                 }
@@ -61,11 +61,11 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
 
             // Await all CPU sampling results
             val aggregateMetrics = aggregateMetricsDeferred.await() ?: return@coroutineScope null
-            val coreMetricsResultList = coreMetricsDeferredList.awaitAll()
+            val coreMetricsResults = coreMetricsDeferred.awaitAll()
             val systemUptime = systemUptimeDeferred.await() ?: return@coroutineScope null
 
             // Filter unavailable CPU core results
-            val availableCoreMetrics = coreMetricsResultList.filterNotNull()
+            val availableCoreMetrics = coreMetricsResults.filterNotNull()
             if (availableCoreMetrics.isEmpty()) {
                 return@coroutineScope null
             }
