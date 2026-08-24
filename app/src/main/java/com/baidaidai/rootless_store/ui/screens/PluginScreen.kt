@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 fun PluginScreen(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
+    onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin:suspend (pluginId: String) -> Unit,
     onActivateOneTimePlugin: (pluginId: String)-> Unit
 ){
@@ -87,7 +87,7 @@ fun PluginScreen(
                     isBadgeVisible = isBadgeVisible,
                     plugins = plugins,
                     pluginScreenViewModel = pluginScreenViewModel,
-                    navigateToExecuteScreen = navigateToExecuteScreen,
+                    onNavigateToExecuteScreen = onNavigateToExecuteScreen,
                     onAbortPlugin = onAbortPlugin,
                     onActivateOneTimePlugin = onActivateOneTimePlugin
                 )
@@ -108,7 +108,7 @@ fun InstalledPluginList(
     isBadgeVisible: Boolean,
     plugins: List<PluginManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
+    onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
     onAbortPlugin: suspend (pluginId: String) -> Unit,
     onActivateOneTimePlugin: (pluginId: String)-> Unit
 ){
@@ -178,7 +178,7 @@ fun InstalledPluginList(
                         )
 
                         if (isEnabled){
-                            navigateToExecuteScreen(pluginManifestRoom.pluginId,true)
+                            onNavigateToExecuteScreen(pluginManifestRoom.pluginId,true)
                         }else{
                             coroutineScope.launch {
                                 onAbortPlugin(pluginManifestRoom.pluginId)
@@ -188,7 +188,7 @@ fun InstalledPluginList(
                     onExecuteClick = { onActivateOneTimePlugin(pluginManifestRoom.pluginId) },
                     onClick = {
                         if (pluginManifestRoom.isEnabled){
-                            navigateToExecuteScreen(pluginManifestRoom.pluginId,false)
+                            onNavigateToExecuteScreen(pluginManifestRoom.pluginId,false)
                         }
                     },
                     onLongClick = { isActionPanelVisible = !isActionPanelVisible },
