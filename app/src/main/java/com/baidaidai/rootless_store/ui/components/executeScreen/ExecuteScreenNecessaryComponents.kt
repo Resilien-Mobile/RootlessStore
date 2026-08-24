@@ -20,29 +20,29 @@ object ExecuteScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     fun ExecuteScreenTopAppBar(
         scrollBehavior: TopAppBarScrollBehavior,
-        onExecuteScreenStopButtonClick: () -> Unit = {},
-        onExecuteScreenShareButtonClick: () -> Unit = {},
-        onExecuteScreenBackButtonClick: () -> Unit = {}
+        onAbortClick: () -> Unit = {},
+        onShareClick: () -> Unit = {},
+        onBackClick: () -> Unit = {}
     ){
         MediumFlexibleTopAppBar(
             title = { Text(stringResource(R.string.execute_screen_top_app_bar_title)) },
             scrollBehavior = scrollBehavior,
             actions = {
-                ExecuteScreenStopButton(onExecuteScreenStopButtonClick)
-                ExecuteScreenShareButton(onExecuteScreenShareButtonClick)
+                ExecuteScreenStopButton(onAbortClick)
+                ExecuteScreenShareButton(onShareClick)
             },
             navigationIcon = {
-                ExecuteScreenBackButton(onExecuteScreenBackButtonClick)
+                ExecuteScreenBackButton(onBackClick)
             }
         )
     }
 
     @Composable
     private fun ExecuteScreenShareButton(
-        onExecuteScreenShareButtonClick:()-> Unit = {}
+        onClick:()-> Unit = {}
     ) {
         IconButton(
-            onClick = onExecuteScreenShareButtonClick
+            onClick = onClick
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_ios_share),
@@ -53,10 +53,10 @@ object ExecuteScreenNecessaryComponents {
 
     @Composable
     private fun ExecuteScreenStopButton(
-        onExecuteScreenStopButtonClick:()-> Unit = {}
+        onClick:()-> Unit = {}
     ) {
         IconButton(
-            onClick = onExecuteScreenStopButtonClick
+            onClick = onClick
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_disabled),
@@ -67,10 +67,10 @@ object ExecuteScreenNecessaryComponents {
 
     @Composable
     private fun ExecuteScreenBackButton(
-        onExecuteScreenBackButtonClick:()-> Unit = {}
+        onClick:()-> Unit = {}
     ) {
         IconButton(
-            onClick = onExecuteScreenBackButtonClick
+            onClick = onClick
         ) {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_arrow_back),
