@@ -1,25 +1,31 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
+import androidx.room.ColumnInfo
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 data class PluginManifestRoom(
-    override val enabled: Boolean,
+    @ColumnInfo(name = "enabled")
+    override val isEnabled: Boolean,
     override val state: PluginState,
-    override val source: PluginSource,
+    @ColumnInfo(name = "source")
+    override val origin: PluginOrigin,
     override val installedVersion: String,
     override val pluginRenderingName: String,
     override val pluginPackageName: String,
-    override val pluginID: String,
-    override val iconURI: String?,
+    @ColumnInfo(name = "pluginID")
+    override val pluginId: String,
+    @ColumnInfo(name = "iconURI")
+    override val iconUri: String?,
     override val author: String,
     override val pluginDescription: String,
-    override val requiredEnvironment: HosterOverallStatus,
+    override val requiredEnvironment: ExecutionContext,
     override val entryPoint: String,
     override val pluginRunModel: PluginRunModel,
-    override val webUIEntryPoint: String? = null
+    @ColumnInfo(name = "webUIEntryPoint")
+    override val webUiEntryPoint: String? = null
 ): PluginManifest.PluginManifestRoom{
 
     companion object {
@@ -27,14 +33,14 @@ data class PluginManifestRoom(
             installedVersion = "x.x.x",
             pluginRenderingName = "Test Plugin",
             pluginPackageName = "TestPlugin",
-            pluginID = "29bb10c46772264df3c0d0fade57d2eb",
-            iconURI = null,
+            pluginId = "29bb10c46772264df3c0d0fade57d2eb",
+            iconUri = null,
             author = "Rootless Store(Creater. Bai)",
-            requiredEnvironment = HosterOverallStatus.LIMITED,
+            requiredEnvironment = ExecutionContext.LIMITED,
             pluginDescription = "Tested by Creater. Bai",
-            enabled = false,
+            isEnabled = false,
             state = PluginState.PermissionProblems,
-            source = PluginSource.Local,
+            origin = PluginOrigin.Local,
             entryPoint = "./index.sh",
             pluginRunModel = PluginRunModel.OneTime
         )

@@ -30,10 +30,10 @@ class ShizukuActivity: ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val shizukuAdbScreenViewModel: RootlessStoreShizukuAdbScreenViewModel = hiltViewModel<RootlessStoreShizukuAdbScreenViewModel>()
-            var sharedEvent by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
+            var currentError by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
             LaunchedEffect(0) {
-                shizukuAdbScreenViewModel.shizukuEvent.collect { event ->
-                    sharedEvent = event
+                shizukuAdbScreenViewModel.shizukuError.collect { error ->
+                    currentError = error
                 }
             }
             RootlessStoreTheme {
@@ -46,10 +46,10 @@ class ShizukuActivity: ComponentActivity() {
                         )
                     }
                 ) { contentPadding ->
-                    if (sharedEvent is RootlessStoreError){
+                    if (currentError is RootlessStoreError){
                         StartScreenErrorDialog(
                             shizukuAdbScreenViewModel,
-                            sharedEvent
+                            currentError
                         )
                     }
                     ShizukuAdbScreen(

@@ -26,17 +26,17 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.ui.components.thirdPartyNotificationScreen.ThirdPartyNotificationScreenListItemDefault
-import com.baidaidai.rootless_store.ui.model.RootLessStoreThirdPartyNotificationScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreThirdPartyNotificationScreenViewModel
 
 @Composable
 fun ThirdPartyNotificationScreen(
     contentPaddingValues: PaddingValues,
-    thirdPartyNotificationScreenViewModel: RootLessStoreThirdPartyNotificationScreenViewModel
+    thirdPartyNotificationScreenViewModel: RootlessStoreThirdPartyNotificationScreenViewModel
 ){
 
     val thirdPartyNotificationScreenUiState by thirdPartyNotificationScreenViewModel.thirdPartyNotificationScreenUiState.collectAsState()
 
-    var apiKeyVisibility by rememberSaveable { mutableStateOf(false) }
+    var isApiKeyVisible by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -48,17 +48,17 @@ fun ThirdPartyNotificationScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             value = thirdPartyNotificationScreenUiState.barkApiKey,
-            onValueChange = thirdPartyNotificationScreenViewModel::onBarkApiKeyChanged,
+            onValueChange = thirdPartyNotificationScreenViewModel::setBarkApiKey,
             label = {
                 Text(stringResource(R.string.third_party_notification_screen_bark_api_key_input_label))
             },
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        apiKeyVisibility = !apiKeyVisibility
+                        isApiKeyVisible = !isApiKeyVisible
                     }
                 ) {
-                    if (apiKeyVisibility){
+                    if (isApiKeyVisible){
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_visibility),
                             contentDescription = stringResource(R.string.third_party_notification_screen_api_key_visibility_content_description)
@@ -71,7 +71,7 @@ fun ThirdPartyNotificationScreen(
                     }
                 }
             },
-            visualTransformation = if (apiKeyVisibility) {
+            visualTransformation = if (isApiKeyVisible) {
                 VisualTransformation.None
             } else {
                 PasswordVisualTransformation()
@@ -81,14 +81,14 @@ fun ThirdPartyNotificationScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             value = thirdPartyNotificationScreenUiState.notificationTitle ?: "",
-            onValueChange = thirdPartyNotificationScreenViewModel::onNotificationTitleChanged,
+            onValueChange = thirdPartyNotificationScreenViewModel::setNotificationTitle,
             label = {
                 Text(stringResource(R.string.third_party_notification_screen_notification_title_input_label))
             },
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        thirdPartyNotificationScreenViewModel.onNotificationTitleChanged(null)
+                        thirdPartyNotificationScreenViewModel.setNotificationTitle(null)
                     }
                 ) {
                     Icon(
@@ -102,14 +102,14 @@ fun ThirdPartyNotificationScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             value = thirdPartyNotificationScreenUiState.selfBuiltServer ?: "",
-            onValueChange = thirdPartyNotificationScreenViewModel::onSelfBuiltServerChanged,
+            onValueChange = thirdPartyNotificationScreenViewModel::setSelfBuiltServer,
             label = {
                 Text(stringResource(R.string.third_party_notification_screen_self_built_server_input_label))
             },
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        thirdPartyNotificationScreenViewModel.onSelfBuiltServerChanged(null)
+                        thirdPartyNotificationScreenViewModel.setSelfBuiltServer(null)
                     }
                 ) {
                     Icon(
@@ -130,8 +130,8 @@ fun ThirdPartyNotificationScreen(
                 supportingText = stringResource(R.string.third_party_notification_screen_warning_notification_supporting),
                 trailingContent = {
                     Switch(
-                        checked = thirdPartyNotificationScreenUiState.warningNotificationEnabled,
-                        onCheckedChange = thirdPartyNotificationScreenViewModel::onWarningNotificationEnabledChanged
+                        checked = thirdPartyNotificationScreenUiState.isWarningNotificationEnabled,
+                        onCheckedChange = thirdPartyNotificationScreenViewModel::setWarningNotificationEnabled
                     )
                 },
                 leadingContent = {

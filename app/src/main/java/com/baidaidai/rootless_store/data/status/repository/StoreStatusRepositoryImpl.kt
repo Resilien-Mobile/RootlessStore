@@ -1,12 +1,12 @@
 package com.baidaidai.rootless_store.data.status.repository
 
 import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
-import com.baidaidai.rootless_store.domain.status.model.AndroidAndAPIStatus
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.AndroidPlatformVersion
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
-import com.baidaidai.rootless_store.domain.status.model.SELinuxStatus
+import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
-import com.baidaidai.rootless_store.domain.status.model.TempStatus
+import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
@@ -14,30 +14,30 @@ class StoreStatusRepositoryImpl @Inject constructor(
     private val storeStatusGatewayImpl: StoreStatusGatewayImpl
 ) {
 
-    fun getStorageStatus(): Flow<StorageStatus> = storeStatusGatewayImpl.getStorageStatus()
+    fun observeStorageStatus(): Flow<StorageStatus> = storeStatusGatewayImpl.observeStorageStatus()
 
-    fun getMemoryStatus(): Flow<MemoryStatus> = storeStatusGatewayImpl.getMemoryStatus()
+    fun observeMemoryStatus(): Flow<MemoryStatus> = storeStatusGatewayImpl.observeMemoryStatus()
 
-    fun getSELinuxStatus(): SELinuxStatus = storeStatusGatewayImpl.getSELinuxStatus()
+    fun getSeLinuxStatus(): SeLinuxStatus = storeStatusGatewayImpl.getSeLinuxStatus()
 
-    fun getKernelStatus(): String = storeStatusGatewayImpl.getKernelStatus()
+    fun getKernelVersion(): String = storeStatusGatewayImpl.getKernelVersion()
 
-    fun getTemperatureStatus(): Flow<TempStatus> = storeStatusGatewayImpl.getTemperatureStatus()
+    fun observeTemperatureStatus(): Flow<TemperatureStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
 
-    fun getAndroidAndAPIStatus(): AndroidAndAPIStatus = storeStatusGatewayImpl.getAndroidAndAPIStatus()
+    fun getAndroidPlatformVersion(): AndroidPlatformVersion = storeStatusGatewayImpl.getAndroidPlatformVersion()
 
-    fun getOverallStatus(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.getHosterOverallStatus()
+    fun observeAvailableExecutionContext(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeAvailableExecutionContext()
 
-    fun getRootStatus(): Boolean = storeStatusGatewayImpl.getRootStatus()
+    fun isRootShellAvailable(): Boolean = storeStatusGatewayImpl.isRootShellAvailable()
 
-    fun getShizukuStatus(): Boolean = storeStatusGatewayImpl.getShizukuStatus()
+    fun isShizukuAvailable(): Boolean = storeStatusGatewayImpl.isShizukuAvailable()
 
-    fun getExecuteContextPreference(): Flow<HosterOverallStatus> = storeStatusGatewayImpl.getExecuteContextPreference()
+    fun observeExecutionContextPreference(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeExecutionContextPreference()
 
-    suspend fun setExecuteContextPreference(hosterOverallStatus: HosterOverallStatus) = storeStatusGatewayImpl.setExecuteContextPreference(hosterOverallStatus)
+    suspend fun setExecutionContextPreference(executionContext: ExecutionContext) = storeStatusGatewayImpl.setExecutionContextPreference(executionContext)
 
-    fun getEnableChooserPreference(): Flow<Boolean> = storeStatusGatewayImpl.getEnableChooserPreference()
+    fun observeExecutionContextChooserEnabled(): Flow<Boolean> = storeStatusGatewayImpl.observeExecutionContextChooserEnabled()
 
-    suspend fun setEnableChooserPreference(chooserStatus: Boolean) = storeStatusGatewayImpl.setEnableChooserPreference(chooserStatus)
+    suspend fun setExecutionContextChooserEnabled(isEnabled: Boolean) = storeStatusGatewayImpl.setExecutionContextChooserEnabled(isEnabled)
 
 }

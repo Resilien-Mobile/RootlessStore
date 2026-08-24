@@ -9,37 +9,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.baidaidai.rootless_store.ui.components.marketScreen.PluginInfoContainerRemote
-import com.baidaidai.rootless_store.ui.model.RootLessStoreMarketScreenViewModel
+import com.baidaidai.rootless_store.ui.components.marketScreen.MarketManifestCard
+import com.baidaidai.rootless_store.ui.model.RootlessStoreMarketScreenViewModel
 
 @Composable
 fun MarketScreen(
     contentPadding: PaddingValues,
-    marketScreenViewModel: RootLessStoreMarketScreenViewModel,
-    navigateToPluginScreen: () -> Unit
+    marketScreenViewModel: RootlessStoreMarketScreenViewModel,
+    onNavigateToPluginScreen: () -> Unit
 ){
 
-    val _contentPadding = PaddingValues(vertical = 15.dp)
+    val listContentPadding = PaddingValues(vertical = 15.dp)
 
-    val remoteModuleList = marketScreenViewModel.remoteModuleList.collectAsLazyPagingItems()
+    val marketManifests = marketScreenViewModel.marketManifests.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = Modifier
             .padding(contentPadding)
             .padding(horizontal = 15.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = _contentPadding
+        contentPadding = listContentPadding
     ) {
         items(
-            count = remoteModuleList.itemCount
-        ){ moduleIndex ->
+            count = marketManifests.itemCount
+        ){ manifestIndex ->
 
-            val remoteModuleListContent = remoteModuleList[moduleIndex]
-            PluginInfoContainerRemote(
-                manifest = remoteModuleListContent!!
+            val marketManifest = marketManifests[manifestIndex]
+            MarketManifestCard(
+                manifest = marketManifest!!
             ) {
-                marketScreenViewModel.installModule(remoteModuleListContent)
-                navigateToPluginScreen()
+                marketScreenViewModel.installMarketManifest(marketManifest)
+                onNavigateToPluginScreen()
             }
 
         }

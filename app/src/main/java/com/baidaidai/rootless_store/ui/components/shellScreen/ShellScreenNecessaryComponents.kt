@@ -14,11 +14,11 @@ import kotlinx.coroutines.launch
 object ShellScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShellScreenScreenTopAppBar(
-        onTopIconClick:suspend ()-> Unit = {},
-        onBottomIconClick:suspend ()-> Unit = {},
-        onDeleteIconClick:()-> Unit = {},
-    ){
+    fun ShellScreenTopAppBar(
+        onScrollToTop: suspend () -> Unit = {},
+        onScrollToBottom: suspend () -> Unit = {},
+        onClearOutput: () -> Unit = {},
+    ) {
         val coroutineScope = rememberCoroutineScope()
 
         TopAppBar(
@@ -29,31 +29,31 @@ object ShellScreenNecessaryComponents {
                 IconButton(
                     onClick = {
                         coroutineScope.launch {
-                            onTopIconClick()
+                            onScrollToTop()
                         }
                     }
-                ){
+                ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_top),
-                        contentDescription = "To Top"
+                        contentDescription = "Scroll to top"
                     )
                 }
                 IconButton(
                     onClick = {
                         coroutineScope.launch {
-                            onBottomIconClick()
+                            onScrollToBottom()
                         }
                     }
-                ){
+                ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_bottom),
-                        contentDescription = "To Top"
+                        contentDescription = "Scroll to bottom"
                     )
                 }
-                IconButton(onClick = onDeleteIconClick){
+                IconButton(onClick = onClearOutput) {
                     Icon(
                         painterResource(R.drawable.material_symbols_delete),
-                        contentDescription = "To Top"
+                        contentDescription = "Clear output"
                     )
                 }
             }

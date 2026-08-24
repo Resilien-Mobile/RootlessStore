@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.Dp
 class HomeScreenLayoutScope(
     val preferWidth: Dp
 ){
-    fun getBasicWidthModifier(
+    fun resolveBasicWidthModifier(
         modifier: Modifier? = null
     ): Modifier{
         val preferWidth = preferWidth

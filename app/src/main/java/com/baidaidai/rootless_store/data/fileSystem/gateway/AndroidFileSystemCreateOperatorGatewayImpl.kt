@@ -12,29 +12,29 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
 ) {
 
     // Create FS Operator
-    fun createFileDir(path: String) {
-        if (!confirmPathExists(path)) {
+    fun ensureFilesDirectory(path: String) {
+        if (!hasInternalDirectory(path)) {
             File(context.filesDir, path).mkdirs()
         }
     } // /File
 
-    fun createCacheDir(path: String) {
-        if (!confirmCacheExists(path)) {
+    fun ensureCacheDirectory(path: String) {
+        if (!hasCacheDirectory(path)) {
             File(context.cacheDir, path).mkdirs()
         }
     } // /Cache/path  e.g. /Cache/Plugin
 
     @Deprecated(
         message = "Not Longer Recommended",
-        replaceWith = ReplaceWith("createVoidFileDirectory(pluginRootDirectory, directoryName)")
+        replaceWith = ReplaceWith("resolveChildFile(destinationDirectory, fileNameWithoutExtension + \".zip\").createNewFile()")
     )
-    fun createOneVoidFile(destination: File, fileName: String): Boolean {
-        val result = File(destination, "$fileName.zip").createNewFile()
-        return result
+    fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean {
+        val isZipFileCreated = File(destinationDirectory, "$fileNameWithoutExtension.zip").createNewFile()
+        return isZipFileCreated
     }
 
-    fun createVoidFileDirectory(pluginRootDirectory: File, directoryName: String): File {
-        return File(pluginRootDirectory, directoryName)
+    fun resolveChildFile(parentDirectory: File, childName: String): File {
+        return File(parentDirectory, childName)
     } // /File/Plugin/PLUGIN
 
     fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
@@ -43,10 +43,10 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         return targetFile
     }
 
-    fun copyUriToFile(originFileURI: Uri, targetFile: File): File {
+    fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
         targetFile.parentFile?.mkdirs()
 
-        context.contentResolver.openInputStream(originFileURI).use { originInputStream ->
+        context.contentResolver.openInputStream(originFileUri).use { originInputStream ->
             FileOutputStream(targetFile).use { targetOutputStream ->
                 originInputStream!!.copyTo(targetOutputStream)
             }
@@ -55,12 +55,12 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         return targetFile
     }
 
-    private fun confirmPathExists(path: String): Boolean {
+    private fun hasInternalDirectory(path: String): Boolean {
         val targetFile = File(context.filesDir, path)
         return targetFile.exists()
     } // /File/?
 
-    private fun confirmCacheExists(path: String): Boolean {
+    private fun hasCacheDirectory(path: String): Boolean {
         val targetFile = File(context.cacheDir, path)
         return targetFile.exists()
     } // /Cache/?

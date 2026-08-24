@@ -42,14 +42,14 @@ import com.baidaidai.rootless_store.domain.navigation.model.ThirdPartyNotificati
 object StartScreenNecessaryComponents {
 
     @Composable
-    private fun getNavBarItemsSpecList(): List<NavBarItemSpec>{
+    private fun listNavigationBarItems(): List<NavBarItemSpec>{
         return listOf(
             NavBarItemSpec(
                 number = 0,
-                pattern = painterResource(R.drawable.outline_home_24),
-                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_home_label),
+                icon = painterResource(R.drawable.outline_home_24),
+                label = stringResource(R.string.start_screen_navigation_bar_home_label),
                 targetDestination = HomeScreenKey,
-                compatibleDestinationList = listOf(
+                compatibleDestinations = listOf(
                     HomeScreenKey::class,
                     ShellScreenKey::class,
                     SettingScreenKey::class,
@@ -58,20 +58,20 @@ object StartScreenNecessaryComponents {
             ),
             NavBarItemSpec(
                 number = 1,
-                pattern = painterResource(R.drawable.outline_extension_24),
-                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_plugin_label),
+                icon = painterResource(R.drawable.outline_extension_24),
+                label = stringResource(R.string.start_screen_navigation_bar_plugin_label),
                 targetDestination = PluginScreenKey,
-                compatibleDestinationList = listOf(
+                compatibleDestinations = listOf(
                     PluginScreenKey::class,
                     ExecuteScreenKey("abcde")::class
                 )
             ),
             NavBarItemSpec(
                 number = 2,
-                pattern = painterResource(R.drawable.material_symbols_data_object),
-                contentDeprecated = stringResource(R.string.start_screen_navigation_bar_brick_label),
+                icon = painterResource(R.drawable.material_symbols_data_object),
+                label = stringResource(R.string.start_screen_navigation_bar_brick_label),
                 targetDestination = CodeBrickScreenKey,
-                compatibleDestinationList = listOf(
+                compatibleDestinations = listOf(
                     CodeBrickScreenKey::class,
                 )
             )
@@ -107,16 +107,16 @@ object StartScreenNecessaryComponents {
         currentDestination: RootlessNavigationKey,
         onNavigate:(RootlessNavigationKey)-> Unit
     ) {
-        val navigationBarRenderingList = getNavBarItemsSpecList()
+        val navigationItems = listNavigationBarItems()
         NavigationBar {
-            navigationBarRenderingList.forEach { navBarItemSpec ->
+            navigationItems.forEach { navBarItemSpec ->
                 NavigationBarItem(
-                    selected = currentDestination::class in navBarItemSpec.compatibleDestinationList,
+                    selected = currentDestination::class in navBarItemSpec.compatibleDestinations,
                     onClick = {
                         onNavigate(navBarItemSpec.targetDestination)
                     },
-                    icon = { Icon(navBarItemSpec.pattern, contentDescription = navBarItemSpec.contentDeprecated) },
-                    label = { Text(navBarItemSpec.contentDeprecated) }
+                    icon = { Icon(navBarItemSpec.icon, contentDescription = navBarItemSpec.label) },
+                    label = { Text(navBarItemSpec.label) }
                 )
             }
         }
@@ -127,7 +127,7 @@ object StartScreenNecessaryComponents {
         currentDestination: RootlessNavigationKey,
         onNavigate:(RootlessNavigationKey)-> Unit
     ) {
-        val navigationBarRenderingList = getNavBarItemsSpecList()
+        val navigationItems = listNavigationBarItems()
         NavigationRail(
         ){
             Column(
@@ -135,20 +135,20 @@ object StartScreenNecessaryComponents {
                 modifier = Modifier
                     .fillMaxHeight()
             ) {
-                navigationBarRenderingList.forEach { navBarItemSpec ->
+                navigationItems.forEach { navBarItemSpec ->
                     NavigationRailItem(
-                        selected = currentDestination::class in navBarItemSpec.compatibleDestinationList,
+                        selected = currentDestination::class in navBarItemSpec.compatibleDestinations,
                         onClick = {
                             onNavigate(navBarItemSpec.targetDestination)
                         },
                         icon = {
                             Icon(
-                                painter = navBarItemSpec.pattern,
-                                contentDescription = navBarItemSpec.contentDeprecated
+                                painter = navBarItemSpec.icon,
+                                contentDescription = navBarItemSpec.label
                             )
                         },
                         label = {
-                            Text(navBarItemSpec.contentDeprecated)
+                            Text(navBarItemSpec.label)
                         }
                     )
                 }
@@ -162,7 +162,7 @@ object StartScreenNecessaryComponents {
         onNavigate:(RootlessNavigationKey)-> Unit
     ) {
 
-        val navBarItemsList = getNavBarItemsSpecList()
+        val navigationItems = listNavigationBarItems()
 
         NavigationRail{
             Column(
@@ -172,20 +172,20 @@ object StartScreenNecessaryComponents {
                     .padding(horizontal = 20.dp)
                     .fillMaxHeight()
             ) {
-                navBarItemsList.forEach { navBarItemSpec ->
+                navigationItems.forEach { navBarItemSpec ->
                     ExpressiveNavigationRailItem(
-                        selected = currentDestination::class in navBarItemSpec.compatibleDestinationList,
+                        isSelected = currentDestination::class in navBarItemSpec.compatibleDestinations,
                         onClick = {
                             onNavigate(navBarItemSpec.targetDestination)
                         },
                         icon = {
                             Icon(
-                                painter = navBarItemSpec.pattern,
-                                contentDescription = navBarItemSpec.contentDeprecated
+                                painter = navBarItemSpec.icon,
+                                contentDescription = navBarItemSpec.label
                             )
                         },
                         label = {
-                            Text(navBarItemSpec.contentDeprecated)
+                            Text(navBarItemSpec.label)
                         }
                     )
                 }
@@ -195,20 +195,20 @@ object StartScreenNecessaryComponents {
 
     @Composable
     private fun ExpressiveNavigationRailItem(
-        selected: Boolean,
+        isSelected: Boolean,
         onClick: () -> Unit,
         icon: @Composable () -> Unit,
         modifier: Modifier = Modifier,
-        enabled: Boolean = true,
+        isEnabled: Boolean = true,
         label: @Composable (() -> Unit)? = null,
     ){
-        val buttonColorsSelected = ButtonColors(
+        val selectedButtonColors = ButtonColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             disabledContentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
-        val buttonColorsNoSelected = ButtonColors(
+        val unselectedButtonColors = ButtonColors(
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.onSurface,
             disabledContainerColor = MaterialTheme.colorScheme.surface,
@@ -216,9 +216,9 @@ object StartScreenNecessaryComponents {
         )
 
         Button(
-            onClick = { if (enabled){ onClick() } },
+            onClick = { if (isEnabled){ onClick() } },
             contentPadding = PaddingValues(horizontal = 24.dp),
-            colors = if (selected) buttonColorsSelected else buttonColorsNoSelected,
+            colors = if (isSelected) selectedButtonColors else unselectedButtonColors,
             modifier = modifier
                 .height(56.dp)
         ) {

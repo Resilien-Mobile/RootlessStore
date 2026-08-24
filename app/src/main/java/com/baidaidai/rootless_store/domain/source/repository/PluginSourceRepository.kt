@@ -1,37 +1,31 @@
 package com.baidaidai.rootless_store.domain.source.repository
 
-import androidx.room.RoomDatabase
-import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEndpointInput
 import kotlinx.coroutines.flow.Flow
 
 interface PluginSourceRepository {
-    // 以DB为中心的Gateway
+    // Add
+    suspend fun addPluginSource(sourceEndpointInput: PluginSourceEndpointInput): PluginSourceEvent
 
-    val appDatabase: RoomDatabase
-
-    // Create
-    suspend fun insertOnePluginSourceByDefault(sourceEndpointInput: PluginSourceEndpointInput): PluginSourceEvent
-
-    suspend fun insertOnePluginSourceByAuthentication(pluginSourceAuthFormInput: PluginSourceAuthFormInput): PluginSourceEvent
+    suspend fun addAuthenticatedPluginSource(authenticationInput: PluginSourceAuthenticationInput): PluginSourceEvent
 
     // Update
-    suspend fun updateOnePluginSource(
-        sourceID: String,
+    suspend fun updatePluginSource(
+        sourceId: String,
         sourceName: String,
         sourceRemoteEndpoint: String
     )
 
     // Read
-    suspend fun getOnePluginSource(sourceID: String): PluginSourceEntity?
+    suspend fun findPluginSource(sourceId: String): PluginSource?
 
-    fun getAllPluginSources(): Flow<List<PluginSourceInfo>?>
+    fun observePluginSources(): Flow<List<PluginSource>>
 
-    fun getPluginSourcesCount(): Flow<Int>
+    fun observePluginSourceCount(): Flow<Int>
 
     // Delete
-    suspend fun deleteOnePluginSource(pluginSourceEntity: PluginSourceEntity)
+    suspend fun deletePluginSource(pluginSource: PluginSource)
 }

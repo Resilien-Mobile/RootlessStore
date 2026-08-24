@@ -3,7 +3,6 @@ package com.baidaidai.rootless_store.application.environment
 import com.baidaidai.rootless_store.data.environment.gateway.EnvironmentGatewayImpl
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
-import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
 import javax.inject.Inject
 
 class InstallEnvironmentFromMarketUseCase @Inject constructor(
@@ -11,13 +10,11 @@ class InstallEnvironmentFromMarketUseCase @Inject constructor(
     private val environmentGatewayImpl: EnvironmentGatewayImpl
 ) {
     suspend operator fun invoke(
-        environmentURI: String,
-        manifest: ModuleManifestCollection
+        environmentUrl: String,
+        environmentManifestRemote: EnvironmentManifestRemote
     ) {
-        val environmentManifestRemote = manifest as EnvironmentManifestRemote
-
-        environmentGatewayImpl.installEnvironmentFromMarket(environmentURI, environmentManifestRemote)
+        environmentGatewayImpl.installEnvironmentFromMarket(environmentUrl, environmentManifestRemote)
         environmentGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifestRemote)
-        environmentRepositoryImpl.insertOneEnvironmentInfo(environmentManifestRemote)
+        environmentRepositoryImpl.addEnvironment(environmentManifestRemote)
     }
 }

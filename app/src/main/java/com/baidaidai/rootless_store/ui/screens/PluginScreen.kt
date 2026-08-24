@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
-import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,21 +33,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import com.baidaidai.rootless_store.WebViewActivity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
+import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginActionPanel
+import com.baidaidai.rootless_store.ui.components.pluginScreen.InstalledManifestCard
 import kotlinx.coroutines.launch
 
 @Composable
-fun RootlessStorePluginScreenContainer(
+fun PluginScreen(
     contentPadding: PaddingValues,
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
-    onAbortOnePlugin:suspend (pluginID: String) -> Unit,
-    onActiveOneTimePlugin: (pluginID: String)-> Unit
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel,
+    onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
+    onAbortPluginProcess: suspend (pluginId: String) -> Unit,
+    onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
-    val pluginInfoList by pluginScreenViewModel.pluginInfoList.collectAsState()
-    val environmentInfoList by pluginScreenViewModel.environmentInfoList.collectAsState()
-    val badgeShowState by pluginScreenViewModel.badgeShowState.collectAsState()
+    val plugins by pluginScreenViewModel.plugins.collectAsState()
+    val environments by pluginScreenViewModel.environments.collectAsState()
+    val isBadgeVisible by pluginScreenViewModel.isBadgeVisible.collectAsState()
 
     var selectedTabIndex by rememberSaveable{ mutableIntStateOf(0) }
 
@@ -83,19 +83,19 @@ fun RootlessStorePluginScreenContainer(
         }
         when(selectedTabIndex){
             0 -> {
-                PluginScreen(
-                    badgeShowState = badgeShowState,
-                    renderingList = pluginInfoList,
+                InstalledPluginList(
+                    isBadgeVisible = isBadgeVisible,
+                    plugins = plugins,
                     pluginScreenViewModel = pluginScreenViewModel,
-                    navigateToExecuteScreen = navigateToExecuteScreen,
-                    onAbortOnePlugin = onAbortOnePlugin,
-                    onButtonClick = onActiveOneTimePlugin
+                    onNavigateToExecuteScreen = onNavigateToExecuteScreen,
+                    onAbortPluginProcess = onAbortPluginProcess,
+                    onExecuteOneTimePlugin = onExecuteOneTimePlugin
                 )
             }
             1 -> {
-                EnvironmentScreen(
-                    badgeShowState = badgeShowState,
-                    renderingList = environmentInfoList,
+                InstalledEnvironmentList(
+                    isBadgeVisible = isBadgeVisible,
+                    environments = environments,
                     pluginScreenViewModel = pluginScreenViewModel
                 )
             }
@@ -104,13 +104,13 @@ fun RootlessStorePluginScreenContainer(
 }
 
 @Composable
-fun PluginScreen(
-    badgeShowState: Boolean,
-    renderingList: List<PluginManifestRoom>,
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
-    navigateToExecuteScreen: (pluginID: String,isExecutePlugin: Boolean)-> Unit,
-    onAbortOnePlugin: suspend (pluginID: String) -> Unit,
-    onButtonClick: (pluginID: String)-> Unit
+fun InstalledPluginList(
+    isBadgeVisible: Boolean,
+    plugins: List<PluginManifestRoom>,
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel,
+    onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
+    onAbortPluginProcess: suspend (pluginId: String) -> Unit,
+    onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -127,39 +127,39 @@ fun PluginScreen(
     ) {
 
         items(
-            items = renderingList,
-            key = { pluginManifestRoom -> pluginManifestRoom.pluginID }
+            items = plugins,
+            key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
         ){ pluginManifestRoom ->
 
-            var actionCanSee by remember { mutableStateOf(false) }
+            var isActionPanelVisible by remember { mutableStateOf(false) }
             var cardSize by remember { mutableStateOf(IntSize.Zero) }
 
-            if (actionCanSee){
+            if (isActionPanelVisible){
 
-                PluginActionContainer(
+                PluginActionPanel(
                     pluginManifestRoom = pluginManifestRoom,
-                    onShareButtonClick = {
-                        val shareLink = pluginScreenViewModel.getPluginShareLink(pluginManifestRoom)
+                    onShareClick = {
+                        val shareUri = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/zip"
-                            putExtra(Intent.EXTRA_STREAM, shareLink)
+                            putExtra(Intent.EXTRA_STREAM, shareUri)
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
 
                         context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
                     },
-                    onWebUiButtonClick = {
+                    onOpenWebUiClick = {
 
-                        val webUiUri = pluginScreenViewModel.getPluginWebUiUri(pluginManifestRoom)
+                        val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifestRoom)
 
                         val webUiIntent = Intent(context, WebViewActivity::class.java).apply {
                             putExtra("webUri",webUiUri)
                         }
                         context.startActivity(webUiIntent)
                     },
-                    onDeleteButtonClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
-                    onBackButtonClick = { actionCanSee = !actionCanSee },
+                    onUninstallClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
+                    onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
                     modifier = Modifier
                         .size(
                             width = with(density) { cardSize.width.toDp() },
@@ -169,30 +169,30 @@ fun PluginScreen(
 
             }else{
 
-                PluginInfoContainerLocal(
+                InstalledManifestCard(
                     pluginManifestRoom = pluginManifestRoom,
-                    onSwitchClick = {
+                    onEnabledChange = { isEnabled ->
                         pluginScreenViewModel.setPluginEnabled(
-                            pluginID = pluginManifestRoom.pluginID,
-                            pluginEnabledStatus = !pluginManifestRoom.enabled
+                            pluginId = pluginManifestRoom.pluginId,
+                            isEnabled = isEnabled
                         )
 
-                        if (!pluginManifestRoom.enabled){
-                            navigateToExecuteScreen(pluginManifestRoom.pluginID,true)
+                        if (isEnabled){
+                            onNavigateToExecuteScreen(pluginManifestRoom.pluginId,true)
                         }else{
                             coroutineScope.launch {
-                                onAbortOnePlugin(pluginManifestRoom.pluginID)
+                                onAbortPluginProcess(pluginManifestRoom.pluginId)
                             }
                         }
                     },
-                    onButtonClick = { onButtonClick(pluginManifestRoom.pluginID) },
-                    onCardClick = {
-                        if (pluginManifestRoom.enabled){
-                            navigateToExecuteScreen(pluginManifestRoom.pluginID,false)
+                    onExecuteClick = { onExecuteOneTimePlugin(pluginManifestRoom.pluginId) },
+                    onClick = {
+                        if (pluginManifestRoom.isEnabled){
+                            onNavigateToExecuteScreen(pluginManifestRoom.pluginId,false)
                         }
                     },
-                    onCardLongClick = { actionCanSee = !actionCanSee },
-                    onCardSizeChanged = { cardSize = it },
+                    onLongClick = { isActionPanelVisible = !isActionPanelVisible },
+                    onSizeChanged = { cardSize = it },
                 )
 
             }

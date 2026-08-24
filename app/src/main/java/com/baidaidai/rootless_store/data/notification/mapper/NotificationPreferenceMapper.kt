@@ -10,7 +10,7 @@ object NotificationPreferenceMapper {
             apiKey = apiKey,
             notificationTitle = notificationTitle,
             selfBuiltServer = selfBuiltServer,
-            criticalWarning = criticalWarning
+            isCriticalWarningEnabled = isCriticalWarningEnabled
         )
     }
 
@@ -19,7 +19,7 @@ object NotificationPreferenceMapper {
             apiKey = apiKey,
             notificationTitle = notificationTitle,
             selfBuiltServer = selfBuiltServer,
-            criticalWarning = criticalWarning
+            isCriticalWarningEnabled = isCriticalWarningEnabled
         )
     }
 

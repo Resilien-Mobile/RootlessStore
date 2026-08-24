@@ -29,11 +29,11 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return File(context.filesDir, ENVIRONMENT_DIR_NAME)
     }
 
-    private fun getEnvironmentCacheDirectory(): File {
+    private fun getInternalEnvironmentCacheDirectory(): File {
         return File(context.cacheDir, ENVIRONMENT_DIR_NAME)
     }
 
-    private fun getExternalAppRootDirectory(): File {
+    private fun getExternalAppFilesRootDirectory(): File {
         return context.getExternalFilesDir(null)!!
     }
 
@@ -42,12 +42,12 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     }
 
     // Default FS Operator (External)
-    fun getExternalAppDirectoryPath(): String {
-        return getExternalAppRootDirectory().path
+    fun getExternalAppFilesDirectoryPath(): String {
+        return getExternalAppFilesRootDirectory().path
     } // /sdcard/Android/data/APP_PACKAGE/files
 
-    fun getExternalAppDirectoryFile(): File {
-        return getExternalAppRootDirectory()
+    fun getExternalAppFilesDirectoryFile(): File {
+        return getExternalAppFilesRootDirectory()
     } // /sdcard/Android/data/APP_PACKAGE/files
 
     fun getExternalAppCacheDirectoryPath(): String {
@@ -59,7 +59,7 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     } // /sdcard/Android/data/APP_PACKAGE/cache
 
     fun getExternalAppMagiskDirectoryFile(): File {
-        return File(getExternalAppRootDirectory(), MAGISK_DIR_NAME)
+        return File(getExternalAppFilesRootDirectory(), MAGISK_DIR_NAME)
     } // /sdcard/Android/data/APP_PACKAGE/files/magisk
 
     fun getExternalAppMagiskTemplateDirectoryFile(): File {
@@ -71,22 +71,22 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalPluginRootDirectory().path
     } // /File/Plugin
 
-    fun getCachePluginDirectoryPath(): String {
+    fun getInternalPluginCacheDirectoryPath(): String {
         return getInternalPluginCacheDirectory().path
     } // /Cache/Plugin: String
 
-    fun getCachePluginDirectoryFile(): File {
+    fun getInternalPluginCacheDirectoryFile(): File {
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
 
-    fun getPluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         val pluginEntryPoint = pluginManifestRoom.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     } // /File/Plugin/PLUGIN/entry
 
-    fun getPluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifestRoom.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
@@ -97,11 +97,11 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalEnvironmentRootDirectory().path
     } // /File/Environment
 
-    fun getCacheEnvironmentDirectoryFile(): File {
-        return getEnvironmentCacheDirectory()
+    fun getInternalEnvironmentCacheDirectoryFile(): File {
+        return getInternalEnvironmentCacheDirectory()
     } // /Cache/Environment: File
 
-    fun getEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
+    fun resolveEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
         val environmentPackageName = environmentManifestRoom.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"

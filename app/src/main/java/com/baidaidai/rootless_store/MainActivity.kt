@@ -23,8 +23,8 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import coil3.request.crossfade
-import com.baidaidai.rootless_store.domain.runtime.usecase.SetUpRuntimeUseCase
-import com.baidaidai.rootless_store.ui.screens.RootlessStoreStartScreenContainer
+import com.baidaidai.rootless_store.domain.runtime.usecase.RecoverPluginRuntimeStateUseCase
+import com.baidaidai.rootless_store.ui.screens.RootlessStoreNavigationScaffold
 import com.baidaidai.rootless_store.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.jvm.java
 
-val RootLessStoreLocalContext = compositionLocalOf<Context>{
+val LocalRootlessStoreContext = compositionLocalOf<Context>{
     error("No Context Provide")
 }
 
@@ -47,7 +47,7 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
     @Inject
     lateinit var ktorClient: HttpClient
     @Inject
-    lateinit var setUpRuntimeUseCase: SetUpRuntimeUseCase
+    lateinit var recoverPluginRuntimeStateUseCase: RecoverPluginRuntimeStateUseCase
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -67,7 +67,7 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
     override fun onCreate() {
         super.onCreate()
         applicationScope.launch {
-            setUpRuntimeUseCase()
+            recoverPluginRuntimeStateUseCase()
         }
     }
 }
@@ -75,31 +75,31 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(){
 
-    private var fileIntentUri: Uri? by mutableStateOf(null)
+    private var incomingPackageUri: Uri? by mutableStateOf(null)
 
     @OptIn(ExperimentalMaterial3ExpressiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // save Intent if hot-start from an implicit invocation
-        if (fileIntentUri == null){
-            handleFileIntent(intent)
+        if (incomingPackageUri == null){
+            setIncomingPackageUriFromIntent(intent)
         }
 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        applyNotificationChannel(this)
+        registerNotificationChannel(this)
 
         setContent {
             val context = LocalContext.current
 
             RootlessStoreTheme {
                 CompositionLocalProvider(
-                    RootLessStoreLocalContext provides context,
+                    LocalRootlessStoreContext provides context,
                 ) {
-                    RootlessStoreStartScreenContainer(
-                        fileIntentUri = fileIntentUri,
-                        onHandlerEnded = {
-                            fileIntentUri = null
+                    RootlessStoreNavigationScaffold(
+                        incomingPackageUri = incomingPackageUri,
+                        onIncomingPackageConsumed = {
+                            incomingPackageUri = null
                         }
                     )
                 }
@@ -114,12 +114,12 @@ class MainActivity : ComponentActivity(){
         setIntent(intent)
 
         // save Intent if cold-start from an implicit invocation
-        handleFileIntent(intent)
+        setIncomingPackageUriFromIntent(intent)
     }
 
-    private fun handleFileIntent(intent: Intent?) {
+    private fun setIncomingPackageUriFromIntent(intent: Intent?) {
         if (intent?.action != Intent.ACTION_SEND) {
-            this.fileIntentUri = null
+            incomingPackageUri = null
         }
         val uri: Uri? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent?.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
@@ -128,18 +128,18 @@ class MainActivity : ComponentActivity(){
             intent?.getParcelableExtra(Intent.EXTRA_STREAM)
         }
 
-        fileIntentUri = uri
+        incomingPackageUri = uri
     }
-    private fun applyNotificationChannel(context: Context){
+    private fun registerNotificationChannel(context: Context){
 
-        val channel_id = context.getString(R.string.notification_channel_id)
+        val channelId = context.getString(R.string.notification_channel_id)
 
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.
         val name = "插件存活通知"
         val descriptionText = "当插件因为各种原因死掉了，Rootless Store将会提醒你"
         val importance = NotificationManager.IMPORTANCE_HIGH
-        val channel = NotificationChannel(channel_id, name, importance).apply {
+        val channel = NotificationChannel(channelId, name, importance).apply {
             description = descriptionText
         }
         // Register the channel with the system.

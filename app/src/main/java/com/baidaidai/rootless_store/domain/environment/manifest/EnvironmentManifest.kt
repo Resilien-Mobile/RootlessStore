@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
-import com.baidaidai.rootless_store.domain.module.model.ModuleManifestCollection
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import com.baidaidai.rootless_store.domain.market.model.MarketManifest
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
-sealed interface EnvironmentManifest: ModuleManifestCollection {
+sealed interface EnvironmentManifest: MarketManifest {
     // ─────────────────────────────────────────────────────────────
     // Environment Basic Infos
     // ─────────────────────────────────────────────────────────────
@@ -23,7 +23,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
 
     val environmentPackageName: String
 
-    val environmentID: String
+    val environmentId: String
 
     /**
      * Environment icon reference shown in the environment list.
@@ -36,7 +36,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
      * - File URI/path: "file://..." or "/icons/xxx.png"
      * - Relative path inside plugin package/zip: "icons/icon.png"
      */
-    val iconURI: String?
+    val iconUri: String?
 
     /**
      * Environment author / publisher name.
@@ -59,7 +59,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
     // ─────────────────────────────────────────────────────────────
 
     /**
-     * Required hoster environment status / capability requirement.
+     * Required execution context or capability requirement.
      *
      * Meaning:
      * - Describes what environment capability this environment needs to run correctly.
@@ -69,7 +69,7 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
      * - If this is purely a *computed* runtime value (not declared by plugin),
      *   move it out of the manifest.
      */
-    val requiredEnvironment: HosterOverallStatus
+    val requiredEnvironment: ExecutionContext
 
     val entryPoint: String
 
@@ -77,17 +77,17 @@ sealed interface EnvironmentManifest: ModuleManifestCollection {
 
     val env: Map<String, String>
 
-    // Runtime state such as `enabled`, `state`, `source` should NOT belong here:
-    // - enabled: Boolean
+    // Runtime state such as `isEnabled`, `state`, `origin` should NOT belong here:
+    // - isEnabled: Boolean
     // - state: PluginState
-    // - source: PluginSource
+    // - origin: PluginOrigin
     interface EnvironmentManifestLocal: EnvironmentManifest
     interface EnvironmentManifestRemote: EnvironmentManifest {
-        val environmentURI: String
+        val environmentUrl: String
     }
     interface EnvironmentManifestRoom: EnvironmentManifest {
-        val enabled: Boolean
+        val isEnabled: Boolean
         val state: PluginState
-        val source: PluginSource
+        val origin: PluginOrigin
     }
 }

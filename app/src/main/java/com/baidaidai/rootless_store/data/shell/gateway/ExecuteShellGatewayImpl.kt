@@ -2,10 +2,10 @@ package com.baidaidai.rootless_store.data.shell.gateway
 
 import android.util.Log
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.data.shell.provider.ShellExecuteContextProviderImpl
+import com.baidaidai.rootless_store.data.shell.provider.ShellExecutionContextProviderImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
-import com.baidaidai.rootless_store.domain.execute.model.ResultTag
+import com.baidaidai.rootless_store.domain.execution.model.ExecutionResultTag
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -20,37 +20,37 @@ import kotlin.text.orEmpty
 class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
-    private val shellExecuteContextProviderImpl: ShellExecuteContextProviderImpl
+    private val shellExecutionContextProviderImpl: ShellExecutionContextProviderImpl
 ) {
 
     private var currentDirectory: String = "/sdcard"
 
-    fun runCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
         var commandContent = commandContent
 
-        val appShellContextConfig = shellExecuteContextProviderImpl.getAppShellContext()
+        val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
 
-        if(appShellContextConfig.jumpToDirectory){
-            changeDirectoryHandler(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
+        if(appShellContextConfig.shouldJumpToDirectory){
+            prepareWorkingDirectoryCommand(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
         }
         if(commandContent.startsWith("cd ")){
             val targetDirectory = commandContent.removePrefix("cd ").trim()
-            changeDirectoryHandler(targetDirectory)
+            prepareWorkingDirectoryCommand(targetDirectory)
             commandContent = "exit"
         }
 
-        val appShellProcessBuilder = ProcessBuilder("sh","-c", "${changeDirectoryHandler()}$commandContent")
+        val appShellProcessBuilder = ProcessBuilder("sh","-c", "${prepareWorkingDirectoryCommand()}$commandContent")
 
         val environment = appShellProcessBuilder.environment()
-        val oldPATH = environment["PATH"].orEmpty()
-        val oldLDPATH = environment["LD_LIBRARY_PATH"].orEmpty()
+        val oldPath = environment["PATH"].orEmpty()
+        val oldLdPath = environment["LD_LIBRARY_PATH"].orEmpty()
 
-        environment["PATH"] = "${appShellContextConfig.environmentPATH}:$oldPATH"
-        environment["LD_LIBRARY_PATH"] = "${appShellContextConfig.environmentLDPATH}:$oldLDPATH"
+        environment["PATH"] = "${appShellContextConfig.environmentPath}:$oldPath"
+        environment["LD_LIBRARY_PATH"] = "${appShellContextConfig.environmentLdPath}:$oldLdPath"
         environment.putAll(appShellContextConfig.environmentConfig)
 
-        Log.d("executePluginEntryPoint","environmentPATH: ${appShellContextConfig.environmentPATH}")
-        Log.d("executePluginEntryPoint","environmentLDPATH: ${appShellContextConfig.environmentLDPATH}")
+        Log.d("executePluginEntryPoint","environmentPath: ${appShellContextConfig.environmentPath}")
+        Log.d("executePluginEntryPoint","environmentLdPath: ${appShellContextConfig.environmentLdPath}")
 
         val appShellProcess = appShellProcessBuilder.start()
 
@@ -59,9 +59,9 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { result ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.Normal,
+                            resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
-                            content = result,
+                            output = result,
                         )
                     )
                 }
@@ -72,9 +72,9 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { error ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             command = "~ $commandContent",
-                            content = error,
+                            output = error,
                         )
                     )
                 }
@@ -85,65 +85,65 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    fun runCommandByADBShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByAdbShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
-        val adbShellContextConfig = shellExecuteContextProviderImpl.getAdbShellContext()
+        val adbShellContextConfig = shellExecutionContextProviderImpl.resolveAdbShellContext()
 
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
-                onExecuteCallback = { session ->
+                onOutput = { output ->
                     trySend(
                         ShellResult(
-                            resulTag = ResultTag.Normal,
+                            resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
-                            content = session.toString(),
+                            output = output.toString(),
                         )
                     )
                 },
-                onErrorCallback = { error ->
+                onError = { error ->
                     trySend(
                         ShellResult(
-                            resulTag = ResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             command = "~ $commandContent",
-                            content = error.toString(),
+                            output = error.toString(),
                         )
                     )
                 },
-                onProcessExitedCallback = {}
+                onProcessExit = {}
             )
 
-            Log.d("exam",(shizukuUserServiceGatewayImpl.getShizukuUserService()==null).toString())
+            Log.d("exam",(shizukuUserServiceGatewayImpl.findShizukuUserService()==null).toString())
 
-            shizukuUserServiceGatewayImpl.getShizukuUserService()
+            shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.command(
                     commandContent,
                     callback,
-                    adbShellContextConfig.jumpToDirectory
+                    adbShellContextConfig.shouldJumpToDirectory
                 )
         }
         awaitClose {  }
     }
 
-    fun runCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
         var commandContent = commandContent
 
         if(commandContent.startsWith("cd ")){
             val targetDirectory = commandContent.removePrefix("cd ").trim()
-            changeDirectoryHandler(targetDirectory)
+            prepareWorkingDirectoryCommand(targetDirectory)
             commandContent = "exit"
         }
 
-        val process = ProcessBuilder("su", "-c", "${changeDirectoryHandler()}$commandContent").start()
+        val process = ProcessBuilder("su", "-c", "${prepareWorkingDirectoryCommand()}$commandContent").start()
 
         launch(Dispatchers.IO) {
             process.inputStream.bufferedReader().useLines { lines ->
                 lines.forEach { result ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.Normal,
+                            resultTag = ExecutionResultTag.Normal,
                             command = "# $commandContent",
-                            content = result,
+                            output = result,
                         )
                     )
                 }
@@ -152,9 +152,9 @@ class ExecuteShellGatewayImpl @Inject constructor(
                 lines.forEach { error ->
                     send(
                         ShellResult(
-                            resulTag = ResultTag.RedLine,
+                            resultTag = ExecutionResultTag.Error,
                             command = "# $commandContent",
-                            content = error,
+                            output = error,
                         )
                     )
                 }
@@ -165,7 +165,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    private fun changeDirectoryHandler(directory: String = currentDirectory): String{
+    private fun prepareWorkingDirectoryCommand(directory: String = currentDirectory): String{
 
         currentDirectory = when {
             directory.startsWith("/") -> {

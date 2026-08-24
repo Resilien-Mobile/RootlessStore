@@ -24,24 +24,24 @@ import com.baidaidai.rootless_store.R
 
 @Composable
 fun StartScreenRepositoryDialog(
-    sourceDomainContent: String,
+    sourceRemoteEndpoint: String,
     onDismissRequest: ()-> Unit,
-    onConfirmButtonClick: ()-> Unit,
-    onDismissButtonClick: () -> Unit,
-    onTextFieldValueChange: (String)-> Unit
+    onAddPluginSource: () -> Unit,
+    onCancel: () -> Unit,
+    onSourceRemoteEndpointChange: (String) -> Unit
 ){
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Button(
-                onClick = onConfirmButtonClick
+                onClick = onAddPluginSource
             ) {
                 Text(stringResource(R.string.sources_screen_repository_dialog_confirm_button))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = onDismissButtonClick
+                onClick = onCancel
             ) {
                 Text(stringResource(R.string.sources_screen_repository_dialog_dismiss_button))
             }
@@ -76,8 +76,8 @@ fun StartScreenRepositoryDialog(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 OutlinedTextField(
-                    value = sourceDomainContent,
-                    onValueChange = { newValue -> onTextFieldValueChange(newValue)},
+                    value = sourceRemoteEndpoint,
+                    onValueChange = { newValue -> onSourceRemoteEndpointChange(newValue)},
                     label = { Text(stringResource(R.string.sources_screen_repository_dialog_input_label)) },
                     placeholder = { Text(stringResource(R.string.sources_screen_repository_dialog_input_placeholder)) },
                     singleLine = true,

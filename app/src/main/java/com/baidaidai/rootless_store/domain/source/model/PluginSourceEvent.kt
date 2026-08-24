@@ -9,7 +9,7 @@ sealed interface PluginSourceEvent {
         override val errorCause: String
     ): RootlessStoreError, PluginSourceEvent
 
-    object SourceAuthentication: PluginSourceEvent
+    object AuthenticationRequired: PluginSourceEvent
     object Success: PluginSourceEvent
 
 }

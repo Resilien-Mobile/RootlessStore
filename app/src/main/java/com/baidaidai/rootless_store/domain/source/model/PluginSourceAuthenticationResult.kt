@@ -2,8 +2,8 @@ package com.baidaidai.rootless_store.domain.source.model
 
 interface PluginSourceAuthenticationResult {
     data class Success(
-        val userName: String,
-        val userAccessToken: String
+        val username: String,
+        val accessToken: String
     ) : PluginSourceAuthenticationResult
 
     data class AccessDenied(

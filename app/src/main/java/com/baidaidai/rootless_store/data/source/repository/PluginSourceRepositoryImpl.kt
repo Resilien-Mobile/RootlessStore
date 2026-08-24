@@ -1,51 +1,46 @@
 package com.baidaidai.rootless_store.data.source.repository
 
-import android.content.Context
-import com.baidaidai.rootless_store.core.util.OutOfStringLike
+import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 import com.baidaidai.rootless_store.data.source.gateway.PluginSourceGatewayImpl
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceInfo
+import com.baidaidai.rootless_store.domain.source.model.PluginSource
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEvent
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceEndpointInput
 import com.baidaidai.rootless_store.domain.source.repository.PluginSourceRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceInfo
-import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthFormInput
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSource
+import com.baidaidai.rootless_store.data.source.mapper.PluginSourceMapper.toPluginSourceEntity
+import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationInput
 import com.baidaidai.rootless_store.domain.source.model.PluginSourceAuthenticationResult
 import kotlinx.coroutines.flow.map
 
 class PluginSourceRepositoryImpl @Inject constructor(
-    @ApplicationContext context: Context,
     rootlessStoreDatabase: RootlessStoreDatabase,
-    val pluginSourceGatewayImpl: PluginSourceGatewayImpl
+    private val pluginSourceGatewayImpl: PluginSourceGatewayImpl
 ): PluginSourceRepository {
 
-    override val appDatabase = rootlessStoreDatabase
+    private val pluginSourceDao = rootlessStoreDatabase.pluginSourceDao()
 
-    private val pluginSourceDAO = appDatabase.pluginSourceDao()
-
-    // Create
-    override suspend fun insertOnePluginSourceByDefault(
+    // Add
+    override suspend fun addPluginSource(
         sourceEndpointInput: PluginSourceEndpointInput
     ): PluginSourceEvent {
         try{
-            val pluginSource = pluginSourceGatewayImpl.getPluginSource(sourceEndpointInput.sourceRemoteEndpoint)
-            val sourceAuthenticationInfo = pluginSource.pluginSourceAuthenticationMeta
+            val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceEndpointInput.sourceRemoteEndpoint)
+            val authenticationMetadata = pluginSource.pluginSourceAuthenticationMetadata
 
             /**
              * 验证，拉起WebView
              */
-            if (sourceAuthenticationInfo.requireAuthentication){
-                return PluginSourceEvent.SourceAuthentication
+            if (authenticationMetadata.needsAuthentication){
+                return PluginSourceEvent.AuthenticationRequired
             }
 
 
-            val newPluginSourceEntity = PluginSourceEntity.fromPluginSourceLocal(pluginSource)
+            val newPluginSourceEntity = pluginSource.toPluginSourceEntity()
 
-            pluginSourceDAO.insertOnePluginSource(newPluginSourceEntity)
+            pluginSourceDao.insertPluginSource(newPluginSourceEntity)
 
             return PluginSourceEvent.Success
 
@@ -53,37 +48,37 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
             return PluginSourceEvent.SourceError(
                 errorMessage = error.message.toString(),
-                errorCause = error.stackTrace.OutOfStringLike()
+                errorCause = error.stackTrace.formatAsMultilineString()
             )
 
         }
     }
 
-    override suspend fun insertOnePluginSourceByAuthentication(
-        pluginSourceAuthFormInput: PluginSourceAuthFormInput
+    override suspend fun addAuthenticatedPluginSource(
+        authenticationInput: PluginSourceAuthenticationInput
     ): PluginSourceEvent {
         try{
 
-            val pluginSource = pluginSourceGatewayImpl.getPluginSource(sourceRemoteEndpoint = pluginSourceAuthFormInput.sourceRemoteEndpoint)
-            val sourceAuthenticationResult = pluginSourceGatewayImpl.getPluginSourceAuthenticationResult(pluginSourceAuthFormInput)
+            val pluginSource = pluginSourceGatewayImpl.fetchPluginSource(sourceRemoteEndpoint = authenticationInput.sourceRemoteEndpoint)
+            val authenticationResult = pluginSourceGatewayImpl.fetchPluginSourceAuthenticationResult(authenticationInput)
 
             /**
              * 验证，打断异常会话
              */
-            return when(sourceAuthenticationResult){
+            return when(authenticationResult){
                 is PluginSourceAuthenticationResult.Success -> {
-                    val pluginSourceEntity = PluginSourceEntity
-                        .fromPluginSourceLocal(pluginSource)
-                        .copy(userAccessToken = sourceAuthenticationResult.userAccessToken)
+                    val pluginSourceEntity = pluginSource
+                        .toPluginSourceEntity()
+                        .copy(accessToken = authenticationResult.accessToken)
 
-                    pluginSourceDAO.insertOnePluginSource(pluginSourceEntity)
+                    pluginSourceDao.insertPluginSource(pluginSourceEntity)
 
                     PluginSourceEvent.Success
                 }
                 is PluginSourceAuthenticationResult.AccessDenied -> {
                     PluginSourceEvent.SourceError(
                         errorMessage = "Verification failed",
-                        errorCause = sourceAuthenticationResult.errorMessage
+                        errorCause = authenticationResult.errorMessage
                     )
                 }
                 is PluginSourceAuthenticationResult.ServerError -> {
@@ -110,53 +105,49 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
             return PluginSourceEvent.SourceError(
                 errorMessage = error.message.toString(),
-                errorCause = error.stackTrace.OutOfStringLike()
+                errorCause = error.stackTrace.formatAsMultilineString()
             )
 
         }
     }
 
     // Update
-    override suspend fun updateOnePluginSource(
-        sourceID: String,
+    override suspend fun updatePluginSource(
+        sourceId: String,
         sourceName: String,
         sourceRemoteEndpoint: String
     ) {
-        pluginSourceDAO.updateOnePluginSource(
-            sourceID = sourceID,
+        pluginSourceDao.updatePluginSource(
+            sourceId = sourceId,
             sourceName = sourceName,
             sourceRemoteEndpoint = sourceRemoteEndpoint
         )
     }
 
     // Read
-    override suspend fun getOnePluginSource(
-        sourceID: String
-    ): PluginSourceEntity? {
-        return pluginSourceDAO.getOnePluginSourceBySourceID(sourceID)
+    override suspend fun findPluginSource(
+        sourceId: String
+    ): PluginSource? {
+        return pluginSourceDao.findPluginSourceById(sourceId)?.toPluginSource()
     }
 
-    override fun getAllPluginSources(): Flow<List<PluginSourceInfo>?> {
-        val pluginSourceEntry = pluginSourceDAO.getAllPluginSources()
-
-        val pluginSource = pluginSourceEntry.map { list ->
-            list?.map { content ->
-               content.toPluginSourceInfo()
+    override fun observePluginSources(): Flow<List<PluginSource>> {
+        return pluginSourceDao.observePluginSources().map { pluginSourceEntities ->
+            pluginSourceEntities.map { pluginSourceEntity ->
+                pluginSourceEntity.toPluginSource()
             }
         }
-
-        return pluginSource
     }
 
-    override fun getPluginSourcesCount(): Flow<Int> {
-        return pluginSourceDAO.getPluginSourcesCount()
+    override fun observePluginSourceCount(): Flow<Int> {
+        return pluginSourceDao.observePluginSourceCount()
     }
 
     // Delete
-    override suspend fun deleteOnePluginSource(
-        pluginSourceEntity: PluginSourceEntity
+    override suspend fun deletePluginSource(
+        pluginSource: PluginSource
     ) {
-        pluginSourceDAO.deleteOnePluginSource(pluginSourceEntity)
+        pluginSourceDao.deletePluginSource(pluginSource.toPluginSourceEntity())
     }
 
 }

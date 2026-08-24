@@ -1,21 +1,26 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
-import com.baidaidai.rootless_store.domain.plugin.model.PluginSource
+import androidx.room.ColumnInfo
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 data class EnvironmentManifestRoom(
-    override val enabled: Boolean,
+    @ColumnInfo(name = "enabled")
+    override val isEnabled: Boolean,
     override val state: PluginState,
-    override val source: PluginSource,
+    @ColumnInfo(name = "source")
+    override val origin: PluginOrigin,
     override val installedVersion: String,
     override val environmentRenderingName: String,
     override val environmentPackageName: String,
-    override val environmentID: String,
-    override val iconURI: String?,
+    @ColumnInfo(name = "environmentID")
+    override val environmentId: String,
+    @ColumnInfo(name = "iconURI")
+    override val iconUri: String?,
     override val author: String,
     override val environmentDescription: String,
-    override val requiredEnvironment: HosterOverallStatus,
+    override val requiredEnvironment: ExecutionContext,
     override val entryPoint: String,
     override val ldLibraryPath: List<String>,
     override val env: Map<String, String>
@@ -25,14 +30,14 @@ data class EnvironmentManifestRoom(
             installedVersion = "x.x.x",
             environmentRenderingName = "Test Environment",
             environmentPackageName = "TestEnvironment",
-            environmentID = "29bb10c46772264df3c0d0fade57d2eb",
-            iconURI = "content://rootless_store/environment_icon/test",
+            environmentId = "29bb10c46772264df3c0d0fade57d2eb",
+            iconUri = "content://rootless_store/environment_icon/test",
             author = "Rootless Store(Creater. Bai)",
-            requiredEnvironment = HosterOverallStatus.LIMITED,
+            requiredEnvironment = ExecutionContext.LIMITED,
             environmentDescription = "Tested by Creater. Bai",
-            enabled = false,
+            isEnabled = false,
             state = PluginState.PermissionProblems,
-            source = PluginSource.Local,
+            origin = PluginOrigin.Local,
             entryPoint = "./index.sh",
             ldLibraryPath = emptyList(),
             env = emptyMap()

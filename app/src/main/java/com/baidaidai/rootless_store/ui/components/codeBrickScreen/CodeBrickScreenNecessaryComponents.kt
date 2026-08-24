@@ -41,20 +41,20 @@ object CodeBrickScreenNecessaryComponents {
 
     @Composable
     fun CodeBrickScreenFloatingButton(
-        buttonMenuExpandStatus: Boolean,
-        onHandMenuItemClick: ()-> Unit = {},
-        onJsonMenuItemClick: ()-> Unit = {},
-        onButtonMenuClick:(Boolean)-> Unit = {}
+        isMenuExpanded: Boolean,
+        onCreateClick: ()-> Unit = {},
+        onImportJsonClick: ()-> Unit = {},
+        onExpandedChange:(Boolean)-> Unit = {}
     ) {
 
         FloatingActionButtonMenu(
-            expanded = buttonMenuExpandStatus,
+            expanded = isMenuExpanded,
             button = {
                 ToggleFloatingActionButton(
-                    checked = buttonMenuExpandStatus,
-                    onCheckedChange = onButtonMenuClick
+                    checked = isMenuExpanded,
+                    onCheckedChange = onExpandedChange
                 ) {
-                    if (buttonMenuExpandStatus){
+                    if (isMenuExpanded){
                         Icon(
                             painter = painterResource(R.drawable.outline_close_24),
                             contentDescription = stringResource(R.string.code_brick_screen_floating_button_add_content_description),
@@ -71,18 +71,18 @@ object CodeBrickScreenNecessaryComponents {
             modifier = Modifier
                 .offset(16.dp,16.dp)
         ) {
-            InputByJsonMenuItem {
-                onJsonMenuItemClick()
+            ImportJsonMenuItem {
+                onImportJsonClick()
             }
-            InputByHandMenuItem {
-                onHandMenuItemClick()
+            CreateManuallyMenuItem {
+                onCreateClick()
             }
 
         }
     }
 
     @Composable
-    private fun FloatingActionButtonMenuScope.InputByJsonMenuItem(
+    private fun FloatingActionButtonMenuScope.ImportJsonMenuItem(
         onClick: () -> Unit = {}
     ){
         FloatingActionButtonMenuItem(
@@ -97,7 +97,7 @@ object CodeBrickScreenNecessaryComponents {
     }
 
     @Composable
-    private fun FloatingActionButtonMenuScope.InputByHandMenuItem(
+    private fun FloatingActionButtonMenuScope.CreateManuallyMenuItem(
         onClick: () -> Unit = {}
     ){
         FloatingActionButtonMenuItem(

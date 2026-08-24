@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenActionCard
-import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModelSheet
+import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenModalSheet
 import com.baidaidai.rootless_store.ui.components.shizukuAdbScreen.ShizukuAdbScreenNecessaryComponents.ShizukuAdbScreenOverviewCard
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 import kotlinx.coroutines.delay
@@ -37,33 +37,33 @@ fun ShizukuAdbScreen(
     contentPaddingValues: PaddingValues,
     shizukuAdbScreenViewModel: RootlessStoreShizukuAdbScreenViewModel,
 ){
-    val shizukuActived by shizukuAdbScreenViewModel.shizukuActived.collectAsState()
-    val endpointActived by shizukuAdbScreenViewModel.endpointActived.collectAsState()
+    val isShizukuActive by shizukuAdbScreenViewModel.isShizukuActive.collectAsState()
+    val isEndpointActive by shizukuAdbScreenViewModel.isEndpointActive.collectAsState()
 
     val context = LocalContext.current
     val activity = context as? Activity
 
-    var sheetState by remember { mutableStateOf(false) }
-    var remainderTime by remember { mutableIntStateOf(6) }
+    var isCompletionSheetVisible by remember { mutableStateOf(false) }
+    var remainingSeconds by remember { mutableIntStateOf(6) }
 
 
-    LaunchedEffect(endpointActived) {
-        if (endpointActived) {
-            sheetState = true
-            while (remainderTime > 0){
+    LaunchedEffect(isEndpointActive) {
+        if (isEndpointActive) {
+            isCompletionSheetVisible = true
+            while (remainingSeconds > 0){
                 delay(1000)
-                remainderTime--
+                remainingSeconds--
             }
             activity?.finish()
         }
     }
 
-    if (sheetState){
-        ShizukuAdbScreenModelSheet(
-            remainderTime = remainderTime,
-            onDismissRequest = { sheetState = false},
-            onCloseButtonClick = { sheetState = false },
-            onReturnButtonClick = { activity?.finish() }
+    if (isCompletionSheetVisible){
+        ShizukuAdbScreenModalSheet(
+            remainingSeconds = remainingSeconds,
+            onDismissRequest = { isCompletionSheetVisible = false},
+            onDismissCompletion = { isCompletionSheetVisible = false },
+            onReturnToApp = { activity?.finish() }
         )
     }else{
         LazyColumn(
@@ -84,9 +84,9 @@ fun ShizukuAdbScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                     LinearWavyProgressIndicator(
                         progress = {
-                            if (endpointActived) {
+                            if (isEndpointActive) {
                                 1f
-                            }else if (shizukuActived){
+                            }else if (isShizukuActive){
                                 0.5f
                             }else{
                                 0.05f
@@ -105,9 +105,9 @@ fun ShizukuAdbScreen(
                     step = stringResource(R.string.shizuku_adb_screen_action_card_step_1_label),
                     title = stringResource(R.string.shizuku_adb_screen_action_card_step_1_title),
                     description = stringResource(R.string.shizuku_adb_screen_action_card_step_1_description),
-                    targetStatus = shizukuActived,
+                    isTargetActive = isShizukuActive,
                     onClick = {
-                        shizukuAdbScreenViewModel.authShizukuPermission()
+                        shizukuAdbScreenViewModel.ensureShizukuPermission()
                     }
                 )
             }
@@ -116,9 +116,9 @@ fun ShizukuAdbScreen(
                     step = stringResource(R.string.shizuku_adb_screen_action_card_step_2_label),
                     title = stringResource(R.string.shizuku_adb_screen_action_card_step_2_title),
                     description = stringResource(R.string.shizuku_adb_screen_action_card_step_2_description),
-                    targetStatus = endpointActived,
+                    isTargetActive = isEndpointActive,
                     onClick = {
-                        shizukuAdbScreenViewModel.activeShizukuUserService()
+                        shizukuAdbScreenViewModel.startShizukuUserService()
                     }
                 )
             }

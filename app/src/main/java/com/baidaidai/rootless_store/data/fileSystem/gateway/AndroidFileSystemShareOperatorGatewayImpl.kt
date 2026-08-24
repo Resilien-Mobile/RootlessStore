@@ -12,7 +12,7 @@ class AndroidFileSystemShareOperatorGatewayImpl @Inject constructor(
 ) {
 
     // Share FS Operator
-    fun getShareUriFromFile(file: File): Uri {
+    fun resolveShareUriFromFile(file: File): Uri {
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
 

@@ -40,11 +40,11 @@ object ShizukuAdbScreenNecessaryComponents {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
-    fun ShizukuAdbScreenModelSheet(
-        remainderTime: Int,
+    fun ShizukuAdbScreenModalSheet(
+        remainingSeconds: Int,
         onDismissRequest: ()-> Unit,
-        onCloseButtonClick: ()-> Unit,
-        onReturnButtonClick: ()-> Unit
+        onDismissCompletion: () -> Unit,
+        onReturnToApp: () -> Unit
     ){
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
@@ -84,7 +84,7 @@ object ShizukuAdbScreenNecessaryComponents {
                 Spacer(Modifier.height(8.dp))
 
                 Text(
-                    text = icuString(R.string.shizuku_adb_screen_bottom_sheet_countdown_context,mapOf("second" to remainderTime)),
+                    text = icuString(R.string.shizuku_adb_screen_bottom_sheet_countdown_context,mapOf("second" to remainingSeconds)),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
@@ -97,13 +97,13 @@ object ShizukuAdbScreenNecessaryComponents {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     OutlinedButton(
-                        onClick = onCloseButtonClick,
+                        onClick = onDismissCompletion,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.shizuku_adb_screen_bottom_sheet_close_button))
                     }
                     Button(
-                        onClick = onReturnButtonClick,
+                        onClick = onReturnToApp,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.shizuku_adb_screen_bottom_sheet_return_button))
@@ -119,7 +119,7 @@ object ShizukuAdbScreenNecessaryComponents {
         step: String,
         title: String,
         description: String,
-        targetStatus: Boolean,
+        isTargetActive: Boolean,
         onClick: () -> Unit
     ){
         Card(
@@ -160,7 +160,7 @@ object ShizukuAdbScreenNecessaryComponents {
                             contentPadding = PaddingValues(0.dp)
                         ) {
                             Icon(
-                                painter = if (targetStatus){
+                                painter = if (isTargetActive){
                                     painterResource(R.drawable.material_symbols_check)
                                 }else{
                                     painterResource(R.drawable.material_symbols_play_arrow)

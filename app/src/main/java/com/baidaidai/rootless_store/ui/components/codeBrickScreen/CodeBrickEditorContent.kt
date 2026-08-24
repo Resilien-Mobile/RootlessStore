@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickContextConfig
-import com.baidaidai.rootless_store.domain.status.model.HosterOverallStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Composable
 fun CodeBrickEditorContent(
@@ -33,29 +33,29 @@ fun CodeBrickEditorContent(
     onCodeBrickTitleValueChange: (value: String)-> Unit,
     onCodeBrickTileValueChange: (value: Int?) -> Unit,
     onCodeBrickContentValueChange: (value: String)-> Unit,
-    onCodeBrickContextValueChange: (hosterOverallStatus: HosterOverallStatus) -> Unit
+    onCodeBrickContextValueChange: (executionContext: ExecutionContext) -> Unit
 
 ){
 
-    val brickContextConfigList = listOf(
+    val codeBrickContexts = listOf(
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.LIMITED,
+            contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
-            contextIcon = R.drawable.material_symbols_applicaitons
+            contextIcon = R.drawable.material_symbols_applications
         ),
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.ADB,
+            contextType = ExecutionContext.ADB,
             contextTextResource = R.string.code_brick_screen_editor_context_adb_shell_label,
             contextIcon = R.drawable.material_symbols_adb
         ),
         CodeBrickContextConfig(
-            contextType = HosterOverallStatus.ROOTD,
+            contextType = ExecutionContext.ROOTD,
             contextTextResource = R.string.code_brick_screen_editor_context_root_shell_label,
             contextIcon = R.drawable.material_symbols_cyclone
         )
     )
 
-    var currentSelectedContext by remember { mutableStateOf(brickContextConfigList[0]) }
+    var selectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
 
     Column(modifier) {
 
@@ -81,10 +81,10 @@ fun CodeBrickEditorContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         CodeBrickContextList(
-            currentSelectedContext = currentSelectedContext,
-            brickContextConfigList = brickContextConfigList,
-            onListItemClick = { codeBrickContextConfig ->
-                currentSelectedContext = codeBrickContextConfig
+            selectedContext = selectedContext,
+            codeBrickContexts = codeBrickContexts,
+            onContextSelected = { codeBrickContextConfig ->
+                selectedContext = codeBrickContextConfig
                 onCodeBrickContextValueChange(codeBrickContextConfig.contextType)
             }
         )

@@ -18,15 +18,15 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionContainer
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginInfoContainerLocal
-import com.baidaidai.rootless_store.ui.model.RootLessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginActionPanel
+import com.baidaidai.rootless_store.ui.components.pluginScreen.InstalledManifestCard
+import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 
 @Composable
-fun EnvironmentScreen(
-    badgeShowState: Boolean,
-    renderingList: List<EnvironmentManifestRoom>,
-    pluginScreenViewModel: RootLessStorePluginScreenViewModel,
+fun InstalledEnvironmentList(
+    isBadgeVisible: Boolean,
+    environments: List<EnvironmentManifestRoom>,
+    pluginScreenViewModel: RootlessStorePluginScreenViewModel,
 ){
 
     val density = LocalDensity.current
@@ -42,31 +42,31 @@ fun EnvironmentScreen(
         )
     ) {
         items(
-            items = renderingList,
-            key = { environmentManifestRoom -> environmentManifestRoom.environmentID }
+            items = environments,
+            key = { environmentManifestRoom -> environmentManifestRoom.environmentId }
         ){ environmentManifestRoom ->
 
-            var actionCanSee by remember { mutableStateOf(false) }
+            var isActionPanelVisible by remember { mutableStateOf(false) }
             var cardSize by remember { mutableStateOf(IntSize.Zero) }
 
-            if (actionCanSee){
+            if (isActionPanelVisible){
 
-                PluginActionContainer(
-                    onShareButtonClick = {
+                PluginActionPanel(
+                    onShareClick = {
 
-                        val shareLink = pluginScreenViewModel.getEnvironmentShareLink(environmentManifestRoom)
+                        val shareUri = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/zip"
-                            putExtra(Intent.EXTRA_STREAM, shareLink)
+                            putExtra(Intent.EXTRA_STREAM, shareUri)
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
 
                         context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
 
                     },
-                    onDeleteButtonClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
-                    onBackButtonClick = { actionCanSee = !actionCanSee },
+                    onUninstallClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
+                    onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
                     modifier = Modifier
                         .size(
                             width = with(density) { cardSize.width.toDp() },
@@ -76,16 +76,16 @@ fun EnvironmentScreen(
 
             }else{
 
-                PluginInfoContainerLocal(
+                InstalledManifestCard(
                     environmentManifest = environmentManifestRoom,
-                    onSwitchClick = {
+                    onEnabledChange = { isEnabled ->
                         pluginScreenViewModel.setEnvironmentEnabled(
-                            environmentID = environmentManifestRoom.environmentID,
-                            environmentEnabledStatus = !environmentManifestRoom.enabled
+                            environmentId = environmentManifestRoom.environmentId,
+                            isEnabled = isEnabled
                         )
                     },
-                    onCardLongClick = { actionCanSee = !actionCanSee },
-                    onCardSizeChanged = { cardSize = it },
+                    onLongClick = { isActionPanelVisible = !isActionPanelVisible },
+                    onSizeChanged = { cardSize = it },
                 )
 
             }

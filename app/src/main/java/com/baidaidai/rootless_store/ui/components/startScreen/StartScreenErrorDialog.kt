@@ -13,20 +13,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
-import com.baidaidai.rootless_store.ui.model.RootLessStoreSourceScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 
 @Composable
 fun StartScreenErrorDialog(
-    sourceScreenViewModel: RootLessStoreSourceScreenViewModel,
-    sharedEvent: RootlessStoreError?
+    sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
+    error: RootlessStoreError?
 ){
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {
             Button(
                 onClick = {
-                    sourceScreenViewModel.onOkButtonClick()
+                    sourceScreenViewModel.dismissSourceError()
                 }
             ) {
                 Text("Ok")
@@ -39,11 +39,11 @@ fun StartScreenErrorDialog(
             )
         },
         title = {
-            Text(sharedEvent!!.errorMessage)
+            Text(error!!.errorMessage)
         },
         text = {
             Text(
-                text = sharedEvent!!.errorCause,
+                text = error!!.errorCause,
                 modifier = Modifier
                     .heightIn(max = 300.dp)
                     .verticalScroll(
@@ -56,14 +56,14 @@ fun StartScreenErrorDialog(
 @Composable
 fun StartScreenErrorDialog(
     shizukuAdbScreenViewModel: RootlessStoreShizukuAdbScreenViewModel,
-    sharedEvent: RootlessStoreError?
+    error: RootlessStoreError?
 ){
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {
             Button(
                 onClick = {
-                    shizukuAdbScreenViewModel.onOkButtonClick()
+                    shizukuAdbScreenViewModel.dismissShizukuError()
                 }
             ) {
                 Text("Ok")
@@ -76,11 +76,11 @@ fun StartScreenErrorDialog(
             )
         },
         title = {
-            Text(sharedEvent!!.errorMessage)
+            Text(error!!.errorMessage)
         },
         text = {
             Text(
-                text = sharedEvent!!.errorCause,
+                text = error!!.errorCause,
                 modifier = Modifier
                     .heightIn(max = 300.dp)
                     .verticalScroll(
