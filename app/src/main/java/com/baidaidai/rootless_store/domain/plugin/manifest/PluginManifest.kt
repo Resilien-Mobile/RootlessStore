@@ -90,7 +90,7 @@ sealed interface PluginManifest: MarketManifest {
     // ─────────────────────────────────────────────────────────────
 
     /**
-     * Required hoster environment status / capability requirement.
+     * Required execution context or capability requirement.
      *
      * Meaning:
      * - Describes what environment the plugin needs to run correctly.

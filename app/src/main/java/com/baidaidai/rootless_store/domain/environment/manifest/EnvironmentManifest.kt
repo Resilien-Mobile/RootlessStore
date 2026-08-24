@@ -59,7 +59,7 @@ sealed interface EnvironmentManifest: MarketManifest {
     // ─────────────────────────────────────────────────────────────
 
     /**
-     * Required hoster environment status / capability requirement.
+     * Required execution context or capability requirement.
      *
      * Meaning:
      * - Describes what environment capability this environment needs to run correctly.

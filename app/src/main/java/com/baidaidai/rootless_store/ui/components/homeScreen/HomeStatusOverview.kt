@@ -63,7 +63,7 @@ fun HomeStatusOverview(
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_monitoring),
-                            contentDescription = stringResource(R.string.home_screen_hoster_status_board_icon_content_description),
+                            contentDescription = stringResource(R.string.home_screen_device_status_icon_content_description),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier
                                 .fillMaxHeight()
@@ -73,7 +73,7 @@ fun HomeStatusOverview(
                                 .width(10.dp)
                         )
                         Text(
-                            text = stringResource(R.string.home_screen_hoster_status_board_title),
+                            text = stringResource(R.string.home_screen_device_status_title),
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier
                                 .fillMaxHeight()
@@ -104,12 +104,12 @@ fun HomeStatusOverview(
                     .fillMaxWidth()
             ) {
                 StatusCircularProgress(
-                    label = stringResource(R.string.home_screen_hoster_status_board_memory_label),
+                    label = stringResource(R.string.home_screen_device_status_memory_label),
                     currentValue = deviceStatus.memoryStatus.usedMemory,
                     maxValue = deviceStatus.memoryStatus.totalMemory
                 )
                 StatusCircularProgress(
-                    label = stringResource(R.string.home_screen_hoster_status_board_storage_label),
+                    label = stringResource(R.string.home_screen_device_status_storage_label),
                     currentValue = deviceStatus.storageStatus.usedStorage,
                     maxValue = deviceStatus.storageStatus.totalStorage
                 )
