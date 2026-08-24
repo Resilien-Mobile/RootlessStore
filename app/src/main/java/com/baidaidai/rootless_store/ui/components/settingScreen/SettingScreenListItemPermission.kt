@@ -26,12 +26,12 @@ fun SettingScreenListItemPermission(
     headlineText: String,
     supportingText: String,
     leadingContent: @Composable (() -> Unit)? = null,
-    onOpenClick: ()-> Unit = {}
+    onOpenSettings: () -> Unit = {}
 ){
     ListItem(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
-            .clickable(onClick = onOpenClick),
+            .clickable(onClick = onOpenSettings),
         headlineContent = {
             Text(
                 text = headlineText,
@@ -51,7 +51,7 @@ fun SettingScreenListItemPermission(
         leadingContent = leadingContent,
         trailingContent = {
             IconButton(
-                onClick = onOpenClick
+                onClick = onOpenSettings
             ) {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_arrow_outward),
