@@ -33,9 +33,9 @@ import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 @Composable
 fun CodeBrickContextList(
     modifier: Modifier = Modifier,
-    currentSelectedContext: CodeBrickContextConfig,
+    selectedContext: CodeBrickContextConfig,
     codeBrickContexts: List<CodeBrickContextConfig>,
-    onListItemClick: (codeBrickContextConfig: CodeBrickContextConfig)-> Unit
+    onContextSelected: (codeBrickContextConfig: CodeBrickContextConfig)-> Unit
 ){
 
     val focusedListItemStyle = ListItemColors(
@@ -94,7 +94,7 @@ fun CodeBrickContextList(
     var isContextListExpanded by remember { mutableStateOf(false) }
 
     fun contextListItemColors(index: Int): ListItemColors{
-        return if (codeBrickContexts[index].contextType == currentSelectedContext.contextType){
+        return if (codeBrickContexts[index].contextType == selectedContext.contextType){
             focusedListItemStyle
         }else{
             unfocusedListItemStyle
@@ -126,7 +126,7 @@ fun CodeBrickContextList(
                 val contextText = stringResource(codeBrickContextConfig.contextTextResource)
 
                 ListItem(
-                    onClick = { onListItemClick(codeBrickContextConfig) },
+                    onClick = { onContextSelected(codeBrickContextConfig) },
                     leadingContent = {
                         Icon(
                             painter = painterResource(codeBrickContextConfig .contextIcon),
@@ -170,10 +170,10 @@ private fun _CodeBrickContextListPreview_() {
         )
     )
 
-    var currentSelectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
+    var selectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
 
     CodeBrickContextList(
-        currentSelectedContext = currentSelectedContext,
+        selectedContext = selectedContext,
         codeBrickContexts = codeBrickContexts,
         modifier = Modifier
             .width(300.dp)
