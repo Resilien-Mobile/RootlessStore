@@ -48,7 +48,7 @@ fun ThirdPartyNotificationScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             value = thirdPartyNotificationScreenUiState.barkApiKey,
-            onValueChange = thirdPartyNotificationScreenViewModel::onBarkApiKeyChanged,
+            onValueChange = thirdPartyNotificationScreenViewModel::setBarkApiKey,
             label = {
                 Text(stringResource(R.string.third_party_notification_screen_bark_api_key_input_label))
             },
@@ -81,14 +81,14 @@ fun ThirdPartyNotificationScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             value = thirdPartyNotificationScreenUiState.notificationTitle ?: "",
-            onValueChange = thirdPartyNotificationScreenViewModel::onNotificationTitleChanged,
+            onValueChange = thirdPartyNotificationScreenViewModel::setNotificationTitle,
             label = {
                 Text(stringResource(R.string.third_party_notification_screen_notification_title_input_label))
             },
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        thirdPartyNotificationScreenViewModel.onNotificationTitleChanged(null)
+                        thirdPartyNotificationScreenViewModel.setNotificationTitle(null)
                     }
                 ) {
                     Icon(
@@ -102,14 +102,14 @@ fun ThirdPartyNotificationScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             value = thirdPartyNotificationScreenUiState.selfBuiltServer ?: "",
-            onValueChange = thirdPartyNotificationScreenViewModel::onSelfBuiltServerChanged,
+            onValueChange = thirdPartyNotificationScreenViewModel::setSelfBuiltServer,
             label = {
                 Text(stringResource(R.string.third_party_notification_screen_self_built_server_input_label))
             },
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        thirdPartyNotificationScreenViewModel.onSelfBuiltServerChanged(null)
+                        thirdPartyNotificationScreenViewModel.setSelfBuiltServer(null)
                     }
                 ) {
                     Icon(
@@ -131,7 +131,7 @@ fun ThirdPartyNotificationScreen(
                 trailingContent = {
                     Switch(
                         checked = thirdPartyNotificationScreenUiState.isWarningNotificationEnabled,
-                        onCheckedChange = thirdPartyNotificationScreenViewModel::onWarningNotificationEnabledChanged
+                        onCheckedChange = thirdPartyNotificationScreenViewModel::setWarningNotificationEnabled
                     )
                 },
                 leadingContent = {

@@ -28,28 +28,28 @@ class RootlessStoreThirdPartyNotificationScreenViewModel @Inject constructor(
 
     // Ui Event cluster
     // Change UiState methods
-    fun onBarkApiKeyChanged(barkApiKey: String){
+    fun setBarkApiKey(barkApiKey: String){
         _thirdPartyNotificationScreenUiState.update {
             it.copy(barkApiKey = barkApiKey)
         }
     }
-    fun onNotificationTitleChanged(notificationTitle: String?){
+    fun setNotificationTitle(notificationTitle: String?){
         _thirdPartyNotificationScreenUiState.update {
             it.copy(notificationTitle = notificationTitle)
         }
     }
-    fun onSelfBuiltServerChanged(selfBuiltServer: String?){
+    fun setSelfBuiltServer(selfBuiltServer: String?){
         _thirdPartyNotificationScreenUiState.update {
             it.copy(selfBuiltServer = selfBuiltServer)
         }
     }
-    fun onWarningNotificationEnabledChanged(isEnabled: Boolean){
+    fun setWarningNotificationEnabled(isEnabled: Boolean){
         _thirdPartyNotificationScreenUiState.update {
             it.copy(isWarningNotificationEnabled = isEnabled)
         }
     }
 
-    fun onSubmitClick(){
+    fun ensureNotificationPreference(){
         viewModelScope.launch {
             val uiState = thirdPartyNotificationScreenUiState.value
 
