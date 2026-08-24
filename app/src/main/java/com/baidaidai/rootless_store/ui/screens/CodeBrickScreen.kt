@@ -40,10 +40,10 @@ fun CodeBrickScreen(
             onDismissRequest = {
                 codeBrickViewModel.setBrickEditorVisible(false)
             },
-            onDismissButtonClick = {
+            onCancelClick = {
                 codeBrickViewModel.setBrickEditorVisible(false)
             },
-            onConfirmButtonClick = { title, content, context, tileIndex ->
+            onCreateClick = { title, content, context, tileIndex ->
                 codeBrickViewModel.addCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,
@@ -57,7 +57,7 @@ fun CodeBrickScreen(
         CodeBrickExecutionResultDialog(
             outputLines = codeBrickScreenUiState.executionOutputLines,
             onDismissRequest = codeBrickViewModel::setExecutionResultVisible,
-            onConfirmButtonClick = codeBrickViewModel::setExecutionResultVisible
+            onDismissClick = codeBrickViewModel::setExecutionResultVisible
         )
     } else if (codeBrickScreenUiState.isBrickSettingsVisible) {
         CodeBrickSetting(
@@ -65,10 +65,10 @@ fun CodeBrickScreen(
             onDismissRequest = {
                 codeBrickViewModel.hideBrickSettings()
             },
-            onDismissButtonClick = {
+            onCancelClick = {
                 codeBrickViewModel.hideBrickSettings()
             },
-            onConfirmButtonClick = { title, content, context, tileIndex, oldCodeBrickConfig ->
+            onUpdateClick = { title, content, context, tileIndex, oldCodeBrickConfig ->
                 codeBrickViewModel.updateCodeBrick(
                     codeBrickTitle = title,
                     codeBrickContent = content,

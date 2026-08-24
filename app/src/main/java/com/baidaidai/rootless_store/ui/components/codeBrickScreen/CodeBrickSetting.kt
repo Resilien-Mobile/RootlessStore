@@ -22,8 +22,8 @@ import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 fun CodeBrickSetting(
     codeBrickConfig: CodeBrickConfig,
     onDismissRequest: () -> Unit,
-    onDismissButtonClick: ()-> Unit,
-    onConfirmButtonClick: (
+    onCancelClick: ()-> Unit,
+    onUpdateClick: (
         title: String,
         content: String,
         context: ExecutionContext,
@@ -52,7 +52,7 @@ fun CodeBrickSetting(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(
-                onClick = onDismissButtonClick
+                onClick = onCancelClick
             ) {
                 Text(stringResource(R.string.code_brick_screen_editor_cancel_button))
             }
@@ -60,7 +60,7 @@ fun CodeBrickSetting(
         confirmButton = {
             Button(
                 onClick = {
-                    onConfirmButtonClick(
+                    onUpdateClick(
                         titleContent,
                         codeContent,
                         selectedContext,

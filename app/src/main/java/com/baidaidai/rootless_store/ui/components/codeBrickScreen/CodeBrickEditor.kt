@@ -19,8 +19,8 @@ import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 @Composable
 fun CodeBrickEditor(
     onDismissRequest: () -> Unit,
-    onDismissButtonClick: ()-> Unit,
-    onConfirmButtonClick: (title: String,content: String,context: ExecutionContext,tileIndex: Int?)-> Unit
+    onCancelClick: ()-> Unit,
+    onCreateClick: (title: String,content: String,context: ExecutionContext,tileIndex: Int?)-> Unit
 ){
 
     var titleContent by remember { mutableStateOf("") }
@@ -35,14 +35,14 @@ fun CodeBrickEditor(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(
-                onClick = onDismissButtonClick
+                onClick = onCancelClick
             ) {
                 Text(stringResource(R.string.code_brick_screen_editor_cancel_button))
             }
         },
         confirmButton = {
             Button(
-                onClick = { onConfirmButtonClick(titleContent,codeContent, selectedContext, tileIndex) }
+                onClick = { onCreateClick(titleContent,codeContent, selectedContext, tileIndex) }
             ) {
                 Text(stringResource(R.string.code_brick_screen_editor_confirm_button))
             }
