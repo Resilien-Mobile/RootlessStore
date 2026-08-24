@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HosterStatusCircularProgress(label: String, currentValue: Double, maxValue: Double){
+fun StatusCircularProgress(label: String, currentValue: Double, maxValue: Double){
     val currentValueProgress = (currentValue / maxValue).toFloat()
     val currentValuePercentage = (currentValueProgress * 100).toInt()
 
@@ -48,7 +48,7 @@ fun HosterStatusCircularProgress(label: String, currentValue: Double, maxValue: 
 }
 
 @Composable
-fun HosterStatusCircularProgress(label: String, percentage: Float){
+fun StatusCircularProgress(label: String, percentage: Float){
     val currentValuePercentage = (percentage * 100).toInt()
 
     Column(
@@ -72,12 +72,12 @@ fun HosterStatusCircularProgress(label: String, percentage: Float){
 
 @Composable
 @PreviewLightDark
-private fun _HosterStatusCircularProgressRowPreview_(){
+private fun _StatusCircularProgressPreview_(){
     Box(
         modifier = Modifier
             .background(color = Color.White)
     ) {
-        HosterStatusCircularProgress(
+        StatusCircularProgress(
             label = "RAM",
             currentValue = 139.32,
             maxValue = 512.00

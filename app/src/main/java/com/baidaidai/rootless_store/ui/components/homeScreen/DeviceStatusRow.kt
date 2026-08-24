@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HosterStatusRow(
+fun DeviceStatusRow(
     label: String,
     value: String,
     modifier: Modifier = Modifier
@@ -42,7 +42,7 @@ fun HosterStatusRow(
 @PreviewLightDark
 @Composable
 private fun _preview_() {
-    HosterStatusRow(
+    DeviceStatusRow(
         label = "版本",
         value = "Android 16 (Api 36)",
         modifier = Modifier
