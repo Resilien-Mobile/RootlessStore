@@ -26,7 +26,7 @@ import com.baidaidai.rootless_store.domain.status.usecase.ObserveStorageStatusUs
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveTemperatureStatusUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetExecutionContextChooserEnabledUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.SetExecutionContextPreferenceUseCase
-import com.baidaidai.rootless_store.domain.update.usecase.FetchLatestVersionUseCase
+import com.baidaidai.rootless_store.domain.update.usecase.FetchLatestVersionTagUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,23 +53,23 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     private val setExecutionContextPreferenceUseCase: SetExecutionContextPreferenceUseCase,
     private val setExecutionContextChooserEnabledUseCase: SetExecutionContextChooserEnabledUseCase,
     private val observeAutoUpdateEnabledPreferenceUseCase: ObserveAutoUpdateEnabledPreferenceUseCase,
-    private val fetchLatestVersionUseCase: FetchLatestVersionUseCase,
+    private val fetchLatestVersionTagUseCase: FetchLatestVersionTagUseCase,
     private val observeAdbShellAvailabilityUseCase: ObserveAdbShellAvailabilityUseCase,
     private val observeCpuDashboardConfigUseCase: ObserveCpuDashboardConfigUseCase,
     private val observeNetworkDashboardConfigUseCase: ObserveNetworkDashboardConfigUseCase
 ) : ViewModel() {
 
     init {
-        refreshLatestVersion()
+        refreshLatestVersionTag()
     }
 
     private val _isContextDialogVisible = MutableStateFlow(false)
     private val _pendingExecutionContext = MutableStateFlow<ExecutionContext?>(null)
     val isContextDialogVisible = _isContextDialogVisible.asStateFlow()
 
-    // Latest Version Status
-    private val _latestVersion = MutableStateFlow<String?>(null)
-    val latestVersion = _latestVersion.asStateFlow()
+    // Latest release tag
+    private val _latestVersionTag = MutableStateFlow<String?>(null)
+    val latestVersionTag = _latestVersionTag.asStateFlow()
 
 
     val memoryStatus: StateFlow<MemoryStatus> =
@@ -189,14 +189,14 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         _isContextDialogVisible.value = !_isContextDialogVisible.value
     }
 
-    fun refreshLatestVersion(){
+    fun refreshLatestVersionTag(){
         viewModelScope.launch {
             val isAutoUpdateEnabled = observeAutoUpdateEnabledPreferenceUseCase().first()
-            Log.d("refreshLatestVersion",isAutoUpdateEnabled.toString())
+            Log.d("refreshLatestVersionTag",isAutoUpdateEnabled.toString())
 
             if(isAutoUpdateEnabled){
-                val latestVersion = fetchLatestVersionUseCase()
-                _latestVersion.value = latestVersion
+                val latestVersionTag = fetchLatestVersionTagUseCase()
+                _latestVersionTag.value = latestVersionTag
             }
         }
     }
