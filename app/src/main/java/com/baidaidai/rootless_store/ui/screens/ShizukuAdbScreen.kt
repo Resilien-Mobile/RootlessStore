@@ -62,8 +62,8 @@ fun ShizukuAdbScreen(
         ShizukuAdbScreenModalSheet(
             remainingSeconds = remainingSeconds,
             onDismissRequest = { isCompletionSheetVisible = false},
-            onCloseButtonClick = { isCompletionSheetVisible = false },
-            onReturnButtonClick = { activity?.finish() }
+            onDismissCompletion = { isCompletionSheetVisible = false },
+            onReturnToApp = { activity?.finish() }
         )
     }else{
         LazyColumn(
