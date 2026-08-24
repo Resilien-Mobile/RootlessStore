@@ -19,7 +19,7 @@ class PluginGatewayImpl @Inject constructor(
     private val marketPackageRemoteDataSource: MarketPackageRemoteDataSource,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ): PluginGateway {
-    private val defaultPluginLocation = File(context.getExternalFilesDir(null), "Plugin")
+    private val defaultPluginDirectory = File(context.getExternalFilesDir(null), "Plugin")
 
     // Create
     override fun installPluginFromLocal(originFileUri: Uri) {
@@ -53,11 +53,11 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
-    private fun installPluginPackage(originFileUri: Uri, destination: File = defaultPluginLocation) {
+    private fun installPluginPackage(originFileUri: Uri, destinationDirectory: File = defaultPluginDirectory) {
         if (androidFileSystemCapabilityGatewayImpl.hasPluginDirectory()){
             androidFileSystemCapabilityGatewayImpl.unzipFromFile(
                 originFileUri = originFileUri,
-                pluginRootDirectory = destination
+                pluginRootDirectory = destinationDirectory
             )
         }else{
             androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
@@ -65,16 +65,16 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
-    private fun installPluginPackage(originFileByteChannel: ByteReadChannel, destination: File = defaultPluginLocation, destinationFileName: String) {
+    private fun installPluginPackage(originFileByteChannel: ByteReadChannel, destinationDirectory: File = defaultPluginDirectory, destinationFileName: String) {
         if (androidFileSystemCapabilityGatewayImpl.hasPluginDirectory()){
             androidFileSystemCapabilityGatewayImpl.unzipFromUri(
                 originFileByteChannel = originFileByteChannel,
-                pluginRootDirectory = destination,
+                pluginRootDirectory = destinationDirectory,
                 directoryName = destinationFileName
             )
         }else{
             androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Plugin")
-            installPluginPackage(originFileByteChannel,destination,destinationFileName)
+            installPluginPackage(originFileByteChannel,destinationDirectory,destinationFileName)
         }
     }
 }
