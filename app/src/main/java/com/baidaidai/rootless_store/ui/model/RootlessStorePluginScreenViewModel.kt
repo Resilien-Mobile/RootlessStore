@@ -51,7 +51,6 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     observePluginCountUseCase: ObservePluginCountUseCase
 ): ViewModel() {
 
-//    private val _pluginInfoList = observePlugins()  // Will change back to PluginManifestLocal feature
     private val _pluginPackageUri = MutableStateFlow<Uri>(value = Uri.EMPTY)
     private val _isBadgeVisible = MutableStateFlow(false)
 

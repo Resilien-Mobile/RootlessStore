@@ -11,9 +11,9 @@ class SeLinuxStatusDataSource @Inject constructor() {
             .setFlags(Shell.FLAG_REDIRECT_STDERR)
             .build("sh")
 
-        val list = ArrayList<String>()
+        val outputLines = ArrayList<String>()
         val result = shell.use {
-            it.newJob().add("getenforce").to(list, list).exec()
+            it.newJob().add("getenforce").to(outputLines, outputLines).exec()
         }
         val output = result.out.joinToString("\n").trim()
 
