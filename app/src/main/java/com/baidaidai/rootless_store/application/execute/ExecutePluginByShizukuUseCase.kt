@@ -4,7 +4,7 @@ import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntity
 import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRepositoryImpl
+import com.baidaidai.rootless_store.data.setting.repository.SettingPreferencesRepositoryImpl
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class ExecutePluginByShizukuUseCase @Inject constructor(
     private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val settingPreferenceRepositoryImpl: SettingPreferenceRepositoryImpl,
+    private val settingPreferencesRepositoryImpl: SettingPreferencesRepositoryImpl,
     private val rootlessStoreDatabase: RootlessStoreDatabase
 ) {
     private val pidRegex = Regex("""^\s*-\s*PID:(\d+)\s*$""")
@@ -25,7 +25,7 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
     ): Flow<ExecutionResult> {
 
         val pluginManifestRoom = pluginRepositoryImpl.findPlugin(pluginId)!!
-        val shouldMonitor = settingPreferenceRepositoryImpl.observePluginStatusNotificationEnabled().first()
+        val shouldMonitor = settingPreferencesRepositoryImpl.observePluginStatusNotificationEnabled().first()
 
         // Dispatch to PluginExecutionGateway.executePluginWithoutEnvironmentByShizuku
         var pidSaved = false

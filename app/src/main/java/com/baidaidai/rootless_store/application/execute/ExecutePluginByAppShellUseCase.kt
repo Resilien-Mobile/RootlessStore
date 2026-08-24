@@ -5,7 +5,7 @@ import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntit
 import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.setting.repository.SettingPreferenceRepositoryImpl
+import com.baidaidai.rootless_store.data.setting.repository.SettingPreferencesRepositoryImpl
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -17,7 +17,7 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val rootlessStoreDatabase: RootlessStoreDatabase,
-    private val settingPreferenceRepositoryImpl: SettingPreferenceRepositoryImpl
+    private val settingPreferencesRepositoryImpl: SettingPreferencesRepositoryImpl
 ) {
 
     private val pidRegex = Regex("""^\s*-\s*PID:(\d+)\s*$""")
@@ -27,7 +27,7 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
     ) : Flow<ExecutionResult> {
 
         val pluginManifestRoom = pluginRepositoryImpl.findPlugin(pluginId)!!
-        val shouldMonitor = settingPreferenceRepositoryImpl.observePluginStatusNotificationEnabled().first()
+        val shouldMonitor = settingPreferencesRepositoryImpl.observePluginStatusNotificationEnabled().first()
 
         var pidSaved = false
         val pluginEntryPoint = androidFileSystemCapabilityGatewayImpl.resolvePluginEntryPoint(pluginManifestRoom)
