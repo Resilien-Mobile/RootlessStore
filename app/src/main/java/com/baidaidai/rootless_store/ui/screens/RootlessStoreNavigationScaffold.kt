@@ -219,13 +219,13 @@ fun RootlessStoreNavigationScaffold(
                     is ExecuteScreenKey -> {
                         ExecuteScreenNecessaryComponents.ExecuteScreenTopAppBar(
                             scrollBehavior = scrollBehavior,
-                            onExecuteScreenStopButtonClick = {
+                            onAbortClick = {
                                 currentExecuteViewModel.abortPluginProcess(currentDestination.pluginId)
                             },
-                            onExecuteScreenBackButtonClick = {
+                            onBackClick = {
                                 navigationBackStack.removeLastOrNull()
                             },
-                            onExecuteScreenShareButtonClick = {
+                            onShareClick = {
                                 val executionLog = currentExecuteViewModel?.exportExecutionLog()
                                 val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                     type = "text/plain"
