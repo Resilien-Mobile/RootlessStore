@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.domain.status.model
 
 data class DeviceStatusSummary(
     val executionContext: ExecutionContext? = null,
-    val androidAndApiStatus: AndroidAndApiStatus? = null,
+    val androidPlatformVersion: AndroidPlatformVersion? = null,
     val kernelVersion: String? = null,
     val seLinuxStatus: SeLinuxStatus = SeLinuxStatus.Unknown,
     val pluginStatus: PluginStatus = PluginStatus(

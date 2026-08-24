@@ -16,7 +16,7 @@ import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.PluginStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
-import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidAndApiStatusUseCase
+import com.baidaidai.rootless_store.domain.status.usecase.GetAndroidPlatformVersionUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveExecutionContextPreferenceUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.GetKernelVersionUseCase
 import com.baidaidai.rootless_store.domain.status.usecase.ObserveMemoryStatusUseCase
@@ -46,7 +46,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     observeTemperatureStatusUseCase: ObserveTemperatureStatusUseCase,
     getSeLinuxStatusUseCase: GetSeLinuxStatusUseCase,
     getKernelVersionUseCase: GetKernelVersionUseCase,
-    getAndroidAndApiStatusUseCase: GetAndroidAndApiStatusUseCase,
+    getAndroidPlatformVersionUseCase: GetAndroidPlatformVersionUseCase,
     observeExecutionContextPreferenceUseCase: ObserveExecutionContextPreferenceUseCase,
     private val getRootShellAvailabilityUseCase: GetRootShellAvailabilityUseCase,
     private val observeExecutionContextUseCase: ObserveExecutionContextUseCase,
@@ -139,8 +139,8 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     private val _kernelVersion = MutableStateFlow(getKernelVersionUseCase())
     val kernelVersion = _kernelVersion.asStateFlow()
 
-    private val _androidAndApiStatus = MutableStateFlow(getAndroidAndApiStatusUseCase())
-    val androidAndApiStatus = _androidAndApiStatus.asStateFlow()
+    private val _androidPlatformVersion = MutableStateFlow(getAndroidPlatformVersionUseCase())
+    val androidPlatformVersion = _androidPlatformVersion.asStateFlow()
 
     val executionContext = observeExecutionContextUseCase().stateIn(
         scope = viewModelScope,

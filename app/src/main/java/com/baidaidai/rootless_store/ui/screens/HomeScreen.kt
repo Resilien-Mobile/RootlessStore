@@ -45,7 +45,7 @@ fun HomeScreen(
     val temperatureStatus by homeScreenViewModel.temperatureStatus.collectAsState()
     val seLinuxStatus by homeScreenViewModel.seLinuxStatus.collectAsState()
     val kernelVersion by homeScreenViewModel.kernelVersion.collectAsState()
-    val androidAndApiStatus by homeScreenViewModel.androidAndApiStatus.collectAsState()
+    val androidPlatformVersion by homeScreenViewModel.androidPlatformVersion.collectAsState()
     val executionContext by homeScreenViewModel.executionContext.collectAsState()
     val isContextDialogVisible by homeScreenViewModel.isContextDialogVisible.collectAsState()
     val latestVersionTag by homeScreenViewModel.latestVersionTag.collectAsState()
@@ -55,7 +55,7 @@ fun HomeScreen(
 
     val deviceStatusSummary = DeviceStatusSummary(
         executionContext = executionContext,
-        androidAndApiStatus = androidAndApiStatus,
+        androidPlatformVersion = androidPlatformVersion,
         kernelVersion = kernelVersion,
         seLinuxStatus = seLinuxStatus,
         pluginStatus = pluginStatus,

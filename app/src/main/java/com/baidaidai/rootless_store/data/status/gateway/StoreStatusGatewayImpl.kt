@@ -9,7 +9,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
-import com.baidaidai.rootless_store.data.status.datasource.AndroidAndApiVersionDataSource
+import com.baidaidai.rootless_store.data.status.datasource.AndroidPlatformVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.CpuStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.KernelVersionDataSource
 import com.baidaidai.rootless_store.data.status.datasource.MemoryStatusDataSource
@@ -17,7 +17,7 @@ import com.baidaidai.rootless_store.data.status.datasource.NetworkStatusDataSour
 import com.baidaidai.rootless_store.data.status.datasource.SeLinuxStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.StorageStatusDataSource
 import com.baidaidai.rootless_store.data.status.datasource.TemperatureStatusDataSource
-import com.baidaidai.rootless_store.domain.status.model.AndroidAndApiStatus
+import com.baidaidai.rootless_store.domain.status.model.AndroidPlatformVersion
 import com.baidaidai.rootless_store.domain.status.model.CpuCoreMetrics
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
@@ -43,7 +43,7 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val seLinuxStatusDataSource: SeLinuxStatusDataSource,
     private val kernelVersionDataSource: KernelVersionDataSource,
     private val temperatureStatusDataSource: TemperatureStatusDataSource,
-    private val androidAndApiVersionDataSource: AndroidAndApiVersionDataSource,
+    private val androidPlatformVersionDataSource: AndroidPlatformVersionDataSource,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
@@ -78,10 +78,10 @@ class StoreStatusGatewayImpl @Inject constructor(
 
     fun observeTemperatureStatus(): Flow<TemperatureStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 
-    fun getAndroidAndApiStatus(): AndroidAndApiStatus {
-        val androidVersion = androidAndApiVersionDataSource.getAndroidVersion()
-        val apiVersion = androidAndApiVersionDataSource.getAndroidApiVersion()
-        return AndroidAndApiStatus(androidVersion,apiVersion)
+    fun getAndroidPlatformVersion(): AndroidPlatformVersion {
+        val releaseLabel = androidPlatformVersionDataSource.getReleaseLabel()
+        val apiLevelLabel = androidPlatformVersionDataSource.getApiLevelLabel()
+        return AndroidPlatformVersion(releaseLabel, apiLevelLabel)
     }
 
     fun observeAvailableExecutionContext(): Flow<ExecutionContext> = flow {
