@@ -171,13 +171,13 @@ fun InstalledPluginList(
 
                 InstalledManifestCard(
                     pluginManifestRoom = pluginManifestRoom,
-                    onSwitchClick = {
+                    onEnabledChange = { isEnabled ->
                         pluginScreenViewModel.setPluginEnabled(
                             pluginId = pluginManifestRoom.pluginId,
-                            isEnabled = !pluginManifestRoom.isEnabled
+                            isEnabled = isEnabled
                         )
 
-                        if (!pluginManifestRoom.isEnabled){
+                        if (isEnabled){
                             navigateToExecuteScreen(pluginManifestRoom.pluginId,true)
                         }else{
                             coroutineScope.launch {
@@ -185,14 +185,14 @@ fun InstalledPluginList(
                             }
                         }
                     },
-                    onButtonClick = { onActivateOneTimePlugin(pluginManifestRoom.pluginId) },
-                    onCardClick = {
+                    onExecuteClick = { onActivateOneTimePlugin(pluginManifestRoom.pluginId) },
+                    onClick = {
                         if (pluginManifestRoom.isEnabled){
                             navigateToExecuteScreen(pluginManifestRoom.pluginId,false)
                         }
                     },
-                    onCardLongClick = { isActionPanelVisible = !isActionPanelVisible },
-                    onCardSizeChanged = { cardSize = it },
+                    onLongClick = { isActionPanelVisible = !isActionPanelVisible },
+                    onSizeChanged = { cardSize = it },
                 )
 
             }

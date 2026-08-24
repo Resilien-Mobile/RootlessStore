@@ -43,11 +43,11 @@ import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 @Composable
 fun InstalledManifestCard(
     pluginManifestRoom: PluginManifestRoom,
-    onCardSizeChanged: (intSize: IntSize)-> Unit = {},
-    onSwitchClick: ()-> Unit,
-    onButtonClick: ()-> Unit,
-    onCardClick: ()-> Unit,
-    onCardLongClick: ()-> Unit = {}
+    onSizeChanged: (intSize: IntSize)-> Unit = {},
+    onEnabledChange: (isEnabled: Boolean)-> Unit,
+    onExecuteClick: ()-> Unit,
+    onClick: ()-> Unit,
+    onLongClick: ()-> Unit = {}
 ){
 
     var isExecutionIndicatorActive by remember { mutableStateOf(false) }
@@ -63,10 +63,10 @@ fun InstalledManifestCard(
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
             .combinedClickable(
-                onClick = { onCardClick() },
-                onLongClick = { onCardLongClick() }
+                onClick = onClick,
+                onLongClick = onLongClick
             )
-            .onSizeChanged { onCardSizeChanged(it) }
+            .onSizeChanged(onSizeChanged)
         ,
     ) {
         Surface(
@@ -110,12 +110,12 @@ fun InstalledManifestCard(
                 if (pluginManifestRoom.pluginRunModel == PluginRunModel.Daemon){
                     Switch(
                         checked = pluginManifestRoom.isEnabled,
-                        onCheckedChange = { onSwitchClick() }
+                        onCheckedChange = onEnabledChange
                     )
                 }else{
                     IconButton(
                         onClick = {
-                            onButtonClick()
+                            onExecuteClick()
                             isExecutionIndicatorActive = !isExecutionIndicatorActive
                         },
                         colors = iconButtonColors,
@@ -176,19 +176,19 @@ fun InstalledManifestCard(
 @Composable
 fun InstalledManifestCard(
     environmentManifest: EnvironmentManifestRoom,
-    onCardSizeChanged: (intSize: IntSize)-> Unit = {},
-    onSwitchClick: ()-> Unit,
-    onCardClick:()-> Unit = {},
-    onCardLongClick: ()-> Unit = {}
+    onSizeChanged: (intSize: IntSize)-> Unit = {},
+    onEnabledChange: (isEnabled: Boolean)-> Unit,
+    onClick:()-> Unit = {},
+    onLongClick: ()-> Unit = {}
 ){
     Column(
         modifier = Modifier
             .clip(MaterialTheme.shapes.large)
             .combinedClickable(
-                onClick = { onCardClick() },
-                onLongClick = { onCardLongClick() }
+                onClick = onClick,
+                onLongClick = onLongClick
             )
-            .onSizeChanged { onCardSizeChanged(it) }
+            .onSizeChanged(onSizeChanged)
         ,
     ) {
         Surface(
@@ -231,7 +231,7 @@ fun InstalledManifestCard(
                 }
                 Switch(
                     checked = environmentManifest.isEnabled,
-                    onCheckedChange = { onSwitchClick() }
+                    onCheckedChange = onEnabledChange
                 )
             }
         }
@@ -306,9 +306,9 @@ private fun ManifestDetailRow(
 private fun InstalledManifestCardPreview(){
     InstalledManifestCard(
         pluginManifestRoom = PluginManifestRoom._testOnly_,
-        onSwitchClick = {},
-        onButtonClick = {},
-        onCardClick = {},
-        onCardLongClick = {}
+        onEnabledChange = {},
+        onExecuteClick = {},
+        onClick = {},
+        onLongClick = {}
     )
 }
