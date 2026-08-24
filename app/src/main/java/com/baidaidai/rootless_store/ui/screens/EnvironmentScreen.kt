@@ -78,14 +78,14 @@ fun InstalledEnvironmentList(
 
                 InstalledManifestCard(
                     environmentManifest = environmentManifestRoom,
-                    onSwitchClick = {
+                    onEnabledChange = { isEnabled ->
                         pluginScreenViewModel.setEnvironmentEnabled(
                             environmentId = environmentManifestRoom.environmentId,
-                            isEnabled = !environmentManifestRoom.isEnabled
+                            isEnabled = isEnabled
                         )
                     },
-                    onCardLongClick = { isActionPanelVisible = !isActionPanelVisible },
-                    onCardSizeChanged = { cardSize = it },
+                    onLongClick = { isActionPanelVisible = !isActionPanelVisible },
+                    onSizeChanged = { cardSize = it },
                 )
 
             }
