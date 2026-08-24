@@ -64,7 +64,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     }
 
     private val _isContextDialogVisible = MutableStateFlow(false)
-    private val _currentExecutionContextSelected = MutableStateFlow<ExecutionContext?>(null)
+    private val _pendingExecutionContext = MutableStateFlow<ExecutionContext?>(null)
     val isContextDialogVisible = _isContextDialogVisible.asStateFlow()
 
     // Latest Version Status
@@ -112,9 +112,9 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
      * if initial -> get from preference
      * else -> get from user settings
      */
-    val currentExecutionContextSelected: StateFlow<ExecutionContext> = combine(
+    val selectedExecutionContext: StateFlow<ExecutionContext> = combine(
         executionContextPreference,
-        _currentExecutionContextSelected
+        _pendingExecutionContext
     ) { contextPreference, contextSelected ->
         contextSelected ?: contextPreference
     }.stateIn(
@@ -163,14 +163,14 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     // Saves the user's selected execute context for now.
     // This is only for the UI and is not saved to preferences yet.
     fun selectExecutionContext(executionContext: ExecutionContext) {
-        _currentExecutionContextSelected.value = executionContext
+        _pendingExecutionContext.value = executionContext
     }
 
     // The real context setting for preferences
     fun setExecutionContextPreference() {
         viewModelScope.launch {
             setExecutionContextChooserEnabledUseCase(true)
-            setExecutionContextPreferenceUseCase(_currentExecutionContextSelected.value ?: ExecutionContext.LIMITED)
+            setExecutionContextPreferenceUseCase(_pendingExecutionContext.value ?: ExecutionContext.LIMITED)
         }
 
         toggleContextDialogVisibility()

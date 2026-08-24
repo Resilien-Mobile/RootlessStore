@@ -52,7 +52,7 @@ fun HomeScreenContextSwitchDialog(
     val isAdbShellAvailable by homeScreenViewModel.isAdbShellAvailable.collectAsState()
     val isRootShellAvailable by homeScreenViewModel.isRootShellAvailable.collectAsState()
 
-    val selectedExecutionContext by homeScreenViewModel.currentExecutionContextSelected.collectAsState()
+    val selectedExecutionContext by homeScreenViewModel.selectedExecutionContext.collectAsState()
 
     val executionContextOptions = listOf(
         ExecutionContextOption(
