@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.shizuku.StartShizukuUserServiceUseCase
 import com.baidaidai.rootless_store.application.shizuku.EnsureShizukuPermissionUseCase
-import com.baidaidai.rootless_store.core.util.OutOfStringLike
+import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -37,7 +37,7 @@ class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
         viewModelScope.launch {
             ensureShizukuPermissionUseCase()
                 .onSuccess { isShizukuActive -> _isShizukuActive.value = isShizukuActive }
-                .onFailure { error -> _shizukuError.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
+                .onFailure { error -> _shizukuError.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.formatAsMultilineString())) }
         }
     }
 
@@ -46,7 +46,7 @@ class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
         viewModelScope.launch {
             startShizukuUserServiceUseCase()
                 .onSuccess { _isEndpointActive.value = true }
-                .onFailure { error -> _shizukuError.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.OutOfStringLike())) }
+                .onFailure { error -> _shizukuError.emit(PluginError(errorMessage = error.message!!, errorCause = error.stackTrace.formatAsMultilineString())) }
         }
     }
 }
