@@ -32,11 +32,11 @@ import com.baidaidai.rootless_store.ui.model.RootlessStoreHomeScreenViewModel
 import androidx.compose.ui.graphics.*
 
 
-private data class HomeScreenContextSwitchDialogSpec(
-    val option: ExecutionContext,
+private data class ExecutionContextOption(
+    val executionContext: ExecutionContext,
     @DrawableRes val iconResource: Int,
-    val content: String,
-    val canUse: Boolean
+    val label: String,
+    val isEnabled: Boolean
 )
 
 @Composable
@@ -52,26 +52,26 @@ fun HomeScreenContextSwitchDialog(
     val isAdbShellAvailable by homeScreenViewModel.isAdbShellAvailable.collectAsState()
     val isRootShellAvailable by homeScreenViewModel.isRootShellAvailable.collectAsState()
 
-    val currentSelected by homeScreenViewModel.currentExecutionContextSelected.collectAsState()
+    val selectedExecutionContext by homeScreenViewModel.currentExecutionContextSelected.collectAsState()
 
-    val HomeScreenContextSwitchDialogRenderingList = listOf(
-        HomeScreenContextSwitchDialogSpec(
-            option = ExecutionContext.LIMITED,
+    val executionContextOptions = listOf(
+        ExecutionContextOption(
+            executionContext = ExecutionContext.LIMITED,
             iconResource = R.drawable.material_symbols_disabled,
-            content = "LIMITED",
-            canUse = true
+            label = "LIMITED",
+            isEnabled = true
         ),
-        HomeScreenContextSwitchDialogSpec(
-            option = ExecutionContext.ADB,
+        ExecutionContextOption(
+            executionContext = ExecutionContext.ADB,
             iconResource = R.drawable.material_symbols_adb,
-            content = "ADB",
-            canUse = isAdbShellAvailable
+            label = "ADB",
+            isEnabled = isAdbShellAvailable
         ),
-        HomeScreenContextSwitchDialogSpec(
-            option = ExecutionContext.ROOTD,
+        ExecutionContextOption(
+            executionContext = ExecutionContext.ROOTD,
             iconResource = R.drawable.material_symbols_cyclone,
-            content = "ROOTD",
-            canUse = isRootShellAvailable
+            label = "ROOT",
+            isEnabled = isRootShellAvailable
         )
     )
 
@@ -111,13 +111,13 @@ fun HomeScreenContextSwitchDialog(
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                HomeScreenContextSwitchDialogRenderingList.forEach { spec ->
+                executionContextOptions.forEach { executionContextOption ->
                     HomeScreenContextSwitchDialogItem(
-                        currentSelected = currentSelected.name,
+                        selectedExecutionContext = selectedExecutionContext,
                         onClick = {
-                            homeScreenViewModel.selectExecutionContext(spec.option)
+                            homeScreenViewModel.selectExecutionContext(executionContextOption.executionContext)
                         },
-                        homeScreenContextSwitchDialogSpec = spec
+                        executionContextOption = executionContextOption
                     )
                 }
             }
@@ -128,25 +128,25 @@ fun HomeScreenContextSwitchDialog(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun HomeScreenContextSwitchDialogItem(
-    currentSelected: String,
+    selectedExecutionContext: ExecutionContext,
     onClick: () -> Unit,
-    homeScreenContextSwitchDialogSpec: HomeScreenContextSwitchDialogSpec
+    executionContextOption: ExecutionContextOption
 ){
     ListItem(
         onClick = onClick,
-        enabled = homeScreenContextSwitchDialogSpec.canUse,
+        enabled = executionContextOption.isEnabled,
         modifier = Modifier
             .fillMaxWidth(),
         leadingContent = {
             Icon(
-                painter = painterResource(homeScreenContextSwitchDialogSpec.iconResource),
+                painter = painterResource(executionContextOption.iconResource),
                 contentDescription = null
             )
         },
         trailingContent = {
             RadioButton(
-                enabled = homeScreenContextSwitchDialogSpec.canUse,
-                selected = currentSelected == homeScreenContextSwitchDialogSpec.content,
+                enabled = executionContextOption.isEnabled,
+                selected = selectedExecutionContext == executionContextOption.executionContext,
                 onClick = onClick,
             )
         },
@@ -155,6 +155,6 @@ private fun HomeScreenContextSwitchDialogItem(
             disabledContainerColor = AlertDialogDefaults.containerColor
         ),
     ){
-        Text(homeScreenContextSwitchDialogSpec.content)
+        Text(executionContextOption.label)
     }
 }
