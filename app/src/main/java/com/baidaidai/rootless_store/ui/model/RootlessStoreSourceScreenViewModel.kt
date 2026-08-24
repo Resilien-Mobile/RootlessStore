@@ -105,7 +105,7 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
         }
     }
 
-    fun onOkButtonClick(){
+    fun dismissSourceError(){
         viewModelScope.launch {
             _sourceEvent.emit(null)
         }

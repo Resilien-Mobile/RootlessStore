@@ -29,7 +29,7 @@ class RootlessStoreShizukuAdbScreenViewModel @Inject constructor(
     val shizukuEvent = _shizukuEvent.asSharedFlow()
 
 
-    fun onOkButtonClick() = viewModelScope.launch {
+    fun dismissShizukuError() = viewModelScope.launch {
         _shizukuEvent.emit(null)
     }
 
