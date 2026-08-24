@@ -186,7 +186,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_all_files_access_icon_content_description)
                         )
                     },
-                    onOpenClick = { SettingPermission.openAllFilesAccessSettings(context) }
+                    onOpenSettings = { SettingPermission.openAllFilesAccessSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -198,7 +198,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_stop_restrict_child_process_icon_content_description)
                         )
                     },
-                    onOpenClick = { SettingPermission.openDeveloperOptions(context) }
+                    onOpenSettings = { SettingPermission.openDeveloperOptions(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -210,7 +210,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_notification_icon_content_description)
                         )
                     },
-                    onOpenClick = { SettingPermission.openAppNotificationSettings(context) }
+                    onOpenSettings = { SettingPermission.openAppNotificationSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -222,7 +222,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_battery_icon_content_description)
                         )
                     },
-                    onOpenClick = { SettingPermission.requestBatteryOptimizationExemption(context) }
+                    onOpenSettings = { SettingPermission.requestBatteryOptimizationExemption(context) }
                 )
             }
         }
