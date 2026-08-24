@@ -42,7 +42,7 @@ fun DeviceStatusBoard(
                     .padding(horizontal = 30.dp, vertical = 20.dp)
             ) {
                 DeviceStatusRow(
-                    stringResource(R.string.home_screen_hoster_status_board_version_label),
+                    stringResource(R.string.home_screen_device_status_version_label),
                     "${deviceStatus.androidAndApiStatus?.androidVersion} (${deviceStatus.androidAndApiStatus?.apiVersion})"
                 )
                 Spacer(
@@ -50,7 +50,7 @@ fun DeviceStatusBoard(
                         .height(8.dp)
                 )
                 DeviceStatusRow(
-                    stringResource(R.string.home_screen_hoster_status_board_kernel_label),
+                    stringResource(R.string.home_screen_device_status_kernel_label),
                     deviceStatus.kernelVersion ?: "null"
                 )
                 Spacer(
@@ -58,7 +58,7 @@ fun DeviceStatusBoard(
                         .height(8.dp)
                 )
                 DeviceStatusRow(
-                    stringResource(R.string.home_screen_hoster_status_board_selinux_label),
+                    stringResource(R.string.home_screen_device_status_selinux_label),
                     deviceStatus.seLinuxStatus.toString()
                 )
                 Spacer(
@@ -66,7 +66,7 @@ fun DeviceStatusBoard(
                         .height(8.dp)
                 )
                 DeviceStatusRow(
-                    stringResource(R.string.home_screen_hoster_status_board_plugins_label),
+                    stringResource(R.string.home_screen_device_status_plugins_label),
                     "${deviceStatus.pluginStatus.enabledCount}/${deviceStatus.pluginStatus.totalCount}"
                 )
                 Spacer(
@@ -74,7 +74,7 @@ fun DeviceStatusBoard(
                         .height(8.dp)
                 )
                 DeviceStatusRow(
-                    stringResource(R.string.home_screen_hoster_status_board_temp_label),
+                    stringResource(R.string.home_screen_device_status_temp_label),
                     deviceStatus.temperatureStatus?.toString() ?: "null"
                 )
             }
