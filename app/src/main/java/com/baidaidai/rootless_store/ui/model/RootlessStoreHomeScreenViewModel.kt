@@ -60,7 +60,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     init {
-        fetchLatestVersion()
+        refreshLatestVersion()
     }
 
     private val _isContextDialogVisible = MutableStateFlow(false)
@@ -189,10 +189,10 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
         _isContextDialogVisible.value = !_isContextDialogVisible.value
     }
 
-    fun fetchLatestVersion(){
+    fun refreshLatestVersion(){
         viewModelScope.launch {
             val isAutoUpdateEnabled = observeAutoUpdateEnabledPreferenceUseCase().first()
-            Log.d("fetchLatestVersion",isAutoUpdateEnabled.toString())
+            Log.d("refreshLatestVersion",isAutoUpdateEnabled.toString())
 
             if(isAutoUpdateEnabled){
                 val latestVersion = fetchLatestVersionUseCase()
