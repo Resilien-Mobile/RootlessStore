@@ -24,10 +24,10 @@ import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 fun PluginActionPanel(
     modifier: Modifier = Modifier,
     pluginManifestRoom: PluginManifestRoom? = null,
-    onShareButtonClick: ()-> Unit = {},
-    onWebUiButtonClick: ()-> Unit = {},
-    onBackButtonClick: ()-> Unit = {},
-    onDeleteButtonClick: ()-> Unit = {},
+    onShareClick: ()-> Unit = {},
+    onOpenWebUiClick: ()-> Unit = {},
+    onDismissClick: ()-> Unit = {},
+    onUninstallClick: ()-> Unit = {},
 ){
 
     val shareButtonColors = IconButtonColors(
@@ -73,7 +73,7 @@ fun PluginActionPanel(
         ) {
 
             IconButton(
-                onClick = onShareButtonClick,
+                onClick = onShareClick,
                 colors = shareButtonColors,
                 modifier = Modifier
                     .size(56.dp)
@@ -86,7 +86,7 @@ fun PluginActionPanel(
 
             if (!pluginManifestRoom?.webUiEntryPoint.isNullOrEmpty()){
                 IconButton(
-                    onClick = onWebUiButtonClick,
+                    onClick = onOpenWebUiClick,
                     colors = webUiButtonColors,
                     modifier = Modifier
                         .size(56.dp)
@@ -99,7 +99,7 @@ fun PluginActionPanel(
             }
 
             IconButton(
-                onClick = onBackButtonClick,
+                onClick = onDismissClick,
                 colors = backButtonColors,
                 modifier = Modifier
                     .size(56.dp)
@@ -111,7 +111,7 @@ fun PluginActionPanel(
             }
 
             IconButton(
-                onClick = onDeleteButtonClick,
+                onClick = onUninstallClick,
                 colors = deleteButtonColors,
                 modifier = Modifier
                     .size(56.dp)
