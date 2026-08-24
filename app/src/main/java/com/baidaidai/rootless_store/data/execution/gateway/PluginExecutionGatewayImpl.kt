@@ -96,15 +96,15 @@ class PluginExecutionGatewayImpl @Inject constructor(
     ): Flow<ExecutionResult> = callbackFlow {
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
-                onExecuteCallback = { session ->
+                onOutput = { output ->
                     trySend(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.Normal,
-                            output = "- ${session.toString()}"
+                            output = "- ${output.toString()}"
                         )
                     )
                 },
-                onErrorCallback = { error ->
+                onError = { error ->
                     trySend(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.Error,
@@ -112,7 +112,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                         )
                     )
                 },
-                onProcessExitedCallback = { exitCode ->
+                onProcessExit = { exitCode ->
                     processMonitor(exitCode)
                 }
             )

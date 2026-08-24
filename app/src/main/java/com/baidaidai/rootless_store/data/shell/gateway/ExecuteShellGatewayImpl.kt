@@ -91,16 +91,16 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
         launch(Dispatchers.IO) {
             val callback = ShizukuEndpointCallback(
-                onExecuteCallback = { session ->
+                onOutput = { output ->
                     trySend(
                         ShellResult(
                             resultTag = ExecutionResultTag.Normal,
                             command = "~ $commandContent",
-                            output = session.toString(),
+                            output = output.toString(),
                         )
                     )
                 },
-                onErrorCallback = { error ->
+                onError = { error ->
                     trySend(
                         ShellResult(
                             resultTag = ExecutionResultTag.Error,
@@ -109,7 +109,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         )
                     )
                 },
-                onProcessExitedCallback = {}
+                onProcessExit = {}
             )
 
             Log.d("exam",(shizukuUserServiceGatewayImpl.findShizukuUserService()==null).toString())

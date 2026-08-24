@@ -32,13 +32,13 @@ class KernelSuJavaScriptBridge(
         }
 
         val callback = ShizukuEndpointCallback(
-            onExecuteCallback = { session ->
-                stdout.appendLine(session.orEmpty())
+            onOutput = { output ->
+                stdout.appendLine(output.orEmpty())
             },
-            onErrorCallback = { error ->
+            onError = { error ->
                 stderr.appendLine(error.orEmpty())
             },
-            onProcessExitedCallback = {}
+            onProcessExit = {}
         )
 
         shizukuUserService.command(
