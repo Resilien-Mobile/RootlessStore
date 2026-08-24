@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.domain.status.model
 
-enum class TempStatus {
+enum class TemperatureStatus {
     LOW,
     NORMAL,
     WARM,

@@ -25,7 +25,7 @@ import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
-import com.baidaidai.rootless_store.domain.status.model.TempStatus
+import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import com.topjohnwu.superuser.Shell
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
@@ -76,7 +76,7 @@ class StoreStatusGatewayImpl @Inject constructor(
 
     fun getKernelStatus(): String = kernelStatusDataSource.getDeviceKernel()
 
-    fun observeTemperatureStatus(): Flow<TempStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
+    fun observeTemperatureStatus(): Flow<TemperatureStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 
     fun getAndroidAndApiStatus(): AndroidAndApiStatus {
         val androidVersion = androidAndApiVersionDataSource.getAndroidVersion()
