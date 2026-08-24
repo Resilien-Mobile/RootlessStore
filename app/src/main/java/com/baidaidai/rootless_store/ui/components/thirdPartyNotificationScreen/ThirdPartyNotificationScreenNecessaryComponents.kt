@@ -17,7 +17,7 @@ object ThirdPartyNotificationScreenNecessaryComponents {
     @Composable
     fun ThirdPartyNotificationScreenTopAppBar(
         scrollBehavior: TopAppBarScrollBehavior,
-        onSaveButtonClick: ()->Unit = {}
+        onSaveClick: () -> Unit = {}
     ) {
         CenterAlignedTopAppBar(
             title = {
@@ -26,7 +26,7 @@ object ThirdPartyNotificationScreenNecessaryComponents {
             scrollBehavior = scrollBehavior,
             actions = {
                 IconButton(
-                    onClick = onSaveButtonClick
+                    onClick = onSaveClick
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_save),
