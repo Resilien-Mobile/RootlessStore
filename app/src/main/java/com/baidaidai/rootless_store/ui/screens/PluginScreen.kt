@@ -139,11 +139,11 @@ fun InstalledPluginList(
                 PluginActionPanel(
                     pluginManifestRoom = pluginManifestRoom,
                     onShareClick = {
-                        val shareLink = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
+                        val shareUri = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/zip"
-                            putExtra(Intent.EXTRA_STREAM, shareLink)
+                            putExtra(Intent.EXTRA_STREAM, shareUri)
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
 
