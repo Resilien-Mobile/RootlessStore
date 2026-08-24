@@ -38,7 +38,7 @@ import com.baidaidai.rootless_store.ui.components.pluginsScreen.InstalledManifes
 import kotlinx.coroutines.launch
 
 @Composable
-fun PluginManagementScreen(
+fun PluginScreen(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     navigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
