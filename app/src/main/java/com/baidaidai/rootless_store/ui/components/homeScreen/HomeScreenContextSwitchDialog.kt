@@ -41,9 +41,9 @@ private data class ExecutionContextOption(
 
 @Composable
 fun HomeScreenContextSwitchDialog(
-    onDismissButtonClick: () -> Unit,
-    onConfirmButtonClick: ()-> Unit,
-    onRevertButtonClick:()-> Unit,
+    onDismissRequest: () -> Unit,
+    onApplyExecutionContext: () -> Unit,
+    onResetExecutionContextPreference: () -> Unit,
     homeScreenViewModel: RootlessStoreHomeScreenViewModel
 ){
 
@@ -76,10 +76,10 @@ fun HomeScreenContextSwitchDialog(
     )
 
     AlertDialog(
-        onDismissRequest = onDismissButtonClick,
+        onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
-                onClick = onConfirmButtonClick
+                onClick = onApplyExecutionContext
             ) {
                 Text("Confirm")
             }
@@ -87,7 +87,7 @@ fun HomeScreenContextSwitchDialog(
         dismissButton = {
             Row {
                 TextButton(
-                    onClick = onRevertButtonClick,
+                    onClick = onResetExecutionContextPreference,
                     colors = ButtonDefaults.textButtonColors(
                         contentColor = androidx.compose.ui.graphics.Color.Red
                     )
@@ -95,7 +95,7 @@ fun HomeScreenContextSwitchDialog(
                     Text("revert")
                 }
                 TextButton(
-                    onClick = onDismissButtonClick,
+                    onClick = onDismissRequest,
                     colors = ButtonDefaults.textButtonColors(
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                     )

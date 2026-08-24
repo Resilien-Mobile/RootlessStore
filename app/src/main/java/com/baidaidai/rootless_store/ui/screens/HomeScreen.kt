@@ -66,10 +66,10 @@ fun HomeScreen(
 
     if (isContextDialogVisible){
         HomeScreenContextSwitchDialog(
-            onDismissButtonClick = homeScreenViewModel::toggleContextDialogVisibility,
+            onDismissRequest = homeScreenViewModel::toggleContextDialogVisibility,
             homeScreenViewModel = homeScreenViewModel,
-            onConfirmButtonClick = homeScreenViewModel::setExecutionContextPreference,
-            onRevertButtonClick = homeScreenViewModel::resetExecutionContextPreference
+            onApplyExecutionContext = homeScreenViewModel::setExecutionContextPreference,
+            onResetExecutionContextPreference = homeScreenViewModel::resetExecutionContextPreference
         )
     }
 
