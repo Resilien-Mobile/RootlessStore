@@ -48,11 +48,11 @@ fun HomeScreenNetworkDashboard(
     networkDashboardConfig: NetworkDashboardConfig,
     rootlessStoreHeightWindowSize: RootlessStoreWindowSize
 ){
-    val downloadSpeedList = rememberSaveable { mutableStateListOf(0f,0f,0f,0f,0f,0f,0f,0f) }
+    val downloadRateHistory = rememberSaveable { mutableStateListOf(0f,0f,0f,0f,0f,0f,0f,0f) }
 
     LaunchedEffect(networkDashboardConfig.currentDownloadRate) {
-        downloadSpeedList.removeAt(0)
-        downloadSpeedList.add(networkDashboardConfig.currentDownloadRate)
+        downloadRateHistory.removeAt(0)
+        downloadRateHistory.add(networkDashboardConfig.currentDownloadRate)
     }
 
     val dynamicallyAdjustedModifier = when(rootlessStoreHeightWindowSize){
@@ -82,13 +82,13 @@ fun HomeScreenNetworkDashboard(
                         .fillMaxSize()
                         .padding(top = 5.dp, bottom = 10.dp)
                 ) {
-                    val maxValue = downloadSpeedList.maxOrNull() ?: return@Canvas
-                    val minValue = downloadSpeedList.minOrNull() ?: return@Canvas
+                    val maxValue = downloadRateHistory.maxOrNull() ?: return@Canvas
+                    val minValue = downloadRateHistory.minOrNull() ?: return@Canvas
                     val valueRange = (maxValue - minValue).takeIf { it > 0f } ?: 1f
-                    val stepX = size.width / downloadSpeedList.lastIndex
+                    val stepX = size.width / downloadRateHistory.lastIndex
                     val path = Path()
 
-                    downloadSpeedList.forEachIndexed { index, float ->
+                    downloadRateHistory.forEachIndexed { index, float ->
                         val x = stepX * index
                         val progress = (float - minValue) / valueRange
                         val y = size.height * (1f - progress)
@@ -150,13 +150,13 @@ fun HomeScreenNetworkDashboard(
                         .fillMaxSize()
                         .padding(top = 5.dp, bottom = 10.dp)
                 ) {
-                    val maxValue = downloadSpeedList.maxOrNull() ?: return@Canvas
-                    val minValue = downloadSpeedList.minOrNull() ?: return@Canvas
+                    val maxValue = downloadRateHistory.maxOrNull() ?: return@Canvas
+                    val minValue = downloadRateHistory.minOrNull() ?: return@Canvas
                     val valueRange = (maxValue - minValue).takeIf { it > 0f } ?: 1f
-                    val stepX = size.width / downloadSpeedList.lastIndex
+                    val stepX = size.width / downloadRateHistory.lastIndex
                     val path = Path()
 
-                    downloadSpeedList.forEachIndexed { index, float ->
+                    downloadRateHistory.forEachIndexed { index, float ->
                         val x = stepX * index
                         val progress = (float - minValue) / valueRange
                         val y = size.height * (1f - progress)
