@@ -9,5 +9,5 @@ class ObserveShellContextPreferencesUseCase @Inject constructor(
 ) {
     val defaultPreferences = ShellContextPreferences()
 
-    operator fun invoke() = shellPreferencesRepositoryImpl.shellContextPreferences
+    operator fun invoke() = shellPreferencesRepositoryImpl.observeShellContextPreferences()
 }
