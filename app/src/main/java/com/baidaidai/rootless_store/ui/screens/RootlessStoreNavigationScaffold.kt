@@ -101,7 +101,7 @@ fun RootlessStoreNavigationScaffold(
 
     // Local Data
     var isSourceDialogVisible by rememberSaveable{ mutableStateOf(false) }
-    var sourceDomainContent by rememberSaveable{ mutableStateOf("") }
+    var sourceRemoteEndpoint by rememberSaveable{ mutableStateOf("") }
     var sharedEvent by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
     val context = LocalContext.current
     val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
@@ -329,18 +329,18 @@ fun RootlessStoreNavigationScaffold(
             // Source Adding Dialog
             if (isSourceDialogVisible){
                 StartScreenRepositoryDialog(
-                    sourceDomainContent,
+                    sourceRemoteEndpoint,
                     onDismissRequest =  {
                         isSourceDialogVisible = !isSourceDialogVisible
                     },
-                    onConfirmButtonClick = {
-                        sourceScreenViewModel.addPluginSource(sourceRemoteEndpoint = sourceDomainContent)
+                    onAddPluginSource = {
+                        sourceScreenViewModel.addPluginSource(sourceRemoteEndpoint = sourceRemoteEndpoint)
                         isSourceDialogVisible = !isSourceDialogVisible
                     },
-                    onDismissButtonClick = {
+                    onCancel = {
                         isSourceDialogVisible = !isSourceDialogVisible
                     },
-                    onTextFieldValueChange = { newValue -> sourceDomainContent = newValue }
+                    onSourceRemoteEndpointChange = { newValue -> sourceRemoteEndpoint = newValue }
                 )
             }
 
