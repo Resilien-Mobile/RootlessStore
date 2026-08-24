@@ -36,7 +36,7 @@ class InstallShellPluginUseCase @Inject constructor(
             )
 
             // Shizuku File Flow
-            val shellPluginInstallResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
+            val isShellPluginInstallSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.installShellPlugin(
                     shellPluginStagingFile.path,
                     pluginManifestLocal.pluginPackageName,
@@ -44,18 +44,18 @@ class InstallShellPluginUseCase @Inject constructor(
                 ) ?: false
 
             // Delete /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
-            val deleteShellPluginStagingFileResult = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+            val isShellPluginStagingFileDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
                 shellPluginStagingFile.path
             )
 
-            if (!shellPluginInstallResult) {
+            if (!isShellPluginInstallSuccessful) {
                 return PluginError(
                     errorMessage = "Install shell plugin failed",
                     errorCause = "Failed to copy shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifestLocal.pluginPackageName}, entryPoint=${pluginManifestLocal.entryPoint}"
                 )
             }
 
-            if (!deleteShellPluginStagingFileResult) {
+            if (!isShellPluginStagingFileDeleted) {
                 return PluginError(
                     errorMessage = "Delete shell plugin staging file failed",
                     errorCause = "Failed to delete ${shellPluginStagingFile.path}"

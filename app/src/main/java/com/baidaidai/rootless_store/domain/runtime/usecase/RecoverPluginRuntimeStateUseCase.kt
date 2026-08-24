@@ -16,8 +16,8 @@ class RecoverPluginRuntimeStateUseCase @Inject constructor(
 
         pluginExecutionStatuses.forEach { pluginExecutionStatus ->
             if (pluginExecutionStatus.executionContext == ExecutionContext.ADB){
-                val abortResult = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
-                if (abortResult){
+                val isPluginProcessAbortSuccessful = pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pluginExecutionStatus.executionPid)
+                if (isPluginProcessAbortSuccessful){
                     pluginRepositoryImpl.disablePlugin(pluginExecutionStatus.pluginId)
                     pluginExecutionRepositoryImpl.deletePluginExecutionByPluginId(pluginExecutionStatus.pluginId)
                 }

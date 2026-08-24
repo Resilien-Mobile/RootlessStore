@@ -24,11 +24,11 @@ class UninstallPluginUseCase @Inject constructor(
     private suspend fun uninstallShellPlugin(
         pluginManifestRoom: PluginManifestRoom
     ){
-        val shellPluginUninstallResult = shizukuUserServiceGatewayImpl
+        val isShellPluginUninstallSuccessful = shizukuUserServiceGatewayImpl
             .findShizukuUserService()
             ?.uninstallShellPlugin(pluginManifestRoom.pluginPackageName) ?: false
 
-        if (!shellPluginUninstallResult) return
+        if (!isShellPluginUninstallSuccessful) return
 
         pluginRepositoryImpl.deletePluginById(pluginManifestRoom.pluginId)
     }
