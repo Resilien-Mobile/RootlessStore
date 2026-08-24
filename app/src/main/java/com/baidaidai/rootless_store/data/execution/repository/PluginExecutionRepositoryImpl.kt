@@ -30,12 +30,12 @@ class PluginExecutionRepositoryImpl @Inject constructor(
     // Update
     // Read
     suspend fun listPluginExecutionStatuses(): List<PluginExecutionStatus> {
-        val pluginExecutionEntityList = pluginExecutionDao.listPluginExecutions()
-        val pluginExecutionStatusList = pluginExecutionEntityList
+        val pluginExecutionEntities = pluginExecutionDao.listPluginExecutions()
+        val pluginExecutionStatuses = pluginExecutionEntities
             .map { pluginExecutionEntity ->
                 pluginExecutionEntity.toPluginExecutionStatus()
             }
-        return pluginExecutionStatusList
+        return pluginExecutionStatuses
     }
 
     // Delete
