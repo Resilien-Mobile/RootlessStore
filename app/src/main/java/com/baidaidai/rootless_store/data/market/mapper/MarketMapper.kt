@@ -8,7 +8,7 @@ object MarketMapper {
     fun MarketPageResponseDto.toMarketPageResponse(): MarketPageResponse {
         return MarketPageResponse(
             manifests = manifests,
-            meta = meta
+            pagination = pagination
         )
     }
 
