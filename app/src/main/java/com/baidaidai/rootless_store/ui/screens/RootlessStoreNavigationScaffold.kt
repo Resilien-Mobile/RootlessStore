@@ -366,9 +366,9 @@ fun RootlessStoreNavigationScaffold(
                         PluginScreen(
                             contentPadding = contentPadding,
                             pluginScreenViewModel = pluginScreenViewModel,
-                            onNavigateToExecuteScreen = { pluginId, shouldExecutePlugin ->
+                            onNavigateToExecuteScreen = { pluginId, shouldExecuteImmediately ->
                                 navigationBackStack
-                                    .add(ExecuteScreenKey(pluginId,shouldExecutePlugin))
+                                    .add(ExecuteScreenKey(pluginId,shouldExecuteImmediately))
                             },
                             onAbortPluginProcess = { pluginId ->
                                 currentExecuteViewModel.abortPluginProcess(pluginId)
@@ -420,14 +420,14 @@ fun RootlessStoreNavigationScaffold(
                         val executeScreenViewModel = hiltViewModel<RootlessStoreExecuteScreenViewModel>(key = executeScreenKey.pluginId, viewModelStoreOwner = viewModelStoreOwner)
 
                         val pluginId = executeScreenKey.pluginId
-                        val shouldExecutePlugin = executeScreenKey.shouldExecutePlugin
+                        val shouldExecuteImmediately = executeScreenKey.shouldExecuteImmediately
 
                         Log.d("ExecuteScreenKey.pluginId",pluginId)
-                        Log.d("ExecuteScreenKey.shouldExecutePlugin",shouldExecutePlugin.toString())
+                        Log.d("ExecuteScreenKey.shouldExecuteImmediately",shouldExecuteImmediately.toString())
 
                         // Function debouncing
-                        LaunchedEffect(pluginId, shouldExecutePlugin) {
-                            if (shouldExecutePlugin) {
+                        LaunchedEffect(pluginId, shouldExecuteImmediately) {
+                            if (shouldExecuteImmediately) {
                                 executeScreenViewModel.executePlugin(pluginId)
                             }
                         }

@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 fun PluginScreen(
     contentPadding: PaddingValues,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
-    onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
+    onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
     onAbortPluginProcess: suspend (pluginId: String) -> Unit,
     onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
@@ -108,7 +108,7 @@ fun InstalledPluginList(
     isBadgeVisible: Boolean,
     plugins: List<PluginManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
-    onNavigateToExecuteScreen: (pluginId: String,shouldExecutePlugin: Boolean)-> Unit,
+    onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
     onAbortPluginProcess: suspend (pluginId: String) -> Unit,
     onExecuteOneTimePlugin: (pluginId: String) -> Unit
 ){
