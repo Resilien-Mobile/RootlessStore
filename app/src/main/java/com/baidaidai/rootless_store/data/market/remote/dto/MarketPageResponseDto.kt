@@ -8,5 +8,6 @@ import kotlinx.serialization.Serializable
 data class MarketPageResponseDto(
     @SerialName("data")
     val manifests: List<MarketManifest>,
-    val meta: MetaDto
+    @SerialName("meta")
+    val pagination: MarketPaginationDto
 )

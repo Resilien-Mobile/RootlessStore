@@ -31,7 +31,7 @@ class MarketManifestPagingSource (
             val marketPageResponseDto = response.body<MarketPageResponseDto>()
             val marketPageResponse = marketPageResponseDto.toMarketPageResponse()
 
-            val nextKey = if (marketPageResponseDto.meta.hasMore) page + 1 else null
+            val nextKey = if (marketPageResponseDto.pagination.hasMore) page + 1 else null
 
             return LoadResult.Page(
                 data = marketPageResponse.manifests,
