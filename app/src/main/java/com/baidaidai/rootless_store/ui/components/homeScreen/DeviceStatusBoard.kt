@@ -43,7 +43,7 @@ fun DeviceStatusBoard(
             ) {
                 DeviceStatusRow(
                     stringResource(R.string.home_screen_device_status_version_label),
-                    "${deviceStatus.androidAndApiStatus?.androidVersion} (${deviceStatus.androidAndApiStatus?.apiVersion})"
+                    "${deviceStatus.androidPlatformVersion?.releaseLabel} (${deviceStatus.androidPlatformVersion?.apiLevelLabel})"
                 )
                 Spacer(
                     modifier = Modifier
