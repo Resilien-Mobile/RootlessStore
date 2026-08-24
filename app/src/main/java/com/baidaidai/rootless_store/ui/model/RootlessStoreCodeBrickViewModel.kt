@@ -25,9 +25,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class CodeBrickScreenUiState(
-    val isBrickEditorVisible: Boolean = false,
+    val isCodeBrickEditorVisible: Boolean = false,
     val isExecutionResultVisible: Boolean = false,
-    val isBrickSettingsVisible: Boolean = false,
+    val isCodeBrickSettingsVisible: Boolean = false,
     val isCreationMenuExpanded: Boolean = false,
     val executionOutputLines: List<String> = emptyList(),
     val selectedCodeBrick: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", ExecutionContext.LIMITED,"")
@@ -57,29 +57,29 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    fun setBrickEditorVisible(
+    fun setCodeBrickEditorVisible(
         isVisible: Boolean = false
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                isBrickEditorVisible = isVisible
+                isCodeBrickEditorVisible = isVisible
             )
         }
     }
-    fun showBrickSettings(
+    fun showCodeBrickSettings(
         codeBrickConfig: CodeBrickConfig
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                isBrickSettingsVisible = true,
+                isCodeBrickSettingsVisible = true,
                 selectedCodeBrick = codeBrickConfig
             )
         }
     }
-    fun hideBrickSettings(){
+    fun hideCodeBrickSettings(){
         _codeBrickScreenUiState.update {
             it.copy(
-                isBrickSettingsVisible = false,
+                isCodeBrickSettingsVisible = false,
             )
         }
     }

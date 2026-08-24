@@ -302,7 +302,7 @@ fun RootlessStoreNavigationScaffold(
                         CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
                             isMenuExpanded = codeBrickScreenUiState.isCreationMenuExpanded,
                             onCreateClick = {
-                                codeBrickViewModel.setBrickEditorVisible(true)
+                                codeBrickViewModel.setCodeBrickEditorVisible(true)
                                 codeBrickViewModel.setCreationMenuExpanded()
                             },
                             onImportJsonClick = {
