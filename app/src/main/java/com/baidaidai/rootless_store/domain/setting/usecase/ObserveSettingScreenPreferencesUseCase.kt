@@ -9,5 +9,5 @@ class ObserveSettingScreenPreferencesUseCase @Inject constructor(
     private val settingPreferencesRepositoryImpl: SettingPreferenceRepositoryImpl
 ) {
     operator fun invoke(): Flow<SettingScreenPreference> =
-        settingPreferencesRepositoryImpl.settingScreenPreferences
+        settingPreferencesRepositoryImpl.observeSettingScreenPreferences()
 }

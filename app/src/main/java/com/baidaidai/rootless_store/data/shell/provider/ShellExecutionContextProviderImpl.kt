@@ -13,7 +13,7 @@ class ShellExecutionContextProviderImpl @Inject constructor(
 ) {
 
     suspend fun resolveAppShellContext(): AppShellContextConfig{
-        val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
+        val preferences = shellPreferencesRepositoryImpl.observeShellContextPreferences().first()
         val environmentPath = environmentRepositoryImpl.resolveEnvironmentRuntimePath()
         val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
@@ -27,7 +27,7 @@ class ShellExecutionContextProviderImpl @Inject constructor(
     }
 
     suspend fun resolveAdbShellContext(): AdbShellContextConfig{
-        val preferences = shellPreferencesRepositoryImpl.shellContextPreferences.first()
+        val preferences = shellPreferencesRepositoryImpl.observeShellContextPreferences().first()
         val environmentPath = environmentRepositoryImpl.resolveEnvironmentRuntimePath()
         val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()

@@ -18,7 +18,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     // Read
-    val settingScreenPreferences: Flow<SettingScreenPreference> =
+    fun observeSettingScreenPreferences(): Flow<SettingScreenPreference> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {

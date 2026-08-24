@@ -19,7 +19,7 @@ data class ShellContextPreferences(
 class ShellPreferencesRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    val shellContextPreferences: Flow<ShellContextPreferences> =
+    fun observeShellContextPreferences(): Flow<ShellContextPreferences> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
