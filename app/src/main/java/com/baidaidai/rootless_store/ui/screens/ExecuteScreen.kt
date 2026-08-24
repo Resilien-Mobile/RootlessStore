@@ -34,13 +34,13 @@ fun ExecuteScreen(
             when(executionResult.resultTag){
                 ExecutionResultTag.Normal -> {
                     Text(
-                        text = executionResult.content,
+                        text = executionResult.output,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
                 ExecutionResultTag.RedLine -> {
                     Text(
-                        text = executionResult.content,
+                        text = executionResult.output,
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Red
                     )

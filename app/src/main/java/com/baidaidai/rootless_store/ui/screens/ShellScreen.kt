@@ -333,12 +333,12 @@ fun ShellScreen(
 
                     if (shellResult.resultTag == ExecutionResultTag.RedLine){
                         Text(
-                            shellResult.content,
+                            shellResult.output,
                             color = Color(Color.RED)
                         )
                     }else{
                         Text(
-                            shellResult.content,
+                            shellResult.output,
                         )
                     }
                 }

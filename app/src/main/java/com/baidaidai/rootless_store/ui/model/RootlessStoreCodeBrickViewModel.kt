@@ -192,7 +192,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
 
                     // Add results
                     clearedUiState.copy(
-                        executionOutputLines = clearedUiState.executionOutputLines + shellResult.content
+                        executionOutputLines = clearedUiState.executionOutputLines + shellResult.output
                     )
                 }
             }

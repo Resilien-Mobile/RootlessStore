@@ -59,7 +59,7 @@ fun RootlessStoreWebViewScreen(
                 addWebMessageListener(this, "AppShell",setOf("*")){ _, message, _, _, proxy ->
                     coroutineScope.launch {
                         webViewScreenViewModel.executeAppShell(message.data).collect { shellResult ->
-                            proxy.postMessage(shellResult.content)
+                            proxy.postMessage(shellResult.output)
                         }
                     }
                 } // Newest JavaScript Native Bridge
