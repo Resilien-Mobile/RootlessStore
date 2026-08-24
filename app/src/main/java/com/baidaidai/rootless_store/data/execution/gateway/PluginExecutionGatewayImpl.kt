@@ -22,7 +22,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
     private val processMonitor: ProcessMonitor
 ) {
 
-    internal fun rootEnvironmentSwitch(): String{
+    internal fun resolveLocalShellExecutable(): String{
         val shell = Shell.getShell()
         return if (shell.isRoot){
             "su"
@@ -36,7 +36,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
         shouldMonitor: Boolean = false
     ): Flow<ExecutionResult> = callbackFlow {
         val processBuilder = ProcessBuilder(
-            rootEnvironmentSwitch(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginEntryPoint"
+            resolveLocalShellExecutable(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginEntryPoint"
         )
 
         val environment = processBuilder.environment()
@@ -127,7 +127,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
     fun abortPluginProcess(pluginProcessPid: Int?){
         if (pluginProcessPid != null){
             ProcessBuilder(
-                rootEnvironmentSwitch(), "-c", "kill -9 $pluginProcessPid"
+                resolveLocalShellExecutable(), "-c", "kill -9 $pluginProcessPid"
             ).start()
         }
     }
