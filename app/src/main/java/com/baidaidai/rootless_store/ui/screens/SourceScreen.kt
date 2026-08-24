@@ -29,7 +29,7 @@ import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenList
 fun SourceScreen(
     contentPadding: PaddingValues,
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
-    onPluginSourceClick: (pluginSource: PluginSource)-> Unit
+    onPluginSourceSelected: (pluginSource: PluginSource) -> Unit
 ){
     val pluginSources by sourceScreenViewModel.pluginSources.collectAsState()
     val isDeleteActionVisible by sourceScreenViewModel.isDeleteActionVisible.collectAsState()
@@ -73,7 +73,7 @@ fun SourceScreen(
                             isDeleteActionVisible = isDeleteActionVisible,
                             pluginSource = pluginSource,
                             sourceScreenViewModel = sourceScreenViewModel,
-                            onPluginSourceClick = onPluginSourceClick
+                            onPluginSourceSelected = onPluginSourceSelected
                         )
                         if (listIndex!=pluginSources.size-1){
                             Spacer(modifier = Modifier.height(2.dp))
