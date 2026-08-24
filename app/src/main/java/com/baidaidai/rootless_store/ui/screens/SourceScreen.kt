@@ -42,15 +42,15 @@ fun SourceScreen(
     if(isAuthenticationDialogVisible){
         SourceScreenAlertDialog(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
-            onConfirmButtonClick = sourceScreenViewModel::startSourceAuthentication,
-            onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication
+            onStartAuthentication = sourceScreenViewModel::startSourceAuthentication,
+            onCancelAuthentication = sourceScreenViewModel::cancelSourceAuthentication
         )
     }
 
     if (isAuthenticationSheetVisible){
         SourceScreenAuthenticationModalBottomSheet(
             onDismissRequest = sourceScreenViewModel::cancelSourceAuthentication,
-            onDismissButtonClick = sourceScreenViewModel::cancelSourceAuthentication,
+            onCancelAuthentication = sourceScreenViewModel::cancelSourceAuthentication,
         ) { username, password ->
             sourceScreenViewModel.addAuthenticatedPluginSource(username,password)
         }
