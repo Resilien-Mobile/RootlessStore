@@ -41,7 +41,7 @@ fun SettingScreen(
     onThirdPartyNotificationSettingClick: ()-> Unit
 ){
 
-    val settingPanelPreferences by settingScreenViewModel.settingPanelPreferences.collectAsState()
+    val settingScreenPreferences by settingScreenViewModel.settingScreenPreferences.collectAsState()
     val context = LocalContext.current
 
     LazyColumn(
@@ -69,7 +69,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_check_latest_version_headline),
                     supportingText = stringResource(R.string.setting_screen_general_check_latest_version_supporting),
-                    isChecked = settingPanelPreferences.isAutoUpdateEnabled,
+                    isChecked = settingScreenPreferences.isAutoUpdateEnabled,
                     onCheckedChange = settingScreenViewModel::setAutoUpdateEnabled,
                     leadingContent = {
                         Icon(
@@ -82,7 +82,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_notify_plugin_status_headline),
                     supportingText = stringResource(R.string.setting_screen_general_notify_plugin_status_supporting),
-                    isChecked = settingPanelPreferences.isPluginStatusNotificationEnabled,
+                    isChecked = settingScreenPreferences.isPluginStatusNotificationEnabled,
                     onCheckedChange = settingScreenViewModel::setPluginStatusNotificationEnabled,
                     leadingContent = {
                         Icon(
@@ -95,7 +95,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_general_third_party_push_headline),
                     supportingText = stringResource(R.string.setting_screen_general_third_party_push_supporting),
-                    isChecked = settingPanelPreferences.isThirdPartyNotificationPushEnabled,
+                    isChecked = settingScreenPreferences.isThirdPartyNotificationPushEnabled,
                     onCheckedChange = settingScreenViewModel::setThirdPartyNotificationPushEnabled,
                     leadingContent = {
                         Icon(
@@ -136,7 +136,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_allow_insecure_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_allow_insecure_connection_supporting),
-                    isChecked = settingPanelPreferences.isInsecureConnectionAllowed,
+                    isChecked = settingScreenPreferences.isInsecureConnectionAllowed,
                     onCheckedChange = settingScreenViewModel::setInsecureConnectionAllowed,
                     leadingContent = {
                         Icon(
@@ -149,7 +149,7 @@ fun SettingScreen(
                 SettingScreenListItemDefault(
                     headlineText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_supporting),
-                    isChecked = settingPanelPreferences.isDotProtectedConnectionEnabled,
+                    isChecked = settingScreenPreferences.isDotProtectedConnectionEnabled,
                     onCheckedChange = settingScreenViewModel::setDotProtectedConnectionEnabled,
                     leadingContent = {
                         Icon(
