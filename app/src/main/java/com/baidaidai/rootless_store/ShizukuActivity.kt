@@ -32,8 +32,8 @@ class ShizukuActivity: ComponentActivity() {
             val shizukuAdbScreenViewModel: RootlessStoreShizukuAdbScreenViewModel = hiltViewModel<RootlessStoreShizukuAdbScreenViewModel>()
             var currentError by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
             LaunchedEffect(0) {
-                shizukuAdbScreenViewModel.shizukuEvent.collect { event ->
-                    currentError = event
+                shizukuAdbScreenViewModel.shizukuError.collect { error ->
+                    currentError = error
                 }
             }
             RootlessStoreTheme {
