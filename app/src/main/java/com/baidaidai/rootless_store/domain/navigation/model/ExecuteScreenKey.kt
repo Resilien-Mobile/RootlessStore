@@ -9,5 +9,5 @@ data class ExecuteScreenKey(
     @SerialName("pluginID")
     val pluginId: String,
     @SerialName("isExecutePlugin")
-    val shouldExecutePlugin: Boolean = false
+    val shouldExecuteImmediately: Boolean = false
 ): RootlessNavigationKey
