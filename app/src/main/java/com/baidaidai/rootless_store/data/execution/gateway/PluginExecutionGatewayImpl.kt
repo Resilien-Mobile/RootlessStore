@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.data.execution.gateway
 
 import android.util.Log
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
-import com.baidaidai.rootless_store.data.monitor.ProcessMonitor
+import com.baidaidai.rootless_store.data.monitor.PluginProcessMonitor
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class PluginExecutionGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
-    private val processMonitor: ProcessMonitor
+    private val pluginProcessMonitor: PluginProcessMonitor
 ) {
 
     internal fun resolveLocalShellExecutable(): String{
@@ -58,7 +58,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
         val process = processBuilder.start()
 
         if (shouldMonitor){
-            processMonitor(process)
+            pluginProcessMonitor(process)
         }
 
         launch(Dispatchers.IO) {
@@ -113,7 +113,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                     )
                 },
                 onProcessExit = { exitCode ->
-                    processMonitor(exitCode)
+                    pluginProcessMonitor(exitCode)
                 }
             )
 
