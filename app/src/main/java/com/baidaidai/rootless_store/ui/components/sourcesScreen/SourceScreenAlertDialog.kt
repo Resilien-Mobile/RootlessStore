@@ -10,21 +10,21 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 @Composable
 fun SourceScreenAlertDialog(
     onDismissRequest: () -> Unit = {},
-    onDismissButtonClick: () -> Unit = {},
-    onConfirmButtonClick: () -> Unit = {}
+    onCancelAuthentication: () -> Unit = {},
+    onStartAuthentication: () -> Unit = {}
 ){
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Button(
-                onClick = onConfirmButtonClick
+                onClick = onStartAuthentication
             ) {
                 Text("Confirm")
             }
         },
         dismissButton = {
             TextButton(
-                onClick = onDismissButtonClick
+                onClick = onCancelAuthentication
             ) {
                 Text("Cancel")
             }
@@ -46,7 +46,7 @@ fun SourceScreenAlertDialog(
 private fun _SourceScreenAlertDialogPreview_(){
     SourceScreenAlertDialog(
         onDismissRequest = {},
-        onDismissButtonClick = {},
-        onConfirmButtonClick = {}
+        onCancelAuthentication = {},
+        onStartAuthentication = {}
     )
 }

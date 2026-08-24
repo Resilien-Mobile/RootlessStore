@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SourceScreenAuthenticationModalBottomSheet(
     onDismissRequest:()-> Unit = {},
-    onDismissButtonClick: () -> Unit = {},
-    onSubmitButtonClick: (username:String, password: String) -> Unit = { u, p ->  }
+    onCancelAuthentication: () -> Unit = {},
+    onSubmitCredentials: (username:String, password: String) -> Unit = { _, _ -> }
 ){
 
     var username by rememberSaveable { mutableStateOf("") }
@@ -74,7 +74,7 @@ fun SourceScreenAuthenticationModalBottomSheet(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
-                    onClick = onDismissButtonClick,
+                    onClick = onCancelAuthentication,
                 ) {
                     Text("Dismiss")
                 }
@@ -86,7 +86,7 @@ fun SourceScreenAuthenticationModalBottomSheet(
 
                 Button(
                     onClick = {
-                        onSubmitButtonClick(username,password)
+                        onSubmitCredentials(username,password)
                     },
                     modifier = Modifier
                         .height(40.dp)
@@ -103,7 +103,7 @@ fun SourceScreenAuthenticationModalBottomSheet(
 private fun _SourceScreenAuthenticationModalBottomSheetPreview_(){
     SourceScreenAuthenticationModalBottomSheet(
         onDismissRequest = {},
-        onDismissButtonClick = {},
-        onSubmitButtonClick = { u, p ->}
+        onCancelAuthentication = {},
+        onSubmitCredentials = { _, _ -> }
     )
 }
