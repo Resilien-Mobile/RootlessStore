@@ -53,10 +53,10 @@ class ResolvePluginShareUriUseCase @Inject constructor(
         // Check if Zip is really available (option)
 //      TODO("Check Zip integrity")
 
-        // Convert from zip to ShareLink
-        val shareLink = androidFileSystemShareOperatorGatewayImpl.resolveShareUriFromFile(zipFile)
+        // Convert the zip file to a share URI
+        val shareUri = androidFileSystemShareOperatorGatewayImpl.resolveShareUriFromFile(zipFile)
 
-        return shareLink
+        return shareUri
 
     }
 
@@ -85,10 +85,10 @@ class ResolvePluginShareUriUseCase @Inject constructor(
         // Check if Zip is really available (option)
 //      TODO("Check Zip integrity")
 
-        // Convert from zip to ShareLink
-        val shareLink = androidFileSystemShareOperatorGatewayImpl.resolveShareUriFromFile(shellPluginExportZipFile)
+        // Convert the zip file to a share URI
+        val shareUri = androidFileSystemShareOperatorGatewayImpl.resolveShareUriFromFile(shellPluginExportZipFile)
 
-        return shareLink
+        return shareUri
 
     }
 }

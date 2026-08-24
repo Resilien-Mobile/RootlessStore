@@ -38,10 +38,10 @@ class ResolveEnvironmentShareUriUseCase @Inject constructor(
         // Check if Zip is really available (option)
 //      TODO("Check Zip integrity")
 
-        // Convert from zip to ShareLink
-        val shareLink = androidFileSystemCapabilityGatewayImpl.resolveShareUriFromFile(zipFile)
+        // Convert the zip file to a share URI
+        val shareUri = androidFileSystemCapabilityGatewayImpl.resolveShareUriFromFile(zipFile)
 
-        return shareLink
+        return shareUri
 
     }
 

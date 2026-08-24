@@ -139,8 +139,8 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     fun resolvePluginShareUri(
         pluginManifestRoom: PluginManifestRoom
     ): Uri {
-        val shareLink = resolvePluginShareUriUseCase(pluginManifestRoom)
-        return shareLink
+        val shareUri = resolvePluginShareUriUseCase(pluginManifestRoom)
+        return shareUri
     }
 
     fun resolvePluginWebUiUri(
@@ -153,8 +153,8 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     fun resolveEnvironmentShareUri(
         environmentManifestRoom: EnvironmentManifestRoom
     ): Uri {
-        val shareLink = resolveEnvironmentShareUriUseCase(environmentManifestRoom)
-        return shareLink
+        val shareUri = resolveEnvironmentShareUriUseCase(environmentManifestRoom)
+        return shareUri
     }
 
 

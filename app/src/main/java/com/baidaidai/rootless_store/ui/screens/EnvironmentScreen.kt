@@ -54,11 +54,11 @@ fun InstalledEnvironmentList(
                 PluginActionPanel(
                     onShareClick = {
 
-                        val shareLink = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
+                        val shareUri = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
 
                         val shareIntent = Intent(Intent.ACTION_SEND).apply {
                             type = "application/zip"
-                            putExtra(Intent.EXTRA_STREAM, shareLink)
+                            putExtra(Intent.EXTRA_STREAM, shareUri)
                             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         }
 
