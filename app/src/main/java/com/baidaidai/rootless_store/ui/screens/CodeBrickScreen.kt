@@ -107,11 +107,11 @@ fun CodeBrickScreen(
         ){ index ,codeBrickConfig ->
             CodeBrickPreviewer(
                 codeBrickConfig = codeBrickConfig,
-                onActionButtonClick = codeBrickViewModel::executeCodeBrick,
-                onSettingButtonClick = {
+                onExecuteClick = codeBrickViewModel::executeCodeBrick,
+                onSettingsClick = {
                     codeBrickViewModel.showBrickSettings(codeBrickConfig)
                 },
-                onDeleteButtonClick = codeBrickViewModel::deleteCodeBrick
+                onDeleteClick = codeBrickViewModel::deleteCodeBrick
             )
         }
     }

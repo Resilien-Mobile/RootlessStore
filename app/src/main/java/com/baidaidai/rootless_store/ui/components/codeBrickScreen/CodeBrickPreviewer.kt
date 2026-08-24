@@ -33,9 +33,9 @@ import com.baidaidai.rootless_store.R
 fun CodeBrickPreviewer(
     modifier: Modifier = Modifier,
     codeBrickConfig: CodeBrickConfig,
-    onActionButtonClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
-    onSettingButtonClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
-    onDeleteButtonClick: (codeBrickConfig: CodeBrickConfig)-> Unit
+    onExecuteClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
+    onSettingsClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
+    onDeleteClick: (codeBrickConfig: CodeBrickConfig)-> Unit
 ){
 
     // TODO("Add Carry out opportunity assessment")
@@ -105,7 +105,7 @@ fun CodeBrickPreviewer(
                 IconButton(
                     colors = actionButtonColors,
                     modifier = Modifier.weight(1.5f),
-                    onClick = {onActionButtonClick(codeBrickConfig)}
+                    onClick = {onExecuteClick(codeBrickConfig)}
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_play_arrow),
@@ -115,7 +115,7 @@ fun CodeBrickPreviewer(
                 IconButton(
                     colors = modifierButtonColors,
                     modifier = Modifier.weight(1f),
-                    onClick = {onSettingButtonClick(codeBrickConfig)}
+                    onClick = {onSettingsClick(codeBrickConfig)}
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_settings),
@@ -125,7 +125,7 @@ fun CodeBrickPreviewer(
                 IconButton(
                     colors = deleteButtonColors,
                     modifier = Modifier.weight(1f),
-                    onClick = { onDeleteButtonClick(codeBrickConfig) }
+                    onClick = { onDeleteClick(codeBrickConfig) }
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_delete),
@@ -150,8 +150,8 @@ private fun _preview_(){
     CodeBrickPreviewer(
         modifier = Modifier.width(200.dp),
         codeBrickConfig = codeBrickConfig,
-        onActionButtonClick = {},
-        onDeleteButtonClick = {},
-        onSettingButtonClick = {}
+        onExecuteClick = {},
+        onDeleteClick = {},
+        onSettingsClick = {}
     )
 }
