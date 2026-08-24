@@ -28,7 +28,7 @@ fun CodeBrickScreen(
     contentPaddingValues: PaddingValues,
     codeBrickViewModel: RootlessStoreCodeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>(),
     rootlessStoreWindowSize: RootlessStoreWindowSize,
-    onBackgroundClick: ()-> Unit = {}
+    onDismissCreationMenu: () -> Unit = {}
 ){
 
     val codeBricks by codeBrickViewModel.codeBricks.collectAsState()
@@ -100,7 +100,7 @@ fun CodeBrickScreen(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
-            ){ onBackgroundClick() }
+            ){ onDismissCreationMenu() }
     ) {
         itemsIndexed(
             items = codeBricks
