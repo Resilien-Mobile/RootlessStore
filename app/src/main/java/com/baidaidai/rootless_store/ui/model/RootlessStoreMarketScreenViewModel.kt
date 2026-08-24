@@ -31,19 +31,9 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
     private val installEnvironmentFromMarketUseCase: InstallEnvironmentFromMarketUseCase
 ): ViewModel() {
 
-    /**
-     *  ClickSourceList
-     *  ⬇️
-     *  setPluginSourceEndpoint
-     *  ⬇️
-     *  navigate("MarketScreen")
-     *  ⬇️
-     *  remotePluginList
-     */
-
     private val _pluginSourceEndpoint = MutableStateFlow<String?>(null)
 
-    // Market Error Handler
+    // Market events
     private val _marketEvent = MutableSharedFlow<MarketError?>()
 
     val marketEvent = _marketEvent.asSharedFlow()
