@@ -37,7 +37,7 @@ fun CodeBrickSettingContent(
         CodeBrickContextConfig(
             contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
-            contextIcon = R.drawable.material_symbols_applicaitons
+            contextIcon = R.drawable.material_symbols_applications
         ),
         CodeBrickContextConfig(
             contextType = ExecutionContext.ADB,

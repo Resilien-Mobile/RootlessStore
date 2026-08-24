@@ -252,7 +252,7 @@ fun ShellScreen(
                                                 shapes = MenuDefaults.itemShape(1,4),
                                                 leadingIcon = {
                                                     Icon(
-                                                        painterResource(R.drawable.material_symbols_applicaitons),
+                                                        painterResource(R.drawable.material_symbols_applications),
                                                         contentDescription = "App shell"
                                                     )
                                                 },
