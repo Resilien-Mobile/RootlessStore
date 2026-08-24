@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.domain.setting.model
 
-data class SettingScreenPreference(
+data class SettingScreenPreferences(
     val isAutoUpdateEnabled: Boolean = false,
     val isPluginStatusNotificationEnabled: Boolean = false,
     val isThirdPartyNotificationPushEnabled: Boolean = false,

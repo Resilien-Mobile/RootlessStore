@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.baidaidai.rootless_store.core.datastore.rootlessStorePreferencesDataStore
-import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreference
+import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreferences
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -18,7 +18,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     // Read
-    fun observeSettingScreenPreferences(): Flow<SettingScreenPreference> =
+    fun observeSettingScreenPreferences(): Flow<SettingScreenPreferences> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -28,7 +28,7 @@ class SettingPreferenceRepositoryImpl @Inject constructor(
                 }
             }
             .map { preferences ->
-                SettingScreenPreference(
+                SettingScreenPreferences(
                     isAutoUpdateEnabled = preferences[ENABLE_AUTO_UPDATE] ?: false,
                     isPluginStatusNotificationEnabled = preferences[NOTIFY_PLUGIN_STATUS] ?: false,
                     isThirdPartyNotificationPushEnabled = preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] ?: false,

@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreference
+import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreferences
 import com.baidaidai.rootless_store.domain.setting.usecase.ObserveSettingScreenPreferencesUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetInsecureConnectionAllowedUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.SetAutoUpdateEnabledUseCase
@@ -26,11 +26,11 @@ class RootlessStoreSettingScreenViewModel @Inject constructor(
     private val setAutoUpdateEnabledUseCase: SetAutoUpdateEnabledUseCase,
 ) : ViewModel() {
 
-    val settingPanelPreferences: StateFlow<SettingScreenPreference> =
+    val settingScreenPreferences: StateFlow<SettingScreenPreferences> =
         observeSettingScreenPreferencesUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1_000),
-            initialValue = SettingScreenPreference()
+            initialValue = SettingScreenPreferences()
         )
 
     fun setPluginStatusNotificationEnabled(isEnabled: Boolean) {
