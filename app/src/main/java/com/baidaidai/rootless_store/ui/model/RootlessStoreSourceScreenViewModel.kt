@@ -30,7 +30,7 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
     private val deletePluginSourceUseCase: DeletePluginSourceUseCase,
 ): ViewModel(){
 
-    var latestPluginSourceEndpoint = ""
+    var pendingPluginSourceEndpoint = ""
 
     val pluginSources = observePluginSourcesUseCase().stateIn(
         scope = viewModelScope,
@@ -60,7 +60,7 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
         sourceRemoteEndpoint: String
     ){
 
-        latestPluginSourceEndpoint = sourceRemoteEndpoint
+        pendingPluginSourceEndpoint = sourceRemoteEndpoint
 
         viewModelScope.launch {
             val result = addPluginSourceUseCase(sourceRemoteEndpoint)
@@ -81,7 +81,7 @@ class RootlessStoreSourceScreenViewModel @Inject constructor(
 
     fun addAuthenticatedPluginSource(username: String, password: String){
         val authenticationInput = PluginSourceAuthenticationInput(
-            sourceRemoteEndpoint = latestPluginSourceEndpoint,
+            sourceRemoteEndpoint = pendingPluginSourceEndpoint,
             username = username,
             password = password
         )
