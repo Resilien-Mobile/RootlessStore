@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.data.market.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.baidaidai.rootless_store.core.util.OutOfStringLike
+import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.market.mapper.MarketMapper.toMarketPageResponse
 import com.baidaidai.rootless_store.data.market.remote.api.MarketApi
 import com.baidaidai.rootless_store.data.market.remote.dto.MarketPageResponseDto
@@ -43,7 +43,7 @@ class MarketManifestPagingSource (
             onError(
                 MarketError(
                     errorMessage = error.message ?: "Fetch market manifests failed",
-                    errorCause = error.stackTrace.OutOfStringLike()
+                    errorCause = error.stackTrace.formatAsMultilineString()
                 )
             )
             return LoadResult.Error(error)

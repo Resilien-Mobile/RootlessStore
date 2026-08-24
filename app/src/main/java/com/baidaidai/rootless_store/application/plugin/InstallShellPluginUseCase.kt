@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.application.plugin
 
 import android.net.Uri
-import com.baidaidai.rootless_store.core.util.OutOfStringLike
+import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
@@ -69,7 +69,7 @@ class InstallShellPluginUseCase @Inject constructor(
         } catch (error: Throwable) {
             PluginError(
                 errorMessage = error.message ?: "Install shell plugin crashed",
-                errorCause = error.stackTrace.OutOfStringLike()
+                errorCause = error.stackTrace.formatAsMultilineString()
             )
         }
     }

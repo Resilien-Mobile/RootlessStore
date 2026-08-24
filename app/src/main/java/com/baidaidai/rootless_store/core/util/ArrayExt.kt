@@ -1,9 +1,9 @@
 package com.baidaidai.rootless_store.core.util
 
-fun <T> Array<T>.OutOfStringLike(): String{
-    var patched = ""
+fun <T> Array<T>.formatAsMultilineString(): String{
+    var formattedText = ""
     for (i in 0..size-1){
-        patched = patched + get(i) + ",\n\n"
+        formattedText = formattedText + get(i) + ",\n\n"
     }
-    return patched
+    return formattedText
 }

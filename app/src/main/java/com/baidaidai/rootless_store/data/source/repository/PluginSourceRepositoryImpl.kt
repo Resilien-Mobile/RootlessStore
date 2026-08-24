@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.data.source.repository
 
-import com.baidaidai.rootless_store.core.util.OutOfStringLike
+import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.source.gateway.PluginSourceGatewayImpl
 import com.baidaidai.rootless_store.domain.source.model.PluginSource
@@ -48,7 +48,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
             return PluginSourceEvent.SourceError(
                 errorMessage = error.message.toString(),
-                errorCause = error.stackTrace.OutOfStringLike()
+                errorCause = error.stackTrace.formatAsMultilineString()
             )
 
         }
@@ -105,7 +105,7 @@ class PluginSourceRepositoryImpl @Inject constructor(
 
             return PluginSourceEvent.SourceError(
                 errorMessage = error.message.toString(),
-                errorCause = error.stackTrace.OutOfStringLike()
+                errorCause = error.stackTrace.formatAsMultilineString()
             )
 
         }
