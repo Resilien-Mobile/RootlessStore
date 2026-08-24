@@ -43,8 +43,8 @@ object ShizukuAdbScreenNecessaryComponents {
     fun ShizukuAdbScreenModalSheet(
         remainingSeconds: Int,
         onDismissRequest: ()-> Unit,
-        onCloseButtonClick: ()-> Unit,
-        onReturnButtonClick: ()-> Unit
+        onDismissCompletion: () -> Unit,
+        onReturnToApp: () -> Unit
     ){
         ModalBottomSheet(
             onDismissRequest = onDismissRequest,
@@ -97,13 +97,13 @@ object ShizukuAdbScreenNecessaryComponents {
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     OutlinedButton(
-                        onClick = onCloseButtonClick,
+                        onClick = onDismissCompletion,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.shizuku_adb_screen_bottom_sheet_close_button))
                     }
                     Button(
-                        onClick = onReturnButtonClick,
+                        onClick = onReturnToApp,
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(stringResource(R.string.shizuku_adb_screen_bottom_sheet_return_button))
