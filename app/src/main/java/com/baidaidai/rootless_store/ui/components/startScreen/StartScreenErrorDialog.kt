@@ -19,14 +19,14 @@ import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewMo
 @Composable
 fun StartScreenErrorDialog(
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
-    sharedEvent: RootlessStoreError?
+    error: RootlessStoreError?
 ){
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {
             Button(
                 onClick = {
-                    sourceScreenViewModel.onOkButtonClick()
+                    sourceScreenViewModel.dismissSourceError()
                 }
             ) {
                 Text("Ok")
@@ -39,11 +39,11 @@ fun StartScreenErrorDialog(
             )
         },
         title = {
-            Text(sharedEvent!!.errorMessage)
+            Text(error!!.errorMessage)
         },
         text = {
             Text(
-                text = sharedEvent!!.errorCause,
+                text = error!!.errorCause,
                 modifier = Modifier
                     .heightIn(max = 300.dp)
                     .verticalScroll(
@@ -56,14 +56,14 @@ fun StartScreenErrorDialog(
 @Composable
 fun StartScreenErrorDialog(
     shizukuAdbScreenViewModel: RootlessStoreShizukuAdbScreenViewModel,
-    sharedEvent: RootlessStoreError?
+    error: RootlessStoreError?
 ){
     AlertDialog(
         onDismissRequest = {},
         confirmButton = {
             Button(
                 onClick = {
-                    shizukuAdbScreenViewModel.onOkButtonClick()
+                    shizukuAdbScreenViewModel.dismissShizukuError()
                 }
             ) {
                 Text("Ok")
@@ -76,11 +76,11 @@ fun StartScreenErrorDialog(
             )
         },
         title = {
-            Text(sharedEvent!!.errorMessage)
+            Text(error!!.errorMessage)
         },
         text = {
             Text(
-                text = sharedEvent!!.errorCause,
+                text = error!!.errorCause,
                 modifier = Modifier
                     .heightIn(max = 300.dp)
                     .verticalScroll(
