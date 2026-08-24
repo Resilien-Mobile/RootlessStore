@@ -70,7 +70,7 @@ fun SettingScreen(
                     headlineText = stringResource(R.string.setting_screen_general_check_latest_version_headline),
                     supportingText = stringResource(R.string.setting_screen_general_check_latest_version_supporting),
                     isChecked = settingPanelPreferences.isAutoUpdateEnabled,
-                    onSwitchClicked = settingScreenViewModel::setAutoUpdateEnabled,
+                    onCheckedChange = settingScreenViewModel::setAutoUpdateEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_upgrade),
@@ -83,7 +83,7 @@ fun SettingScreen(
                     headlineText = stringResource(R.string.setting_screen_general_notify_plugin_status_headline),
                     supportingText = stringResource(R.string.setting_screen_general_notify_plugin_status_supporting),
                     isChecked = settingPanelPreferences.isPluginStatusNotificationEnabled,
-                    onSwitchClicked = settingScreenViewModel::setPluginStatusNotificationEnabled,
+                    onCheckedChange = settingScreenViewModel::setPluginStatusNotificationEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_notification),
@@ -96,7 +96,7 @@ fun SettingScreen(
                     headlineText = stringResource(R.string.setting_screen_general_third_party_push_headline),
                     supportingText = stringResource(R.string.setting_screen_general_third_party_push_supporting),
                     isChecked = settingPanelPreferences.isThirdPartyNotificationPushEnabled,
-                    onSwitchClicked = settingScreenViewModel::setThirdPartyNotificationPushEnabled,
+                    onCheckedChange = settingScreenViewModel::setThirdPartyNotificationPushEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_notification_add),
@@ -137,7 +137,7 @@ fun SettingScreen(
                     headlineText = stringResource(R.string.setting_screen_source_allow_insecure_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_allow_insecure_connection_supporting),
                     isChecked = settingPanelPreferences.isInsecureConnectionAllowed,
-                    onSwitchClicked = settingScreenViewModel::setInsecureConnectionAllowed,
+                    onCheckedChange = settingScreenViewModel::setInsecureConnectionAllowed,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_safety_check),
@@ -150,7 +150,7 @@ fun SettingScreen(
                     headlineText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_headline),
                     supportingText = stringResource(R.string.setting_screen_source_use_dot_protected_connection_supporting),
                     isChecked = settingPanelPreferences.isDotProtectedConnectionEnabled,
-                    onSwitchClicked = settingScreenViewModel::setDotProtectedConnectionEnabled,
+                    onCheckedChange = settingScreenViewModel::setDotProtectedConnectionEnabled,
                     leadingContent = {
                         Icon(
                             painter = painterResource(R.drawable.material_symbols_cloud_lock),
