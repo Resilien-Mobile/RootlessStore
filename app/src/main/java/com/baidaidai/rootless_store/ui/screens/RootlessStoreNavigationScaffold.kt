@@ -258,7 +258,7 @@ fun RootlessStoreNavigationScaffold(
                     ThirdPartyNotificationScreenKey -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
                         scrollBehavior = scrollBehavior,
                         onSaveClick = {
-                            thirdPartyNotificationScreenViewModel.onSubmitClick()
+                            thirdPartyNotificationScreenViewModel.ensureNotificationPreference()
                         }
                     )
                     else -> StartScreenNecessaryComponents.StartScreenTopAppBar(
