@@ -300,17 +300,17 @@ fun RootlessStoreNavigationScaffold(
                     CodeBrickScreenKey -> {
                         val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
                         CodeBrickScreenNecessaryComponents.CodeBrickScreenFloatingButton(
-                            isButtonMenuExpanded = codeBrickScreenUiState.isButtonMenuExpanded,
-                            onHandMenuItemClick = {
+                            isMenuExpanded = codeBrickScreenUiState.isCreationMenuExpanded,
+                            onCreateClick = {
                                 codeBrickViewModel.setBrickEditorVisible(true)
-                                codeBrickViewModel.setButtonMenuExpanded()
+                                codeBrickViewModel.setCreationMenuExpanded()
                             },
-                            onJsonMenuItemClick = {
+                            onImportJsonClick = {
                                 codeBrickViewModel.addCodeBrickFromClipboard()
-                                codeBrickViewModel.setButtonMenuExpanded()
+                                codeBrickViewModel.setCreationMenuExpanded()
                             },
-                            onButtonMenuClick = {
-                                codeBrickViewModel.setButtonMenuExpanded(it)
+                            onExpandedChange = {
+                                codeBrickViewModel.setCreationMenuExpanded(it)
                             }
                         )
                     }
@@ -384,7 +384,7 @@ fun RootlessStoreNavigationScaffold(
                             codeBrickViewModel = codeBrickViewModel,
                             rootlessStoreWindowSize = rootlessStoreWidthWindowSize,
                             onBackgroundClick = {
-                                codeBrickViewModel.setButtonMenuExpanded()
+                                codeBrickViewModel.setCreationMenuExpanded()
                             }
                         )
                     }
