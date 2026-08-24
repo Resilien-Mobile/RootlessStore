@@ -98,7 +98,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
     ) {
 
         // Prepare Temporary Shell Plugin Package Directory
-        val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppDirectoryFile()
+        val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryFile()
         val temporaryShellPluginPackageDirectory = File(
             shellPluginStagingDirectory,
             pluginManifestLocal.pluginPackageName

@@ -27,7 +27,7 @@ class InstallShellPluginUseCase @Inject constructor(
             val pluginManifestLocal = pluginGatewayImpl.parsePluginManifest(uri)
 
             // Copy to /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
-            val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppDirectoryPath()
+            val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryPath()
             val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
 
             androidFileSystemCreateOperatorGatewayImpl.copyUriToFile(
