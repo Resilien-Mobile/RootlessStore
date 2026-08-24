@@ -121,13 +121,13 @@ class CpuStatusDataSource @Inject constructor(
         val commandResult = withTimeoutOrNull(CPU_READ_TIMEOUT_MILLIS.milliseconds) {
             callbackFlow {
                 val callback = ShizukuEndpointCallback(
-                    onExecuteCallback = { session ->
-                        trySend(session)
+                    onOutput = { output ->
+                        trySend(output)
                     },
-                    onErrorCallback = {
+                    onError = {
                         trySend(null)
                     },
-                    onProcessExitedCallback = {}
+                    onProcessExit = {}
                 )
 
                 launch(Dispatchers.IO) {
