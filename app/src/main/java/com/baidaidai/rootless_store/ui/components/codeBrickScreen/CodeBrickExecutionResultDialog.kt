@@ -18,7 +18,7 @@ import com.baidaidai.rootless_store.R
 fun CodeBrickExecutionResultDialog(
     outputLines: List<String>,
     onDismissRequest: () -> Unit = {},
-    onConfirmButtonClick: () -> Unit = {},
+    onDismissClick: () -> Unit = {},
 ) {
     AlertDialog(
         title = {
@@ -26,7 +26,7 @@ fun CodeBrickExecutionResultDialog(
         },
         confirmButton = {
             Button(
-                onClick = onConfirmButtonClick
+                onClick = onDismissClick
             ) {
                 Text(stringResource(R.string.code_brick_screen_result_confirm_button))
             }
