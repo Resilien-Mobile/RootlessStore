@@ -253,7 +253,7 @@ data class ColorFamily(
     val onColorContainer: Color
 )
 
-val unspecified_scheme = ColorFamily(
+val unspecifiedScheme = ColorFamily(
     Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
 )
 
@@ -279,4 +279,3 @@ fun RootlessStoreTheme(
     content = content
   )
 }
-
