@@ -56,10 +56,10 @@ class KernelSuJavaScriptBridge(
 
     @JavascriptInterface
     fun listPackages(packageType: String?): String {
-        val packageInfoList = listInstalledPackages()
+        val packageInfos = listInstalledPackages()
 
         // Filter, ensure every package is either system or user
-        val packageNameList = packageInfoList
+        val packageNames = packageInfos
             .filter { packageInfo ->
                 when (packageType?.lowercase()) {
                     "user" -> !packageInfo.isSystemPackage()
@@ -71,7 +71,7 @@ class KernelSuJavaScriptBridge(
                 packageInfo.packageName
             }
 
-        return JSONArray(packageNameList).toString()
+        return JSONArray(packageNames).toString()
     }
 
     private fun listInstalledPackages(): List<PackageInfo> {
