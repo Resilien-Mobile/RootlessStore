@@ -46,10 +46,10 @@ import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.executeScreen.ExecuteScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.marketScreen.MarketScreenNecessaryComponents
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginScreenNecessaryComponents
+import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.shellScreen.ShellScreenNecessaryComponents
-import com.baidaidai.rootless_store.ui.components.sourcesScreen.SourceScreenNecessaryComponents
+import com.baidaidai.rootless_store.ui.components.sourceScreen.SourceScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenErrorDialog
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenRepositoryDialog

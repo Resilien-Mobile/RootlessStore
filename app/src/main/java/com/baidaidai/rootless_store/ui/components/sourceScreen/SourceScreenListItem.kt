@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.ui.components.sourcesScreen
+package com.baidaidai.rootless_store.ui.components.sourceScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues

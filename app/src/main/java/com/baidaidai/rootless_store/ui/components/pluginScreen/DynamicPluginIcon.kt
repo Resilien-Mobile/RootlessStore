@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.ui.components.pluginsScreen
+package com.baidaidai.rootless_store.ui.components.pluginScreen
 
 import android.net.Uri
 import androidx.compose.foundation.layout.padding

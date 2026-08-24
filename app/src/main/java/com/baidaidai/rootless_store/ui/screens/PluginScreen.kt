@@ -33,8 +33,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntSize
 import com.baidaidai.rootless_store.WebViewActivity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.PluginActionPanel
-import com.baidaidai.rootless_store.ui.components.pluginsScreen.InstalledManifestCard
+import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginActionPanel
+import com.baidaidai.rootless_store.ui.components.pluginScreen.InstalledManifestCard
 import kotlinx.coroutines.launch
 
 @Composable

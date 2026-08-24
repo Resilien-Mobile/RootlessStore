@@ -1,4 +1,4 @@
-package com.baidaidai.rootless_store.ui.components.pluginsScreen
+package com.baidaidai.rootless_store.ui.components.pluginScreen
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
