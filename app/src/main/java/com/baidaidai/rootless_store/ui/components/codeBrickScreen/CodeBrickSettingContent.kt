@@ -33,7 +33,7 @@ fun CodeBrickSettingContent(
     onCodeBrickToPluginButtonClick: ()-> Unit
 ){
 
-    val brickContextConfigList = listOf(
+    val codeBrickContexts = listOf(
         CodeBrickContextConfig(
             contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
@@ -51,9 +51,9 @@ fun CodeBrickSettingContent(
         )
     )
 
-    val currentSelectedContext = brickContextConfigList.firstOrNull { codeBrickContextConfig ->
+    val currentSelectedContext = codeBrickContexts.firstOrNull { codeBrickContextConfig ->
         codeBrickContextConfig.contextType == brickContext
-    } ?: brickContextConfigList.first()
+    } ?: codeBrickContexts.first()
 
     Column(modifier) {
 
@@ -80,7 +80,7 @@ fun CodeBrickSettingContent(
 
         CodeBrickContextList(
             currentSelectedContext = currentSelectedContext,
-            brickContextConfigList = brickContextConfigList,
+            codeBrickContexts = codeBrickContexts,
             onListItemClick = { codeBrickContextConfig ->
                 onCodeBrickContextValueChange(codeBrickContextConfig.contextType)
             }

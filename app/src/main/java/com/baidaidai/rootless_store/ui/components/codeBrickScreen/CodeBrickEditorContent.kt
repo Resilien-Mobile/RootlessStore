@@ -37,7 +37,7 @@ fun CodeBrickEditorContent(
 
 ){
 
-    val brickContextConfigList = listOf(
+    val codeBrickContexts = listOf(
         CodeBrickContextConfig(
             contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
@@ -55,7 +55,7 @@ fun CodeBrickEditorContent(
         )
     )
 
-    var currentSelectedContext by remember { mutableStateOf(brickContextConfigList[0]) }
+    var currentSelectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
 
     Column(modifier) {
 
@@ -82,7 +82,7 @@ fun CodeBrickEditorContent(
 
         CodeBrickContextList(
             currentSelectedContext = currentSelectedContext,
-            brickContextConfigList = brickContextConfigList,
+            codeBrickContexts = codeBrickContexts,
             onListItemClick = { codeBrickContextConfig ->
                 currentSelectedContext = codeBrickContextConfig
                 onCodeBrickContextValueChange(codeBrickContextConfig.contextType)

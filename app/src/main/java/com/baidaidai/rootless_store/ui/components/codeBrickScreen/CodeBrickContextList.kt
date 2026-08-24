@@ -34,7 +34,7 @@ import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 fun CodeBrickContextList(
     modifier: Modifier = Modifier,
     currentSelectedContext: CodeBrickContextConfig,
-    brickContextConfigList: List<CodeBrickContextConfig>,
+    codeBrickContexts: List<CodeBrickContextConfig>,
     onListItemClick: (codeBrickContextConfig: CodeBrickContextConfig)-> Unit
 ){
 
@@ -94,7 +94,7 @@ fun CodeBrickContextList(
     var isContextListExpanded by remember { mutableStateOf(false) }
 
     fun contextListItemColors(index: Int): ListItemColors{
-        return if (brickContextConfigList[index].contextType == currentSelectedContext.contextType){
+        return if (codeBrickContexts[index].contextType == currentSelectedContext.contextType){
             focusedListItemStyle
         }else{
             unfocusedListItemStyle
@@ -122,7 +122,7 @@ fun CodeBrickContextList(
         }
         if (isContextListExpanded){
             Spacer(modifier = Modifier.height(2.dp))
-            brickContextConfigList.forEachIndexed { index, codeBrickContextConfig ->
+            codeBrickContexts.forEachIndexed { index, codeBrickContextConfig ->
                 val contextText = stringResource(codeBrickContextConfig.contextTextResource)
 
                 ListItem(
@@ -152,7 +152,7 @@ fun CodeBrickContextList(
 @Composable
 private fun _CodeBrickContextListPreview_() {
 
-    val brickContextConfigList = listOf(
+    val codeBrickContexts = listOf(
         CodeBrickContextConfig(
             contextType = ExecutionContext.LIMITED,
             contextTextResource = R.string.code_brick_screen_editor_context_app_shell_label,
@@ -170,11 +170,11 @@ private fun _CodeBrickContextListPreview_() {
         )
     )
 
-    var currentSelectedContext by remember { mutableStateOf(brickContextConfigList[0]) }
+    var currentSelectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
 
     CodeBrickContextList(
         currentSelectedContext = currentSelectedContext,
-        brickContextConfigList = brickContextConfigList,
+        codeBrickContexts = codeBrickContexts,
         modifier = Modifier
             .width(300.dp)
             .background(color = MaterialTheme.colorScheme.surface)
