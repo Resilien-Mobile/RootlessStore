@@ -72,13 +72,13 @@ class ResolvePluginShareUriUseCase @Inject constructor(
         )
 
         // Shizuku File Flow
-        val shellPluginExportResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
+        val isShellPluginExportSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
             ?.exportShellPlugin(
                 pluginManifestRoom.pluginPackageName,
                 shellPluginExportZipFile.path
             ) ?: false
 
-        if (!shellPluginExportResult) {
+        if (!isShellPluginExportSuccessful) {
             throw IllegalStateException("Failed to export shell plugin. pluginPackageName=${pluginManifestRoom.pluginPackageName}")
         }
 

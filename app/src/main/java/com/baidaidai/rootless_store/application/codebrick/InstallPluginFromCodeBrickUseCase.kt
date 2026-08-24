@@ -130,7 +130,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
         )
 
         // Shizuku File Flow
-        val shellPluginInstallResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
+        val isShellPluginInstallSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
             ?.installShellPlugin(
                 shellPluginStagingFile.path,
                 pluginManifestLocal.pluginPackageName,
@@ -147,7 +147,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
             shellPluginStagingFile.path
         )
 
-        if (!shellPluginInstallResult) {
+        if (!isShellPluginInstallSuccessful) {
             return
         }
 

@@ -49,8 +49,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
             }
 
             // Judge module.prop by IllusionCube
-            val magiskModulePropAvailable = IllusionCube.Prop.validate(magiskModulePropContent)
-            if (!magiskModulePropAvailable) {
+            val isMagiskModulePropValid = IllusionCube.Prop.validate(magiskModulePropContent)
+            if (!isMagiskModulePropValid) {
                 return PluginError(
                     errorMessage = "Magisk module.prop is invalid",
                     errorCause = "IllusionCube cannot recognize this module.prop as prop format."
@@ -108,10 +108,10 @@ class InstallMagiskPluginUseCase @Inject constructor(
                 targetZipFile = magiskTemplateZipFile
             )
 
-            val deleteMagiskTemplateDirectoryResult = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+            val isMagiskTemplateDirectoryDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
                 magiskTemplateDirectory.path
             )
-            if (!deleteMagiskTemplateDirectoryResult) {
+            if (!isMagiskTemplateDirectoryDeleted) {
                 return PluginError(
                     errorMessage = "Delete magisk template directory failed",
                     errorCause = "Failed to delete ${magiskTemplateDirectory.path}"
@@ -119,25 +119,25 @@ class InstallMagiskPluginUseCase @Inject constructor(
             }
 
             // Shizuku File Flow
-            val shellPluginInstallResult = shizukuUserServiceGatewayImpl.findShizukuUserService()
+            val isShellPluginInstallSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.installShellPlugin(
                     magiskTemplateZipFile.path,
                     pluginManifestLocal.pluginPackageName,
                     pluginManifestLocal.entryPoint
                 ) ?: false
 
-            val deleteMagiskTemplateZipFileResult = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+            val isMagiskTemplateArchiveDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
                 magiskTemplateZipFile.path
             )
 
-            if (!shellPluginInstallResult) {
+            if (!isShellPluginInstallSuccessful) {
                 return PluginError(
                     errorMessage = "Install magisk shell plugin failed",
                     errorCause = "Failed to copy magisk shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifestLocal.pluginPackageName}, entryPoint=${pluginManifestLocal.entryPoint}"
                 )
             }
 
-            if (!deleteMagiskTemplateZipFileResult) {
+            if (!isMagiskTemplateArchiveDeleted) {
                 return PluginError(
                     errorMessage = "Delete magisk template zip failed",
                     errorCause = "Failed to delete ${magiskTemplateZipFile.path}"
