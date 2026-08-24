@@ -29,7 +29,7 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return File(context.filesDir, ENVIRONMENT_DIR_NAME)
     }
 
-    private fun getEnvironmentCacheDirectory(): File {
+    private fun getInternalEnvironmentCacheDirectory(): File {
         return File(context.cacheDir, ENVIRONMENT_DIR_NAME)
     }
 
@@ -71,11 +71,11 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalPluginRootDirectory().path
     } // /File/Plugin
 
-    fun getCachePluginDirectoryPath(): String {
+    fun getInternalPluginCacheDirectoryPath(): String {
         return getInternalPluginCacheDirectory().path
     } // /Cache/Plugin: String
 
-    fun getCachePluginDirectoryFile(): File {
+    fun getInternalPluginCacheDirectoryFile(): File {
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
 
@@ -97,8 +97,8 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalEnvironmentRootDirectory().path
     } // /File/Environment
 
-    fun getCacheEnvironmentDirectoryFile(): File {
-        return getEnvironmentCacheDirectory()
+    fun getInternalEnvironmentCacheDirectoryFile(): File {
+        return getInternalEnvironmentCacheDirectory()
     } // /Cache/Environment: File
 
     fun resolveEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {

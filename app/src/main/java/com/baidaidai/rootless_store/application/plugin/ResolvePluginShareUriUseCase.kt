@@ -28,7 +28,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
             return resolveShellPluginShareUri(pluginManifestRoom)
         }
 
-        val defaultPluginCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getCachePluginDirectoryFile()
+        val internalPluginCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getInternalPluginCacheDirectoryFile()
 
         // Get plugin package directory -> /file/Plugin/PLUGIN_DIRECTORY
         val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom)
@@ -42,7 +42,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
 
         // Zip to cache/plugin
         // Resolve zip target -> /cache/Plugin/PLUGIN.zip
-        val zipFile = androidFileSystemCreateOperatorGatewayImpl.resolveChildFile(defaultPluginCacheDirectory,"${pluginManifestRoom.pluginPackageName}.zip")
+        val zipFile = androidFileSystemCreateOperatorGatewayImpl.resolveChildFile(internalPluginCacheDirectory,"${pluginManifestRoom.pluginPackageName}.zip")
 
         // Write Zip Byte
         androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
