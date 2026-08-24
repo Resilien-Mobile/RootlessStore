@@ -16,12 +16,12 @@ object MarketScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
     fun MarketScreenTopAppBar(
-        onBackButtonClick: ()-> Unit = {},
-        onSearchButtonClick: ()-> Unit = {},
-        onFilterButtonClick: ()-> Unit = {},
+        onBackClick: () -> Unit = {},
+        onSearchClick: () -> Unit = {},
+        onFilterClick: () -> Unit = {},
         sourceName: String = "Null",
         scrollBehavior: TopAppBarScrollBehavior
-    ){
+    ) {
         MediumFlexibleTopAppBar(
             title = {
                 Text(sourceName)
@@ -31,7 +31,7 @@ object MarketScreenNecessaryComponents {
             },
             actions = {
                 IconButton(
-                    onClick = onSearchButtonClick
+                    onClick = onSearchClick
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_search),
@@ -39,7 +39,7 @@ object MarketScreenNecessaryComponents {
                     )
                 }
                 IconButton(
-                    onClick = onFilterButtonClick
+                    onClick = onFilterClick
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_filter_list),
@@ -49,7 +49,7 @@ object MarketScreenNecessaryComponents {
             },
             navigationIcon = {
                 IconButton(
-                    onClick = onBackButtonClick
+                    onClick = onBackClick
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_arrow_back),
