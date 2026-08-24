@@ -7,7 +7,7 @@ import com.baidaidai.rootless_store.application.status.ObserveCpuDashboardConfig
 import com.baidaidai.rootless_store.application.status.ObserveNetworkDashboardConfigUseCase
 import com.baidaidai.rootless_store.application.status.ObserveExecutionContextUseCase
 import com.baidaidai.rootless_store.domain.setting.usecase.ObserveAutoUpdateEnabledPreferenceUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellAvailabilityUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
@@ -48,7 +48,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
     getKernelStatusUseCase: GetKernelStatusUseCase,
     getAndroidAndApiStatusUseCase: GetAndroidAndApiStatusUseCase,
     observeExecutionContextPreferenceUseCase: ObserveExecutionContextPreferenceUseCase,
-    private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
+    private val getRootShellAvailabilityUseCase: GetRootShellAvailabilityUseCase,
     private val observeExecutionContextUseCase: ObserveExecutionContextUseCase,
     private val setExecutionContextPreferenceUseCase: SetExecutionContextPreferenceUseCase,
     private val setExecutionContextChooserEnabledUseCase: SetExecutionContextChooserEnabledUseCase,
@@ -130,7 +130,7 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
             initialValue = false
         )
 
-    private val _isRootShellAvailable = MutableStateFlow(getRootShellStatusUseCase())
+    private val _isRootShellAvailable = MutableStateFlow(getRootShellAvailabilityUseCase())
     val isRootShellAvailable = _isRootShellAvailable.asStateFlow()
 
     private val _seLinuxStatus = MutableStateFlow(getSeLinuxStatusUseCase())
