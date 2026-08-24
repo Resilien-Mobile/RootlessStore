@@ -11,10 +11,10 @@ class KernelVersionDataSource @Inject constructor(
             .redirectErrorStream(true)
             .start()
 
-        val output = process.inputStream.bufferedReader().use { it.readText() }
+        val kernelVersionOutput = process.inputStream.bufferedReader().use { it.readText() }
 
         process.waitFor()
 
-        return output.trim().substringBefore("-")
+        return kernelVersionOutput.trim().substringBefore("-")
     }
 }
