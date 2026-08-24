@@ -186,7 +186,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_all_files_access_icon_content_description)
                         )
                     },
-                    onOpenSettings = { SettingPermission.openAllFilesAccessSettings(context) }
+                    onOpenSettings = { SystemSettingsActions.openAllFilesAccessSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -198,7 +198,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_stop_restrict_child_process_icon_content_description)
                         )
                     },
-                    onOpenSettings = { SettingPermission.openDeveloperOptions(context) }
+                    onOpenSettings = { SystemSettingsActions.openDeveloperOptions(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -210,7 +210,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_notification_icon_content_description)
                         )
                     },
-                    onOpenSettings = { SettingPermission.openAppNotificationSettings(context) }
+                    onOpenSettings = { SystemSettingsActions.openAppNotificationSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -222,7 +222,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_battery_icon_content_description)
                         )
                     },
-                    onOpenSettings = { SettingPermission.requestBatteryOptimizationExemption(context) }
+                    onOpenSettings = { SystemSettingsActions.requestBatteryOptimizationExemption(context) }
                 )
             }
         }
@@ -246,7 +246,7 @@ fun SettingScreen(
     }
 }
 
-private object SettingPermission {
+private object SystemSettingsActions {
     fun openAllFilesAccessSettings(context: Context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
