@@ -27,7 +27,7 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
     private val setShellDirectoryJumpEnabledUseCase: SetShellDirectoryJumpEnabledUseCase
 ) : ViewModel(){
 
-    private var _shellOutputList = MutableStateFlow(emptyList<ShellResult>())
+    private var _shellOutputs = MutableStateFlow(emptyList<ShellResult>())
     private val _isRootShellAvailable = MutableStateFlow(getRootShellStatusUseCase())
     private var _lastCommandContent = MutableStateFlow("")
     val shellContextPreferences = observeShellContextPreferencesUseCase()
@@ -36,7 +36,7 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = observeShellContextPreferencesUseCase.defaultPreferences
         )
-    val shellOutputList = _shellOutputList.asStateFlow()
+    val shellOutputs = _shellOutputs.asStateFlow()
     val isRootShellAvailable = _isRootShellAvailable.asStateFlow()
     val isAdbShellAvailable = observeAdbShellStatusUseCase()
         .stateIn(
@@ -58,11 +58,11 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
                 if (_lastCommandContent.value != shellResult.command && shellResult.command != null){
 
                     _lastCommandContent.value = shellResult.command
-                    _shellOutputList.value += shellResult
+                    _shellOutputs.value += shellResult
 
                 }else if(_lastCommandContent.value == shellResult.command){
 
-                    _shellOutputList.value += shellResult.copy(command = null)
+                    _shellOutputs.value += shellResult.copy(command = null)
 
                 }
 
@@ -74,7 +74,7 @@ class RootlessStoreShellScreenViewModel @Inject constructor(
     }
 
     fun resetShellOutput() {
-        _shellOutputList.value =  emptyList()
+        _shellOutputs.value =  emptyList()
     }
 
     fun setDirectoryJumpEnabled(isEnabled: Boolean) {

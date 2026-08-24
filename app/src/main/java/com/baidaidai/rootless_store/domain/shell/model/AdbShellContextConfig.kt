@@ -5,6 +5,6 @@ data class AdbShellContextConfig(
     override val environmentPath: String,
     override val environmentLdPath: String,
     override val environmentConfig: Map<String, String>,
-    val environmentConfigKeyList: List<String>,
-    val environmentConfigValueList: List<String>
+    val environmentConfigKeys: List<String>,
+    val environmentConfigValues: List<String>
 ): ShellContextConfig
