@@ -331,7 +331,7 @@ fun ShellScreen(
                         Text(shellResult.command)
                     }
 
-                    if (shellResult.resultTag == ExecutionResultTag.RedLine){
+                    if (shellResult.resultTag == ExecutionResultTag.Error){
                         Text(
                             shellResult.output,
                             color = Color(Color.RED)
