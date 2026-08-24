@@ -8,17 +8,17 @@ import javax.inject.Inject
 class StorageStatusDataSource @Inject constructor(
     @ApplicationContext appContext: Context
 ){
-    private val statFS = StatFs(appContext.dataDir.absolutePath)
+    private val statFs = StatFs(appContext.dataDir.absolutePath)
     fun getUsedStorage(): Double{
-        val usedStorage: Long = statFS.totalBytes - statFS.availableBytes
-        return reverseBytesToGiB(usedStorage)
+        val usedStorageBytes: Long = statFs.totalBytes - statFs.availableBytes
+        return bytesToGibibytes(usedStorageBytes)
     }
     fun getTotalStorage(): Double{
-        val totalStorage: Long = statFS.totalBytes
-        return reverseBytesToGiB(totalStorage)
+        val totalStorageBytes: Long = statFs.totalBytes
+        return bytesToGibibytes(totalStorageBytes)
     }
 
-    private fun reverseBytesToGiB(bytes: Long): Double {
+    private fun bytesToGibibytes(bytes: Long): Double {
         return bytes / (1024.0 * 1024.0 * 1024.0)
     }
 }
