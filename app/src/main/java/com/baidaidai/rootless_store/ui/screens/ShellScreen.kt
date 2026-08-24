@@ -64,14 +64,14 @@ fun ShellScreen(
     var shellEnvironment by remember { mutableStateOf(ShellEnvironment.AppShell) }
     var isEnvironmentMenuExpanded by remember { mutableStateOf(false) }
 
-    val shellOutputList by shellScreenViewModel.shellOutputList.collectAsState()
+    val shellOutputs by shellScreenViewModel.shellOutputs.collectAsState()
     val isRootShellAvailable by shellScreenViewModel.isRootShellAvailable.collectAsState()
     val isAdbShellAvailable by shellScreenViewModel.isAdbShellAvailable.collectAsState()
     val shellContextPreferences by shellScreenViewModel.shellContextPreferences.collectAsState()
 
-    LaunchedEffect(shellOutputList.size) {
-        if (shellOutputList.isNotEmpty()) {
-            lazyColumnState.scrollToItem(shellOutputList.lastIndex)
+    LaunchedEffect(shellOutputs.size) {
+        if (shellOutputs.isNotEmpty()) {
+            lazyColumnState.scrollToItem(shellOutputs.lastIndex)
         }
     }
 
@@ -325,7 +325,7 @@ fun ShellScreen(
                     .padding(horizontal = 25.dp, vertical = 15.dp)
             ){
                 items(
-                    items = shellOutputList
+                    items = shellOutputs
                 ){ shellResult ->
                     if(shellResult.command != null){
                         Text(shellResult.command)

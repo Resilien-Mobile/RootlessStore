@@ -31,16 +31,16 @@ class ShellExecutionContextProviderImpl @Inject constructor(
         val environmentPath = environmentRepositoryImpl.resolveEnvironmentRuntimePath()
         val environmentLdPath = environmentRepositoryImpl.resolveEnvironmentLdPath()
         val environmentConfig = environmentRepositoryImpl.resolveEnvironmentConfig()
-        val environmentConfigKeyList = environmentRepositoryImpl.resolveEnvironmentConfigKeys()
-        val environmentConfigValueList = environmentRepositoryImpl.resolveEnvironmentConfigValues()
+        val environmentConfigKeys = environmentRepositoryImpl.resolveEnvironmentConfigKeys()
+        val environmentConfigValues = environmentRepositoryImpl.resolveEnvironmentConfigValues()
 
         return AdbShellContextConfig(
             shouldJumpToDirectory = preferences.shouldJumpToDirectory,
             environmentPath = environmentPath,
             environmentLdPath = environmentLdPath,
             environmentConfig = environmentConfig,
-            environmentConfigKeyList = environmentConfigKeyList,
-            environmentConfigValueList = environmentConfigValueList,
+            environmentConfigKeys = environmentConfigKeys,
+            environmentConfigValues = environmentConfigValues,
         )
     }
 

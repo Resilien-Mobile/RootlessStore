@@ -97,7 +97,7 @@ fun RootlessStoreNavigationScaffold(
     }
 
     val lazyColumnState = rememberLazyListState() /*TODO("Can migration Intro VM")*/
-    val totalListLength = shellScreenViewModel.shellOutputList.collectAsState().value.size
+    val shellOutputCount = shellScreenViewModel.shellOutputs.collectAsState().value.size
 
     // Local Data
     var isSourceDialogVisible by rememberSaveable{ mutableStateOf(false) }
@@ -246,7 +246,7 @@ fun RootlessStoreNavigationScaffold(
                         },
                         onBottomIconClick = {
 
-                            lazyColumnState.scrollToItem(totalListLength)
+                            lazyColumnState.scrollToItem(shellOutputCount)
                         },
                         onDeleteIconClick = {
                             shellScreenViewModel.resetShellOutput()

@@ -220,11 +220,11 @@ internal class ShizukuEndpointTemplate : IShellService.Stub() {
     }
 
     private fun buildEnvironmentConfigExportString(
-        environmentConfigKeyList: List<String>,
-        environmentConfigValueList: List<String>
+        environmentConfigKeys: List<String>,
+        environmentConfigValues: List<String>
     ): String {
-        return environmentConfigKeyList
-            .zip(environmentConfigValueList)
+        return environmentConfigKeys
+            .zip(environmentConfigValues)
             .filter { (key, _) -> key.isValidShellVariableName() }
             .joinToString(separator = "; ") { (key, value) ->
                 "export $key=${value.shellQuote()}"
