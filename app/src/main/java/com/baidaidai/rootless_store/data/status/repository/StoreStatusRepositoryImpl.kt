@@ -28,9 +28,9 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun observeAvailableExecutionContext(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeAvailableExecutionContext()
 
-    fun getRootStatus(): Boolean = storeStatusGatewayImpl.getRootStatus()
+    fun isRootShellAvailable(): Boolean = storeStatusGatewayImpl.isRootShellAvailable()
 
-    fun getShizukuStatus(): Boolean = storeStatusGatewayImpl.getShizukuStatus()
+    fun isShizukuAvailable(): Boolean = storeStatusGatewayImpl.isShizukuAvailable()
 
     fun observeExecutionContextPreference(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeExecutionContextPreference()
 

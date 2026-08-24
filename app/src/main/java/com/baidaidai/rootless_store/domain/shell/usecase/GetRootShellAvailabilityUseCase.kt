@@ -3,8 +3,8 @@ package com.baidaidai.rootless_store.domain.shell.usecase
 import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
 import javax.inject.Inject
 
-class GetRootShellStatusUseCase @Inject constructor(
+class GetRootShellAvailabilityUseCase @Inject constructor(
     private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
 ) {
-    operator fun invoke(): Boolean = storeStatusRepositoryImpl.getRootStatus()
+    operator fun invoke(): Boolean = storeStatusRepositoryImpl.isRootShellAvailable()
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.domain.shell.model.ShellCommand
 import com.baidaidai.rootless_store.domain.shell.model.ShellResult
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveAdbShellStatusUseCase
-import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellStatusUseCase
+import com.baidaidai.rootless_store.domain.shell.usecase.GetRootShellAvailabilityUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.ObserveShellContextPreferencesUseCase
 import com.baidaidai.rootless_store.application.shell.ExecuteShellCommandUseCase
 import com.baidaidai.rootless_store.domain.shell.usecase.SetShellDirectoryJumpEnabledUseCase
@@ -21,14 +21,14 @@ import javax.inject.Inject
 @HiltViewModel
 class RootlessStoreShellScreenViewModel @Inject constructor(
     private val executeShellCommandUseCase: ExecuteShellCommandUseCase,
-    private val getRootShellStatusUseCase: GetRootShellStatusUseCase,
+    private val getRootShellAvailabilityUseCase: GetRootShellAvailabilityUseCase,
     private val observeAdbShellStatusUseCase: ObserveAdbShellStatusUseCase,
     observeShellContextPreferencesUseCase: ObserveShellContextPreferencesUseCase,
     private val setShellDirectoryJumpEnabledUseCase: SetShellDirectoryJumpEnabledUseCase
 ) : ViewModel(){
 
     private var _shellOutputs = MutableStateFlow(emptyList<ShellResult>())
-    private val _isRootShellAvailable = MutableStateFlow(getRootShellStatusUseCase())
+    private val _isRootShellAvailable = MutableStateFlow(getRootShellAvailabilityUseCase())
     private var _lastCommandContent = MutableStateFlow("")
     val shellContextPreferences = observeShellContextPreferencesUseCase()
         .stateIn(

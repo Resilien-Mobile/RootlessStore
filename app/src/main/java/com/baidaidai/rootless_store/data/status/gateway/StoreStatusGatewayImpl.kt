@@ -121,11 +121,11 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    fun getRootStatus(): Boolean {
+    fun isRootShellAvailable(): Boolean {
         return Shell.getShell().isRoot
     }
 
-    fun getShizukuStatus(): Boolean {
+    fun isShizukuAvailable(): Boolean {
         shizukuUserServiceGatewayImpl.startShizukuUserService()
         return true
         // MVP后马上删，会抛error不稳定
