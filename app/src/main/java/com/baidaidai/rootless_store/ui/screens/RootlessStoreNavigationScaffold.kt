@@ -366,7 +366,7 @@ fun RootlessStoreNavigationScaffold(
                         PluginScreen(
                             contentPadding = contentPadding,
                             pluginScreenViewModel = pluginScreenViewModel,
-                            navigateToExecuteScreen = { pluginId, shouldExecutePlugin ->
+                            onNavigateToExecuteScreen = { pluginId, shouldExecutePlugin ->
                                 navigationBackStack
                                     .add(ExecuteScreenKey(pluginId,shouldExecutePlugin))
                             },
@@ -401,10 +401,11 @@ fun RootlessStoreNavigationScaffold(
                     entry<MarketScreenKey> {
                         MarketScreen(
                             contentPadding = contentPadding,
-                            marketScreenViewModel = marketScreenViewModel
-                        ){
-                            navigationBackStack.add(PluginScreenKey)
-                        }
+                            marketScreenViewModel = marketScreenViewModel,
+                            onNavigateToPluginScreen = {
+                                navigationBackStack.add(PluginScreenKey)
+                            }
+                        )
                     }
                     entry<ShellScreenKey> {
                         ShellScreen(
