@@ -2,7 +2,7 @@ package com.baidaidai.illusioncube
 
 import com.baidaidai.illusioncube.application.conf.ValidateConfUseCase
 import com.baidaidai.illusioncube.application.json.ValidateJsonUseCase
-import com.baidaidai.illusioncube.application.prop.ConvertPropToJsonUseCase
+import com.baidaidai.illusioncube.application.prop.EncodePropAsJsonUseCase
 import com.baidaidai.illusioncube.application.prop.ValidatePropUseCase
 import com.baidaidai.illusioncube.application.yaml.ValidateYamlUseCase
 import com.baidaidai.illusioncube.domain.type.ConfigType
@@ -46,9 +46,9 @@ class IllusionCube (
     class Prop(
         private val rawConfig: String
     ){
-        fun convertPropToJson(): String{
-            val convertPropToJsonUseCase = ConvertPropToJsonUseCase()
-            return convertPropToJsonUseCase(rawConfig)
+        fun encodeAsJson(): String{
+            val encodePropAsJsonUseCase = EncodePropAsJsonUseCase()
+            return encodePropAsJsonUseCase(rawConfig)
         }
         companion object {
             fun validate(rawConfig: String): Boolean{

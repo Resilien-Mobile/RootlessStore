@@ -3,7 +3,7 @@ package com.baidaidai.illusioncube.application.prop
 import com.fasterxml.jackson.databind.ObjectMapper
 import java.util.Properties
 
-class ConvertPropToJsonUseCase (
+class EncodePropAsJsonUseCase(
     private val objectMapper: ObjectMapper = ObjectMapper()
 ) {
     operator fun invoke(targetContent: String): String {

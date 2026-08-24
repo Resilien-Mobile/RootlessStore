@@ -58,7 +58,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             }
 
             // Convert module.prop to ModuleProp
-            val magiskModulePropJson = IllusionCube.Prop(magiskModulePropContent).convertPropToJson()
+            val magiskModulePropJson = IllusionCube.Prop(magiskModulePropContent).encodeAsJson()
             val magiskProp = json.decodeFromString<MagiskProp>(magiskModulePropJson)
 
             // Detect AXManager style action script.
