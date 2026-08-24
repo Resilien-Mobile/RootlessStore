@@ -33,8 +33,8 @@ import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 fun HomeStatusOverview(
     modifier: Modifier = Modifier,
     deviceStatus: DeviceStatusSummary,
-    onChipClick: ()-> Unit = {},
-    onChipLongClick: ()-> Unit = {}
+    onOpenShizukuSetup: () -> Unit = {},
+    onOpenExecutionContextChooser: () -> Unit = {}
 ){
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
@@ -87,8 +87,8 @@ fun HomeStatusOverview(
                     Row {
                         ExecutionContextChip(
                             deviceStatus = deviceStatus,
-                            onLongClick = onChipLongClick,
-                            onClick = onChipClick,
+                            onOpenExecutionContextChooser = onOpenExecutionContextChooser,
+                            onOpenShizukuSetup = onOpenShizukuSetup,
                         )
                     }
                 }

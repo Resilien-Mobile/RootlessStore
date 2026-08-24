@@ -20,16 +20,16 @@ import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 @Composable
 fun ExecutionContextChip(
     deviceStatus: DeviceStatusSummary,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    onOpenShizukuSetup: () -> Unit,
+    onOpenExecutionContextChooser: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Surface(
         modifier = modifier
             .scale(0.95f)
             .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick
+                onClick = onOpenShizukuSetup,
+                onLongClick = onOpenExecutionContextChooser
             ),
         shape = AssistChipDefaults.shape,
         color = MaterialTheme.colorScheme.primaryContainer,
@@ -59,7 +59,7 @@ fun ExecutionContextChip(
 private fun _preview_() {
     ExecutionContextChip(
         deviceStatus = DeviceStatusSummary(),
-        onClick = {},
-        onLongClick = {}
+        onOpenShizukuSetup = {},
+        onOpenExecutionContextChooser = {}
     )
 }

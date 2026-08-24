@@ -36,7 +36,7 @@ fun HomeScreen(
     contentPadding: PaddingValues,
     rootlessStoreHeightWindowSize: RootlessStoreWindowSize,
     rootlessStoreWidthWindowSize: RootlessStoreWindowSize,
-    onChipClick:()-> Unit,
+    onOpenShizukuSetup: () -> Unit,
     homeScreenViewModel: RootlessStoreHomeScreenViewModel = hiltViewModel()
 ){
     val memoryStatus by homeScreenViewModel.memoryStatus.collectAsState()
@@ -102,8 +102,8 @@ fun HomeScreen(
                 /* Device Status Overview */
                 HomeStatusOverview(
                     deviceStatus = deviceStatusSummary,
-                    onChipClick = onChipClick,
-                    onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility
+                    onOpenShizukuSetup = onOpenShizukuSetup,
+                    onOpenExecutionContextChooser = homeScreenViewModel::toggleContextDialogVisibility
                 )
             }
 
@@ -141,8 +141,8 @@ fun HomeScreen(
             /* Device Status Overview */
             HomeStatusOverview(
                 deviceStatus = deviceStatusSummary,
-                onChipClick = onChipClick,
-                onChipLongClick = homeScreenViewModel::toggleContextDialogVisibility,
+                onOpenShizukuSetup = onOpenShizukuSetup,
+                onOpenExecutionContextChooser = homeScreenViewModel::toggleContextDialogVisibility,
                 modifier = resolveBasicWidthModifier()
             )
 
