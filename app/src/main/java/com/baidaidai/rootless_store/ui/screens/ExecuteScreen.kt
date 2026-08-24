@@ -30,17 +30,17 @@ fun ExecuteScreen(
             horizontal = 15.dp
         )
     ) {
-        itemsIndexed(executionLog){ ListIndex, ListContent ->
-            when(ListContent.resultTag){
+        itemsIndexed(executionLog){ _, executionResult ->
+            when(executionResult.resultTag){
                 ExecutionResultTag.Normal -> {
                     Text(
-                        text = ListContent.content,
+                        text = executionResult.content,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
                 ExecutionResultTag.RedLine -> {
                     Text(
-                        text = ListContent.content,
+                        text = executionResult.content,
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.Red
                     )
