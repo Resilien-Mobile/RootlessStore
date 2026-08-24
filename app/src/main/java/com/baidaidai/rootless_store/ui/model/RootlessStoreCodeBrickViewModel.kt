@@ -28,7 +28,7 @@ data class CodeBrickScreenUiState(
     val isBrickEditorVisible: Boolean = false,
     val isExecutionResultVisible: Boolean = false,
     val isBrickSettingsVisible: Boolean = false,
-    val isButtonMenuExpanded: Boolean = false,
+    val isCreationMenuExpanded: Boolean = false,
     val executionOutputLines: List<String> = emptyList(),
     val selectedCodeBrick: CodeBrickConfig = CodeBrickConfig(unixTimestamp = 1L,"", ExecutionContext.LIMITED,"")
 )
@@ -92,12 +92,12 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
             )
         }
     }
-    fun setButtonMenuExpanded(
+    fun setCreationMenuExpanded(
         isExpanded: Boolean = false
     ){
         _codeBrickScreenUiState.update {
             it.copy(
-                isButtonMenuExpanded = isExpanded
+                isCreationMenuExpanded = isExpanded
             )
         }
     }
