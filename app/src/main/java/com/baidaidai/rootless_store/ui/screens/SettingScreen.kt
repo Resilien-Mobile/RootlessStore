@@ -186,7 +186,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_all_files_access_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToAllFilesAccess(context) }
+                    onIconButtonClick = { SettingPermission.openAllFilesAccessSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -198,7 +198,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_stop_restrict_child_process_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToStopRestrictChildProcess(context) }
+                    onIconButtonClick = { SettingPermission.openDeveloperOptions(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -210,7 +210,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_notification_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToNotificationPermission(context) }
+                    onIconButtonClick = { SettingPermission.openAppNotificationSettings(context) }
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 SettingScreenListItemPermission(
@@ -222,7 +222,7 @@ fun SettingScreen(
                             contentDescription = stringResource(R.string.setting_screen_permission_battery_icon_content_description)
                         )
                     },
-                    onIconButtonClick = { SettingPermission.jumpToBatteryPermission(context) }
+                    onIconButtonClick = { SettingPermission.requestBatteryOptimizationExemption(context) }
                 )
             }
         }
@@ -247,7 +247,7 @@ fun SettingScreen(
 }
 
 private object SettingPermission {
-    fun jumpToAllFilesAccess(context: Context){
+    fun openAllFilesAccessSettings(context: Context){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val intent = Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
                 data = "package:${context.packageName}".toUri()
@@ -257,14 +257,14 @@ private object SettingPermission {
         }
     }
 
-    fun jumpToStopRestrictChildProcess(context: Context){
+    fun openDeveloperOptions(context: Context){
         val intent = Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(intent)
     }
 
-    fun jumpToNotificationPermission(context: Context){
+    fun openAppNotificationSettings(context: Context){
         val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
             putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -272,7 +272,7 @@ private object SettingPermission {
         context.startActivity(intent)
     }
 
-    fun jumpToBatteryPermission(context: Context){
+    fun requestBatteryOptimizationExemption(context: Context){
         val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
             data = "package:${context.packageName}".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
