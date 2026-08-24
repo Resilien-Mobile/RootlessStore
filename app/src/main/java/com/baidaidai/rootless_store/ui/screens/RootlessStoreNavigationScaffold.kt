@@ -241,14 +241,14 @@ fun RootlessStoreNavigationScaffold(
                         scrollBehavior = scrollBehavior
                     )
                     ShellScreenKey -> ShellScreenNecessaryComponents.ShellScreenTopAppBar(
-                        onTopIconClick = {
+                        onScrollToTop = {
                             lazyColumnState.scrollToItem(0)
                         },
-                        onBottomIconClick = {
+                        onScrollToBottom = {
 
                             lazyColumnState.scrollToItem(shellOutputCount)
                         },
-                        onDeleteIconClick = {
+                        onClearOutput = {
                             shellScreenViewModel.resetShellOutput()
                         }
                     )
