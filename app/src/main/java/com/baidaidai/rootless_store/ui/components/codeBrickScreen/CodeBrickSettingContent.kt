@@ -51,7 +51,7 @@ fun CodeBrickSettingContent(
         )
     )
 
-    val currentSelectedContext = codeBrickContexts.firstOrNull { codeBrickContextConfig ->
+    val selectedContext = codeBrickContexts.firstOrNull { codeBrickContextConfig ->
         codeBrickContextConfig.contextType == brickContext
     } ?: codeBrickContexts.first()
 
@@ -79,9 +79,9 @@ fun CodeBrickSettingContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         CodeBrickContextList(
-            currentSelectedContext = currentSelectedContext,
+            selectedContext = selectedContext,
             codeBrickContexts = codeBrickContexts,
-            onListItemClick = { codeBrickContextConfig ->
+            onContextSelected = { codeBrickContextConfig ->
                 onCodeBrickContextValueChange(codeBrickContextConfig.contextType)
             }
         )

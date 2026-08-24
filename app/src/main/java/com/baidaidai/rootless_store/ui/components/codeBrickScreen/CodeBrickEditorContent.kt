@@ -55,7 +55,7 @@ fun CodeBrickEditorContent(
         )
     )
 
-    var currentSelectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
+    var selectedContext by remember { mutableStateOf(codeBrickContexts[0]) }
 
     Column(modifier) {
 
@@ -81,10 +81,10 @@ fun CodeBrickEditorContent(
         Spacer(modifier = Modifier.height(16.dp))
 
         CodeBrickContextList(
-            currentSelectedContext = currentSelectedContext,
+            selectedContext = selectedContext,
             codeBrickContexts = codeBrickContexts,
-            onListItemClick = { codeBrickContextConfig ->
-                currentSelectedContext = codeBrickContextConfig
+            onContextSelected = { codeBrickContextConfig ->
+                selectedContext = codeBrickContextConfig
                 onCodeBrickContextValueChange(codeBrickContextConfig.contextType)
             }
         )
