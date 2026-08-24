@@ -14,7 +14,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 
-class SettingPreferenceRepositoryImpl @Inject constructor(
+class SettingPreferencesRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
     // Read
