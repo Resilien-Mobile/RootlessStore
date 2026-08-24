@@ -102,7 +102,7 @@ fun RootlessStoreNavigationScaffold(
     // Local Data
     var isSourceDialogVisible by rememberSaveable{ mutableStateOf(false) }
     var sourceRemoteEndpoint by rememberSaveable{ mutableStateOf("") }
-    var sharedEvent by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
+    var currentError by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
     val context = LocalContext.current
     val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     val scrollBehavior = when(currentDestination){
@@ -138,22 +138,22 @@ fun RootlessStoreNavigationScaffold(
     // Effects
     LaunchedEffect(0) {
         sourceScreenViewModel.sourceEvent.collect { event ->
-            sharedEvent = event
+            currentError = event
         }
     }
     LaunchedEffect(1) {
         pluginScreenViewModel.pluginEvent.collect{ event ->
-            sharedEvent = event
+            currentError = event
         }
     }
     LaunchedEffect(2) {
         marketScreenViewModel.marketEvent.collect{ event ->
-            sharedEvent = event
+            currentError = event
         }
     }
     LaunchedEffect(3) {
         codeBrickViewModel.codeBrickEvent.collect { event ->
-            sharedEvent = event
+            currentError = event
         }
     }
     LaunchedEffect(incomingPackageUri) {
@@ -345,8 +345,8 @@ fun RootlessStoreNavigationScaffold(
             }
 
             // Application Error Dialog
-            if (sharedEvent is RootlessStoreError){
-                StartScreenErrorDialog(sourceScreenViewModel, sharedEvent)
+            if (currentError is RootlessStoreError){
+                StartScreenErrorDialog(sourceScreenViewModel, currentError)
             }
 
             NavDisplay(
