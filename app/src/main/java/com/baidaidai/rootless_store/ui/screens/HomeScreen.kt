@@ -48,7 +48,7 @@ fun HomeScreen(
     val androidAndApiStatus by homeScreenViewModel.androidAndApiStatus.collectAsState()
     val executionContext by homeScreenViewModel.executionContext.collectAsState()
     val isContextDialogVisible by homeScreenViewModel.isContextDialogVisible.collectAsState()
-    val latestVersionNumber by homeScreenViewModel.latestVersion.collectAsState()
+    val latestVersionTag by homeScreenViewModel.latestVersionTag.collectAsState()
     val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
     val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
     val appVersion = stringResource(R.string.app_version)
@@ -89,11 +89,11 @@ fun HomeScreen(
                 RootlessStoreVersionCard()
             }
 
-            if (latestVersionNumber != null && latestVersionNumber != appVersion) {
+            if (latestVersionTag != null && latestVersionTag != appVersion) {
                 item {
                     /* Version Checker */
                     RootlessStoreUpdateBanner(
-                        latestVersionNumber = latestVersionNumber!!
+                        latestVersionTag = latestVersionTag!!
                     )
                 }
             }
@@ -131,9 +131,9 @@ fun HomeScreen(
             // Version and update status
             RootlessStoreVersionCard(Modifier.width(preferWidth))
 
-            if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
+            if (latestVersionTag != null && latestVersionTag != appVersion && rootlessStoreHeightWindowSize != RootlessStoreWindowSize.Compact) {
                 RootlessStoreUpdateBanner(
-                    latestVersionNumber = latestVersionNumber!!,
+                    latestVersionTag = latestVersionTag!!,
                     modifier = resolveBasicWidthModifier()
                 )
             }
@@ -148,9 +148,9 @@ fun HomeScreen(
 
             /* Version Checker */
             // 如果height紧凑，则可用此布局，反之不可使用
-            if (latestVersionNumber != null && latestVersionNumber != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
+            if (latestVersionTag != null && latestVersionTag != appVersion && rootlessStoreHeightWindowSize == RootlessStoreWindowSize.Compact) {
                 RootlessStoreUpdateBanner(
-                    latestVersionNumber = latestVersionNumber!!,
+                    latestVersionTag = latestVersionTag!!,
                     modifier = resolveBasicWidthModifier()
                 )
             }

@@ -9,17 +9,17 @@ import javax.inject.Inject
 class StoreUpdateGatewayImpl @Inject constructor(
     private val githubReleaseApi: GithubReleaseApi
 ){
-    suspend fun fetchLatestVersion(): String? {
+    suspend fun fetchLatestVersionTag(): String? {
         try{
             val httpResponse = githubReleaseApi.fetchLatestVersionTagName()
             val githubReleaseDto = httpResponse.body<GithubReleaseDto>()  // Automatically ignore the useless values
 
 
-            Log.d("StoreUpdateGatewayImpl.fetchLatestVersion",githubReleaseDto.tagName)
+            Log.d("StoreUpdateGatewayImpl.fetchLatestVersionTag",githubReleaseDto.tagName)
             return githubReleaseDto.tagName
         }catch (error: Throwable){
             // It's Useless to show error message for users
-            Log.d("StoreUpdateGatewayImpl.fetchLatestVersion","Connection Time Out")
+            Log.d("StoreUpdateGatewayImpl.fetchLatestVersionTag","Connection Time Out")
             return null
         }
     }

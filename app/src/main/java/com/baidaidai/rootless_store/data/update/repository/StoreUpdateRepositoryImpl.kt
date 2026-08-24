@@ -6,5 +6,5 @@ import javax.inject.Inject
 class StoreUpdateRepositoryImpl @Inject constructor(
     private val storeUpdateGatewayImpl: StoreUpdateGatewayImpl
 ){
-    suspend fun fetchLatestVersion(): String? = storeUpdateGatewayImpl.fetchLatestVersion()
+    suspend fun fetchLatestVersionTag(): String? = storeUpdateGatewayImpl.fetchLatestVersionTag()
 }

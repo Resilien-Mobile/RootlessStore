@@ -29,7 +29,7 @@ import com.baidaidai.rootless_store.R
 @Composable
 fun RootlessStoreUpdateBanner(
     modifier: Modifier = Modifier,
-    latestVersionNumber: String
+    latestVersionTag: String
 ){
 
     val context = LocalContext.current
@@ -75,7 +75,7 @@ fun RootlessStoreUpdateBanner(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = latestVersionNumber,
+                        text = latestVersionTag,
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
@@ -88,6 +88,6 @@ fun RootlessStoreUpdateBanner(
 @Composable
 private fun _preview_() {
     Column(modifier = Modifier.fillMaxWidth()) {
-        RootlessStoreUpdateBanner(latestVersionNumber = "v2.2.0", modifier = Modifier.width(200.dp))
+        RootlessStoreUpdateBanner(latestVersionTag = "v2.2.0", modifier = Modifier.width(200.dp))
     }
 }
