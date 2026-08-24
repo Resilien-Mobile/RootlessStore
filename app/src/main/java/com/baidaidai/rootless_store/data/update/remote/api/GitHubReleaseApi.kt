@@ -6,7 +6,7 @@ import io.ktor.client.request.request
 import io.ktor.client.statement.HttpResponse
 import javax.inject.Inject
 
-class GitHubReleaseApi @Inject constructor(
+class GithubReleaseApi @Inject constructor(
     private val ktorClient: HttpClient
 ) {
     private val client = ktorClient
