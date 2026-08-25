@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -29,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import com.baidaidai.rootless_store.WebViewActivity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
@@ -47,7 +51,6 @@ fun PluginScreen(
 ){
     val plugins by pluginScreenViewModel.plugins.collectAsState()
     val environments by pluginScreenViewModel.environments.collectAsState()
-    val isBadgeVisible by pluginScreenViewModel.isBadgeVisible.collectAsState()
 
     var selectedTabIndex by rememberSaveable{ mutableIntStateOf(0) }
 
@@ -84,7 +87,6 @@ fun PluginScreen(
         when(selectedTabIndex){
             0 -> {
                 InstalledPluginList(
-                    isBadgeVisible = isBadgeVisible,
                     plugins = plugins,
                     pluginScreenViewModel = pluginScreenViewModel,
                     onNavigateToExecuteScreen = onNavigateToExecuteScreen,
@@ -94,7 +96,6 @@ fun PluginScreen(
             }
             1 -> {
                 InstalledEnvironmentList(
-                    isBadgeVisible = isBadgeVisible,
                     environments = environments,
                     pluginScreenViewModel = pluginScreenViewModel
                 )
@@ -105,7 +106,6 @@ fun PluginScreen(
 
 @Composable
 fun InstalledPluginList(
-    isBadgeVisible: Boolean,
     plugins: List<PluginManifestRoom>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
@@ -116,86 +116,111 @@ fun InstalledPluginList(
     val density = LocalDensity.current
     val context = LocalContext.current
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(
-            vertical = 15.dp,
-            horizontal = 15.dp
-        )
-    ) {
+    if (plugins.isEmpty()){
 
-        items(
-            items = plugins,
-            key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
-        ){ pluginManifestRoom ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.material_symbols_folder_open),
+                modifier = Modifier.size(64.dp),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
+            )
+            Text(
+                text = "No Plugin Installed",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
+            )
+        }
 
-            var isActionPanelVisible by remember { mutableStateOf(false) }
-            var cardSize by remember { mutableStateOf(IntSize.Zero) }
+    }else{
 
-            if (isActionPanelVisible){
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(
+                vertical = 15.dp,
+                horizontal = 15.dp
+            )
+        ) {
 
-                PluginActionPanel(
-                    pluginManifestRoom = pluginManifestRoom,
-                    onShareClick = {
-                        val shareUri = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
+            items(
+                items = plugins,
+                key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
+            ){ pluginManifestRoom ->
 
-                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                            type = "application/zip"
-                            putExtra(Intent.EXTRA_STREAM, shareUri)
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        }
+                var isActionPanelVisible by remember { mutableStateOf(false) }
+                var cardSize by remember { mutableStateOf(IntSize.Zero) }
 
-                        context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
-                    },
-                    onOpenWebUiClick = {
+                if (isActionPanelVisible){
 
-                        val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifestRoom)
+                    PluginActionPanel(
+                        pluginManifestRoom = pluginManifestRoom,
+                        onShareClick = {
+                            val shareUri = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
 
-                        val webUiIntent = Intent(context, WebViewActivity::class.java).apply {
-                            putExtra("webUri",webUiUri)
-                        }
-                        context.startActivity(webUiIntent)
-                    },
-                    onUninstallClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
-                    onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
-                    modifier = Modifier
-                        .size(
-                            width = with(density) { cardSize.width.toDp() },
-                            height = with(density) { cardSize.height.toDp() }
-                        )
-                )
-
-            }else{
-
-                InstalledManifestCard(
-                    pluginManifestRoom = pluginManifestRoom,
-                    onEnabledChange = { isEnabled ->
-                        pluginScreenViewModel.setPluginEnabled(
-                            pluginId = pluginManifestRoom.pluginId,
-                            isEnabled = isEnabled
-                        )
-
-                        if (isEnabled){
-                            onNavigateToExecuteScreen(pluginManifestRoom.pluginId,true)
-                        }else{
-                            coroutineScope.launch {
-                                onAbortPluginProcess(pluginManifestRoom.pluginId)
+                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "application/zip"
+                                putExtra(Intent.EXTRA_STREAM, shareUri)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
-                        }
-                    },
-                    onExecuteClick = { onExecuteOneTimePlugin(pluginManifestRoom.pluginId) },
-                    onClick = {
-                        if (pluginManifestRoom.isEnabled){
-                            onNavigateToExecuteScreen(pluginManifestRoom.pluginId,false)
-                        }
-                    },
-                    onLongClick = { isActionPanelVisible = !isActionPanelVisible },
-                    onSizeChanged = { cardSize = it },
-                )
 
+                            context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
+                        },
+                        onOpenWebUiClick = {
+
+                            val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifestRoom)
+
+                            val webUiIntent = Intent(context, WebViewActivity::class.java).apply {
+                                putExtra("webUri",webUiUri)
+                            }
+                            context.startActivity(webUiIntent)
+                        },
+                        onUninstallClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
+                        onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
+                        modifier = Modifier
+                            .size(
+                                width = with(density) { cardSize.width.toDp() },
+                                height = with(density) { cardSize.height.toDp() }
+                            )
+                    )
+
+                }else{
+
+                    InstalledManifestCard(
+                        pluginManifestRoom = pluginManifestRoom,
+                        onEnabledChange = { isEnabled ->
+                            pluginScreenViewModel.setPluginEnabled(
+                                pluginId = pluginManifestRoom.pluginId,
+                                isEnabled = isEnabled
+                            )
+
+                            if (isEnabled){
+                                onNavigateToExecuteScreen(pluginManifestRoom.pluginId,true)
+                            }else{
+                                coroutineScope.launch {
+                                    onAbortPluginProcess(pluginManifestRoom.pluginId)
+                                }
+                            }
+                        },
+                        onExecuteClick = { onExecuteOneTimePlugin(pluginManifestRoom.pluginId) },
+                        onClick = {
+                            if (pluginManifestRoom.isEnabled){
+                                onNavigateToExecuteScreen(pluginManifestRoom.pluginId,false)
+                            }
+                        },
+                        onLongClick = { isActionPanelVisible = !isActionPanelVisible },
+                        onSizeChanged = { cardSize = it },
+                    )
+
+                }
             }
         }
+
     }
 }
