@@ -382,7 +382,6 @@ fun RootlessStoreNavigationScaffold(
                         CodeBrickScreen(
                             contentPaddingValues = contentPadding,
                             codeBrickViewModel = codeBrickViewModel,
-                            rootlessStoreWindowSize = rootlessStoreWidthWindowSize,
                             onDismissCreationMenu = {
                                 codeBrickViewModel.setCreationMenuExpanded()
                             }
