@@ -365,7 +365,9 @@ fun RootlessStoreNavigationScaffold(
                     entry<PluginScreenKey> {
                         PluginScreen(
                             contentPadding = contentPadding,
+                            rootlessStoreWidthWindowSize = rootlessStoreWidthWindowSize,
                             pluginScreenViewModel = pluginScreenViewModel,
+                            viewModelStoreOwner = viewModelStoreOwner,
                             onNavigateToExecuteScreen = { pluginId, shouldExecuteImmediately ->
                                 navigationBackStack
                                     .add(ExecuteScreenKey(pluginId,shouldExecuteImmediately))

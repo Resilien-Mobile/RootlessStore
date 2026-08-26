@@ -2,8 +2,10 @@ package com.baidaidai.rootless_store.ui.screens
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,6 +19,7 @@ import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -35,16 +38,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import com.baidaidai.rootless_store.WebViewActivity
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginActionPanel
 import com.baidaidai.rootless_store.ui.components.pluginScreen.InstalledManifestCard
+import com.baidaidai.rootless_store.ui.model.RootlessStoreExecuteScreenViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun PluginScreen(
     contentPadding: PaddingValues,
+    rootlessStoreWidthWindowSize: RootlessStoreWindowSize,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
+    viewModelStoreOwner: ViewModelStoreOwner,
     onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
     onAbortPluginProcess: suspend (pluginId: String) -> Unit,
     onExecuteOneTimePlugin: (pluginId: String) -> Unit
@@ -52,58 +61,108 @@ fun PluginScreen(
     val plugins by pluginScreenViewModel.plugins.collectAsState()
     val environments by pluginScreenViewModel.environments.collectAsState()
 
+    // 切换 Environment / Plugin
     var selectedTabIndex by rememberSaveable{ mutableIntStateOf(0) }
+    var pluginId by remember { mutableStateOf("") }
+    var shouldExecuteImmediately by remember { mutableStateOf(false) }
+    val executeScreenViewModel = hiltViewModel<RootlessStoreExecuteScreenViewModel>(key = pluginId, viewModelStoreOwner = viewModelStoreOwner)
 
-    Column(
-        modifier = Modifier
-            .padding(contentPadding)
-            .fillMaxSize(),
-    ) {
-        SecondaryTabRow(
-            selectedTabIndex = selectedTabIndex,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Tab(
-                selected = selectedTabIndex == 0,
-                onClick = { selectedTabIndex = 0 },
+
+    Row(modifier = Modifier.fillMaxSize().padding(contentPadding)) {
+
+        Column(modifier = Modifier.weight(1f).fillMaxSize()) {
+            SecondaryTabRow(
+                selectedTabIndex = selectedTabIndex,
                 modifier = Modifier
-                    .height(48.dp)
-                    .weight(1f)
+                    .fillMaxWidth()
             ) {
-                Text(stringResource(R.string.plugin_screen_secondary_tab_row_plugins_label))
+                Tab(
+                    selected = selectedTabIndex == 0,
+                    onClick = { selectedTabIndex = 0 },
+                    modifier = Modifier
+                        .height(48.dp)
+                        .weight(1f)
+                ) {
+                    Text(stringResource(R.string.plugin_screen_secondary_tab_row_plugins_label))
+                }
+
+                Tab(
+                    selected = selectedTabIndex == 1,
+                    onClick = { selectedTabIndex = 1 },
+                    modifier = Modifier
+                        .height(48.dp)
+                        .weight(1f)
+                ) {
+                    Text(stringResource(R.string.plugin_screen_secondary_tab_row_environment_label))
+                }
             }
+            when(selectedTabIndex){
+                0 -> {
+                    InstalledPluginList(
+                        plugins = plugins,
+                        pluginScreenViewModel = pluginScreenViewModel,
+                        onNavigateToExecuteScreen = { _pluginId, _shouldExecuteImmediately ->
+                            pluginId = _pluginId ; shouldExecuteImmediately = _shouldExecuteImmediately
 
-            Tab(
-                selected = selectedTabIndex == 1,
-                onClick = { selectedTabIndex = 1 },
-                modifier = Modifier
-                    .height(48.dp)
-                    .weight(1f)
-            ) {
-                Text(stringResource(R.string.plugin_screen_secondary_tab_row_environment_label))
+                            if (rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Compact){
+                                onNavigateToExecuteScreen(_pluginId,_shouldExecuteImmediately)
+                            }
+                        },
+                        onAbortPluginProcess = onAbortPluginProcess,
+                        onExecuteOneTimePlugin = onExecuteOneTimePlugin
+                    )
+                }
+                1 -> {
+                    InstalledEnvironmentList(
+                        environments = environments,
+                        pluginScreenViewModel = pluginScreenViewModel
+                    )
+                }
             }
         }
-        when(selectedTabIndex){
-            0 -> {
-                InstalledPluginList(
-                    plugins = plugins,
-                    pluginScreenViewModel = pluginScreenViewModel,
-                    onNavigateToExecuteScreen = onNavigateToExecuteScreen,
-                    onAbortPluginProcess = onAbortPluginProcess,
-                    onExecuteOneTimePlugin = onExecuteOneTimePlugin
+
+        if (rootlessStoreWidthWindowSize != RootlessStoreWindowSize.Compact){
+
+            if (pluginId.isNotEmpty()){
+                LaunchedEffect(pluginId, shouldExecuteImmediately) {
+                    if (shouldExecuteImmediately) {
+                        executeScreenViewModel.executePlugin(pluginId)
+                    }
+                }
+
+                ExecuteScreen(
+                    contentPaddingValues = PaddingValues(0.dp),
+                    executeScreenViewModel = executeScreenViewModel,
+                    modifier = Modifier.weight(1f)
                 )
+            }else{
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                ) {
+
+                    Icon(
+                        painter = painterResource(R.drawable.terminal_24px),
+                        modifier = Modifier.size(64.dp),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
+                    )
+
+                }
             }
-            1 -> {
-                InstalledEnvironmentList(
-                    environments = environments,
-                    pluginScreenViewModel = pluginScreenViewModel
-                )
-            }
+
         }
+
     }
+
 }
 
+/**
+ * shouldExecuteImmediately只是用来控制一种情况
+ * 就是是否 Switch 杀插件，因为OneTime已经有对应的CallBack了
+ */
 @Composable
 fun InstalledPluginList(
     plugins: List<PluginManifestRoom>,
