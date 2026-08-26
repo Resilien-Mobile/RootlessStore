@@ -124,7 +124,7 @@ class CpuStatusDataSource @Inject constructor(
                     onOutput = { output ->
                         trySend(output)
                     },
-                    onError = {
+                    onErrors = {
                         trySend(null)
                     },
                     onProcessExit = {}
