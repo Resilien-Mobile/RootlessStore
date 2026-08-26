@@ -104,7 +104,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
                         )
                     )
                 },
-                onError = { error ->
+                onErrors = { error ->
                     trySend(
                         ExecutionResult(
                             resultTag = ExecutionResultTag.Error,

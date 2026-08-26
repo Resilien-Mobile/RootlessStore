@@ -35,7 +35,7 @@ class KernelSuJavaScriptBridge(
             onOutput = { output ->
                 stdout.appendLine(output.orEmpty())
             },
-            onError = { error ->
+            onErrors = { error ->
                 stderr.appendLine(error.orEmpty())
             },
             onProcessExit = {}
