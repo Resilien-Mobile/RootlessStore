@@ -100,7 +100,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
                         )
                     )
                 },
-                onError = { error ->
+                onErrors = { error ->
                     trySend(
                         ShellResult(
                             resultTag = ExecutionResultTag.Error,
