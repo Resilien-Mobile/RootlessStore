@@ -1,20 +1,28 @@
 package com.baidaidai.rootless_store.ui.screens
 
+import com.baidaidai.rootless_store.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -97,38 +105,69 @@ fun CodeBrickScreen(
             )
         }
 
-        LazyVerticalStaggeredGrid(
-            verticalItemSpacing = 10.dp,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            columns = StaggeredGridCells.Fixed(resolveCodeBrickGridCount),
-            contentPadding = PaddingValues(10.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ){ onDismissCreationMenu() }
-        ) {
-            itemsIndexed(
-                items = codeBricks
-            ){ index ,codeBrickConfig ->
-                CodeBrickPreviewer(
-                    codeBrickConfig = codeBrickConfig,
-                    onExecuteClick = codeBrickViewModel::executeCodeBrick,
-                    onSettingsClick = {
-                        codeBrickViewModel.showCodeBrickSettings(codeBrickConfig)
-                    },
-                    onDeleteClick = codeBrickViewModel::deleteCodeBrick
+        if(codeBricks.isEmpty()){
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ){ onDismissCreationMenu() }
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.material_symbols_brick),
+                    modifier = Modifier.size(64.dp),
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
+                )
+                Text(
+                    text = "No Code Brick Added",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
                 )
             }
+
+        }else{
+
+            LazyVerticalStaggeredGrid(
+                verticalItemSpacing = 10.dp,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                columns = StaggeredGridCells.Fixed(resolveCodeBrickGridCount),
+                contentPadding = PaddingValues(10.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ){ onDismissCreationMenu() }
+            ) {
+                itemsIndexed(
+                    items = codeBricks
+                ){ index ,codeBrickConfig ->
+                    CodeBrickPreviewer(
+                        codeBrickConfig = codeBrickConfig,
+                        onExecuteClick = codeBrickViewModel::executeCodeBrick,
+                        onSettingsClick = {
+                            codeBrickViewModel.showCodeBrickSettings(codeBrickConfig)
+                        },
+                        onDeleteClick = codeBrickViewModel::deleteCodeBrick
+                    )
+                }
+            }
+
         }
+
+
     }
 }
 
 /**
  * 按 200.dp 来算，可以吃完后剩下多少可用空间
- * 如果 剩余空间 >= 100dp ，则应该增加一列，让所有 Preview 自己缩减来适配
- * 如果 剩余空间 <= 100dp ，则不用变化剩下的宽度
+ * 如果 剩余空间 >= 158dp ，则应该增加一列，让所有 Preview 自己缩减来适配
+ * 如果 剩余空间 < 158dp ，则不用变化剩下的宽度
  */
 private fun resolveCodeBrickGridCount(
     containerWidth: Dp,
