@@ -17,13 +17,14 @@ import com.baidaidai.rootless_store.ui.model.RootlessStoreExecuteScreenViewModel
 
 @Composable
 fun ExecuteScreen(
+    modifier: Modifier = Modifier,
     contentPaddingValues: PaddingValues,
     executeScreenViewModel: RootlessStoreExecuteScreenViewModel
 ){
     val executionLog by executeScreenViewModel.executionLog.collectAsState()
 
     LazyColumn(
-        modifier = Modifier.padding(contentPaddingValues),
+        modifier = modifier.padding(contentPaddingValues),
 
         contentPadding = PaddingValues(
             vertical = 15.dp,
