@@ -127,8 +127,8 @@ fun CodeBrickScreen(
 
 /**
  * 按 200.dp 来算，可以吃完后剩下多少可用空间
- * 如果 剩余空间 >= 100dp ，则应该增加一列，让所有 Preview 自己缩减来适配
- * 如果 剩余空间 <= 100dp ，则不用变化剩下的宽度
+ * 如果 剩余空间 >= 158dp ，则应该增加一列，让所有 Preview 自己缩减来适配
+ * 如果 剩余空间 < 158dp ，则不用变化剩下的宽度
  */
 private fun resolveCodeBrickGridCount(
     containerWidth: Dp,
