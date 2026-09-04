@@ -1,10 +1,10 @@
 package com.baidaidai.rootless_store.service.tile
 
-import com.baidaidai.rootless_store.domain.tile.model.RootlessStoreTileService
+import com.baidaidai.rootless_store.service.tile.model.RootlessStoreTileService
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CustomTileService_1 @Inject constructor(
-    override val tileIndex: Int = 1
+class CustomTileService_0 @Inject constructor(
+    override val tileIndex: Int = 0
 ): RootlessStoreTileService()
