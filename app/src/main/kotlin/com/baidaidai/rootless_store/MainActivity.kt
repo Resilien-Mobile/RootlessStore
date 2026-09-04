@@ -23,7 +23,7 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import coil3.request.crossfade
-import com.baidaidai.rootless_store.domain.runtime.usecase.RecoverPluginRuntimeStateUseCase
+import com.baidaidai.rootless_store.application.runtime.RecoverPluginRuntimeStateUseCase
 import com.baidaidai.rootless_store.ui.screens.RootlessStoreNavigationScaffold
 import com.baidaidai.rootless_store.ui.theme.*
 import dagger.hilt.android.AndroidEntryPoint
