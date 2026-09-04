@@ -20,6 +20,9 @@ fun icuString(
     @StringRes id: Int,
     args: Map<String, Any> = emptyMap()
 ): String {
+
+
+
     val pattern = stringResource(id)
     val locales = LocalConfiguration.current.locales
     val locale = if (locales.size() > 0) locales[0] else Locale.getDefault()
