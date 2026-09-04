@@ -9,6 +9,12 @@
 ## macOS
 .DS_Store
 
+## Private
+TODO.md
+
+## Ai
+/skills
+
 ## Default
 *.iml
 /local.properties
