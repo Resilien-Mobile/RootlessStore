@@ -1,7 +1,5 @@
 package com.baidaidai.rootless_store.domain.status.model
 
-import com.baidaidai.rootless_store.R
-
 data class NetworkDashboardConfig(
     val currentUploadRate: Float,
     val currentDownloadRate: Float,
@@ -14,7 +12,7 @@ data class NetworkDashboardConfig(
             networkInterfaces = listOf(
                 NetworkInterfaceMetrics(
                     interfaceName = "rmnet_data0",
-                    interfaceIcon = R.drawable.material_symbols_sim_card,
+                    interfaceIcon = 0,
                     interfaceAddress = "172.198.210.132",
                     currentUploadRate = 7.7f,
                     currentDownloadRate = 37.8f,
@@ -23,7 +21,7 @@ data class NetworkDashboardConfig(
                 ),
                 NetworkInterfaceMetrics(
                     interfaceName = "wlan0",
-                    interfaceIcon = R.drawable.material_symbols_wifi,
+                    interfaceIcon = 0,
                     interfaceAddress = "192.168.1.100",
                     currentUploadRate = 4.8f,
                     currentDownloadRate = 48.6f,
