@@ -25,6 +25,7 @@ data class EnvironmentManifestRoom(
     override val ldLibraryPath: List<String>,
     override val env: Map<String, String>
 ): EnvironmentManifest.EnvironmentManifestRoom{
+
     companion object {
         val _testOnly_ = EnvironmentManifestRoom(
             installedVersion = "x.x.x",
@@ -43,4 +44,5 @@ data class EnvironmentManifestRoom(
             env = emptyMap()
         )
     }
+
 }

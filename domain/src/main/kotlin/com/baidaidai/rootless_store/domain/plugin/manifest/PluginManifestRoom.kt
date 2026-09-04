@@ -1,8 +1,8 @@
 package com.baidaidai.rootless_store.domain.plugin.manifest
 
 import androidx.room.ColumnInfo
-import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
