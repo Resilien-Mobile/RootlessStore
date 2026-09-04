@@ -141,7 +141,9 @@ dependencies {
     ksp(libs.kotlin.metadata.jvm)
 
     // Illusion Cube
-    implementation(project(":illusioncube"))
+    implementation(project(":application"))
+    implementation(project(":ui"))
+    implementation(project(":service"))
 
     // WebView
     implementation("androidx.webkit:webkit:1.16.0")

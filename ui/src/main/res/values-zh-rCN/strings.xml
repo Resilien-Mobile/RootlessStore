@@ -1,0 +1,202 @@
+<resources>
+    <!-- Home Screen Strings -->
+    <string name="home_screen_version_checker_container_icon_content_description">终端图标</string>
+    <string name="home_screen_version_checker_container_headline">Rootless Store 正运行</string>
+    <string name="home_screen_version_checker_container_supporting">版本 {version}</string>
+    <string name="home_screen_version_checker_container_new_version_icon_content_description">新版本</string>
+    <string name="home_screen_version_checker_container_new_version_headline">新版本可用</string>
+
+    <string name="home_screen_device_status_icon_content_description">设备状态</string>
+    <string name="home_screen_device_status_title">设备状态</string>
+    <string name="home_screen_device_status_overall">总体状态：%1$s</string>
+    <string name="home_screen_device_status_memory_label">内存</string>
+    <string name="home_screen_device_status_storage_label">存储</string>
+    <string name="home_screen_device_status_version_label">版本</string>
+    <string name="home_screen_device_status_kernel_label">内核</string>
+    <string name="home_screen_device_status_selinux_label">SELinux</string>
+    <string name="home_screen_device_status_plugins_label">插件</string>
+    <string name="home_screen_device_status_temp_label">温度</string>
+
+    <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">开发图标</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_headline">了解 Rootless Store</string>
+    <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">了解如何开发 Rootless Store 插件</string>
+
+    <!-- Shizuku ADB Screen: Overview Card -->
+    <string name="shizuku_adb_screen_overview_card_title">Shizuku 授权</string>
+    <string name="shizuku_adb_screen_overview_card_icon_content_description">Shizuku 图标</string>
+    <string name="shizuku_adb_screen_overview_card_description">Rootless Store 的部分功能依赖 Shizuku 提供的 ADB 能力，请先授予 Shizuku 授权，然后再连接到 UserService</string>
+
+    <!-- Shizuku ADB Screen: Action Cards -->
+    <string name="shizuku_adb_screen_action_card_start_content_description">开始</string>
+    <string name="shizuku_adb_screen_action_card_step_1_label">步骤 1</string>
+    <string name="shizuku_adb_screen_action_card_step_1_title">请求 Shizuku 授权</string>
+    <string name="shizuku_adb_screen_action_card_step_1_description">授予 ADB 授权，让 Rootless Store 可以启动 Shell 流程并解锁下一步。</string>
+    <string name="shizuku_adb_screen_action_card_step_2_label">步骤 2</string>
+    <string name="shizuku_adb_screen_action_card_step_2_title">连接到 Shizuku UserService</string>
+    <string name="shizuku_adb_screen_action_card_step_2_description">请连接到 Shizuku UserService 以完成最后准备</string>
+
+    <!-- Shizuku ADB Screen: Bottom Sheet -->
+    <string name="shizuku_adb_screen_bottom_sheet_title">已完成</string>
+    <!-- Countdown text is intentionally split to avoid format parameters for now. -->
+    <string name="shizuku_adb_screen_bottom_sheet_countdown_context">返回首页倒计时 {second} 秒</string>
+    <string name="shizuku_adb_screen_bottom_sheet_close_button">关闭</string>
+    <string name="shizuku_adb_screen_bottom_sheet_return_button">立即返回</string>
+
+    <!-- Shell Screen Strings -->
+    <string name="shell_screen_command_input_label">Shell 命令</string>
+    <string name="shell_screen_enable_run_as_label">启用 run-as</string>
+    <string name="shell_screen_jump_to_directory_label">跳转到目录</string>
+
+    <!-- Plugin Screen: Top App Bar -->
+    <string name="plugin_screen_top_app_bar_title">插件页</string>
+    <string name="plugin_screen_top_app_bar_subtitle">已安装了 {pluginCount} 个插件</string>
+    <string name="plugin_screen_top_app_bar_edit_button">编辑</string>
+    <string name="plugin_screen_top_app_bar_filter_content_description">筛选</string>
+
+    <!-- Plugin Screen: Secondary Tab Row -->
+    <string name="plugin_screen_secondary_tab_row_plugins_label">插件</string>
+    <string name="plugin_screen_secondary_tab_row_environment_label">环境</string>
+
+    <!-- Plugin Screen: Floating Button -->
+    <string name="plugin_screen_floating_button_install_content_description">安装</string>
+
+    <!-- Plugin Screen: Info Container -->
+    <string name="plugin_screen_info_container_local_delete_button_content_description">删除按钮</string>
+    <string name="plugin_screen_info_container_local_icon_content_description">插件图标</string>
+    <string name="plugin_screen_info_container_local_version">版本：{version}</string>
+    <string name="plugin_screen_info_container_local_author_label">作者</string>
+    <string name="plugin_screen_info_container_local_source_label">来源</string>
+    <string name="plugin_screen_info_container_local_state_label">状态</string>
+    <string name="plugin_screen_info_container_local_required_label">最低权限</string>
+
+    <!-- Sources Screen: Top App Bar -->
+    <string name="sources_screen_top_app_bar_title">插件源</string>
+    <string name="sources_screen_top_app_bar_subtitle">已添加了 {sourceCount} 个插件源</string>
+    <string name="sources_screen_top_app_bar_edit_button">编辑</string>
+    <string name="sources_screen_top_app_bar_add_content_description">添加</string>
+
+    <!-- Sources Screen: List Item -->
+    <string name="sources_screen_list_item_go_to_content_description">前往</string>
+    <string name="sources_screen_list_item_delete_content_description">删除</string>
+    <string name="sources_screen_list_item_icon_content_description">源图标</string>
+
+    <!-- Sources Screen: Repository Dialog -->
+    <string name="sources_screen_repository_dialog_confirm_button">添加</string>
+    <string name="sources_screen_repository_dialog_dismiss_button">取消</string>
+    <string name="sources_screen_repository_dialog_title">添加插件源</string>
+    <string name="sources_screen_repository_dialog_description">添加一个仓库源，用于更新和发现更多插件</string>
+    <string name="sources_screen_repository_dialog_input_label">插件源 URL</string>
+    <string name="sources_screen_repository_dialog_input_placeholder">https://endpoint/api/v1</string>
+
+    <!-- Execute Screen: Top App Bar -->
+    <string name="execute_screen_top_app_bar_title">正执行插件</string>
+    <string name="execute_screen_top_app_bar_share_content_description">分享</string>
+    <string name="execute_screen_top_app_bar_stop_content_description">停止</string>
+    <string name="execute_screen_top_app_bar_back_content_description">返回</string>
+
+    <!-- Start Screen: Navigation Bar -->
+    <string name="start_screen_navigation_bar_home_label">主页</string>
+    <string name="start_screen_navigation_bar_plugin_label">插件页</string>
+    <string name="start_screen_navigation_bar_brick_label">代码块</string>
+    <string name="start_screen_navigation_bar_sources_label">插件源</string>
+
+    <!-- Code Brick Screen: Top App Bar -->
+    <string name="code_brick_screen_top_app_bar_title">代码块</string>
+    <string name="code_brick_screen_top_app_bar_subtitle">灵活 DIY 客制化需求</string>
+
+    <!-- Code Brick Screen: Floating Button -->
+    <string name="code_brick_screen_floating_button_add_content_description">添加</string>
+    <string name="code_brick_screen_floating_button_by_token_label">口令导入</string>
+    <string name="code_brick_screen_floating_button_by_writing_label">手写键入</string>
+
+    <!-- Code Brick Screen: Editor -->
+    <string name="code_brick_screen_editor_title">代码块</string>
+    <string name="code_brick_screen_editor_cancel_button">取消</string>
+    <string name="code_brick_screen_editor_confirm_button">确认</string>
+    <string name="code_brick_screen_editor_brick_name_label">代码块名称</string>
+    <string name="code_brick_screen_editor_shell_script_label">Shell代码内容</string>
+    <string name="code_brick_screen_editor_brick_context_title">代码块环境</string>
+    <string name="code_brick_screen_editor_context_app_shell_label">App Shell</string>
+    <string name="code_brick_screen_editor_context_adb_shell_label">ADB Shell</string>
+    <string name="code_brick_screen_editor_context_root_shell_label">Root Shell</string>
+
+    <!-- Code Brick Screen: Previewer -->
+    <string name="code_brick_screen_previewer_play_content_description">运行</string>
+    <string name="code_brick_screen_previewer_setting_content_description">设置</string>
+    <string name="code_brick_screen_previewer_delete_content_description">删除</string>
+
+    <!-- Code Brick Screen: Tile List -->
+    <string name="code_brick_screen_tile_list_binder_new_title">磁贴绑定器（新增）</string>
+    <string name="code_brick_screen_tile_list_binder_input_placeholder">输入磁贴绑定编号：0-4</string>
+
+    <!-- Code Brick Screen: To Plugin Button -->
+    <string name="code_brick_screen_to_plugin_button_label">转换为插件</string>
+    <string name="code_brick_screen_to_plugin_button_content_description">转换为插件</string>
+
+    <!-- Code Brick Screen: Result -->
+    <string name="code_brick_screen_result_title">执行结果</string>
+    <string name="code_brick_screen_result_confirm_button">确认</string>
+
+    <!-- Setting Screen: Top App Bar -->
+    <string name="setting_screen_top_app_bar_title">设置</string>
+
+    <!-- Setting Screen: Sections -->
+    <string name="setting_screen_section_general_title">通用</string>
+    <string name="setting_screen_section_source_title">源</string>
+    <string name="setting_screen_section_permission_title">权限</string>
+    <string name="setting_screen_section_about_title">关于</string>
+
+    <!-- Setting Screen: General -->
+    <string name="setting_screen_general_check_latest_version_headline">检测最新版本</string>
+    <string name="setting_screen_general_check_latest_version_supporting">自动检测最新版本</string>
+    <string name="setting_screen_general_check_latest_version_icon_content_description">检测最新版本</string>
+    <string name="setting_screen_general_notify_plugin_status_headline">通知插件状态</string>
+    <string name="setting_screen_general_notify_plugin_status_supporting">插件状态通知设置</string>
+    <string name="setting_screen_general_notify_plugin_status_icon_content_description">插件状态通知</string>
+    <string name="setting_screen_general_third_party_push_headline">通过第三方推送通知</string>
+    <string name="setting_screen_general_third_party_push_supporting">第三方通知推送设置</string>
+    <string name="setting_screen_general_third_party_push_icon_content_description">第三方通知推送</string>
+
+    <!-- Setting Screen: Source -->
+    <string name="setting_screen_source_allow_insecure_connection_headline">允许使用不安全连接</string>
+    <string name="setting_screen_source_allow_insecure_connection_supporting">允许直接使用 HTTP 通信</string>
+    <string name="setting_screen_source_allow_insecure_connection_icon_content_description">允许使用不安全连接</string>
+    <string name="setting_screen_source_use_dot_protected_connection_headline">使用 DoT 保护连接</string>
+    <string name="setting_screen_source_use_dot_protected_connection_supporting">使用 DNS-over-TLS 保护连接</string>
+    <string name="setting_screen_source_use_dot_protected_connection_icon_content_description">使用 DoT 保护连接</string>
+
+    <!-- Setting Screen: Permission -->
+    <string name="setting_screen_permission_all_files_access_headline">所有文件访问权限</string>
+    <string name="setting_screen_permission_all_files_access_supporting">用于拓展磁盘上下文权限</string>
+    <string name="setting_screen_permission_all_files_access_icon_content_description">所有文件访问权限</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_headline">停止限制子进程</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_supporting">允许子进程保持运行</string>
+    <string name="setting_screen_permission_stop_restrict_child_process_icon_content_description">停止限制子进程</string>
+    <string name="setting_screen_permission_notification_headline">通知权限</string>
+    <string name="setting_screen_permission_notification_supporting">用于显示应用通知</string>
+    <string name="setting_screen_permission_notification_icon_content_description">通知权限</string>
+    <string name="setting_screen_permission_battery_headline">开启允许后台使用</string>
+    <string name="setting_screen_permission_battery_supporting">允许 Rootless Store 在后台运行</string>
+    <string name="setting_screen_permission_battery_icon_content_description">电池权限</string>
+    <string name="setting_screen_permission_open_content_description">打开</string>
+
+    <!-- Setting Screen: About -->
+    <string name="setting_screen_about_rootless_store_headline">关于 Rootless Store</string>
+
+    <!-- Third Party Notification Screen: Top App Bar -->
+    <string name="third_party_notification_screen_top_app_bar_title">第三方通知</string>
+    <string name="third_party_notification_screen_top_app_bar_save_content_description">保存</string>
+
+    <!-- Third Party Notification Screen: Inputs -->
+    <string name="third_party_notification_screen_bark_api_key_input_label">Bark APP API Key</string>
+    <string name="third_party_notification_screen_api_key_visibility_content_description">显示 API Key</string>
+    <string name="third_party_notification_screen_api_key_visibility_off_content_description">隐藏 API Key</string>
+    <string name="third_party_notification_screen_notification_title_input_label">通知标题（可选）</string>
+    <string name="third_party_notification_screen_self_built_server_input_label">自建服务器（可选）</string>
+    <string name="third_party_notification_screen_clear_content_description">清除</string>
+
+    <!-- Third Party Notification Screen: Warning -->
+    <string name="third_party_notification_screen_warning_notification_headline">警告通知</string>
+    <string name="third_party_notification_screen_warning_notification_supporting">启用警告通知</string>
+    <string name="third_party_notification_screen_warning_notification_icon_content_description">警告</string>
+</resources>

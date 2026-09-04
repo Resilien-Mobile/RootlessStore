@@ -26,3 +26,9 @@ dependencyResolutionManagement {
 rootProject.name = "RootLess Store"
 include(":app")
 include(":illusioncube")
+include(":data")
+include(":domain")
+include(":application")
+include(":ui")
+include(":core")
+include(":service")
