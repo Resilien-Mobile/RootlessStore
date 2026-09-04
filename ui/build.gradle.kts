@@ -1,70 +1,19 @@
 
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
 }
-kotlin {
-    compilerOptions {
-        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
-        // Optional: Set jvmTarget
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-    }
-}
 android {
 
-    lint {
-        disable += "ExpiredTargetSdkVersion"
-    }
-
-    namespace = "com.baidaidai.rootless_store"
-    compileSdk {
-        version = release(37)
-    }
-
-    signingConfigs {
-        create("github") {
-            storeFile = file("release.jks")
-            storePassword = System.getenv("DEBUG_STORE_PASSWORD") ?: "android"
-            keyAlias = System.getenv("DEBUG_KEY_ALIAS") ?: "androiddebugkey"
-            keyPassword = System.getenv("DEBUG_KEY_PASSWORD") ?: "android"
-        }
-    }
-
-    defaultConfig {
-        applicationId = "com.baidaidai.rootless_store"
-        minSdk = 26
-        targetSdk = 28
-        versionCode = 2
-        versionName = "2.2.2"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-        create("github") {
-            initWith(getByName("release"))
-            signingConfig = signingConfigs.getByName("github")
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+    namespace = "com.baidaidai.rootless_store.ui"
+    compileSdk = 37
 
     buildFeatures {
         compose = true
-        aidl = true
     }
 }
 
@@ -109,10 +58,6 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
-    // Room Libs
-    implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-
     // Hilt Libs
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -121,12 +66,6 @@ dependencies {
     // Paging Libs
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose) // Optional
-
-    // Ktor Libs
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
 
     // Coil Libs
     implementation(libs.coil.compose)
@@ -142,8 +81,9 @@ dependencies {
 
     // Illusion Cube
     implementation(project(":application"))
-    implementation(project(":ui"))
-    implementation(project(":service"))
+    implementation(project(":domain"))
+    implementation(project(":core"))
+
 
     // WebView
     implementation("androidx.webkit:webkit:1.16.0")
