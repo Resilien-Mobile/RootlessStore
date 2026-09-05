@@ -12,6 +12,8 @@ import com.baidaidai.rootless_store.data.notification.database.NotificationPrefe
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceEntity
 import com.baidaidai.rootless_store.data.environment.database.EnvironmentDao
 import com.baidaidai.rootless_store.data.environment.database.EnvironmentEntity
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentStatusDao
+import com.baidaidai.rootless_store.data.environment.database.EnvironmentStatusEntity
 import com.baidaidai.rootless_store.data.plugin.database.PluginDao
 import com.baidaidai.rootless_store.data.plugin.database.PluginEntity
 import com.baidaidai.rootless_store.data.plugin.database.PluginStatusDao
@@ -26,11 +28,12 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         PluginSourceEntity::class,
         PluginExecutionEntity::class,
         EnvironmentEntity::class,
+        EnvironmentStatusEntity::class,
         NotificationPreferenceEntity::class,
         CodeBrickEntity::class
         // 其它表也一起加进来
     ],
-    version = 4,
+    version = 5,
     exportSchema = true
 )
 @TypeConverters(RoomCollectionTypeConverters::class)
@@ -38,6 +41,7 @@ abstract class RootlessStoreDatabase : RoomDatabase() {
     abstract fun pluginDao(): PluginDao
     abstract fun pluginStatusDao(): PluginStatusDao
     abstract fun environmentDao(): EnvironmentDao
+    abstract fun environmentStatusDao(): EnvironmentStatusDao
     abstract fun pluginSourceDao(): PluginSourceDao
     abstract fun pluginExecutionDao(): PluginExecutionDao
     abstract fun notificationPreferenceDao(): NotificationPreferenceDao

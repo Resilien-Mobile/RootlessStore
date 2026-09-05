@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
@@ -114,7 +113,7 @@ fun MarketManifestCard(
             }
         }
         is EnvironmentManifest -> {
-            val environmentManifest = manifest as EnvironmentManifestRemote
+            val environmentManifest = manifest
             Card(
                 modifier = modifier
                     .fillMaxWidth(),

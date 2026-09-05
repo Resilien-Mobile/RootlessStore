@@ -5,8 +5,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.utils.io.ByteReadChannel
@@ -82,9 +80,9 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     fun getCacheEnvironmentDirectoryFile(): File{
         return getEnvironmentCacheDirectory()
     } // /Cache/Environment: File
-    fun resolveEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
+    fun resolveEnvironmentPackageDirectory(environmentManifest: EnvironmentManifest): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
-        val environmentPackageName = environmentManifestRoom.environmentPackageName
+        val environmentPackageName = environmentManifest.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
     }  // /File/Environment/ENVIRONMENT
 
@@ -403,14 +401,13 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
         return json.decodeFromString<PluginManifest>(jsonContent)
     }  // Convert JSON to PluginManifest
-    fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifestLocal {
+    fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifest {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
             isLenient = true
         }
-        val manifest: EnvironmentManifestLocal = json.decodeFromString(EnvironmentManifestLocal.Companion.serializer(),jsonContent)
-        return manifest
-    }  // Convert JSON to EnvironmentManifestLocal
+        return json.decodeFromString<EnvironmentManifest>(jsonContent)
+    }  // Convert JSON to EnvironmentManifest
 
     // Delete FS Operator
     @Deprecated(

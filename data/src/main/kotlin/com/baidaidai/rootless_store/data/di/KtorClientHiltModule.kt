@@ -8,7 +8,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import kotlinx.serialization.json.Json
@@ -34,7 +34,7 @@ object KtorClientHiltModule {
                         serializersModule = SerializersModule {
                             polymorphic(MarketManifest::class) {
                                 subclass(PluginManifest::class)
-                                subclass(EnvironmentManifestRemote::class)
+                                subclass(EnvironmentManifest::class)
                             }
                         }
                     }
