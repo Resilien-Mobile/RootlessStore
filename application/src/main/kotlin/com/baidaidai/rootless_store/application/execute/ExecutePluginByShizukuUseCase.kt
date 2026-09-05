@@ -1,8 +1,7 @@
 package com.baidaidai.rootless_store.application.execute
 
-import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
-import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntity
 import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
+import com.baidaidai.rootless_store.data.execution.repository.PluginExecutionRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.setting.repository.SettingPreferencesRepositoryImpl
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
@@ -14,9 +13,9 @@ import javax.inject.Inject
 
 class ExecutePluginByShizukuUseCase @Inject constructor(
     private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
+    private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val settingPreferencesRepositoryImpl: SettingPreferencesRepositoryImpl,
-    private val rootlessStoreDatabase: RootlessStoreDatabase
+    private val settingPreferencesRepositoryImpl: SettingPreferencesRepositoryImpl
 ) {
     private val pidRegex = Regex("""^\s*-\s*PID:(\d+)\s*$""")
 
@@ -41,12 +40,11 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
                 val pid = parsePid(executionResult.output)
                 if (pid != null) {
                     pidSaved = true
-                    val pluginExecutionEntity = PluginExecutionEntity
-                        .fromPluginManifest(pluginManifestRoom, pid)
-                        .copy(executionContext = ExecutionContext.ADB)
-                    rootlessStoreDatabase
-//                        .pluginExecutionDao()
-//                        .insertPluginExecution(pluginExecutionEntity)
+                    pluginExecutionRepositoryImpl.createPluginExecution(
+                        pluginManifestRoom = pluginManifestRoom,
+                        executionPid = pid,
+                        executionContext = ExecutionContext.ADB
+                    )
                 }
             }
         }
