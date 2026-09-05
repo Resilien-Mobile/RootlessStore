@@ -7,7 +7,7 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRez
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemSearchOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import java.io.File
 import javax.inject.Inject
@@ -21,17 +21,17 @@ class ResolvePluginShareUriUseCase @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
     operator fun invoke(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifest: PluginManifest
     ): Uri {
 
-        if (pluginManifestRoom.requiredEnvironment == ExecutionContext.ADB) {
-            return resolveShellPluginShareUri(pluginManifestRoom)
+        if (pluginManifest.requiredEnvironment == ExecutionContext.ADB) {
+            return resolveShellPluginShareUri(pluginManifest)
         }
 
         val internalPluginCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getInternalPluginCacheDirectoryFile()
 
         // Get plugin package directory -> /file/Plugin/PLUGIN_DIRECTORY
-        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom)
+        val pluginPackageDirectory = androidFileSystemDefaultOperatorGatewayImpl.resolvePluginPackageDirectory(pluginManifest)
 
         // Detect if cache/plugin available -> /cache/Plugin
         val hasPluginCacheDirectory = androidFileSystemSearchOperatorGatewayImpl.hasPluginCacheDirectory()
@@ -42,7 +42,7 @@ class ResolvePluginShareUriUseCase @Inject constructor(
 
         // Zip to cache/plugin
         // Resolve zip target -> /cache/Plugin/PLUGIN.zip
-        val zipFile = androidFileSystemCreateOperatorGatewayImpl.resolveChildFile(internalPluginCacheDirectory,"${pluginManifestRoom.pluginPackageName}.zip")
+        val zipFile = androidFileSystemCreateOperatorGatewayImpl.resolveChildFile(internalPluginCacheDirectory,"${pluginManifest.pluginPackageName}.zip")
 
         // Write Zip Byte
         androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
@@ -61,25 +61,25 @@ class ResolvePluginShareUriUseCase @Inject constructor(
     }
 
     private fun resolveShellPluginShareUri(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifest: PluginManifest
     ): Uri {
 
         // Get shell plugin export cache zip -> /storage/emulated/0/Android/data/com.baidaidai.rootless_store/cache/PLUGIN.zip
         val shellPluginExportCacheDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppCacheDirectoryFile()
         val shellPluginExportZipFile = File(
             shellPluginExportCacheDirectory,
-            "${pluginManifestRoom.pluginPackageName}.zip"
+            "${pluginManifest.pluginPackageName}.zip"
         )
 
         // Shizuku File Flow
         val isShellPluginExportSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
             ?.exportShellPlugin(
-                pluginManifestRoom.pluginPackageName,
+                pluginManifest.pluginPackageName,
                 shellPluginExportZipFile.path
             ) ?: false
 
         if (!isShellPluginExportSuccessful) {
-            throw IllegalStateException("Failed to export shell plugin. pluginPackageName=${pluginManifestRoom.pluginPackageName}")
+            throw IllegalStateException("Failed to export shell plugin. pluginPackageName=${pluginManifest.pluginPackageName}")
         }
 
         // Check if Zip is really available (option)

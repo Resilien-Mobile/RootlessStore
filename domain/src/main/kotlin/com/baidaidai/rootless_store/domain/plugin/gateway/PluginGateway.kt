@@ -1,10 +1,8 @@
 package com.baidaidai.rootless_store.domain.plugin.gateway
 
-//import android.net.Uri
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 
 interface PluginGateway {
-//    fun installPluginFromLocal(originFileUri: Uri): Unit // need convert to string
-    suspend fun installPluginFromMarket(pluginUrl: String, pluginManifestRemote: PluginManifestRemote)
-    fun uninstallPlugin(pluginPackageName: String): Unit
+    suspend fun installPluginFromMarket(pluginUrl: String, pluginManifest: PluginManifest)
+    fun uninstallPlugin(pluginPackageName: String)
 }

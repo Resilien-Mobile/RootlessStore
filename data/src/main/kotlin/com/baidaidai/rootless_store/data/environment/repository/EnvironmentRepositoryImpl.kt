@@ -3,11 +3,13 @@ package com.baidaidai.rootless_store.data.environment.repository
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.environment.gateway.EnvironmentGatewayImpl
 import com.baidaidai.rootless_store.data.environment.mapper.EnvironmentMapper.toEnvironmentEntity
+import com.baidaidai.rootless_store.data.environment.mapper.EnvironmentMapper.toEnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class EnvironmentRepositoryImpl @Inject constructor(
@@ -43,16 +45,23 @@ class EnvironmentRepositoryImpl @Inject constructor(
     suspend fun findEnvironmentById(
         environmentId: String
     ): EnvironmentManifestRoom? {
-        val environmentManifest = environmentDao.findEnvironmentById(environmentId)
-        return environmentManifest
+        return environmentDao.findEnvironmentById(environmentId)?.toEnvironmentManifestRoom()
     }
 
     fun observeEnvironments(): Flow<List<EnvironmentManifestRoom>> {
-        return environmentDao.observeEnvironments()
+        return environmentDao.observeEnvironments().map { entities ->
+            entities.map { it.toEnvironmentManifestRoom() }
+        }
+    }
+
+    private fun observeEnabledEnvironmentManifests(): Flow<List<EnvironmentManifestRoom>> {
+        return environmentDao.observeEnabledEnvironments().map { entities ->
+            entities.map { it.toEnvironmentManifestRoom() }
+        }
     }
 
     suspend fun resolveEnvironmentRuntimePath(): String {
-        return environmentDao.observeEnabledEnvironments()
+        return observeEnabledEnvironmentManifests()
             .first()
             .joinToString(":") { environmentManifest ->
                 environmentGatewayImpl.resolveEnvironmentRuntimePath(environmentManifest)
@@ -60,7 +69,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     suspend fun resolveEnvironmentLdPath(): String {
-        return environmentDao.observeEnabledEnvironments()
+        return observeEnabledEnvironmentManifests()
             .first()
             .joinToString(":") { environmentManifest ->
                 environmentGatewayImpl.resolveEnvironmentLdPath(environmentManifest)
@@ -68,7 +77,7 @@ class EnvironmentRepositoryImpl @Inject constructor(
     }
 
     suspend fun resolveEnvironmentConfig(): Map<String, String> {
-        val environmentManifests = environmentDao.observeEnabledEnvironments().first()
+        val environmentManifests = observeEnabledEnvironmentManifests().first()
 
         return buildMap {
             environmentManifests.forEach { environmentManifest ->

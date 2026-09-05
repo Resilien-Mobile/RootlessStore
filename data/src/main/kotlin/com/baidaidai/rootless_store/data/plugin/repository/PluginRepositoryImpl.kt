@@ -2,56 +2,33 @@ package com.baidaidai.rootless_store.data.plugin.repository
 
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.plugin.mapper.PluginMapper.toPluginEntity
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
+import com.baidaidai.rootless_store.data.plugin.mapper.PluginMapper.toPluginManifest
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.repository.PluginRepository
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PluginRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase,
-): PluginRepository {
+) : PluginRepository {
 
     private val pluginDao = rootlessStoreDatabase.pluginDao()
 
     // Add
-    override suspend fun addPlugin(
-        pluginManifestLocal: PluginManifestLocal
-    ){
-        val pluginEntity = pluginManifestLocal.toPluginEntity()
-        pluginDao.insertPlugin(pluginEntity)
-    }
-    suspend fun addPlugin(
-        pluginManifestRemote: PluginManifestRemote
-    ){
-        val pluginEntity = pluginManifestRemote.toPluginEntity()
-        pluginDao.insertPlugin(pluginEntity)
+    override suspend fun addPlugin(pluginManifest: PluginManifest) {
+        pluginDao.insertPlugin(pluginManifest.toPluginEntity())
     }
 
-    // Update
-    override suspend fun enablePlugin(pluginId: String) {
-        pluginDao.updatePluginEnabled(pluginId = pluginId, isEnabled = true)
+    // Read
+    override suspend fun findPlugin(pluginId: String): PluginManifest? {
+        return pluginDao.findPluginById(pluginId)?.toPluginManifest()
     }
 
-    override suspend fun disablePlugin(pluginId: String) {
-        pluginDao.updatePluginEnabled(pluginId = pluginId, isEnabled = false)
-    }
-
-    override suspend fun disableAllPlugins() {
-        pluginDao.updateAllPluginsEnabled(isEnabled = false)
-    }
-
-    // READ
-    override suspend fun findPlugin(
-        pluginId: String
-    ): PluginManifestRoom? {
-        val pluginManifest = pluginDao.findPluginById(pluginId)
-        return pluginManifest
-    }
-
-    override fun observePlugins(): Flow<List<PluginManifestRoom>> {
-        return pluginDao.observePlugins()
+    override fun observePlugins(): Flow<List<PluginManifest>> {
+        return pluginDao.observePlugins().map { entities ->
+            entities.map { it.toPluginManifest() }
+        }
     }
 
     override fun observePluginCount(): Flow<Int> {
@@ -62,13 +39,8 @@ class PluginRepositoryImpl @Inject constructor(
         return pluginDao.getPluginCount()
     }
 
-    override suspend fun getEnabledPluginCount(): Int {
-        return pluginDao.getEnabledPluginCount()
-    }
-
     // Delete
     override suspend fun deletePluginById(pluginId: String) {
         pluginDao.deletePluginById(pluginId)
     }
-
 }

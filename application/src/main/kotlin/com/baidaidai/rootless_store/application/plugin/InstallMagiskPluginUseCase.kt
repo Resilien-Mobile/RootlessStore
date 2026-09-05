@@ -10,10 +10,12 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRea
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
+import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.manifest.MagiskProp
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.serialization.json.Json
@@ -28,7 +30,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
     private val androidFileSystemRezipOperatorGatewayImpl: AndroidFileSystemRezipOperatorGatewayImpl,
     private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
-    private val pluginRepositoryImpl: PluginRepositoryImpl
+    private val pluginRepositoryImpl: PluginRepositoryImpl,
+    private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl
 ) {
 
     private val json = Json {
@@ -73,11 +76,11 @@ class InstallMagiskPluginUseCase @Inject constructor(
                 "service.sh"
             }
 
-            // Mapper ModuleProp to PluginManifestLocal
-            val pluginManifestLocal = magiskProp.toPluginManifestLocal(
+            // Mapper ModuleProp to PluginManifest
+            val pluginManifest = magiskProp.toPluginManifest(
                 entryPoint = magiskModuleEntryPoint
             )
-            val pluginManifestJson = json.encodeToString(pluginManifestLocal)
+            val pluginManifestJson = json.encodeToString(pluginManifest)
 
             // Build PluginManifest.json into temporary zip/plugin package
             val magiskStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppMagiskDirectoryFile()
@@ -122,8 +125,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
             val isShellPluginInstallSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.installShellPlugin(
                     magiskTemplateZipFile.path,
-                    pluginManifestLocal.pluginPackageName,
-                    pluginManifestLocal.entryPoint
+                    pluginManifest.pluginPackageName,
+                    pluginManifest.entryPoint
                 ) ?: false
 
             val isMagiskTemplateArchiveDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
@@ -133,7 +136,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             if (!isShellPluginInstallSuccessful) {
                 return PluginError(
                     errorMessage = "Install magisk shell plugin failed",
-                    errorCause = "Failed to copy magisk shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifestLocal.pluginPackageName}, entryPoint=${pluginManifestLocal.entryPoint}"
+                    errorCause = "Failed to copy magisk shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifest.pluginPackageName}, entryPoint=${pluginManifest.entryPoint}"
                 )
             }
 
@@ -144,8 +147,9 @@ class InstallMagiskPluginUseCase @Inject constructor(
                 )
             }
 
-            // Insert result to PluginRepositoryImpl
-            pluginRepositoryImpl.addPlugin(pluginManifestLocal)
+            // Insert result to PluginRepository
+            pluginRepositoryImpl.addPlugin(pluginManifest)
+            pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
 
             null
         } catch (error: Throwable) {
@@ -156,10 +160,10 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }
     }
 
-    private fun MagiskProp.toPluginManifestLocal(
+    private fun MagiskProp.toPluginManifest(
         entryPoint: String
-    ): PluginManifestLocal {
-        return PluginManifestLocal(
+    ): PluginManifest {
+        return PluginManifest(
             installedVersion = version,
             pluginRenderingName = name,
             pluginPackageName = name.replace(" ",""), // Avoid spacing, Prevent misidentification
@@ -169,8 +173,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             pluginDescription = description,
             requiredEnvironment = ExecutionContext.ADB,
             entryPoint = entryPoint,
-            pluginRunModel = PluginRunModel.Daemon,
-            executableFiles = null
+            pluginRunModel = PluginRunModel.Daemon
         )
     }
 }

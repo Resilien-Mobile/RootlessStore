@@ -1,22 +1,17 @@
 package com.baidaidai.rootless_store.domain.environment.manifest
 
-import androidx.room.ColumnInfo
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 data class EnvironmentManifestRoom(
-    @ColumnInfo(name = "enabled")
     override val isEnabled: Boolean,
     override val state: PluginState,
-    @ColumnInfo(name = "source")
     override val origin: PluginOrigin,
     override val installedVersion: String,
     override val environmentRenderingName: String,
     override val environmentPackageName: String,
-    @ColumnInfo(name = "environmentID")
     override val environmentId: String,
-    @ColumnInfo(name = "iconURI")
     override val iconUri: String?,
     override val author: String,
     override val environmentDescription: String,

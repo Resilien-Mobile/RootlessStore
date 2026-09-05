@@ -2,12 +2,13 @@ package com.baidaidai.rootless_store.domain.plugin.manifest
 
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
-import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
-import com.baidaidai.rootless_store.domain.plugin.model.PluginState
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-sealed interface PluginManifest: MarketManifest {
-
+@Serializable
+@SerialName("PluginManifestRemote")
+data class PluginManifest(
     // ─────────────────────────────────────────────────────────────
     // Plugin Basic Infos
     // ─────────────────────────────────────────────────────────────
@@ -19,7 +20,7 @@ sealed interface PluginManifest: MarketManifest {
      * - Should follow SemVer if possible: MAJOR.MINOR.PATCH
      * - Used for display, updates, and compatibility checks.
      */
-    val installedVersion: String
+    val installedVersion: String,
 
     /**
      * The display name shown in the plugin list UI.
@@ -27,7 +28,7 @@ sealed interface PluginManifest: MarketManifest {
      * You can choose any human-friendly name.
      * Example: "Zip Tools", "Kernel Patch", "Nice Plugin"
      */
-    val pluginRenderingName: String
+    val pluginRenderingName: String,
 
     /**
      * The package name (identifier) of the plugin on the user's device.
@@ -40,7 +41,7 @@ sealed interface PluginManifest: MarketManifest {
      *
      * Example: "com.example.myplugin"
      */
-    val pluginPackageName: String
+    val pluginPackageName: String,
 
     /**
      * Primary key used by Room (plugin unique ID).
@@ -54,7 +55,8 @@ sealed interface PluginManifest: MarketManifest {
      * Why “more random” helps:
      * - Higher entropy reduces collision probability, which reduces DB key conflicts.
      */
-    val pluginId: String
+    @SerialName("pluginID")
+    val pluginId: String,
 
     /**
      * Plugin icon reference shown in the plugin list.
@@ -67,14 +69,15 @@ sealed interface PluginManifest: MarketManifest {
      * - File URI/path: "file://..." or "/icons/xxx.png"
      * - Relative path inside plugin package/zip: "icons/icon.png"
      */
-    val iconUri: String?
+    @SerialName("iconURI")
+    val iconUri: String?,
 
     /**
      * Plugin author / publisher name.
      *
      * Example: "Alice", "Baidaidai", "Rootless Team"
      */
-    val author: String
+    val author: String,
 
     /**
      * A short description shown in details pages.
@@ -83,7 +86,7 @@ sealed interface PluginManifest: MarketManifest {
      * - Keep it concise (1–3 sentences).
      * - Avoid extremely long text; store long-form docs elsewhere if needed.
      */
-    val pluginDescription: String
+    val pluginDescription: String,
 
     // ─────────────────────────────────────────────────────────────
     // Plugin Runtime / Compatibility Infos
@@ -100,7 +103,7 @@ sealed interface PluginManifest: MarketManifest {
      * - If this is purely a *computed* runtime value (not declared by plugin),
      *   move it out of the manifest.
      */
-    val requiredEnvironment: ExecutionContext
+    val requiredEnvironment: ExecutionContext,
 
     /**
      * The runtime model used when executing the plugin.
@@ -112,9 +115,9 @@ sealed interface PluginManifest: MarketManifest {
      * Important:
      * - If the plugin is not clearly one-shot, you must choose `Daemon`.
      */
-    val pluginRunModel: PluginRunModel
+    val pluginRunModel: PluginRunModel,
 
-    val entryPoint: String
+    val entryPoint: String,
 
     /**
      * The optional Web UI entry point of the plugin.
@@ -132,31 +135,19 @@ sealed interface PluginManifest: MarketManifest {
      * - `"webroot/index.html"`
      * - `"ui/index.html"`
      */
-    val webUiEntryPoint: String?
+    @SerialName("webUIEntryPoint")
+    val webUiEntryPoint: String? = null,
 
-    // Runtime state such as `isEnabled`, `state`, `origin` should NOT belong here:
-    // - isEnabled: Boolean
-    // - state: PluginState
-    // - origin: PluginOrigin
-    interface PluginManifestLocal: PluginManifest {
+    /**
+     * Additional files that should be restored/marked as executable after extraction.
+     *
+     * Android packaging/extraction may not preserve Unix executable bits,
+     * so the host should chmod these paths before running the plugin.
+     *
+     * Paths are relative to the plugin package root.
+     */
+    val executableFiles: List<String>? = null,
 
-        /**
-         * Additional files that should be restored/marked as executable after extraction.
-         *
-         * Android packaging/extraction may not preserve Unix executable bits,
-         * so the host should chmod these paths before running the plugin.
-         *
-         * Paths are relative to the plugin package root.
-         */
-        val executableFiles: List<String>?
-
-    }
-    interface PluginManifestRemote: PluginManifest {
-        val pluginUrl: String
-    }
-    interface PluginManifestRoom: PluginManifest {
-        val isEnabled: Boolean
-        val state: PluginState
-        val origin: PluginOrigin
-    }
-}
+    @SerialName("pluginURI")
+    val pluginUrl: String? = null
+): MarketManifest
