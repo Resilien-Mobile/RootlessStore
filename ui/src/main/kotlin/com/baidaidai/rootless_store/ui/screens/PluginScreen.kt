@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import com.baidaidai.rootless_store.ui.WebViewActivity
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginActionPanel
 import com.baidaidai.rootless_store.ui.components.pluginScreen.InstalledManifestCard
@@ -165,7 +165,7 @@ fun PluginScreen(
  */
 @Composable
 fun InstalledPluginList(
-    plugins: List<PluginManifestRoom>,
+    plugins: List<PluginManifest>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
     onNavigateToExecuteScreen: (pluginId: String, shouldExecuteImmediately: Boolean) -> Unit,
     onAbortPluginProcess: suspend (pluginId: String) -> Unit,
@@ -210,8 +210,11 @@ fun InstalledPluginList(
 
             items(
                 items = plugins,
-                key = { pluginManifestRoom -> pluginManifestRoom.pluginId }
-            ){ pluginManifestRoom ->
+                key = { pluginManifest -> pluginManifest.pluginId }
+            ){ pluginManifest ->
+
+                val pluginStatus by pluginScreenViewModel.observePluginStatus(pluginManifest.pluginId)
+                    .collectAsState(initial = null)
 
                 var isActionPanelVisible by remember { mutableStateOf(false) }
                 var cardSize by remember { mutableStateOf(IntSize.Zero) }
@@ -219,9 +222,9 @@ fun InstalledPluginList(
                 if (isActionPanelVisible){
 
                     PluginActionPanel(
-                        pluginManifestRoom = pluginManifestRoom,
+                        pluginManifest = pluginManifest,
                         onShareClick = {
-                            val shareUri = pluginScreenViewModel.resolvePluginShareUri(pluginManifestRoom)
+                            val shareUri = pluginScreenViewModel.resolvePluginShareUri(pluginManifest)
 
                             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "application/zip"
@@ -233,14 +236,14 @@ fun InstalledPluginList(
                         },
                         onOpenWebUiClick = {
 
-                            val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifestRoom)
+                            val webUiUri = pluginScreenViewModel.resolvePluginWebUiUri(pluginManifest)
 
                             val webUiIntent = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra("webUri",webUiUri)
                             }
                             context.startActivity(webUiIntent)
                         },
-                        onUninstallClick = { pluginScreenViewModel.uninstallPlugin(pluginManifestRoom) },
+                        onUninstallClick = { pluginScreenViewModel.uninstallPlugin(pluginManifest) },
                         onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
                         modifier = Modifier
                             .size(
@@ -252,25 +255,26 @@ fun InstalledPluginList(
                 }else{
 
                     InstalledManifestCard(
-                        pluginManifestRoom = pluginManifestRoom,
+                        pluginManifest = pluginManifest,
+                        pluginStatus = pluginStatus,
                         onEnabledChange = { isEnabled ->
                             pluginScreenViewModel.setPluginEnabled(
-                                pluginId = pluginManifestRoom.pluginId,
+                                pluginId = pluginManifest.pluginId,
                                 isEnabled = isEnabled
                             )
 
                             if (isEnabled){
-                                onNavigateToExecuteScreen(pluginManifestRoom.pluginId,true)
+                                onNavigateToExecuteScreen(pluginManifest.pluginId,true)
                             }else{
                                 coroutineScope.launch {
-                                    onAbortPluginProcess(pluginManifestRoom.pluginId)
+                                    onAbortPluginProcess(pluginManifest.pluginId)
                                 }
                             }
                         },
-                        onExecuteClick = { onExecuteOneTimePlugin(pluginManifestRoom.pluginId) },
+                        onExecuteClick = { onExecuteOneTimePlugin(pluginManifest.pluginId) },
                         onClick = {
-                            if (pluginManifestRoom.isEnabled){
-                                onNavigateToExecuteScreen(pluginManifestRoom.pluginId,false)
+                            if (pluginStatus?.isEnabled == true){
+                                onNavigateToExecuteScreen(pluginManifest.pluginId,false)
                             }
                         },
                         onLongClick = { isActionPanelVisible = !isActionPanelVisible },
