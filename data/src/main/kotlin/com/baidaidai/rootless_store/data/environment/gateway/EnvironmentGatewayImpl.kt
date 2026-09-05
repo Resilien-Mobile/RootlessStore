@@ -5,8 +5,6 @@ import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.market.remote.datasource.MarketPackageRemoteDataSource
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.utils.io.ByteReadChannel
@@ -27,10 +25,10 @@ class EnvironmentGatewayImpl @Inject constructor(
 
     suspend fun installEnvironmentFromMarket(
         environmentUrl: String,
-        environmentManifestRemote: EnvironmentManifestRemote
+        environmentManifest: EnvironmentManifest
     ) {
         val remoteEnvironmentContent = marketPackageRemoteDataSource.fetchPackage(environmentUrl).bodyAsChannel()
-        val environmentPackageName = environmentManifestRemote.environmentPackageName
+        val environmentPackageName = environmentManifest.environmentPackageName
         installEnvironment(
             originFileByteChannel = remoteEnvironmentContent,
             destinationFileName = environmentPackageName
@@ -68,7 +66,7 @@ class EnvironmentGatewayImpl @Inject constructor(
 
 
     // Parse local environment manifest
-    fun parseEnvironmentManifest(originFileUri: Uri): EnvironmentManifestLocal {
+    fun parseEnvironmentManifest(originFileUri: Uri): EnvironmentManifest {
         return androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileUri).let {
             androidFileSystemCapabilityGatewayImpl.parseEnvironmentManifest(it)
         }
