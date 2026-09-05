@@ -8,10 +8,10 @@ import com.baidaidai.rootless_store.application.install.InstallLocalPackageUseCa
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.application.plugin.ObservePluginsUseCase
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
 import com.baidaidai.rootless_store.application.plugin.UninstallPluginUseCase
-import com.baidaidai.rootless_store.application.plugin.ObservePluginCountUseCase
+import com.baidaidai.rootless_store.application.plugin.ObservePluginStatusUseCase
+import com.baidaidai.rootless_store.application.plugin.ObservePluginTotalCountUseCase
 import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentsUseCase
 import com.baidaidai.rootless_store.application.environment.DisableEnvironmentUseCase
 import com.baidaidai.rootless_store.application.environment.EnableEnvironmentUseCase
@@ -21,7 +21,9 @@ import com.baidaidai.rootless_store.application.environment.UninstallEnvironment
 import com.baidaidai.rootless_store.application.plugin.ResolvePluginShareUriUseCase
 import com.baidaidai.rootless_store.application.plugin.ResolvePluginWebUiUriUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
+import com.baidaidai.rootless_store.domain.plugin.model.PluginStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -37,6 +39,7 @@ import kotlin.collections.emptyList
 class RootlessStorePluginScreenViewModel @Inject constructor(
     private val observePluginsUseCase: ObservePluginsUseCase,
     private val observeEnvironmentsUseCase: ObserveEnvironmentsUseCase,
+    private val observePluginStatusUseCase: ObservePluginStatusUseCase,
     private val installLocalPackageUseCase: InstallLocalPackageUseCase,
     private val enablePluginUseCase: EnablePluginUseCase,
     private val disablePluginUseCase: DisablePluginUseCase,
@@ -48,7 +51,7 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     private val resolvePluginShareUriUseCase: ResolvePluginShareUriUseCase,
     private val resolvePluginWebUiUriUseCase: ResolvePluginWebUiUriUseCase,
     private val resolveEnvironmentShareUriUseCase: ResolveEnvironmentShareUriUseCase,
-    observePluginCountUseCase: ObservePluginCountUseCase
+    observePluginTotalCountUseCase: ObservePluginTotalCountUseCase
 ): ViewModel() {
 
     private val _pendingLocalPackageUri = MutableStateFlow<Uri>(value = Uri.EMPTY)
@@ -60,7 +63,7 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     val plugins = observePluginsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptyList<PluginManifestRoom>()
+        initialValue = emptyList<PluginManifest>()
     )
 
     val environments = observeEnvironmentsUseCase().stateIn(
@@ -69,7 +72,7 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         initialValue = emptyList<EnvironmentManifestRoom>()
     )
 
-    val pluginCount = observePluginCountUseCase().stateIn(
+    val pluginCount = observePluginTotalCountUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = 0
@@ -77,6 +80,13 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
 
     val pendingLocalPackageUri = _pendingLocalPackageUri.asStateFlow()
     val isBadgeVisible = _isBadgeVisible.asStateFlow()
+
+    /**
+     * 按 pluginId 单独观察某个插件的状态。
+     * 卡片拿到 PluginManifest 后，通过本方法订阅自己的 PluginStatus，避免对齐两条 List 流。
+     */
+    fun observePluginStatus(pluginId: String): Flow<PluginStatus?> =
+        observePluginStatusUseCase(pluginId)
 
     fun setPendingLocalPackageUri(packageUri: Uri){
         _pendingLocalPackageUri.value = packageUri
@@ -92,13 +102,15 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
             }
         }
     }
+
     fun uninstallPlugin(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifest: PluginManifest
     ){
         viewModelScope.launch {
-            uninstallPluginUseCase(pluginManifestRoom)
+            uninstallPluginUseCase(pluginManifest)
         }
     }
+
     fun uninstallEnvironment(
         environmentManifestRoom: EnvironmentManifestRoom
     ){
@@ -106,6 +118,7 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
             uninstallEnvironmentUseCase(environmentManifestRoom)
         }
     }
+
     fun setPluginEnabled(
         pluginId: String,
         isEnabled: Boolean
@@ -137,16 +150,16 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     }
 
     fun resolvePluginShareUri(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifest: PluginManifest
     ): Uri {
-        val shareUri = resolvePluginShareUriUseCase(pluginManifestRoom)
+        val shareUri = resolvePluginShareUriUseCase(pluginManifest)
         return shareUri
     }
 
     fun resolvePluginWebUiUri(
-        pluginManifestRoom: PluginManifestRoom
+        pluginManifest: PluginManifest
     ): String {
-        val webUiUri = resolvePluginWebUiUriUseCase(pluginManifestRoom)
+        val webUiUri = resolvePluginWebUiUriUseCase(pluginManifest)
         return webUiUri
     }
 

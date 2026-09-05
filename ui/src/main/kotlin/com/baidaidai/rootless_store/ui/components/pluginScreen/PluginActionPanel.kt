@@ -18,12 +18,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Composable
 fun PluginActionPanel(
     modifier: Modifier = Modifier,
-    pluginManifestRoom: PluginManifestRoom? = null,
+    pluginManifest: PluginManifest? = null,
     onShareClick: ()-> Unit = {},
     onOpenWebUiClick: ()-> Unit = {},
     onDismissClick: ()-> Unit = {},
@@ -84,7 +86,7 @@ fun PluginActionPanel(
                 )
             }
 
-            if (!pluginManifestRoom?.webUiEntryPoint.isNullOrEmpty()){
+            if (!pluginManifest?.webUiEntryPoint.isNullOrEmpty()){
                 IconButton(
                     onClick = onOpenWebUiClick,
                     colors = webUiButtonColors,
@@ -131,7 +133,19 @@ fun PluginActionPanel(
 @Composable
 private fun _preview_() {
     PluginActionPanel(
-        pluginManifestRoom = PluginManifestRoom._testOnly_.copy(webUiEntryPoint = "akjfjdkdjskf"),
+        pluginManifest = PluginManifest(
+            installedVersion = "x.x.x",
+            pluginRenderingName = "Test Plugin",
+            pluginPackageName = "TestPlugin",
+            pluginId = "test",
+            iconUri = null,
+            author = "Rootless Store",
+            pluginDescription = "Tested",
+            requiredEnvironment = ExecutionContext.LIMITED,
+            entryPoint = "./index.sh",
+            pluginRunModel = PluginRunModel.OneTime,
+            webUiEntryPoint = "akjfjdkdjskf"
+        ),
         modifier = Modifier
             .size(
                 width = 300.dp,

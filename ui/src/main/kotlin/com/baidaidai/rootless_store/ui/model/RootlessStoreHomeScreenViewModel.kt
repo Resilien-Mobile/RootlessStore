@@ -15,7 +15,7 @@ import com.baidaidai.rootless_store.application.status.GetAndroidPlatformVersion
 import com.baidaidai.rootless_store.application.status.GetKernelVersionUseCase
 import com.baidaidai.rootless_store.application.status.GetSeLinuxStatusUseCase
 import com.baidaidai.rootless_store.application.status.ObserveExecutionContextPreferenceUseCase
-import com.baidaidai.rootless_store.application.status.ObservePluginStatusUseCase
+import com.baidaidai.rootless_store.application.status.ObservePluginCountUseCase
 import com.baidaidai.rootless_store.application.status.ObserveTemperatureStatusUseCase
 import com.baidaidai.rootless_store.application.status.SetExecutionContextChooserEnabledUseCase
 import com.baidaidai.rootless_store.application.status.SetExecutionContextPreferenceUseCase
@@ -24,7 +24,7 @@ import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.MemoryStatus
 import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
-import com.baidaidai.rootless_store.domain.status.model.PluginStatus
+import com.baidaidai.rootless_store.domain.status.model.PluginCount
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +42,7 @@ import javax.inject.Inject
 class RootlessStoreHomeScreenViewModel @Inject constructor(
     observeMemoryStatusUseCase: ObserveMemoryStatusUseCase,
     observeStorageStatusUseCase: ObserveStorageStatusUseCase,
-    observePluginStatusUseCase: ObservePluginStatusUseCase,
+    observePluginCountUseCase: ObservePluginCountUseCase,
     observeTemperatureStatusUseCase: ObserveTemperatureStatusUseCase,
     getSeLinuxStatusUseCase: GetSeLinuxStatusUseCase,
     getKernelVersionUseCase: GetKernelVersionUseCase,
@@ -86,11 +86,11 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
             initialValue = StorageStatus()
         )
 
-    val pluginStatus: StateFlow<PluginStatus> =
-        observePluginStatusUseCase().stateIn(
+    val pluginCount: StateFlow<PluginCount> =
+        observePluginCountUseCase().stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(1000),
-            initialValue = PluginStatus()
+            initialValue = PluginCount()
         )
 
     val temperatureStatus: StateFlow<TemperatureStatus?> =
