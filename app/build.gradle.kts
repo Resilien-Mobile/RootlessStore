@@ -144,6 +144,7 @@ dependencies {
     implementation(project(":application"))
     implementation(project(":ui"))
     implementation(project(":service"))
+    implementation(project(":domain"))
 
     // WebView
     implementation("androidx.webkit:webkit:1.16.0")

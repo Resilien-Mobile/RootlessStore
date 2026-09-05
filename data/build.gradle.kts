@@ -10,6 +10,10 @@ android {
     namespace = "com.baidaidai.rootless_store.data"
     compileSdk = 37
 
+    defaultConfig {
+        minSdk = 26
+    }
+
     buildFeatures {
         aidl = true
     }
