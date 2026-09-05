@@ -10,7 +10,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -33,7 +33,7 @@ object KtorClientHiltModule {
                         classDiscriminator = "type"
                         serializersModule = SerializersModule {
                             polymorphic(MarketManifest::class) {
-                                subclass(PluginManifestRemote::class)
+                                subclass(PluginManifest::class)
                                 subclass(EnvironmentManifestRemote::class)
                             }
                         }

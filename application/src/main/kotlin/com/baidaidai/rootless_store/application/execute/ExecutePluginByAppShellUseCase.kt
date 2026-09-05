@@ -25,12 +25,12 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
         pluginId: String
     ) : Flow<ExecutionResult> {
 
-        val pluginManifestRoom = pluginRepositoryImpl.findPlugin(pluginId)!!
+        val pluginManifest = pluginRepositoryImpl.findPlugin(pluginId)!!
         val shouldMonitor = settingPreferencesRepositoryImpl.observePluginStatusNotificationEnabled().first()
 
         var pidSaved = false
-        val pluginEntryPoint = androidFileSystemCapabilityGatewayImpl.resolvePluginEntryPoint(pluginManifestRoom)
-        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolvePluginPackageDirectory(pluginManifestRoom)
+        val pluginEntryPoint = androidFileSystemCapabilityGatewayImpl.resolvePluginEntryPoint(pluginManifest)
+        val pluginPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolvePluginPackageDirectory(pluginManifest)
         return pluginExecutionGatewayImpl
             .executePluginEntryPoint(
                 pluginEntryPoint,
@@ -44,7 +44,7 @@ class ExecutePluginByAppShellUseCase @Inject constructor(
                     if (pid != null) {
                         pidSaved = true
                         pluginExecutionRepositoryImpl.createPluginExecution(
-                            pluginManifestRoom = pluginManifestRoom,
+                            pluginManifest = pluginManifest,
                             executionPid = pid
                         )
                     }

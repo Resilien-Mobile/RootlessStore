@@ -9,8 +9,6 @@ import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManif
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
 import kotlinx.serialization.json.Json
@@ -65,15 +63,15 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         val shellPluginStagingDirectory = File("/sdcard/RootlessStore")
         return shellPluginStagingDirectory
     } // /sdcard/RootlessStore
-    fun resolvePluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String{
+    fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String{
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
-        val pluginPackageName = pluginManifestRoom.pluginPackageName
-        val pluginEntryPoint = pluginManifestRoom.entryPoint
+        val pluginPackageName = pluginManifest.pluginPackageName
+        val pluginEntryPoint = pluginManifest.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     }  // /File/Plugin/PLUGIN/entry
-    fun resolvePluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
-        val pluginPackageName = pluginManifestRoom.pluginPackageName
+        val pluginPackageName = pluginManifest.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
     }  // /File/Plugin/PLUGIN
 
@@ -398,14 +396,13 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         return File(filePath).readText()
     }
 
-    fun parsePluginManifest(jsonContent: String): PluginManifestLocal {
+    fun parsePluginManifest(jsonContent: String): PluginManifest {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
             isLenient = true
         }
-        val manifest: PluginManifestLocal = json.decodeFromString(PluginManifestLocal.Companion.serializer(),jsonContent)
-        return manifest
-    }  // Convert JSON to PluginManifestLocal
+        return json.decodeFromString<PluginManifest>(jsonContent)
+    }  // Convert JSON to PluginManifest
     fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifestLocal {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸

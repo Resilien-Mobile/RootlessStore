@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import java.io.BufferedInputStream
@@ -93,17 +93,13 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         return File(filePath).readText()
     }
 
-    fun parsePluginManifest(jsonContent: String): PluginManifestLocal {
+    fun parsePluginManifest(jsonContent: String): PluginManifest {
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
         }
-        val manifest: PluginManifestLocal = json.decodeFromString(
-            PluginManifestLocal.Companion.serializer(),
-            jsonContent
-        )
-        return manifest
-    } // Convert JSON to PluginManifestLocal
+        return json.decodeFromString<PluginManifest>(jsonContent)
+    } // Convert JSON to PluginManifest
 
     fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifestLocal {
         val json = Json {

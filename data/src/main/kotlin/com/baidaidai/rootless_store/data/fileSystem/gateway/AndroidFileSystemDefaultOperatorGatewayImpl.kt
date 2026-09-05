@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.data.fileSystem.gateway
 
 import android.content.Context
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import javax.inject.Inject
@@ -79,16 +79,16 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
 
-    fun resolvePluginEntryPoint(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
-        val pluginPackageName = pluginManifestRoom.pluginPackageName
-        val pluginEntryPoint = pluginManifestRoom.entryPoint
+        val pluginPackageName = pluginManifest.pluginPackageName
+        val pluginEntryPoint = pluginManifest.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     } // /File/Plugin/PLUGIN/entry
 
-    fun resolvePluginPackageDirectory(pluginManifestRoom: PluginManifestRoom): String {
+    fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
-        val pluginPackageName = pluginManifestRoom.pluginPackageName
+        val pluginPackageName = pluginManifest.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
     } // /File/Plugin/PLUGIN
 
