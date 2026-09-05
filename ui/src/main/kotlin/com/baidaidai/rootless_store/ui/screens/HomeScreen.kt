@@ -41,7 +41,7 @@ fun HomeScreen(
 ){
     val memoryStatus by homeScreenViewModel.memoryStatus.collectAsState()
     val storageStatus by homeScreenViewModel.storageStatus.collectAsState()
-    val pluginStatus by homeScreenViewModel.pluginStatus.collectAsState()
+    val pluginCount by homeScreenViewModel.pluginCount.collectAsState()
     val temperatureStatus by homeScreenViewModel.temperatureStatus.collectAsState()
     val seLinuxStatus by homeScreenViewModel.seLinuxStatus.collectAsState()
     val kernelVersion by homeScreenViewModel.kernelVersion.collectAsState()
@@ -58,7 +58,7 @@ fun HomeScreen(
         androidPlatformVersion = androidPlatformVersion,
         kernelVersion = kernelVersion,
         seLinuxStatus = seLinuxStatus,
-        pluginStatus = pluginStatus,
+        pluginCount = pluginCount,
         memoryStatus = memoryStatus,
         storageStatus = storageStatus,
         temperatureStatus = temperatureStatus

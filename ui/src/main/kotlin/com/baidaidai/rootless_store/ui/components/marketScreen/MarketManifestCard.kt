@@ -29,8 +29,9 @@ import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManif
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.plugin.model.PluginType
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Composable
 fun MarketManifestCard(
@@ -40,7 +41,7 @@ fun MarketManifestCard(
 ){
     when(manifest){
         is PluginManifest -> {
-            val pluginManifest = manifest as PluginManifestRemote
+            val pluginManifest = manifest
             Card(
                 modifier = modifier
                     .fillMaxWidth(),
@@ -220,5 +221,20 @@ private fun ManifestDetailRow(
 @Composable
 @PreviewLightDark
 private fun MarketManifestCardPreview(){
-    MarketManifestCard(manifest = PluginManifestRemote._testOnly_){}
+    MarketManifestCard(
+        manifest = PluginManifest(
+            installedVersion = "x.x.x",
+            pluginRenderingName = "Test Plugin",
+            pluginPackageName = "TestPlugin",
+            pluginId = "29bb10c46772264df3c0d0fade57d2eb",
+            iconUri = null,
+            author = "Rootless Store",
+            pluginDescription = "Tested by Rootless Store",
+            requiredEnvironment = ExecutionContext.ADB,
+            entryPoint = "./index.sh",
+            pluginRunModel = PluginRunModel.OneTime,
+            pluginUrl = "http://test.only.ai/api/v3/assets/plugin?id=29bb10c46772264df3c0d0fade57d2eb"
+        )
+    ){}
+
 }

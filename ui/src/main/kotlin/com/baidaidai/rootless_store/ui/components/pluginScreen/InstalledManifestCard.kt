@@ -37,12 +37,17 @@ import androidx.core.net.toUri
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.core.i18n.icuString
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRoom
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
+import com.baidaidai.rootless_store.domain.plugin.model.PluginState
+import com.baidaidai.rootless_store.domain.plugin.model.PluginStatus
+import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 
 @Composable
 fun InstalledManifestCard(
-    pluginManifestRoom: PluginManifestRoom,
+    pluginManifest: PluginManifest,
+    pluginStatus: PluginStatus?,
     onSizeChanged: (intSize: IntSize)-> Unit = {},
     onEnabledChange: (isEnabled: Boolean)-> Unit,
     onExecuteClick: ()-> Unit,
@@ -82,7 +87,7 @@ fun InstalledManifestCard(
                 verticalAlignment = Alignment.CenterVertically
             ){
                 DynamicPluginIcon(
-                    iconUri = pluginManifestRoom.iconUri?.toUri(),
+                    iconUri = pluginManifest.iconUri?.toUri(),
                     contentDescription = "Plugin Icon",
                     modifier = Modifier
                         .clip(CircleShape)
@@ -96,20 +101,20 @@ fun InstalledManifestCard(
                         .weight(1f)
                 ){
                     Text(
-                        text = pluginManifestRoom.pluginRenderingName,
+                        text = pluginManifest.pluginRenderingName,
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
                         text = icuString(
                             R.string.plugin_screen_info_container_local_version,
-                            mapOf("version" to pluginManifestRoom.installedVersion)
+                            mapOf("version" to pluginManifest.installedVersion)
                         ),
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
-                if (pluginManifestRoom.pluginRunModel == PluginRunModel.Daemon){
+                if (pluginManifest.pluginRunModel == PluginRunModel.Daemon){
                     Switch(
-                        checked = pluginManifestRoom.isEnabled,
+                        checked = pluginStatus?.isEnabled == true,
                         onCheckedChange = onEnabledChange
                     )
                 }else{
@@ -154,19 +159,19 @@ fun InstalledManifestCard(
             ) {
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_author_label),
-                    value = pluginManifestRoom.author
+                    value = pluginManifest.author
                 )
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
-                    value = pluginManifestRoom.origin.toString()
+                    value = pluginStatus?.origin.toString()
                 )
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),
-                    value = pluginManifestRoom.state.toString()
+                    value = pluginStatus?.state.toString()
                 )
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_required_label),
-                    value = pluginManifestRoom.requiredEnvironment.toString()
+                    value = pluginManifest.requiredEnvironment.toString()
                 )
             }
         }
@@ -305,7 +310,24 @@ private fun ManifestDetailRow(
 @PreviewLightDark
 private fun InstalledManifestCardPreview(){
     InstalledManifestCard(
-        pluginManifestRoom = PluginManifestRoom._testOnly_,
+        pluginManifest = PluginManifest(
+            installedVersion = "x.x.x",
+            pluginRenderingName = "Test Plugin",
+            pluginPackageName = "TestPlugin",
+            pluginId = "29bb10c46772264df3c0d0fade57d2eb",
+            iconUri = null,
+            author = "Rootless Store",
+            pluginDescription = "Tested by Rootless Store",
+            requiredEnvironment = ExecutionContext.LIMITED,
+            entryPoint = "./index.sh",
+            pluginRunModel = PluginRunModel.OneTime
+        ),
+        pluginStatus = PluginStatus(
+            pluginId = "29bb10c46772264df3c0d0fade57d2eb",
+            isEnabled = false,
+            state = PluginState.PermissionProblems,
+            origin = PluginOrigin.Local
+        ),
         onEnabledChange = {},
         onExecuteClick = {},
         onClick = {},

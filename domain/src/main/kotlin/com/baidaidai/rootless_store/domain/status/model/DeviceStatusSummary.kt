@@ -5,7 +5,7 @@ data class DeviceStatusSummary(
     val androidPlatformVersion: AndroidPlatformVersion? = null,
     val kernelVersion: String? = null,
     val seLinuxStatus: SeLinuxStatus = SeLinuxStatus.Unknown,
-    val pluginStatus: PluginStatus = PluginStatus(
+    val pluginCount: PluginCount = PluginCount(
         enabledCount = 0,
         totalCount = 0
     ),

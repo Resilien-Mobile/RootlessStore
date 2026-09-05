@@ -67,7 +67,7 @@ fun DeviceStatusBoard(
                 )
                 DeviceStatusRow(
                     stringResource(R.string.home_screen_device_status_plugins_label),
-                    "${deviceStatus.pluginStatus.enabledCount}/${deviceStatus.pluginStatus.totalCount}"
+                    "${deviceStatus.pluginCount.enabledCount}/${deviceStatus.pluginCount.totalCount}"
                 )
                 Spacer(
                     modifier = Modifier

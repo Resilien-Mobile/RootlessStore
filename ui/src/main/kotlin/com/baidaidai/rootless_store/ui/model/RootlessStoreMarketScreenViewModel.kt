@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.baidaidai.rootless_store.domain.market.error.MarketError
 import com.baidaidai.rootless_store.application.market.FetchMarketManifestsUseCase
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
 import com.baidaidai.rootless_store.application.environment.InstallEnvironmentFromMarketUseCase
 import com.baidaidai.rootless_store.application.plugin.InstallPluginFromMarketUseCase
@@ -83,8 +83,10 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
     fun installMarketManifest(marketManifest: MarketManifest){
         viewModelScope.launch {
             when(marketManifest){
-                is PluginManifestRemote -> {
-                    installPluginFromMarketUseCase(marketManifest.pluginUrl,marketManifest)
+                is PluginManifest -> {
+                    marketManifest.pluginUrl?.let { pluginUrl ->
+                        installPluginFromMarketUseCase(pluginUrl, marketManifest)
+                    }
                 }
                 is EnvironmentManifestRemote -> {
                     installEnvironmentFromMarketUseCase(marketManifest.environmentUrl,marketManifest)
