@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,14 +25,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginActionPanel
 import com.baidaidai.rootless_store.ui.components.pluginScreen.InstalledManifestCard
 import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
 
 @Composable
 fun InstalledEnvironmentList(
-    environments: List<EnvironmentManifestRoom>,
+    environments: List<EnvironmentManifest>,
     pluginScreenViewModel: RootlessStorePluginScreenViewModel,
 ){
 
@@ -72,8 +73,11 @@ fun InstalledEnvironmentList(
         ) {
             items(
                 items = environments,
-                key = { environmentManifestRoom -> environmentManifestRoom.environmentId }
-            ){ environmentManifestRoom ->
+                key = { environmentManifest -> environmentManifest.environmentId }
+            ){ environmentManifest ->
+
+                val environmentStatus by pluginScreenViewModel.observeEnvironmentStatus(environmentManifest.environmentId)
+                    .collectAsState(initial = null)
 
                 var isActionPanelVisible by remember { mutableStateOf(false) }
                 var cardSize by remember { mutableStateOf(IntSize.Zero) }
@@ -83,7 +87,7 @@ fun InstalledEnvironmentList(
                     PluginActionPanel(
                         onShareClick = {
 
-                            val shareUri = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifestRoom)
+                            val shareUri = pluginScreenViewModel.resolveEnvironmentShareUri(environmentManifest)
 
                             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "application/zip"
@@ -94,7 +98,7 @@ fun InstalledEnvironmentList(
                             context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
 
                         },
-                        onUninstallClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifestRoom) },
+                        onUninstallClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifest) },
                         onDismissClick = { isActionPanelVisible = !isActionPanelVisible },
                         modifier = Modifier
                             .size(
@@ -106,10 +110,11 @@ fun InstalledEnvironmentList(
                 }else{
 
                     InstalledManifestCard(
-                        environmentManifest = environmentManifestRoom,
+                        environmentManifest = environmentManifest,
+                        environmentStatus = environmentStatus,
                         onEnabledChange = { isEnabled ->
                             pluginScreenViewModel.setEnvironmentEnabled(
-                                environmentId = environmentManifestRoom.environmentId,
+                                environmentId = environmentManifest.environmentId,
                                 isEnabled = isEnabled
                             )
                         },

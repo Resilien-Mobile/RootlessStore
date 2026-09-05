@@ -6,13 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.environment.ResolveEnvironmentShareUriUseCase
 import com.baidaidai.rootless_store.application.install.InstallLocalPackageUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
+import com.baidaidai.rootless_store.domain.environment.model.EnvironmentStatus
 import com.baidaidai.rootless_store.application.plugin.ObservePluginsUseCase
 import com.baidaidai.rootless_store.application.plugin.AbortPluginProcessUseCase
 import com.baidaidai.rootless_store.application.plugin.UninstallPluginUseCase
 import com.baidaidai.rootless_store.application.plugin.ObservePluginStatusUseCase
 import com.baidaidai.rootless_store.application.plugin.ObservePluginTotalCountUseCase
 import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentsUseCase
+import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentStatusUseCase
 import com.baidaidai.rootless_store.application.environment.DisableEnvironmentUseCase
 import com.baidaidai.rootless_store.application.environment.EnableEnvironmentUseCase
 import com.baidaidai.rootless_store.application.plugin.DisablePluginUseCase
@@ -39,6 +41,7 @@ import kotlin.collections.emptyList
 class RootlessStorePluginScreenViewModel @Inject constructor(
     private val observePluginsUseCase: ObservePluginsUseCase,
     private val observeEnvironmentsUseCase: ObserveEnvironmentsUseCase,
+    private val observeEnvironmentStatusUseCase: ObserveEnvironmentStatusUseCase,
     private val observePluginStatusUseCase: ObservePluginStatusUseCase,
     private val installLocalPackageUseCase: InstallLocalPackageUseCase,
     private val enablePluginUseCase: EnablePluginUseCase,
@@ -69,7 +72,7 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     val environments = observeEnvironmentsUseCase().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = emptyList<EnvironmentManifestRoom>()
+        initialValue = emptyList<EnvironmentManifest>()
     )
 
     val pluginCount = observePluginTotalCountUseCase().stateIn(
@@ -87,6 +90,12 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
      */
     fun observePluginStatus(pluginId: String): Flow<PluginStatus?> =
         observePluginStatusUseCase(pluginId)
+
+    /**
+     * 按 environmentId 单独观察某个环境的状态。
+     */
+    fun observeEnvironmentStatus(environmentId: String): Flow<EnvironmentStatus?> =
+        observeEnvironmentStatusUseCase(environmentId)
 
     fun setPendingLocalPackageUri(packageUri: Uri){
         _pendingLocalPackageUri.value = packageUri
@@ -112,10 +121,10 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     }
 
     fun uninstallEnvironment(
-        environmentManifestRoom: EnvironmentManifestRoom
+        environmentManifest: EnvironmentManifest
     ){
         viewModelScope.launch {
-            uninstallEnvironmentUseCase(environmentManifestRoom)
+            uninstallEnvironmentUseCase(environmentManifest)
         }
     }
 
@@ -164,9 +173,9 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     }
 
     fun resolveEnvironmentShareUri(
-        environmentManifestRoom: EnvironmentManifestRoom
+        environmentManifest: EnvironmentManifest
     ): Uri {
-        val shareUri = resolveEnvironmentShareUriUseCase(environmentManifestRoom)
+        val shareUri = resolveEnvironmentShareUriUseCase(environmentManifest)
         return shareUri
     }
 
