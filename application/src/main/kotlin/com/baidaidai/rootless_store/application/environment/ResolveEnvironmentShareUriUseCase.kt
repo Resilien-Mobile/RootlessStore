@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.application.environment
 
 import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import java.io.File
 import javax.inject.Inject
 
@@ -10,13 +10,13 @@ class ResolveEnvironmentShareUriUseCase @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
     operator fun invoke(
-        environmentManifestRoom: EnvironmentManifestRoom
+        environmentManifest: EnvironmentManifest
     ): Uri {
 
         val defaultEnvironmentCacheDirectory = androidFileSystemCapabilityGatewayImpl.getCacheEnvironmentDirectoryFile()
 
         // Get environment package directory -> /file/Environment/ENVIRONMENT_DIRECTORY
-        val environmentPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolveEnvironmentPackageDirectory(environmentManifestRoom)
+        val environmentPackageDirectory = androidFileSystemCapabilityGatewayImpl.resolveEnvironmentPackageDirectory(environmentManifest)
 
         // Detect if cache/environment available -> /cache/Environment
         val hasEnvironmentCacheDirectory = androidFileSystemCapabilityGatewayImpl.hasEnvironmentCacheDirectory()
@@ -27,7 +27,7 @@ class ResolveEnvironmentShareUriUseCase @Inject constructor(
 
         // Zip to cache/environment
         // Resolve zip target -> /cache/Environment/ENVIRONMENT.zip
-        val zipFile = androidFileSystemCapabilityGatewayImpl.resolveChildFile(defaultEnvironmentCacheDirectory,"${environmentManifestRoom.environmentPackageName}.zip")
+        val zipFile = androidFileSystemCapabilityGatewayImpl.resolveChildFile(defaultEnvironmentCacheDirectory,"${environmentManifest.environmentPackageName}.zip")
 
         // Write Zip Byte
         androidFileSystemCapabilityGatewayImpl.rezipFromFile(

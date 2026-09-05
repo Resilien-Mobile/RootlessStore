@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
 import android.content.Context
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -101,9 +101,9 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getInternalEnvironmentCacheDirectory()
     } // /Cache/Environment: File
 
-    fun resolveEnvironmentPackageDirectory(environmentManifestRoom: EnvironmentManifestRoom): String {
+    fun resolveEnvironmentPackageDirectory(environmentManifest: EnvironmentManifest): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
-        val environmentPackageName = environmentManifestRoom.environmentPackageName
+        val environmentPackageName = environmentManifest.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
     } // /File/Environment/ENVIRONMENT
 
