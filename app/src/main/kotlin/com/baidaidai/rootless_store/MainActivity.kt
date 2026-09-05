@@ -23,6 +23,9 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor2.KtorNetworkFetcherFactory
 import coil3.request.crossfade
+import com.baidaidai.rootless_store.application.execute.ObservePluginExecutionErrorUseCase
+import com.baidaidai.rootless_store.application.notification.PostBarkNotificationUseCase
+import com.baidaidai.rootless_store.application.notification.PostLocalNotificationUseCase
 import com.baidaidai.rootless_store.application.runtime.RecoverPluginRuntimeStateUseCase
 import com.baidaidai.rootless_store.ui.screens.RootlessStoreNavigationScaffold
 import com.baidaidai.rootless_store.ui.theme.*
@@ -48,6 +51,12 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
     lateinit var ktorClient: HttpClient
     @Inject
     lateinit var recoverPluginRuntimeStateUseCase: RecoverPluginRuntimeStateUseCase
+    @Inject
+    lateinit var observePluginExecutionErrorUseCase: ObservePluginExecutionErrorUseCase
+    @Inject
+    lateinit var postBarkNotificationUseCase: PostBarkNotificationUseCase
+    @Inject
+    lateinit var postLocalNotificationUseCase: PostLocalNotificationUseCase
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -68,6 +77,10 @@ class RootlessStoreApp: Application(), SingletonImageLoader.Factory {
         super.onCreate()
         applicationScope.launch {
             recoverPluginRuntimeStateUseCase()
+            observePluginExecutionErrorUseCase().collect {
+                postLocalNotificationUseCase()
+                postBarkNotificationUseCase()
+            }
         }
     }
 }
