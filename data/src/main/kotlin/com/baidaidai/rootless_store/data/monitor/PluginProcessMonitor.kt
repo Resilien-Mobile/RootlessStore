@@ -1,25 +1,33 @@
 package com.baidaidai.rootless_store.data.monitor
 
-import com.baidaidai.rootless_store.data.notification.gateway.NotificationGatewayImpl
+import com.baidaidai.rootless_store.domain.execution.error.ExecutionError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class PluginProcessMonitor @Inject constructor(
-    private val notificationGatewayImpl: NotificationGatewayImpl,
-//    private val sendPluginExitNotificationUseCase: SendPluginExitNotificationUseCase
-) {
+@Singleton
+class PluginProcessMonitor @Inject constructor() {
 
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    val unexpectedExitNotificationPoster = MutableSharedFlow<ExecutionError>()
 
     operator fun invoke(process: Process){
         startMonitoring(process)
     }
 
     operator fun invoke(exitCode: Int){
-        if (exitCode != 0) sendUnexpectedExitNotifications()
+        coroutineScope.launch {
+            if (exitCode != 0){
+                unexpectedExitNotificationPoster.emit(ExecutionError(
+                    errorMessage = "Plugin Crashed",
+                    errorCause = exitCode.toString()
+                ))
+            }
+        }
     }
 
     private fun startMonitoring(
@@ -27,19 +35,13 @@ class PluginProcessMonitor @Inject constructor(
     ){
         coroutineScope.launch {
             val exitCode = process.waitFor()
-            if (exitCode != 0) sendUnexpectedExitNotifications()
+            if (exitCode != 0) {
+                unexpectedExitNotificationPoster.emit(ExecutionError(
+                    errorMessage = "Plugin Crashed",
+                    errorCause = exitCode.toString()
+                ))
+            }
         }
-    }
-
-    private fun sendUnexpectedExitNotifications(){
-//        notificationGatewayImpl
-//            .sendLocalNotification(
-//                title = "你有一个插件已退出",
-//                message = "若非本人操作，请尽快前往处理"
-//            )
-//        coroutineScope.launch {
-//            sendPluginExitNotificationUseCase()
-//        }
     }
 
 }
