@@ -1,14 +1,14 @@
 package com.baidaidai.rootless_store.application.plugin
 
-import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
+import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import javax.inject.Inject
 
 class EnablePluginUseCase @Inject constructor(
-    private val pluginRepositoryImpl: PluginRepositoryImpl
+    private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl
 ) {
     suspend operator fun invoke(
         pluginId: String
     ){
-        pluginRepositoryImpl.enablePlugin(pluginId)
+        pluginStatusRepositoryImpl.enablePlugin(pluginId)
     }
 }

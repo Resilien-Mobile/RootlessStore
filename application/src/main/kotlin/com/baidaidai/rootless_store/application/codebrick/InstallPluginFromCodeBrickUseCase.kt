@@ -7,9 +7,11 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDel
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
+import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.serialization.json.Json
@@ -24,6 +26,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
     private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
+    private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
 
@@ -37,7 +40,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
 
         // Build Plugin Manifest
         val pluginId = codeBrickConfig.unixTimestamp.toString()
-        val pluginManifestLocal = PluginManifestLocal(
+        val pluginManifest = PluginManifest(
             installedVersion = "1.0.0",
             pluginRenderingName = codeBrickConfig.codeBrickTitle,
             pluginPackageName = codeBrickConfig.codeBrickTitle,
@@ -49,12 +52,12 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
             entryPoint = "index.sh",
             pluginRunModel = PluginRunModel.OneTime,
         )
-        val pluginManifestJson = json.encodeToString(pluginManifestLocal)
+        val pluginManifestJson = json.encodeToString(pluginManifest)
 
-        if (pluginManifestLocal.requiredEnvironment == ExecutionContext.ADB){
+        if (pluginManifest.requiredEnvironment == ExecutionContext.ADB){
             installShellPluginFromCodeBrick(
                 codeBrickConfig = codeBrickConfig,
-                pluginManifestLocal = pluginManifestLocal,
+                pluginManifest = pluginManifest,
                 pluginManifestJson = pluginManifestJson
             )
             return
@@ -85,15 +88,16 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
         )
 
         // Set Plugin Entry Point Executable
-        pluginGatewayImpl.setPluginEntryPointExecutable(pluginManifestLocal)
+        pluginGatewayImpl.setPluginEntryPointExecutable(pluginManifest)
 
-        // Insert result to PluginRepositoryImpl
-        pluginRepositoryImpl.addPlugin(pluginManifestLocal)
+        // Insert result to PluginRepository
+        pluginRepositoryImpl.addPlugin(pluginManifest)
+        pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
     }
 
     private suspend fun installShellPluginFromCodeBrick(
         codeBrickConfig: CodeBrickConfig,
-        pluginManifestLocal: PluginManifestLocal,
+        pluginManifest: PluginManifest,
         pluginManifestJson: String
     ) {
 
@@ -101,7 +105,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
         val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryFile()
         val temporaryShellPluginPackageDirectory = File(
             shellPluginStagingDirectory,
-            pluginManifestLocal.pluginPackageName
+            pluginManifest.pluginPackageName
         )
         androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
             temporaryShellPluginPackageDirectory.path
@@ -111,7 +115,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
         // Write Plugin Entry Point
         androidFileSystemCreateOperatorGatewayImpl.writeTextFile(
             parentDirectory = temporaryShellPluginPackageDirectory,
-            fileName = pluginManifestLocal.entryPoint,
+            fileName = pluginManifest.entryPoint,
             content = codeBrickConfig.codeBrickContent
         )
 
@@ -133,8 +137,8 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
         val isShellPluginInstallSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
             ?.installShellPlugin(
                 shellPluginStagingFile.path,
-                pluginManifestLocal.pluginPackageName,
-                pluginManifestLocal.entryPoint
+                pluginManifest.pluginPackageName,
+                pluginManifest.entryPoint
             ) ?: false
 
         // Delete Temporary Shell Plugin Package Directory
@@ -151,9 +155,9 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
             return
         }
 
-        // Insert result to PluginRepositoryImpl
-        pluginRepositoryImpl.addPlugin(pluginManifestLocal)
-
+        // Insert result to PluginRepository
+        pluginRepositoryImpl.addPlugin(pluginManifest)
+        pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
     }
 
 }

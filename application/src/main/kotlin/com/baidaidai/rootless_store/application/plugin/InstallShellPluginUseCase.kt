@@ -7,8 +7,10 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDef
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
+import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
+import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import java.io.File
 import javax.inject.Inject
 
@@ -19,12 +21,13 @@ class InstallShellPluginUseCase @Inject constructor(
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
+    private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
 ) {
     suspend operator fun invoke(uri: Uri): PluginError? {
         return try {
 
-            // Parse PluginManifestLocal
-            val pluginManifestLocal = pluginGatewayImpl.parsePluginManifest(uri)
+            // Parse PluginManifest
+            val pluginManifest = pluginGatewayImpl.parsePluginManifest(uri)
 
             // Copy to /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
             val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryPath()
@@ -39,8 +42,8 @@ class InstallShellPluginUseCase @Inject constructor(
             val isShellPluginInstallSuccessful = shizukuUserServiceGatewayImpl.findShizukuUserService()
                 ?.installShellPlugin(
                     shellPluginStagingFile.path,
-                    pluginManifestLocal.pluginPackageName,
-                    pluginManifestLocal.entryPoint
+                    pluginManifest.pluginPackageName,
+                    pluginManifest.entryPoint
                 ) ?: false
 
             // Delete /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
@@ -51,7 +54,7 @@ class InstallShellPluginUseCase @Inject constructor(
             if (!isShellPluginInstallSuccessful) {
                 return PluginError(
                     errorMessage = "Install shell plugin failed",
-                    errorCause = "Failed to copy shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifestLocal.pluginPackageName}, entryPoint=${pluginManifestLocal.entryPoint}"
+                    errorCause = "Failed to copy shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifest.pluginPackageName}, entryPoint=${pluginManifest.entryPoint}"
                 )
             }
 
@@ -63,7 +66,8 @@ class InstallShellPluginUseCase @Inject constructor(
             }
 
             // Add Data, Register Plugin
-            pluginRepositoryImpl.addPlugin(pluginManifestLocal)
+            pluginRepositoryImpl.addPlugin(pluginManifest)
+            pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
 
             null
         } catch (error: Throwable) {
