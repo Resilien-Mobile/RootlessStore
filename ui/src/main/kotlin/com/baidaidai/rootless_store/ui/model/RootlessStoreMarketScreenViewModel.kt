@@ -7,7 +7,7 @@ import androidx.paging.cachedIn
 import com.baidaidai.rootless_store.domain.market.error.MarketError
 import com.baidaidai.rootless_store.application.market.FetchMarketManifestsUseCase
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRemote
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.application.environment.InstallEnvironmentFromMarketUseCase
 import com.baidaidai.rootless_store.application.plugin.InstallPluginFromMarketUseCase
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
@@ -88,8 +88,10 @@ class RootlessStoreMarketScreenViewModel @Inject constructor(
                         installPluginFromMarketUseCase(pluginUrl, marketManifest)
                     }
                 }
-                is EnvironmentManifestRemote -> {
-                    installEnvironmentFromMarketUseCase(marketManifest.environmentUrl,marketManifest)
+                is EnvironmentManifest -> {
+                    marketManifest.environmentUrl?.let { environmentUrl ->
+                        installEnvironmentFromMarketUseCase(environmentUrl, marketManifest)
+                    }
                 }
                 else -> Unit
             }

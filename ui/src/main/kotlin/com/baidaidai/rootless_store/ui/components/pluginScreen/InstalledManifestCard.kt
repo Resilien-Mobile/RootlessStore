@@ -36,7 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.core.i18n.icuString
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
+import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
+import com.baidaidai.rootless_store.domain.environment.model.EnvironmentStatus
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
@@ -180,7 +181,8 @@ fun InstalledManifestCard(
 
 @Composable
 fun InstalledManifestCard(
-    environmentManifest: EnvironmentManifestRoom,
+    environmentManifest: EnvironmentManifest,
+    environmentStatus: EnvironmentStatus?,
     onSizeChanged: (intSize: IntSize)-> Unit = {},
     onEnabledChange: (isEnabled: Boolean)-> Unit,
     onClick:()-> Unit = {},
@@ -235,7 +237,7 @@ fun InstalledManifestCard(
                     )
                 }
                 Switch(
-                    checked = environmentManifest.isEnabled,
+                    checked = environmentStatus?.isEnabled == true,
                     onCheckedChange = onEnabledChange
                 )
             }
@@ -260,11 +262,11 @@ fun InstalledManifestCard(
                 )
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_source_label),
-                    value = environmentManifest.origin.toString()
+                    value = environmentStatus?.origin.toString()
                 )
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_state_label),
-                    value = environmentManifest.state.toString()
+                    value = environmentStatus?.state.toString()
                 )
                 ManifestDetailRow(
                     label = stringResource(R.string.plugin_screen_info_container_local_required_label),

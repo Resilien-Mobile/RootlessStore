@@ -3,11 +3,9 @@ package com.baidaidai.rootless_store.domain.plugin.manifest
 import com.baidaidai.rootless_store.domain.market.model.MarketManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-@SerialName("PluginManifestRemote")
 data class PluginManifest(
     // ─────────────────────────────────────────────────────────────
     // Plugin Basic Infos
@@ -55,7 +53,6 @@ data class PluginManifest(
      * Why “more random” helps:
      * - Higher entropy reduces collision probability, which reduces DB key conflicts.
      */
-    @SerialName("pluginID")
     val pluginId: String,
 
     /**
@@ -69,7 +66,6 @@ data class PluginManifest(
      * - File URI/path: "file://..." or "/icons/xxx.png"
      * - Relative path inside plugin package/zip: "icons/icon.png"
      */
-    @SerialName("iconURI")
     val iconUri: String?,
 
     /**
@@ -135,7 +131,6 @@ data class PluginManifest(
      * - `"webroot/index.html"`
      * - `"ui/index.html"`
      */
-    @SerialName("webUIEntryPoint")
     val webUiEntryPoint: String? = null,
 
     /**
@@ -148,6 +143,5 @@ data class PluginManifest(
      */
     val executableFiles: List<String>? = null,
 
-    @SerialName("pluginURI")
     val pluginUrl: String? = null
 ): MarketManifest
