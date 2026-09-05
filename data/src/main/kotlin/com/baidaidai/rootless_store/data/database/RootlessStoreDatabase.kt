@@ -14,12 +14,15 @@ import com.baidaidai.rootless_store.data.environment.database.EnvironmentDao
 import com.baidaidai.rootless_store.data.environment.database.EnvironmentEntity
 import com.baidaidai.rootless_store.data.plugin.database.PluginDao
 import com.baidaidai.rootless_store.data.plugin.database.PluginEntity
+import com.baidaidai.rootless_store.data.plugin.database.PluginStatusDao
+import com.baidaidai.rootless_store.data.plugin.database.PluginStatusEntity
 import com.baidaidai.rootless_store.data.source.database.PluginSourceDao
 import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
 
 @Database(
     entities = [
         PluginEntity::class,
+        PluginStatusEntity::class,
         PluginSourceEntity::class,
         PluginExecutionEntity::class,
         EnvironmentEntity::class,
@@ -27,12 +30,13 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         CodeBrickEntity::class
         // 其它表也一起加进来
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(RoomCollectionTypeConverters::class)
 abstract class RootlessStoreDatabase : RoomDatabase() {
     abstract fun pluginDao(): PluginDao
+    abstract fun pluginStatusDao(): PluginStatusDao
     abstract fun environmentDao(): EnvironmentDao
     abstract fun pluginSourceDao(): PluginSourceDao
     abstract fun pluginExecutionDao(): PluginExecutionDao
