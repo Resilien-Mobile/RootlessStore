@@ -22,40 +22,41 @@ Market
 
 ## Verbs
 
-| Verb | Meaning |
-|---|---|
-| `get` | 获取一个当前值，不表达持续监听 |
-| `find` | 查找，允许不存在 |
-| `require` | 必须存在，否则失败 |
-| `list` | 获取多个对象 |
-| `observe` | 返回 `Flow`，持续观察变化 |
-| `load` | 从本地持久层加载 |
-| `fetch` | 从远端获取 |
-| `refresh` | 从 authoritative source 更新本地已有状态 |
-| `sync` | 两边状态同步 |
-| `resolve` | 根据上下文或候选项推导最终结果 |
-| `validate` | 判断输入是否合法 |
+| Verb   | Meaning                             |
+|--------|-------------------------------------|
+| `get`  | 获取一个当前值，不表达持续监听                     |
+| `find` | 查找，允许不存在                            |
+| `require` | 必须存在，否则失败                           |
+| `list` | 获取多个对象                              |
+| `observe` | 返回 `Flow`，持续观察变化                    |
+| `load` | 从本地持久层加载                            |
+| `fetch` | 从远端获取                               |
+| `refresh` | 从 authoritative source 更新本地已有状态     |
+| `sync` | 两边状态同步                              |
+| `resolve` | 根据上下文或候选项推导最终结果                     |
+| `validate` | 判断输入是否合法                            |
 | `parse` | representation 转换为 structured model |
-| `create` | 创建新的 domain entity |
-| `add` | 加入已有集合或 registry |
-| `register` | 注册到 registry 或 system |
-| `install` | 使 Plugin 进入已安装状态 |
-| `remove` | 从集合或配置中移除 |
-| `delete` | 删除持久化对象 |
-| `enable` | 转换为 enabled 状态 |
-| `disable` | 转换为 disabled 状态 |
-| `start` | 启动生命周期 |
-| `stop` | 正常停止生命周期 |
-| `abort` | 非正常或强制终止 |
-| `execute` | 执行一个定义明确的 executable |
-| `prepare` | 做好执行准备，但不执行 |
-| `initialize` | 创建首次可用状态 |
-| `restore` | 恢复之前保存的状态 |
-| `recover` | 从异常、崩溃或不一致中恢复 |
-| `reset` | 回到 baseline 或 default 状态 |
-| `cleanup` | 移除残留或过期资源 |
-| `reconcile` | 比较两个状态并消除差异 |
-| `ensure` | 幂等地保证某个 postcondition 成立 |
+| `create` | 创建新的 domain entity                  |
+| `add`  | 加入已有集合或 registry                    |
+| `register` | 注册到 registry 或 system               |
+| `install` | 使 Plugin 进入已安装状态                    |
+| `remove` | 从集合或配置中移除                           |
+| `delete` | 删除持久化对象                             |
+| `enable` | 转换为 enabled 状态                      |
+| `disable` | 转换为 disabled 状态                     |
+| `start` | 启动生命周期                              |
+| `stop` | 正常停止生命周期                            |
+| `abort` | 非正常或强制终止                            |
+| `execute` | 执行一个定义明确的 executable                |
+| `prepare` | 做好执行准备，但不执行                         |
+| `initialize` | 创建首次可用状态                            |
+| `restore` | 恢复之前保存的状态                           |
+| `recover` | 从异常、崩溃或不一致中恢复                       |
+| `reset` | 回到 baseline 或 default 状态            |
+| `cleanup` | 移除残留或过期资源                           |
+| `reconcile` | 比较两个状态并消除差异                         |
+| `ensure` | 幂等地保证某个 postcondition 成立            |
+| `post` | 用于发出或推送一条消息，无需返回值                   |
 
 ## Grammar
 
