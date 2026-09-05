@@ -6,8 +6,6 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCap
 import com.baidaidai.rootless_store.data.market.remote.datasource.MarketPackageRemoteDataSource
 import com.baidaidai.rootless_store.domain.plugin.gateway.PluginGateway
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestLocal
-import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifestRemote
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.utils.io.ByteReadChannel
@@ -26,9 +24,9 @@ class PluginGatewayImpl @Inject constructor(
         installPluginPackage(originFileUri)
     }
 
-    override suspend fun installPluginFromMarket(pluginUrl: String, pluginManifestRemote: PluginManifestRemote) {
+    override suspend fun installPluginFromMarket(pluginUrl: String, pluginManifest: PluginManifest) {
         val remotePluginContent: ByteReadChannel = marketPackageRemoteDataSource.fetchPackage(pluginUrl).bodyAsChannel()
-        val pluginPackageName = pluginManifestRemote.pluginPackageName
+        val pluginPackageName = pluginManifest.pluginPackageName
         installPluginPackage(
             originFileByteChannel = remotePluginContent,
             destinationFileName = pluginPackageName
@@ -47,7 +45,7 @@ class PluginGatewayImpl @Inject constructor(
         androidFileSystemCapabilityGatewayImpl.deleteDirectoryByPackageName(pluginPackageName)
     }
 
-    fun parsePluginManifest(originFileUri: Uri): PluginManifestLocal {
+    fun parsePluginManifest(originFileUri: Uri): PluginManifest {
         return androidFileSystemCapabilityGatewayImpl.loadRawPluginManifest(uri = originFileUri).let {
             androidFileSystemCapabilityGatewayImpl.parsePluginManifest(it)
         }

@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifestRoom
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,10 +22,10 @@ interface EnvironmentDao {
 
     // Read
     @Query("SELECT * FROM environmentInfo WHERE environmentID = :environmentId LIMIT 1")
-    suspend fun findEnvironmentById(environmentId: String): EnvironmentManifestRoom?
+    suspend fun findEnvironmentById(environmentId: String): EnvironmentEntity?
 
     @Query(value = "SELECT * FROM environmentInfo")
-    fun observeEnvironments(): Flow<List<EnvironmentManifestRoom>>
+    fun observeEnvironments(): Flow<List<EnvironmentEntity>>
 
     @Query("SELECT COUNT(*) FROM environmentInfo")
     fun observeEnvironmentCount(): Flow<Int>
@@ -38,7 +37,7 @@ interface EnvironmentDao {
     suspend fun getEnabledEnvironmentCount(): Int
 
     @Query("SELECT * FROM environmentInfo WHERE enabled = 1")
-    fun observeEnabledEnvironments(): Flow<List<EnvironmentManifestRoom>>
+    fun observeEnabledEnvironments(): Flow<List<EnvironmentEntity>>
 
     // Delete
     @Query("DELETE FROM environmentInfo WHERE environmentID = :environmentId")

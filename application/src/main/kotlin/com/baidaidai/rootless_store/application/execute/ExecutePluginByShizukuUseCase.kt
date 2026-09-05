@@ -23,14 +23,14 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
         pluginId: String
     ): Flow<ExecutionResult> {
 
-        val pluginManifestRoom = pluginRepositoryImpl.findPlugin(pluginId)!!
+        val pluginManifest = pluginRepositoryImpl.findPlugin(pluginId)!!
         val shouldMonitor = settingPreferencesRepositoryImpl.observePluginStatusNotificationEnabled().first()
 
         // Dispatch to PluginExecutionGateway.executePluginWithoutEnvironmentByShizuku
         var pidSaved = false
         val pluginExecutionResult = pluginExecutionGatewayImpl.executePluginWithoutEnvironmentByShizuku(
-            pluginEntryPoint = pluginManifestRoom.entryPoint,
-            pluginDirectory = pluginManifestRoom.pluginPackageName,
+            pluginEntryPoint = pluginManifest.entryPoint,
+            pluginDirectory = pluginManifest.pluginPackageName,
             shouldMonitor = shouldMonitor
         )
 
@@ -41,7 +41,7 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
                 if (pid != null) {
                     pidSaved = true
                     pluginExecutionRepositoryImpl.createPluginExecution(
-                        pluginManifestRoom = pluginManifestRoom,
+                        pluginManifest = pluginManifest,
                         executionPid = pid,
                         executionContext = ExecutionContext.ADB
                     )
