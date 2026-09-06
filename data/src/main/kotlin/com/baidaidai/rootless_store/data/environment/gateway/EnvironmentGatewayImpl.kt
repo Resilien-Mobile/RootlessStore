@@ -19,7 +19,7 @@ class EnvironmentGatewayImpl @Inject constructor(
     private val defaultEnvironmentDirectory = File(context.filesDir, "Environment")
 
     // Install Environment
-    fun installEnvironmentFromLocal(originFileUri: Uri) {
+    fun installEnvironmentFromLocal(originFileUri: Uri): Result<Unit> = runCatching {
         installEnvironment(originFileUri)
     }
 
@@ -41,7 +41,7 @@ class EnvironmentGatewayImpl @Inject constructor(
     }
 
     // Environment Operation
-    fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest) {
+    fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Result<Unit> = runCatching {
         androidFileSystemCapabilityGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifest)
     }
 
@@ -66,8 +66,8 @@ class EnvironmentGatewayImpl @Inject constructor(
 
 
     // Parse local environment manifest
-    fun parseEnvironmentManifest(originFileUri: Uri): EnvironmentManifest {
-        return androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileUri).let {
+    fun parseEnvironmentManifest(originFileUri: Uri): Result<EnvironmentManifest> = runCatching {
+        androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileUri).let {
             androidFileSystemCapabilityGatewayImpl.parseEnvironmentManifest(it)
         }
     }
