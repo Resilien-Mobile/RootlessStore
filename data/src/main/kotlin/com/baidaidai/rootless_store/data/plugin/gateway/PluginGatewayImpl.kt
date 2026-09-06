@@ -20,7 +20,7 @@ class PluginGatewayImpl @Inject constructor(
     private val defaultPluginDirectory = File(context.getExternalFilesDir(null), "Plugin")
 
     // Create
-    fun installPluginFromLocal(originFileUri: Uri) {  // override
+    fun installPluginFromLocal(originFileUri: Uri): Result<Unit> = runCatching {  // override
         installPluginPackage(originFileUri)
     }
 
@@ -34,7 +34,7 @@ class PluginGatewayImpl @Inject constructor(
     }
 
     // Operator
-    fun setPluginEntryPointExecutable(pluginManifest: PluginManifest){
+    fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Result<Unit> = runCatching {
         androidFileSystemCapabilityGatewayImpl.setPluginEntryPointExecutable(pluginManifest)
     }
 
@@ -45,8 +45,8 @@ class PluginGatewayImpl @Inject constructor(
         androidFileSystemCapabilityGatewayImpl.deleteDirectoryByPackageName(pluginPackageName)
     }
 
-    fun parsePluginManifest(originFileUri: Uri): PluginManifest {
-        return androidFileSystemCapabilityGatewayImpl.loadRawPluginManifest(uri = originFileUri).let {
+    fun parsePluginManifest(originFileUri: Uri): Result<PluginManifest> = runCatching {
+        androidFileSystemCapabilityGatewayImpl.loadRawPluginManifest(uri = originFileUri).let {
             androidFileSystemCapabilityGatewayImpl.parsePluginManifest(it)
         }
     }
