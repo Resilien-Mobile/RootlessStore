@@ -27,7 +27,14 @@ class InstallShellPluginUseCase @Inject constructor(
         return try {
 
             // Parse PluginManifest
-            val pluginManifest = pluginGatewayImpl.parsePluginManifest(uri)
+            val pluginManifest = pluginGatewayImpl
+                .parsePluginManifest(uri)
+                .getOrElse { throwable ->
+                    return PluginError(
+                        errorMessage = "Can't parse plugin manifest",
+                        errorCause = "Wrong type of PluginManifest.json \n\n" +  throwable.stackTrace.formatAsMultilineString()
+                    )
+                }
 
             // Copy to /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
             val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryPath()

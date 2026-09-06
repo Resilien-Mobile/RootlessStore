@@ -11,9 +11,9 @@ import javax.inject.Inject
 
 class InstallLocalPackageUseCase @Inject constructor(
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
-    private val installPluginUseCase: com.baidaidai.rootless_store.application.plugin.InstallPluginUseCase,
-    private val installEnvironmentUseCase: com.baidaidai.rootless_store.application.environment.InstallEnvironmentUseCase,
-    private val installMagiskPluginUseCase: com.baidaidai.rootless_store.application.plugin.InstallMagiskPluginUseCase
+    private val installPluginUseCase: InstallPluginUseCase,
+    private val installEnvironmentUseCase: InstallEnvironmentUseCase,
+    private val installMagiskPluginUseCase: InstallMagiskPluginUseCase
 ) {
     suspend operator fun invoke(uri: Uri): PluginError? {
         return when (resolveLocalPackageType(uri)) {
