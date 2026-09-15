@@ -47,13 +47,15 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }.getOrElse { throwable ->
             return PluginError(
                 errorMessage = "Can't read magisk module.prop",
-                errorCause = "Unsupported magisk module package: $uri \n\n" + throwable.stackTrace.formatAsMultilineString()
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "Rootless Store could not read module.prop from this package. The zip may not be a Magisk module, or the file is not at the expected location."
             )
         }
         if (magiskModulePropContent.isBlank()) {
             return PluginError(
                 errorMessage = "Magisk module.prop was not found",
-                errorCause = "Unsupported magisk module package: $uri"
+                errorCause = "",
+                errorCompanion = "This package does not contain module.prop, so it cannot be converted as a Magisk module."
             )
         }
 
@@ -62,7 +64,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         if (!isMagiskModulePropValid) {
             return PluginError(
                 errorMessage = "Magisk module.prop is invalid",
-                errorCause = "IllusionCube cannot recognize this module.prop as prop format."
+                errorCause = "",
+                errorCompanion = "module.prop exists, but its key-value content could not be recognized as a valid prop file."
             )
         }
 
@@ -73,7 +76,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }.getOrElse { throwable ->
             return PluginError(
                 errorMessage = "Can't parse magisk module.prop",
-                errorCause = throwable.stackTrace.formatAsMultilineString()
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "module.prop was converted to JSON, but the result does not match the required MagiskProp fields."
             )
         }
 
@@ -87,7 +91,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }.getOrElse { throwable ->
             return PluginError(
                 errorMessage = "Can't detect magisk action script",
-                errorCause = throwable.stackTrace.formatAsMultilineString()
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "Rootless Store could not inspect whether this module uses action.sh as its entry point."
             )
         }
         val magiskModuleEntryPoint = if (hasActionScript) {
@@ -124,7 +129,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }.onFailure { throwable ->
             return PluginError(
                 errorMessage = "Can't unzip magisk module",
-                errorCause = throwable.stackTrace.formatAsMultilineString()
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "The Magisk module was recognized, but Rootless Store could not extract it into the temporary conversion directory."
             )
         }
 
@@ -138,7 +144,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }.onFailure { throwable ->
             return PluginError(
                 errorMessage = "Can't write PluginManifest.json",
-                errorCause = throwable.stackTrace.formatAsMultilineString()
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "The Magisk module was extracted, but Rootless Store could not write the generated PluginManifest.json."
             )
         }
 
@@ -151,7 +158,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         }.onFailure { throwable ->
             return PluginError(
                 errorMessage = "Can't rezip magisk module",
-                errorCause = throwable.stackTrace.formatAsMultilineString()
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "The converted Magisk module could not be compressed into the shell plugin staging archive."
             )
         }
 
@@ -161,7 +169,8 @@ class InstallMagiskPluginUseCase @Inject constructor(
         if (!isMagiskTemplateDirectoryDeleted) {
             return PluginError(
                 errorMessage = "Delete magisk template directory failed",
-                errorCause = "Failed to delete ${magiskTemplateDirectory.path}"
+                errorCause = "",
+                errorCompanion = "The converted package was created, but Rootless Store could not clean up the temporary Magisk template directory."
             )
         }
 
@@ -180,14 +189,16 @@ class InstallMagiskPluginUseCase @Inject constructor(
         if (!isShellPluginInstallSuccessful) {
             return PluginError(
                 errorMessage = "Install magisk shell plugin failed",
-                errorCause = "Failed to copy magisk shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifest.pluginPackageName}, entryPoint=${pluginManifest.entryPoint}"
+                errorCause = "",
+                errorCompanion = "The converted shell plugin archive was ready, but Shizuku could not install it into the com.android.shell private plugin directory."
             )
         }
 
         if (!isMagiskTemplateArchiveDeleted) {
             return PluginError(
                 errorMessage = "Delete magisk template zip failed",
-                errorCause = "Failed to delete ${magiskTemplateZipFile.path}"
+                errorCause = "",
+                errorCompanion = "The Magisk shell plugin installation finished, but Rootless Store could not delete the temporary staging zip."
             )
         }
 
