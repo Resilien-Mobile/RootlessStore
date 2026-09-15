@@ -4,5 +4,6 @@ import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 
 data class FileSystemOperationError(
     override val errorMessage: String,
-    override val errorCause: String
+    override val errorCause: String,
+    override val errorCompanion: String? = null
 ): RootlessStoreError

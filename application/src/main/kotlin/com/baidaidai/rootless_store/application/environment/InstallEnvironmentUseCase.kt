@@ -21,7 +21,8 @@ class InstallEnvironmentUseCase @Inject constructor(
             .getOrElse { throwable ->
                 return PluginError(
                     errorMessage = "Can't parse environment manifest",
-                    errorCause = "Wrong type of EnvironmentManifest.json \n\n" + throwable.stackTrace.formatAsMultilineString()
+                    errorCause = throwable.stackTrace.formatAsMultilineString(),
+                    errorCompanion = "Rootless Store could not read EnvironmentManifest.json, or the manifest schema does not match the current environment format."
                 )
             }
 
@@ -31,7 +32,8 @@ class InstallEnvironmentUseCase @Inject constructor(
             .onFailure { throwable ->
                 return PluginError(
                     errorMessage = "Can't Un-Zip / install Environment",
-                    errorCause = "Maybe storage permission denied \n\n" + throwable.stackTrace.formatAsMultilineString()
+                    errorCause = throwable.stackTrace.formatAsMultilineString(),
+                    errorCompanion = "The package was recognized as an environment, but Rootless Store could not extract it into app storage."
                 )
             }
 
@@ -41,7 +43,8 @@ class InstallEnvironmentUseCase @Inject constructor(
             .onFailure { throwable ->
                 return PluginError(
                     errorMessage = "Can't set environment executable",
-                    errorCause = "Please check your shell permission \n\n" + throwable.stackTrace.formatAsMultilineString()
+                    errorCause = throwable.stackTrace.formatAsMultilineString(),
+                    errorCompanion = "The environment was extracted, but Rootless Store could not mark its entry point executable."
                 )
             }
 
