@@ -61,8 +61,13 @@ dependencies {
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
 
-    // Illusion Cube
+    // Coroutine
+    implementation(libs.kotlinx.coroutines.android)
+
+
+    // Local Modules
     implementation(project(":illusioncube"))
+    implementation(project(":llmcpp"))
     implementation(project(":domain"))
     implementation(project(":core"))
 
