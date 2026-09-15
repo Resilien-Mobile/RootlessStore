@@ -42,45 +42,45 @@ fun RootlessStoreWebViewScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-//    AndroidView(
-//        modifier = modifier.fillMaxSize(),
-//        factory = { context ->
-//            WebView(context).apply {
-//
-//                layoutParams = ViewGroup.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.MATCH_PARENT
-//                ) // Ensure CSS's style is OK
-//
-//                settings.javaScriptEnabled = true
-//                settings.domStorageEnabled = true
-//                setWebContentsDebuggingEnabled(true)
-//
-//                addWebMessageListener(this, "AppShell",setOf("*")){ _, message, _, _, proxy ->
-//                    coroutineScope.launch {
-//                        webViewScreenViewModel.executeAppShell(message.data!!).collect { shellResult ->
-//                            proxy.postMessage(shellResult.output)
-//                        }
-//                    }
-//                } // Newest JavaScript Native Bridge
-//
-//                addJavascriptInterface(
-//                    webViewScreenViewModel.createKernelSuJavaScriptBridge(),
-//                    "__rootless_ksu"
-//                ) // Oldest Inject JavaScript Native Bridge
-//
-//                webViewClient = object : WebViewClient() {
-//                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-//                        super.onPageStarted(view, url, favicon)
-//
-//                        view?.evaluateJavascript(kernelSuCompatibilityScript, null)  // Inject JavaScript KernelSU API grammar adaptor support
-//
-//                    }
-//                }
-//
-//                loadUrl(webUri)
-//
-//            }
-//        }
-//    )
+    AndroidView(
+        modifier = modifier.fillMaxSize(),
+        factory = { context ->
+            WebView(context).apply {
+
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                ) // Ensure CSS's style is OK
+
+                settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
+                setWebContentsDebuggingEnabled(true)
+
+                addWebMessageListener(this, "AppShell",setOf("*")){ _, message, _, _, proxy ->
+                    coroutineScope.launch {
+                        webViewScreenViewModel.executeAppShell(message.data!!).collect { shellResult ->
+                            proxy.postMessage(shellResult.output)
+                        }
+                    }
+                } // Newest JavaScript Native Bridge
+
+                addJavascriptInterface(
+                    webViewScreenViewModel.getKernelSuJavaScriptBridge(),
+                    "__rootless_ksu"
+                ) // Oldest Inject JavaScript Native Bridge
+
+                webViewClient = object : WebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        super.onPageStarted(view, url, favicon)
+
+                        view?.evaluateJavascript(kernelSuCompatibilityScript, null)  // Inject JavaScript KernelSU API grammar adaptor support
+
+                    }
+                }
+
+                loadUrl(webUri)
+
+            }
+        }
+    )
 }
