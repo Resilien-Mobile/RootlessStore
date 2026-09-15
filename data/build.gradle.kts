@@ -67,7 +67,6 @@ dependencies {
 
     // Local Modules
     implementation(project(":illusioncube"))
-    implementation(project(":llmcpp"))
     implementation(project(":domain"))
     implementation(project(":core"))
 
