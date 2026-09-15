@@ -6,6 +6,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
+import com.baidaidai.rootless_store.ui.components.common.ExpressiveDialog
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 
@@ -21,7 +23,7 @@ fun StartScreenErrorDialog(
     sourceScreenViewModel: RootlessStoreSourceScreenViewModel,
     error: RootlessStoreError?
 ){
-    AlertDialog(
+    ExpressiveDialog(
         onDismissRequest = {},
         confirmButton = {
             Button(
@@ -41,7 +43,15 @@ fun StartScreenErrorDialog(
         title = {
             Text(error!!.errorMessage)
         },
-        text = {
+        subtitle = {
+            if (!error?.errorCompanion.isNullOrBlank()){
+                Text(
+                    text = error.errorCompanion.toString(),
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        },
+        content = {
             Text(
                 text = error!!.errorCause,
                 modifier = Modifier

@@ -23,7 +23,8 @@ class InstallPluginUseCase @Inject constructor(
             .getOrElse { throwable ->
                 return PluginError(
                     errorMessage = "Can't parse plugin manifest",
-                    errorCause = "Wrong type of PluginManifest.json \n\n" + throwable.stackTrace.formatAsMultilineString()
+                    errorCause = throwable.stackTrace.formatAsMultilineString(),
+                    errorCompanion = "Rootless Store could not read PluginManifest.json, or the manifest schema does not match the current plugin format."
                 )
             }
 
@@ -37,7 +38,8 @@ class InstallPluginUseCase @Inject constructor(
                 .onFailure { throwable ->
                     return PluginError(
                         errorMessage = "Can't Un-Zip / install Plugin",
-                        errorCause = "Maybe storage permission denied \n\n" + throwable.stackTrace.formatAsMultilineString()
+                        errorCause = throwable.stackTrace.formatAsMultilineString(),
+                        errorCompanion = "The package was recognized as a plugin, but Rootless Store could not extract it into app storage."
                     )
                 }
 
@@ -47,7 +49,8 @@ class InstallPluginUseCase @Inject constructor(
                 .onFailure { throwable ->
                     return PluginError(
                         errorMessage = "Can't set plugin executable",
-                        errorCause = "Please check your shell permission \n\n" + throwable.stackTrace.formatAsMultilineString()
+                        errorCause = throwable.stackTrace.formatAsMultilineString(),
+                        errorCompanion = "The plugin was extracted, but Rootless Store could not mark its entry point executable."
                     )
                 }
 

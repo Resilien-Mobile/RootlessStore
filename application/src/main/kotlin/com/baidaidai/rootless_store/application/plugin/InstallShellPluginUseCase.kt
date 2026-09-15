@@ -32,7 +32,8 @@ class InstallShellPluginUseCase @Inject constructor(
                 .getOrElse { throwable ->
                     return PluginError(
                         errorMessage = "Can't parse plugin manifest",
-                        errorCause = "Wrong type of PluginManifest.json \n\n" +  throwable.stackTrace.formatAsMultilineString()
+                        errorCause = throwable.stackTrace.formatAsMultilineString(),
+                        errorCompanion = "Rootless Store could not read PluginManifest.json before installing this ADB shell plugin."
                     )
                 }
 
@@ -61,14 +62,16 @@ class InstallShellPluginUseCase @Inject constructor(
             if (!isShellPluginInstallSuccessful) {
                 return PluginError(
                     errorMessage = "Install shell plugin failed",
-                    errorCause = "Failed to copy shell plugin into com.android.shell private directory. pluginPackageName=${pluginManifest.pluginPackageName}, entryPoint=${pluginManifest.entryPoint}"
+                    errorCause = "",
+                    errorCompanion = "The shell plugin archive was staged, but Shizuku could not install it into the com.android.shell private plugin directory."
                 )
             }
 
             if (!isShellPluginStagingFileDeleted) {
                 return PluginError(
                     errorMessage = "Delete shell plugin staging file failed",
-                    errorCause = "Failed to delete ${shellPluginStagingFile.path}"
+                    errorCause = "",
+                    errorCompanion = "The shell plugin installation finished, but Rootless Store could not delete the temporary staging zip."
                 )
             }
 
@@ -77,10 +80,11 @@ class InstallShellPluginUseCase @Inject constructor(
             pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
 
             null
-        } catch (error: Throwable) {
+        } catch (throwable: Throwable) {
             PluginError(
-                errorMessage = error.message ?: "Install shell plugin crashed",
-                errorCause = error.stackTrace.formatAsMultilineString()
+                errorMessage = throwable.message ?: "Install shell plugin crashed",
+                errorCause = throwable.stackTrace.formatAsMultilineString(),
+                errorCompanion = "The shell plugin installation flow crashed unexpectedly during manifest parsing, staging, Shizuku installation, or cleanup."
             )
         }
     }
