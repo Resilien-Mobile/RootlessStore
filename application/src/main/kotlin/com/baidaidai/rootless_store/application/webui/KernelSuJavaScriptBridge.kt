@@ -8,11 +8,14 @@ import android.os.Build
 import android.webkit.JavascriptInterface
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONArray
 import org.json.JSONObject
+import javax.inject.Inject
 
 
-class KernelSuJavaScriptBridge(
+class KernelSuJavaScriptBridge @Inject constructor(
+    @ApplicationContext
     private val context: Context,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl
 ) {
