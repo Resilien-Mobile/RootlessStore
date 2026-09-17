@@ -55,6 +55,7 @@ android {
         create("github") {
             initWith(getByName("release"))
             signingConfig = signingConfigs.getByName("github")
+            matchingFallbacks += listOf("release")
         }
     }
     compileOptions {
