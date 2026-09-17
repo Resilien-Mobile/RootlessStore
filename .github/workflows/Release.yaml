@@ -39,7 +39,6 @@ jobs:
       # 读取 asset/markdown/release/<tag>.md 作为发布说明
       - name: Upload Release
         uses: softprops/action-gh-release@v2
-        if: github.ref_type == 'tag'
         with:
-          files: app/github/app-github.apk
+          files: app/build/outputs/apk/github/app-github.apk
           body_path: asset/markdown/release/${{ github.ref_name }}.md
