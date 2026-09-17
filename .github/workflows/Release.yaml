@@ -41,5 +41,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
-          files: app/build/outputs/apk/**/*.apk
+          files: app/github/app-github.apk
           body_path: asset/markdown/release/${{ github.ref_name }}.md
