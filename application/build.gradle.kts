@@ -37,6 +37,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    // kotlin-result
+    implementation("com.michael-bull.kotlin-result:kotlin-result:2.3.1")
+
 
     implementation(project(":illusioncube"))
     implementation(project(":domain"))
