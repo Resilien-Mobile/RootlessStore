@@ -13,6 +13,7 @@ import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
+import com.github.michaelbull.result.onErr
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -126,10 +127,10 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
 
     fun addCodeBrickFromClipboard(){
         viewModelScope.launch {
-            val error = addCodeBrickFromClipboardUseCase()
-            if (error != null){
-                _codeBrickError.emit(error)
-            }
+            addCodeBrickFromClipboardUseCase()
+                .onErr {
+                    _codeBrickError.emit(it)
+                }
         }
     }
 
