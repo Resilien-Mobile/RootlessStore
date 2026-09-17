@@ -17,7 +17,9 @@ fun ExpressiveDialog(
     dismissButton: @Composable (() -> Unit)? = null,
     icon: @Composable (() -> Unit)? = null,
     title: @Composable (() -> Unit)? = null,
+    enableSubTitle: Boolean = false,
     subtitle: @Composable (()-> Unit)? = null,
+    enableContent: Boolean = false,
     content: @Composable (() -> Unit)? = null
 ){
     AlertDialog(
@@ -28,14 +30,19 @@ fun ExpressiveDialog(
         title = title,
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                subtitle?.invoke()
 
-                Spacer(modifier = Modifier.height(12.dp))
-                HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
-                    thickness = 1.dp
-                )
-                Spacer(modifier = Modifier.height(12.dp))
+                if (enableSubTitle){
+                    subtitle?.invoke()
+
+                    if (enableContent){
+                        Spacer(modifier = Modifier.height(12.dp))
+                        HorizontalDivider(
+                            modifier = Modifier.fillMaxWidth(),
+                            thickness = 1.dp
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                }
 
                 content?.invoke()
             }
