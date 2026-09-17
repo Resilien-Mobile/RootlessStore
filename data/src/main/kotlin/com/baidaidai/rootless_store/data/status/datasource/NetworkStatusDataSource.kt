@@ -6,10 +6,10 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.os.RemoteException
-import com.baidaidai.rootless_store.data.R
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
 import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -191,7 +191,7 @@ class NetworkStatusDataSource @Inject constructor(
 
         return NetworkInterfaceMetrics(
             interfaceName = networkInterfaceName,
-            interfaceIcon = resolveNetworkInterfaceIcon(networkInterfaceName),
+            interfaceType = resolveNetworkInterfaceType(networkInterfaceName),
             interfaceAddress = networkInterfaceAddress,
             currentUploadRate = currentUploadBytes.toMebibyte(),
             currentDownloadRate = currentDownloadBytes.toMebibyte(),
@@ -220,12 +220,13 @@ class NetworkStatusDataSource @Inject constructor(
         return connectivityManager.getLinkProperties(network)?.interfaceName
     }
 
-    private fun resolveNetworkInterfaceIcon(networkInterfaceName: String): Int {
+    private fun resolveNetworkInterfaceType(networkInterfaceName: String): NetworkInterfaceType {
         return when {
-            networkInterfaceName.startsWith("rmnet") -> R.drawable.material_symbols_sim_card
-            networkInterfaceName.startsWith("ccmni") -> R.drawable.material_symbols_sim_card
-            networkInterfaceName.startsWith("tun") -> R.drawable.material_symbols_vpn_key
-            else -> R.drawable.material_symbols_wifi
+            networkInterfaceName.startsWith("rmnet") -> NetworkInterfaceType.Cellular
+            networkInterfaceName.startsWith("ccmni") -> NetworkInterfaceType.Cellular
+            networkInterfaceName.startsWith("tun") -> NetworkInterfaceType.Vpn
+            networkInterfaceName.startsWith("wlan") -> NetworkInterfaceType.Wifi
+            else -> NetworkInterfaceType.Unknown
         }
     }
 

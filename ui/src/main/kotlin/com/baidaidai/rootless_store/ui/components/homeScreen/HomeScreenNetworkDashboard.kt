@@ -30,16 +30,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.annotation.DrawableRes
 import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceMetrics
+import com.baidaidai.rootless_store.domain.status.model.NetworkInterfaceType
+import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 
 @Composable
@@ -211,7 +214,7 @@ private fun HomeScreenNetworkInterfaceRow(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    painter = painterResource(networkInterfaceMetrics.interfaceIcon),
+                    painter = painterResource(networkInterfaceMetrics.interfaceType.toIconResource()),
                     contentDescription = networkInterfaceMetrics.interfaceName
                 )
                 Spacer(modifier = Modifier.width(10.dp))
@@ -254,6 +257,16 @@ private fun HomeScreenNetworkInterfaceRow(
             }
         }
 
+    }
+}
+
+@DrawableRes
+private fun NetworkInterfaceType.toIconResource(): Int {
+    return when (this) {
+        NetworkInterfaceType.Wifi -> R.drawable.material_symbols_wifi
+        NetworkInterfaceType.Cellular -> R.drawable.material_symbols_sim_card
+        NetworkInterfaceType.Vpn -> R.drawable.material_symbols_vpn_key
+        NetworkInterfaceType.Unknown -> R.drawable.material_symbols_globe_asia
     }
 }
 

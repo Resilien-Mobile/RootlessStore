@@ -12,7 +12,7 @@ data class NetworkDashboardConfig(
             networkInterfaces = listOf(
                 NetworkInterfaceMetrics(
                     interfaceName = "rmnet_data0",
-                    interfaceIcon = 0,
+                    interfaceType = NetworkInterfaceType.Cellular,
                     interfaceAddress = "172.198.210.132",
                     currentUploadRate = 7.7f,
                     currentDownloadRate = 37.8f,
@@ -21,7 +21,7 @@ data class NetworkDashboardConfig(
                 ),
                 NetworkInterfaceMetrics(
                     interfaceName = "wlan0",
-                    interfaceIcon = 0,
+                    interfaceType = NetworkInterfaceType.Wifi,
                     interfaceAddress = "192.168.1.100",
                     currentUploadRate = 4.8f,
                     currentDownloadRate = 48.6f,
@@ -35,10 +35,17 @@ data class NetworkDashboardConfig(
 
 data class NetworkInterfaceMetrics(
     val interfaceName: String,
-    val interfaceIcon: Int,
+    val interfaceType: NetworkInterfaceType,
     val interfaceAddress: String,
     val currentUploadRate: Float,
     val currentDownloadRate: Float,
     val totalUploadedMebibytes: Float,
     val totalDownloadedMebibytes: Float
 )
+
+enum class NetworkInterfaceType {
+    Wifi,
+    Cellular,
+    Vpn,
+    Unknown
+}
