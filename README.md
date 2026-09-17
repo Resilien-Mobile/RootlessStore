@@ -1,17 +1,22 @@
-# Rootless Store
+<img src="./asset/banner/RootlessStore.png"></img>
 
-[本文中文版](/asset/markdown/readme/README_zh-CN.md) · [Official Wiki](https://resilien-mobile.github.io/RootlessStore_WiKi/) · [![CI](https://github.com/Resilien-Mobile/RootlessStore/actions/workflows/Action.yaml/badge.svg?branch=main)](https://github.com/Resilien-Mobile/RootlessStore/actions/workflows/Action.yaml)
+<h1 style="width: 100%; display: flex; justify-content: center; align-items: center;">Rootless Store</h1>
 
-An open-source, rootless plugin management and runtime platform for the Android ecosystem
+<div style="width: 100%; display: flex; flex-direction: row ; justify-content: center; align-items: center;">
+    <a href="/asset/markdown/readme/README_zh-CN.md">本文中文版</a>
+    <div style="margin-left: 10px; margin-right: 10px ">·</div>
+    <a href="https://resilien-mobile.github.io/RootlessStore_WiKi/">Official Wiki</a>
+</div>
 
-## PreView
+<h4 style="width: 100%; display: flex; justify-content: center; align-items: center; margin-bottom: 30px">An open-source, rootless plugin management and runtime platform for the Android ecosystem</h4>
+
 <p>
-    <img src="/asset/picture/HomeScreen.png" width="32%" />
-    <img src="/asset/picture/PluginScreen.png" width="32%" />
-    <img src="/asset/picture/CodeBrickScreen.png" width="32%" />
-    <img src="/asset/picture/SettingScreen.png" width="32%" />
-    <img src="/asset/picture/ExecuteScreen.png" width="32%" />
-    <img src="/asset/picture/ShellScreen.png" width="32%" />
+    <img src="./asset/picture/HomeScreen.png" width="32%" />
+    <img src="./asset/picture/PluginScreen.png" width="32%" />
+    <img src="./asset/picture/CodeBrickScreen.png" width="32%" />
+    <img src="./asset/picture/SettingScreen.png" width="32%" />
+    <img src="./asset/picture/ExecuteScreen.png" width="32%" />
+    <img src="./asset/picture/ShellScreen.png" width="32%" />
 </p>
 
 ## Overview
@@ -53,9 +58,13 @@ It stands on three core principles:
 - [x] Support Preference Panel
 - [x] Support private sources, invisible sources, and paid sources
 - [x] Shell code snippet support
-- [ ] Magisk Plugin Compatibility Layer
+- [ ] Base64 CodeBrick Token support
+- [x] Magisk Plugin Compatibility Layer
 - [x] Quick launch tile of the Android Control Center
-- [ ] Host status panel， More Expressive
+- [x] Host status panel， More Expressive
+- [x] Add test matrix (not yet completed)
+- [x] More objective error cause
+- [ ] Certificate signature tamper-proof verification chain
 - [ ] A more intuitive demonstration of plugin execution methods
 - [ ] Improve filtering, state feedback, and permission boundaries
 - [ ] Publish to F-Droid
