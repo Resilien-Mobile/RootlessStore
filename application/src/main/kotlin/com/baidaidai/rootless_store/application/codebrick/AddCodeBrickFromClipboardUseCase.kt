@@ -4,6 +4,10 @@ import com.baidaidai.rootless_store.data.codebrick.gateway.CodeBrickGatewayImpl
 import com.baidaidai.rootless_store.data.codebrick.repository.CodeBrickRepositoryImpl
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.getOrElse
 import javax.inject.Inject
 
 class AddCodeBrickFromClipboardUseCase @Inject constructor(
@@ -11,19 +15,21 @@ class AddCodeBrickFromClipboardUseCase @Inject constructor(
     private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
 ) {
 
-    suspend operator fun invoke(): CodeBrickError? {
+    suspend operator fun invoke(): Result<Unit, CodeBrickError> {
 
         // Find Clipboard Content
-        val clipboardText = codeBrickGatewayImpl.findClipboardText() ?: return CodeBrickError(
-            errorMessage = "Clipboard is empty.",
-            errorCause = "CodeBrick json text is null."
-        )
+        val clipboardText = codeBrickGatewayImpl
+            .findClipboardText()
+            .getOrElse { codeBrickError ->
+                return Err(codeBrickError)
+            }
 
         // Parse CodeBrick JSON
-        val codeBrickJsonPayload = codeBrickGatewayImpl.parseCodeBrickJson(jsonString = clipboardText) ?: return CodeBrickError(
-            errorMessage = "Invalid CodeBrick json.",
-            errorCause = clipboardText
-        )
+        val codeBrickJsonPayload = codeBrickGatewayImpl
+            .parseCodeBrickJson(jsonString = clipboardText)
+            .getOrElse { codeBrickError ->
+                return Err(codeBrickError)
+            }
 
         // Create CodeBrick Config
         val codeBrickConfig = CodeBrickConfig(
@@ -36,6 +42,7 @@ class AddCodeBrickFromClipboardUseCase @Inject constructor(
         // Add CodeBrick Config
         codeBrickRepositoryImpl.addCodeBrick(codeBrickConfig)
 
-        return null
+        return Ok(Unit)
+
     }
 }

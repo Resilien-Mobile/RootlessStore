@@ -84,6 +84,9 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
 
+    // kotlin-result
+    implementation("com.michael-bull.kotlin-result:kotlin-result:2.3.1")
+
 
     // WebView
     implementation("androidx.webkit:webkit:1.16.0")
