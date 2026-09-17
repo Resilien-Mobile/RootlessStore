@@ -106,7 +106,7 @@ fun RootlessStoreNavigationScaffold(
     val context = LocalContext.current
     val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     val scrollBehavior = when(currentDestination){
-        PluginScreenKey, CodeBrickScreenKey, MarketScreenKey, SettingScreenKey, ThirdPartyNotificationScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        PluginScreenKey, CodeBrickScreenKey, MarketScreenKey, SettingScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         else -> TopAppBarDefaults.pinnedScrollBehavior()
     }
 
@@ -253,10 +253,16 @@ fun RootlessStoreNavigationScaffold(
                         }
                     )
                     SettingScreenKey -> SettingScreenNecessaryComponents.SettingScreenTopAppBar(
-                        scrollBehavior = scrollBehavior
+                        scrollBehavior = scrollBehavior,
+                        onNavigationIconClick = {
+                            navigationBackStack.removeLastOrNull()
+                        }
                     )
                     ThirdPartyNotificationScreenKey -> ThirdPartyNotificationScreenNecessaryComponents.ThirdPartyNotificationScreenTopAppBar(
                         scrollBehavior = scrollBehavior,
+                        onNavigationIconClick = {
+                            navigationBackStack.removeLastOrNull()
+                        },
                         onSaveClick = {
                             thirdPartyNotificationScreenViewModel.ensureNotificationPreference()
                         }
@@ -271,10 +277,12 @@ fun RootlessStoreNavigationScaffold(
             },
             bottomBar = {
                 if (rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Compact){
-                    StartScreenNecessaryComponents.StartScreenNavigationBar(
-                        currentDestination = navigationBackStack.last() as RootlessNavigationKey
-                    ){ rootlessNavigationKey ->
-                        navigationBackStack.add(rootlessNavigationKey)
+                    if (currentDestination != SettingScreenKey && currentDestination != ThirdPartyNotificationScreenKey){
+                        StartScreenNecessaryComponents.StartScreenNavigationBar(
+                            currentDestination = navigationBackStack.last() as RootlessNavigationKey
+                        ){ rootlessNavigationKey ->
+                            navigationBackStack.add(rootlessNavigationKey)
+                        }
                     }
                 }
             },
