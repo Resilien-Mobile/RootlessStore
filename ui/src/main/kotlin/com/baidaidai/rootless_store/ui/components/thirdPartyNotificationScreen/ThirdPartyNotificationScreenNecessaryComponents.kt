@@ -17,11 +17,22 @@ object ThirdPartyNotificationScreenNecessaryComponents {
     @Composable
     fun ThirdPartyNotificationScreenTopAppBar(
         scrollBehavior: TopAppBarScrollBehavior,
+        onNavigationIconClick: ()-> Unit = {},
         onSaveClick: () -> Unit = {}
     ) {
         CenterAlignedTopAppBar(
             title = {
                 Text(stringResource(R.string.third_party_notification_screen_top_app_bar_title))
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = onNavigationIconClick
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.material_symbols_arrow_back),
+                        contentDescription = "Back"
+                    )
+                }
             },
             scrollBehavior = scrollBehavior,
             actions = {
