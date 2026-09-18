@@ -14,10 +14,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.components.common.ExpressiveDialog
+import com.baidaidai.rootless_store.ui.components.common.FakeExpressiveDialog
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 
@@ -92,6 +95,56 @@ fun StartScreenErrorDialog(
             Text(error!!.errorMessage)
         },
         text = {
+            Text(
+                text = error!!.errorCause,
+                modifier = Modifier
+                    .heightIn(max = 300.dp)
+                    .verticalScroll(
+                        state = rememberScrollState()
+                    )
+            )
+        }
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun _preview_() {
+
+    val error = CodeBrickError(
+        errorCause = "Error Cause",
+        errorMessage = "Error Message",
+        errorCompanion = "Error Companion"
+    )
+
+    FakeExpressiveDialog(
+        enableSubTitle = !error?.errorCompanion.isNullOrEmpty(),
+        enableContent = !error?.errorCause.isNullOrEmpty(),
+        onDismissRequest = {},
+        confirmButton = {
+            Button(
+                onClick = {
+                }
+            ) {
+                Text("Ok")
+            }
+        },
+        icon = {
+            Icon(
+                painter = painterResource(R.drawable.material_symbols_warning),
+                contentDescription = "Dialog Warning Logo"
+            )
+        },
+        title = {
+            Text(error!!.errorMessage)
+        },
+        subtitle = {
+            Text(
+                text = error?.errorCompanion.toString(),
+                style = MaterialTheme.typography.labelLarge
+            )
+        },
+        content = {
             Text(
                 text = error!!.errorCause,
                 modifier = Modifier
