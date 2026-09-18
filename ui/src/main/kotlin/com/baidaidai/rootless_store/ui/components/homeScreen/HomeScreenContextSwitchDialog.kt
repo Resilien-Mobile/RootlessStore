@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.ui.components.homeScreen
 
-import android.graphics.Color
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +19,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -78,29 +75,36 @@ fun HomeScreenContextSwitchDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
-            TextButton(
-                onClick = onApplyExecutionContext
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            Row {
                 TextButton(
                     onClick = onResetExecutionContextPreference,
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = androidx.compose.ui.graphics.Color.Red
+                ){
+                    Text(
+                        text = "Revert",
+                        color = MaterialTheme.colorScheme.error
                     )
-                ) {
-                    Text("revert")
                 }
-                TextButton(
-                    onClick = onDismissRequest,
-                    colors = ButtonDefaults.textButtonColors(
-                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                ) {
-                    Text("Cancel")
+
+                Row{
+                    TextButton(
+                        onClick = onDismissRequest,
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    ) {
+                        Text("Cancel")
+                    }
+                    TextButton(
+                        onClick = onApplyExecutionContext,
+                    ){
+                        Text(
+                            text = "Confirm"
+                        )
+                    }
                 }
             }
         },
