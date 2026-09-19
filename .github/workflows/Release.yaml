@@ -10,9 +10,22 @@ permissions:
   contents: write
 
 jobs:
-  release:
+
+  # 增加 UnitTest单测
+  unit-tests:
     runs-on: ubuntu-latest
-    environment: release
+    strategy:
+      fail-fast: false
+      matrix:
+        module:
+          - name: data
+            gradle_task: :data:testDebugUnitTest
+            test_results: data/build/test-results/testDebugUnitTest/*.xml
+
+    outputs:
+      data_passed: ${{ steps.report_data.outputs.passed }}
+      data_failed: ${{ steps.report_data.outputs.failed }}
+      data_skipped: ${{ steps.report_data.outputs.skipped }}
 
     steps:
       - name: Checkout
@@ -28,6 +41,52 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x ./gradlew
 
+      - name: Run ${{ matrix.module.name }} unit tests
+        id: gradle-test
+        continue-on-error: true
+        run: ./gradlew ${{ matrix.module.gradle_task }}
+
+      - name: Report ${{ matrix.module.name }} unit tests
+        id: report_data
+        if: ${{ !cancelled() }}
+        uses: dorny/test-reporter@v3
+        with:
+          name: ${{ matrix.module.name }} unit tests
+          path: ${{ matrix.module.test_results }}
+          reporter: java-junit
+          only-summary: true
+          fail-on-error: false
+
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    needs: unit-tests
+    if: ${{ always() && needs.unit-tests.result != 'cancelled' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+
+      - name: Grant gradlew permission
+        run: chmod +x ./gradlew
+
+      - name: Render release notes
+        uses: actions-able/envsubst-action@v1
+        with:
+          input-file: asset/markdown/release/${{ github.ref_name }}.md
+          output-file: release.md
+        env:
+          DATA_PASSED: ${{ needs.unit-tests.outputs.data_passed }}
+          DATA_FAILED: ${{ needs.unit-tests.outputs.data_failed }}
+          DATA_SKIPPED: ${{ needs.unit-tests.outputs.data_skipped }}
+
       # 构建 release APK
       - name: Build release APK
         run: ./gradlew assembleGithub
@@ -41,4 +100,4 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: app/build/outputs/apk/github/app-github.apk
-          body_path: asset/markdown/release/${{ github.ref_name }}.md
+          body_path: release.md
