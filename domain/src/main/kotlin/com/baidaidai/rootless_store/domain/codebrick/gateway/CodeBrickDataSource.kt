@@ -5,4 +5,8 @@ import com.github.michaelbull.result.Result
 
 interface CodeBrickDataSource {
     fun findClipboardText(): Result<String, CodeBrickError>
+
+    fun postClipboardText(
+        clipboardText: String
+    ): Result<Unit, CodeBrickError>
 }
