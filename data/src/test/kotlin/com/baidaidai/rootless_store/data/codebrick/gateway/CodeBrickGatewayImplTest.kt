@@ -2,7 +2,7 @@ package com.baidaidai.rootless_store.data.codebrick.gateway
 
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.gateway.CodeBrickDataSource
-import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickJsonPayload
+import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickToken
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
@@ -15,16 +15,22 @@ class CodeBrickGatewayImplTest {
 
     // JSON
     @Test
-    fun testNormalParseCodeBrickJson() {
+    fun testNormalParseCodeBrickToken() {
         val fakeCodeBrickDataSource = object : CodeBrickDataSource {
             override fun findClipboardText(): Result<String, CodeBrickError> {
-                return Ok( "{\"codeBrickTitle\":\"Silent Mode\",\"codeBrickEnvironment\":\"ADB\",\"codeBrickContent\":\"cmd audio set-ringer-mode SILENT\"}")
+                return Ok("{\"codeBrickTitle\":\"Silent Mode\",\"codeBrickEnvironment\":\"ADB\",\"codeBrickContent\":\"cmd audio set-ringer-mode SILENT\"}")
+            }
+
+            override fun postClipboardText(
+                clipboardText: String
+            ): Result<Unit, CodeBrickError> {
+                return Ok(Unit)
             }
         }
 
         val codeBrickGateway = CodeBrickGatewayImpl(fakeCodeBrickDataSource)
 
-        val expectCodeBrickJsonPayload = CodeBrickJsonPayload(
+        val expectCodeBrickToken = CodeBrickToken(
             codeBrickTitle = "Silent Mode",
             codeBrickEnvironment = ExecutionContext.ADB,
             codeBrickContent = "cmd audio set-ringer-mode SILENT"
@@ -36,19 +42,25 @@ class CodeBrickGatewayImplTest {
                 throw AssertionError("Unexpected error: $it")
             }
         val codeBrickJsonPayload = codeBrickGateway
-            .parseCodeBrickJson(jsonString)
+            .parseCodeBrickToken(jsonString)
             .getOrElse {
                 throw AssertionError("Unexpected error: $it")
             }
 
-        assertEquals(expectCodeBrickJsonPayload, codeBrickJsonPayload)
+        assertEquals(expectCodeBrickToken, codeBrickJsonPayload)
     }
 
     @Test
-    fun testMissingParameterParseCodeBrickJson() {
+    fun testMissingParameterParseCodeBrickToken() {
         val fakeCodeBrickDataSource = object : CodeBrickDataSource {
             override fun findClipboardText(): Result<String, CodeBrickError> {
                 return Ok("{\"codeBrickTitle\":\"Silent Mode\",\"codeBrickEnvironment\":\"ADB\"}")
+            }
+
+            override fun postClipboardText(
+                clipboardText: String
+            ): Result<Unit, CodeBrickError> {
+                return Ok(Unit)
             }
         }
 
@@ -60,16 +72,22 @@ class CodeBrickGatewayImplTest {
                 throw AssertionError("Unexpected error: $it")
             }
 
-        val codeBrickJsonPayload = codeBrickGateway.parseCodeBrickJson(jsonString)
+        val codeBrickJsonPayload = codeBrickGateway.parseCodeBrickToken(jsonString)
 
         assertEquals(false,codeBrickJsonPayload.isOk)
     }
 
     @Test
-    fun testErrorEnvironmentParseCodeBrickJson() {
+    fun testErrorEnvironmentParseCodeBrickToken() {
         val fakeCodeBrickDataSource = object : CodeBrickDataSource {
             override fun findClipboardText(): Result<String, CodeBrickError> {
                 return Ok("{\"codeBrickTitle\":\"Silent Mode\",\"codeBrickEnvironment\":\"UNKNOW\",\"codeBrickContent\":\"cmd audio set-ringer-mode SILENT\"}")
+            }
+
+            override fun postClipboardText(
+                clipboardText: String
+            ): Result<Unit, CodeBrickError> {
+                return Ok(Unit)
             }
         }
 
@@ -81,7 +99,7 @@ class CodeBrickGatewayImplTest {
                 throw AssertionError("Unexpected error: $it")
             }
 
-        val codeBrickJsonPayload = codeBrickGateway.parseCodeBrickJson(jsonString)
+        val codeBrickJsonPayload = codeBrickGateway.parseCodeBrickToken(jsonString)
 
         assertEquals(false,codeBrickJsonPayload.isOk)
     }
@@ -92,6 +110,12 @@ class CodeBrickGatewayImplTest {
         val fakeCodeBrickDataSource = object : CodeBrickDataSource {
             override fun findClipboardText(): Result<String, CodeBrickError> {
                 return Ok("fake clipboard text")
+            }
+
+            override fun postClipboardText(
+                clipboardText: String
+            ): Result<Unit, CodeBrickError> {
+                return Ok(Unit)
             }
         }
 
@@ -108,6 +132,12 @@ class CodeBrickGatewayImplTest {
         val fakeCodeBrickDataSource = object : CodeBrickDataSource {
             override fun findClipboardText(): Result<String, CodeBrickError> {
                 return Err(CodeBrickError("",""))
+            }
+
+            override fun postClipboardText(
+                clipboardText: String
+            ): Result<Unit, CodeBrickError> {
+                return Ok(Unit)
             }
         }
 
