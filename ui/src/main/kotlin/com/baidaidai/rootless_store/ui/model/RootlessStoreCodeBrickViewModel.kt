@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.AddCodeBrickFromClipboardUseCase
+import com.baidaidai.rootless_store.application.codebrick.InstallDaemonPluginFromCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.InstallPluginFromCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.DeleteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
@@ -13,6 +14,7 @@ import com.baidaidai.rootless_store.application.codebrick.PostCodeBrickTokenUseC
 import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.github.michaelbull.result.onErr
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,6 +46,7 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val updateCodeBrickUseCase: UpdateCodeBrickUseCase,
     private val addCodeBrickFromClipboardUseCase: AddCodeBrickFromClipboardUseCase,
     private val installPluginFromCodeBrickUseCase: InstallPluginFromCodeBrickUseCase,
+    private val installDaemonPluginFromCodeBrickUseCase: InstallDaemonPluginFromCodeBrickUseCase,
     private val postCodeBrickTokenUseCase: PostCodeBrickTokenUseCase
 ): ViewModel() {
 
@@ -106,10 +109,19 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     }
 
     fun installPluginFromCodeBrick(
-        codeBrickConfig: CodeBrickConfig
+        codeBrickConfig: CodeBrickConfig,
+        pluginRunModel: PluginRunModel = PluginRunModel.OneTime
     ){
         viewModelScope.launch {
-            installPluginFromCodeBrickUseCase(codeBrickConfig)
+            when (pluginRunModel) {
+                PluginRunModel.OneTime -> {
+                    installPluginFromCodeBrickUseCase(codeBrickConfig)
+                }
+
+                PluginRunModel.Daemon -> {
+                    installDaemonPluginFromCodeBrickUseCase(codeBrickConfig)
+                }
+            }
         }
     }
 
