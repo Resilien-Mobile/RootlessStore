@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,6 +33,8 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
+import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickEditor
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickPreviewer
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickExecutionResultDialog
@@ -47,6 +52,61 @@ fun CodeBrickScreen(
     val codeBricks by codeBrickViewModel.codeBricks.collectAsState()
     val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
     val density = LocalDensity.current
+
+    var isInstallPluginRunModelDialogVisible by remember { mutableStateOf(false) }
+    var selectedInstallPluginCodeBrickConfig: CodeBrickConfig? by remember { mutableStateOf(null) }
+
+    // Convert to plugin Second level confirmation
+    if (isInstallPluginRunModelDialogVisible && selectedInstallPluginCodeBrickConfig != null){
+        AlertDialog(
+            title = {
+                Text("Plugin Run Model")
+            },
+            text = {
+                Text("Choose how this CodeBrick plugin should run.")
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        selectedInstallPluginCodeBrickConfig?.let { codeBrickConfig ->
+                            codeBrickViewModel.installPluginFromCodeBrick(
+                                codeBrickConfig = codeBrickConfig,
+                                pluginRunModel = PluginRunModel.OneTime
+                            )
+                        }
+                        selectedInstallPluginCodeBrickConfig = null
+                        isInstallPluginRunModelDialogVisible = false
+
+                        codeBrickViewModel.hideCodeBrickSettings()
+                    }
+                ) {
+                    Text("OneTime")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        selectedInstallPluginCodeBrickConfig?.let { codeBrickConfig ->
+                            codeBrickViewModel.installPluginFromCodeBrick(
+                                codeBrickConfig = codeBrickConfig,
+                                pluginRunModel = PluginRunModel.Daemon
+                            )
+                        }
+                        selectedInstallPluginCodeBrickConfig = null
+                        isInstallPluginRunModelDialogVisible = false
+
+                        codeBrickViewModel.hideCodeBrickSettings()
+                    }
+                ) {
+                    Text("Daemon")
+                }
+            },
+            onDismissRequest = {
+                selectedInstallPluginCodeBrickConfig = null
+                isInstallPluginRunModelDialogVisible = false
+            }
+        )
+    }
 
     // Editor show status
     if (codeBrickScreenUiState.isCodeBrickEditorVisible){
@@ -92,7 +152,12 @@ fun CodeBrickScreen(
                 )
                 codeBrickViewModel.hideCodeBrickSettings()
             },
-            onInstallPluginClick = codeBrickViewModel::installPluginFromCodeBrick
+            onInstallPluginClick = { codeBrickConfig ->
+                selectedInstallPluginCodeBrickConfig = codeBrickConfig
+                isInstallPluginRunModelDialogVisible = true
+
+                codeBrickViewModel.hideCodeBrickSettings()
+            }
         )
     }
 
