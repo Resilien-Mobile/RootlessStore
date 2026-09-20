@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
@@ -54,7 +55,7 @@ fun InstalledEnvironmentList(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
             )
             Text(
-                text = "No Environment Installed",
+                text = stringResource(R.string.environment_screen_empty_state_message),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
             )
@@ -95,7 +96,7 @@ fun InstalledEnvironmentList(
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
 
-                            context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
+                            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_plugin_chooser_title)))
 
                         },
                         onUninstallClick = { pluginScreenViewModel.uninstallEnvironment(environmentManifest) },

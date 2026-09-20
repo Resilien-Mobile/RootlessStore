@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
@@ -61,7 +62,7 @@ fun MarketManifestCard(
                     ){
                         Icon(
                             painter = painterResource(R.drawable.outline_extension_24),
-                            contentDescription = "Plugin Icon",
+                            contentDescription = stringResource(R.string.market_manifest_card_plugin_icon_content_description),
                             modifier = Modifier
                                 .size(24.dp)
                         )
@@ -83,7 +84,7 @@ fun MarketManifestCard(
                             modifier = Modifier
                                 .height(40.dp)
                         ) {
-                            Text("Install")
+                            Text(stringResource(R.string.market_manifest_card_install_button))
                         }
                     }
 
@@ -103,9 +104,9 @@ fun MarketManifestCard(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        ManifestDetailRow(label = "Author", value = pluginManifest.author)
+                        ManifestDetailRow(label = stringResource(R.string.market_manifest_card_author_label), value = pluginManifest.author)
                         ManifestDetailRow(
-                            label = "Description",
+                            label = stringResource(R.string.market_manifest_card_description_label),
                             value = pluginManifest.pluginDescription
                         )
                     }
@@ -134,7 +135,7 @@ fun MarketManifestCard(
                     ){
                         Icon(
                             painter = painterResource(R.drawable.outline_extension_24),
-                            contentDescription = "Plugin Icon",
+                            contentDescription = stringResource(R.string.market_manifest_card_plugin_icon_content_description),
                             modifier = Modifier
                                 .size(24.dp)
                         )
@@ -156,7 +157,7 @@ fun MarketManifestCard(
                             modifier = Modifier
                                 .height(40.dp)
                         ) {
-                            Text("Install")
+                            Text(stringResource(R.string.market_manifest_card_install_button))
                         }
                     }
 
@@ -174,9 +175,9 @@ fun MarketManifestCard(
                     Column(
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        ManifestDetailRow(label = "Author", value = environmentManifest.author)
+                        ManifestDetailRow(label = stringResource(R.string.market_manifest_card_author_label), value = environmentManifest.author)
                         ManifestDetailRow(
-                            label = "Description",
+                            label = stringResource(R.string.market_manifest_card_description_label),
                             value = environmentManifest.environmentDescription
                         )
                     }

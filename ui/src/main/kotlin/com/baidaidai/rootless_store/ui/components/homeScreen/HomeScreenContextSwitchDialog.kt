@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
@@ -55,19 +56,19 @@ fun HomeScreenContextSwitchDialog(
         ExecutionContextOption(
             executionContext = ExecutionContext.LIMITED,
             iconResource = R.drawable.material_symbols_disabled,
-            label = "LIMITED",
+            label = stringResource(R.string.execution_context_app_shell_label),
             isEnabled = true
         ),
         ExecutionContextOption(
             executionContext = ExecutionContext.ADB,
             iconResource = R.drawable.material_symbols_adb,
-            label = "ADB",
+            label = stringResource(R.string.execution_context_adb_shell_label),
             isEnabled = isAdbShellAvailable
         ),
         ExecutionContextOption(
             executionContext = ExecutionContext.ROOTD,
             iconResource = R.drawable.material_symbols_cyclone,
-            label = "ROOT",
+            label = stringResource(R.string.execution_context_root_shell_label),
             isEnabled = isRootShellAvailable
         )
     )
@@ -84,7 +85,7 @@ fun HomeScreenContextSwitchDialog(
                     onClick = onResetExecutionContextPreference,
                 ){
                     Text(
-                        text = "Revert",
+                        text = stringResource(R.string.home_screen_context_switch_dialog_revert_button),
                         color = MaterialTheme.colorScheme.error
                     )
                 }
@@ -96,20 +97,20 @@ fun HomeScreenContextSwitchDialog(
                             contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     ) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.home_screen_context_switch_dialog_cancel_button))
                     }
                     TextButton(
                         onClick = onApplyExecutionContext,
                     ){
                         Text(
-                            text = "Confirm"
+                            text = stringResource(R.string.home_screen_context_switch_dialog_confirm_button)
                         )
                     }
                 }
             }
         },
         title = {
-            Text("Context Switcher")
+            Text(stringResource(R.string.home_screen_context_switch_dialog_title))
         },
         text = {
             Column(

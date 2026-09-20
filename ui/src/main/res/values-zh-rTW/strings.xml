@@ -1,4 +1,16 @@
 <resources>
+    <!-- Shared Display Names -->
+    <string name="execution_context_app_shell_label">App Shell</string>
+    <string name="execution_context_adb_shell_label">ADB Shell</string>
+    <string name="execution_context_root_shell_label">Root Shell</string>
+    <string name="execution_context_permissive_label">Permissive</string>
+    <string name="plugin_type_client_label">用戶端</string>
+    <string name="plugin_type_environment_label">環境</string>
+    <string name="plugin_run_model_one_time_label">一次性</string>
+    <string name="plugin_run_model_daemon_label">常駐</string>
+    <string name="share_plugin_chooser_title">分享外掛</string>
+    <string name="share_chooser_title">分享</string>
+
     <!-- Home Screen Strings -->
     <string name="home_screen_version_checker_container_icon_content_description">終端圖示</string>
     <string name="home_screen_version_checker_container_headline">Rootless Store 正在執行</string>
@@ -20,6 +32,16 @@
     <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">開發圖示</string>
     <string name="home_screen_how_to_develop_rootless_store_plugin_headline">了解 Rootless Store</string>
     <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">了解如何開發 Rootless Store 外掛</string>
+    <string name="home_screen_cpu_dashboard_pressure_label">負載</string>
+
+    <!-- Home Screen: Context Switch Dialog -->
+    <string name="home_screen_context_switch_dialog_title">切換執行環境</string>
+    <string name="home_screen_context_switch_dialog_revert_button">預設</string>
+    <string name="home_screen_context_switch_dialog_cancel_button">取消</string>
+    <string name="home_screen_context_switch_dialog_confirm_button">確認</string>
+
+    <!-- Shizuku ADB Screen: Top App Bar -->
+    <string name="shizuku_adb_screen_top_app_bar_title">Shizuku 授權</string>
 
     <!-- Shizuku ADB Screen: Overview Card -->
     <string name="shizuku_adb_screen_overview_card_title">Shizuku 授權</string>
@@ -46,6 +68,14 @@
     <string name="shell_screen_command_input_label">Shell 指令</string>
     <string name="shell_screen_enable_run_as_label">啟用 run-as</string>
     <string name="shell_screen_jump_to_directory_label">跳轉到目錄</string>
+    <string name="shell_screen_top_app_bar_title">Shell</string>
+    <string name="shell_screen_top_app_bar_scroll_to_top_content_description">捲動到頂部</string>
+    <string name="shell_screen_top_app_bar_scroll_to_bottom_content_description">捲動到底部</string>
+    <string name="shell_screen_top_app_bar_clear_output_content_description">清除輸出</string>
+    <string name="shell_screen_command_input_delete_content_description">刪除</string>
+    <string name="shell_screen_run_button_label">執行</string>
+    <string name="shell_screen_run_command_content_description">執行指令</string>
+    <string name="shell_screen_environment_menu_expand_content_description">展開更多</string>
 
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">外掛頁</string>
@@ -68,6 +98,20 @@
     <string name="plugin_screen_info_container_local_source_label">來源</string>
     <string name="plugin_screen_info_container_local_state_label">狀態</string>
     <string name="plugin_screen_info_container_local_required_label">最低權限</string>
+    <string name="plugin_screen_info_container_local_started_content_description">已啟動</string>
+    <string name="plugin_screen_info_container_local_start_content_description">啟動</string>
+
+    <!-- Plugin Screen: Action Panel -->
+    <string name="plugin_screen_action_panel_share_content_description">分享</string>
+    <string name="plugin_screen_action_panel_open_web_ui_content_description">開啟網頁</string>
+    <string name="plugin_screen_action_panel_back_content_description">返回</string>
+    <string name="plugin_screen_action_panel_uninstall_content_description">解除安裝</string>
+
+    <!-- Plugin Screen: Empty State -->
+    <string name="plugin_screen_empty_state_message">未安裝外掛</string>
+
+    <!-- Environment Screen Strings -->
+    <string name="environment_screen_empty_state_message">未安裝環境</string>
 
     <!-- Sources Screen: Top App Bar -->
     <string name="sources_screen_top_app_bar_title">外掛來源</string>
@@ -88,6 +132,18 @@
     <string name="sources_screen_repository_dialog_input_label">外掛來源 URL</string>
     <string name="sources_screen_repository_dialog_input_placeholder">https://endpoint/api/v1</string>
 
+    <!-- Market Screen: Top App Bar -->
+    <string name="market_screen_top_app_bar_subtitle">共 0 個可用外掛</string>
+    <string name="market_screen_top_app_bar_search_content_description">搜尋</string>
+    <string name="market_screen_top_app_bar_filter_content_description">篩選</string>
+    <string name="market_screen_top_app_bar_back_content_description">返回</string>
+
+    <!-- Market Screen: Manifest Card -->
+    <string name="market_manifest_card_plugin_icon_content_description">外掛圖示</string>
+    <string name="market_manifest_card_install_button">安裝</string>
+    <string name="market_manifest_card_author_label">作者</string>
+    <string name="market_manifest_card_description_label">描述</string>
+
     <!-- Execute Screen: Top App Bar -->
     <string name="execute_screen_top_app_bar_title">正在執行外掛</string>
     <string name="execute_screen_top_app_bar_share_content_description">分享</string>
@@ -99,6 +155,15 @@
     <string name="start_screen_navigation_bar_plugin_label">外掛頁</string>
     <string name="start_screen_navigation_bar_brick_label">代碼塊</string>
     <string name="start_screen_navigation_bar_sources_label">外掛來源</string>
+
+    <!-- Start Screen: Top App Bar -->
+    <string name="start_screen_top_app_bar_title">Rootless Store</string>
+    <string name="start_screen_top_app_bar_setting_content_description">設定</string>
+    <string name="start_screen_floating_button_terminal_content_description">終端</string>
+
+    <!-- Start Screen: Error Dialog -->
+    <string name="start_screen_error_dialog_ok_button">確定</string>
+    <string name="start_screen_error_dialog_warning_icon_content_description">警告圖示</string>
 
     <!-- Code Brick Screen: Top App Bar -->
     <string name="code_brick_screen_top_app_bar_title">代碼塊</string>
@@ -119,26 +184,38 @@
     <string name="code_brick_screen_editor_context_app_shell_label">App Shell</string>
     <string name="code_brick_screen_editor_context_adb_shell_label">ADB Shell</string>
     <string name="code_brick_screen_editor_context_root_shell_label">Root Shell</string>
+    <string name="code_brick_screen_context_list_expand_content_description">展開更多</string>
 
     <!-- Code Brick Screen: Previewer -->
     <string name="code_brick_screen_previewer_play_content_description">執行</string>
     <string name="code_brick_screen_previewer_setting_content_description">設定</string>
     <string name="code_brick_screen_previewer_delete_content_description">刪除</string>
+    <string name="code_brick_screen_share_content_description">分享</string>
 
     <!-- Code Brick Screen: Tile List -->
     <string name="code_brick_screen_tile_list_binder_new_title">磁貼綁定器（新增）</string>
     <string name="code_brick_screen_tile_list_binder_input_placeholder">輸入磁貼綁定編號：0-4</string>
+    <string name="code_brick_screen_tile_list_expand_content_description">展開更多</string>
 
     <!-- Code Brick Screen: To Plugin Button -->
     <string name="code_brick_screen_to_plugin_button_label">轉換為外掛</string>
     <string name="code_brick_screen_to_plugin_button_content_description">轉換為外掛</string>
 
+    <!-- Code Brick Screen: Install Plugin Run Model Dialog -->
+    <string name="code_brick_screen_install_plugin_run_model_dialog_title">外掛執行模式</string>
+    <string name="code_brick_screen_install_plugin_run_model_dialog_description">選擇此代碼塊外掛的執行方式</string>
+
     <!-- Code Brick Screen: Result -->
     <string name="code_brick_screen_result_title">執行結果</string>
     <string name="code_brick_screen_result_confirm_button">確認</string>
+    <string name="code_brick_screen_result_copy_button">複製</string>
+
+    <!-- Code Brick Screen: Empty State -->
+    <string name="code_brick_screen_empty_state_message">尚未新增代碼塊</string>
 
     <!-- Setting Screen: Top App Bar -->
     <string name="setting_screen_top_app_bar_title">設定</string>
+    <string name="setting_screen_top_app_bar_back_content_description">返回</string>
 
     <!-- Setting Screen: Sections -->
     <string name="setting_screen_section_general_title">一般</string>
@@ -156,6 +233,7 @@
     <string name="setting_screen_general_third_party_push_headline">透過第三方推播通知</string>
     <string name="setting_screen_general_third_party_push_supporting">第三方通知推播設定</string>
     <string name="setting_screen_general_third_party_push_icon_content_description">第三方通知推播</string>
+    <string name="setting_screen_third_party_notification_setting_content_description">設定</string>
 
     <!-- Setting Screen: Source -->
     <string name="setting_screen_source_allow_insecure_connection_headline">允許使用不安全連線</string>
@@ -186,6 +264,7 @@
     <!-- Third Party Notification Screen: Top App Bar -->
     <string name="third_party_notification_screen_top_app_bar_title">第三方通知</string>
     <string name="third_party_notification_screen_top_app_bar_save_content_description">儲存</string>
+    <string name="third_party_notification_screen_top_app_bar_back_content_description">返回</string>
 
     <!-- Third Party Notification Screen: Inputs -->
     <string name="third_party_notification_screen_bark_api_key_input_label">Bark APP API Key</string>

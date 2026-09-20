@@ -130,7 +130,7 @@ fun ShellScreen(
                         ) {
                             Icon(
                                 painterResource(R.drawable.outline_close_24),
-                                contentDescription = "Delete"
+                                contentDescription = stringResource(R.string.shell_screen_command_input_delete_content_description)
                             )
                         }
                     },
@@ -207,7 +207,7 @@ fun ShellScreen(
                                 ) {
                                     Icon(
                                         painterResource(R.drawable.terminal_24px),
-                                        contentDescription = "Run Command",
+                                        contentDescription = stringResource(R.string.shell_screen_run_command_content_description),
                                         modifier = Modifier
                                             .size(SplitButtonDefaults.LeadingIconSize)
                                     )
@@ -215,7 +215,7 @@ fun ShellScreen(
                                         modifier = Modifier
                                             .size(8.dp)
                                     )
-                                    Text(text = "Run")
+                                    Text(text = stringResource(R.string.shell_screen_run_button_label))
                                 }
                             },
                             trailingButton = {
@@ -231,7 +231,7 @@ fun ShellScreen(
                                     ){
                                         Icon(
                                             painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
-                                            contentDescription = "Expand More",
+                                            contentDescription = stringResource(R.string.shell_screen_environment_menu_expand_content_description),
                                             modifier = Modifier
                                                 .size(26.dp)
                                                 .rotate(if (isEnvironmentMenuExpanded) 0f else -90f )
@@ -253,11 +253,11 @@ fun ShellScreen(
                                                 leadingIcon = {
                                                     Icon(
                                                         painterResource(R.drawable.material_symbols_applications),
-                                                        contentDescription = "App shell"
+                                                        contentDescription = stringResource(R.string.execution_context_app_shell_label)
                                                     )
                                                 },
                                                 text = {
-                                                    Text("App Shell")
+                                                    Text(stringResource(R.string.execution_context_app_shell_label))
                                                 },
                                                 onClick = {
                                                     shellEnvironment = ShellEnvironment.AppShell
@@ -271,11 +271,11 @@ fun ShellScreen(
                                                 leadingIcon = {
                                                     Icon(
                                                         painterResource(R.drawable.material_symbols_adb),
-                                                        contentDescription = "ADB shell"
+                                                        contentDescription = stringResource(R.string.execution_context_adb_shell_label)
                                                     )
                                                 },
                                                 text = {
-                                                    Text("ADB shell")
+                                                    Text(stringResource(R.string.execution_context_adb_shell_label))
                                                 },
                                                 onClick = {
                                                     shellEnvironment = ShellEnvironment.AdbShell
@@ -289,11 +289,11 @@ fun ShellScreen(
                                                 leadingIcon = {
                                                     Icon(
                                                         painterResource(R.drawable.material_symbols_cyclone),
-                                                        contentDescription = "Root shell"
+                                                        contentDescription = stringResource(R.string.execution_context_root_shell_label)
                                                     )
                                                 },
                                                 text = {
-                                                    Text("Root Shell")
+                                                    Text(stringResource(R.string.execution_context_root_shell_label))
                                                 },
                                                 onClick = {
                                                     shellEnvironment = ShellEnvironment.RootShell

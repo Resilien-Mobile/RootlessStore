@@ -3,6 +3,18 @@
     <string name="app_version">v2.3.0</string>
     <string name="notification_channel_id">Rootless Store Status Monitoring</string>
 
+    <!-- Shared Display Names -->
+    <string name="execution_context_app_shell_label">App Shell</string>
+    <string name="execution_context_adb_shell_label">ADB Shell</string>
+    <string name="execution_context_root_shell_label">Root Shell</string>
+    <string name="execution_context_permissive_label">Permissive</string>
+    <string name="plugin_type_client_label">Client</string>
+    <string name="plugin_type_environment_label">Environment</string>
+    <string name="plugin_run_model_one_time_label">One-time</string>
+    <string name="plugin_run_model_daemon_label">Daemon</string>
+    <string name="share_plugin_chooser_title">Share plugin</string>
+    <string name="share_chooser_title">Share</string>
+
     <!-- Home Screen Strings -->
     <string name="home_screen_version_checker_container_icon_content_description">Terminal Icon</string>
     <string name="home_screen_version_checker_container_headline">Rootless Store is Running</string>
@@ -24,6 +36,16 @@
     <string name="home_screen_how_to_develop_rootless_store_plugin_icon_content_description">Develop Icon</string>
     <string name="home_screen_how_to_develop_rootless_store_plugin_headline">Learn Rootless Store</string>
     <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">Learn how to develop Rootless Store plugins</string>
+    <string name="home_screen_cpu_dashboard_pressure_label">Pressure</string>
+
+    <!-- Home Screen: Context Switch Dialog -->
+    <string name="home_screen_context_switch_dialog_title">Context Switcher</string>
+    <string name="home_screen_context_switch_dialog_revert_button">Revert</string>
+    <string name="home_screen_context_switch_dialog_cancel_button">Cancel</string>
+    <string name="home_screen_context_switch_dialog_confirm_button">Confirm</string>
+
+    <!-- Shizuku ADB Screen: Top App Bar -->
+    <string name="shizuku_adb_screen_top_app_bar_title">Shizuku Auth</string>
 
     <!-- Shizuku ADB Screen: Overview Card -->
     <string name="shizuku_adb_screen_overview_card_title">Shizuku Authorization</string>
@@ -50,6 +72,14 @@
     <string name="shell_screen_command_input_label">Shell Command</string>
     <string name="shell_screen_enable_run_as_label">Enable run-as</string>
     <string name="shell_screen_jump_to_directory_label">Jump to directory</string>
+    <string name="shell_screen_top_app_bar_title">Shell</string>
+    <string name="shell_screen_top_app_bar_scroll_to_top_content_description">Scroll to top</string>
+    <string name="shell_screen_top_app_bar_scroll_to_bottom_content_description">Scroll to bottom</string>
+    <string name="shell_screen_top_app_bar_clear_output_content_description">Clear output</string>
+    <string name="shell_screen_command_input_delete_content_description">Delete</string>
+    <string name="shell_screen_run_button_label">Run</string>
+    <string name="shell_screen_run_command_content_description">Run Command</string>
+    <string name="shell_screen_environment_menu_expand_content_description">Expand More</string>
 
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">Plugin</string>
@@ -72,6 +102,20 @@
     <string name="plugin_screen_info_container_local_source_label">Source</string>
     <string name="plugin_screen_info_container_local_state_label">State</string>
     <string name="plugin_screen_info_container_local_required_label">Required</string>
+    <string name="plugin_screen_info_container_local_started_content_description">started</string>
+    <string name="plugin_screen_info_container_local_start_content_description">start</string>
+
+    <!-- Plugin Screen: Action Panel -->
+    <string name="plugin_screen_action_panel_share_content_description">Share</string>
+    <string name="plugin_screen_action_panel_open_web_ui_content_description">Open Web UI</string>
+    <string name="plugin_screen_action_panel_back_content_description">Back</string>
+    <string name="plugin_screen_action_panel_uninstall_content_description">Uninstall</string>
+
+    <!-- Plugin Screen: Empty State -->
+    <string name="plugin_screen_empty_state_message">No Plugin Installed</string>
+
+    <!-- Environment Screen Strings -->
+    <string name="environment_screen_empty_state_message">No Environment Installed</string>
 
     <!-- Sources Screen: Top App Bar -->
     <string name="sources_screen_top_app_bar_title">Sources</string>
@@ -92,6 +136,18 @@
     <string name="sources_screen_repository_dialog_input_label">Source URL</string>
     <string name="sources_screen_repository_dialog_input_placeholder">https://endpoint/api/v1</string>
 
+    <!-- Market Screen: Top App Bar -->
+    <string name="market_screen_top_app_bar_subtitle">Total Plugin: 0 available</string>
+    <string name="market_screen_top_app_bar_search_content_description">Search</string>
+    <string name="market_screen_top_app_bar_filter_content_description">Filter</string>
+    <string name="market_screen_top_app_bar_back_content_description">Back</string>
+
+    <!-- Market Screen: Manifest Card -->
+    <string name="market_manifest_card_plugin_icon_content_description">Plugin Icon</string>
+    <string name="market_manifest_card_install_button">Install</string>
+    <string name="market_manifest_card_author_label">Author</string>
+    <string name="market_manifest_card_description_label">Description</string>
+
     <!-- Execute Screen: Top App Bar -->
     <string name="execute_screen_top_app_bar_title">Executing Plugin</string>
     <string name="execute_screen_top_app_bar_share_content_description">Share</string>
@@ -103,6 +159,15 @@
     <string name="start_screen_navigation_bar_plugin_label">Plugin</string>
     <string name="start_screen_navigation_bar_brick_label">Brick</string>
     <string name="start_screen_navigation_bar_sources_label">Sources</string>
+
+    <!-- Start Screen: Top App Bar -->
+    <string name="start_screen_top_app_bar_title">Rootless Store</string>
+    <string name="start_screen_top_app_bar_setting_content_description">Setting</string>
+    <string name="start_screen_floating_button_terminal_content_description">Terminal</string>
+
+    <!-- Start Screen: Error Dialog -->
+    <string name="start_screen_error_dialog_ok_button">Ok</string>
+    <string name="start_screen_error_dialog_warning_icon_content_description">Dialog Warning Logo</string>
 
     <!-- Code Brick Screen: Top App Bar -->
     <string name="code_brick_screen_top_app_bar_title">Code Brick</string>
@@ -123,26 +188,38 @@
     <string name="code_brick_screen_editor_context_app_shell_label">App Shell</string>
     <string name="code_brick_screen_editor_context_adb_shell_label">ADB Shell</string>
     <string name="code_brick_screen_editor_context_root_shell_label">Root Shell</string>
+    <string name="code_brick_screen_context_list_expand_content_description">Expand More</string>
 
     <!-- Code Brick Screen: Previewer -->
     <string name="code_brick_screen_previewer_play_content_description">Play</string>
     <string name="code_brick_screen_previewer_setting_content_description">Settings</string>
     <string name="code_brick_screen_previewer_delete_content_description">Delete</string>
+    <string name="code_brick_screen_share_content_description">Share</string>
 
     <!-- Code Brick Screen: Tile List -->
     <string name="code_brick_screen_tile_list_binder_new_title">Tile Binder (New)</string>
     <string name="code_brick_screen_tile_list_binder_input_placeholder">Input tile binder: 0-4</string>
+    <string name="code_brick_screen_tile_list_expand_content_description">Expand More</string>
 
     <!-- Code Brick Screen: To Plugin Button -->
     <string name="code_brick_screen_to_plugin_button_label">Convert To Plugin</string>
     <string name="code_brick_screen_to_plugin_button_content_description">Convert To Plugin</string>
 
+    <!-- Code Brick Screen: Install Plugin Run Model Dialog -->
+    <string name="code_brick_screen_install_plugin_run_model_dialog_title">Plugin Run Model</string>
+    <string name="code_brick_screen_install_plugin_run_model_dialog_description">Choose how this CodeBrick plugin should run.</string>
+
     <!-- Code Brick Screen: Result -->
     <string name="code_brick_screen_result_title">Result</string>
     <string name="code_brick_screen_result_confirm_button">Confirm</string>
+    <string name="code_brick_screen_result_copy_button">Copy</string>
+
+    <!-- Code Brick Screen: Empty State -->
+    <string name="code_brick_screen_empty_state_message">No Code Brick Added</string>
 
     <!-- Setting Screen: Top App Bar -->
     <string name="setting_screen_top_app_bar_title">Settings</string>
+    <string name="setting_screen_top_app_bar_back_content_description">Back</string>
 
     <!-- Setting Screen: Sections -->
     <string name="setting_screen_section_general_title">General</string>
@@ -160,6 +237,7 @@
     <string name="setting_screen_general_third_party_push_headline">Use third party notification push</string>
     <string name="setting_screen_general_third_party_push_supporting">Third party notification push settings</string>
     <string name="setting_screen_general_third_party_push_icon_content_description">Third party notification push</string>
+    <string name="setting_screen_third_party_notification_setting_content_description">Settings</string>
 
     <!-- Setting Screen: Source -->
     <string name="setting_screen_source_allow_insecure_connection_headline">Allow insecure connection</string>
@@ -190,6 +268,7 @@
     <!-- Third Party Notification Screen: Top App Bar -->
     <string name="third_party_notification_screen_top_app_bar_title">Third-Party Notification</string>
     <string name="third_party_notification_screen_top_app_bar_save_content_description">Save</string>
+    <string name="third_party_notification_screen_top_app_bar_back_content_description">Back</string>
 
     <!-- Third Party Notification Screen: Inputs -->
     <string name="third_party_notification_screen_bark_api_key_input_label">Bark APP API Key</string>

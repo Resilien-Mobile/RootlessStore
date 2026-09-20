@@ -30,7 +30,7 @@ object ThirdPartyNotificationScreenNecessaryComponents {
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_arrow_back),
-                        contentDescription = "Back"
+                        contentDescription = stringResource(R.string.third_party_notification_screen_top_app_bar_back_content_description)
                     )
                 }
             },

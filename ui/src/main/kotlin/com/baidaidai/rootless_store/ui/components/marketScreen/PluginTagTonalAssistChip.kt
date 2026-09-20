@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.plugin.model.PluginRunModel
@@ -30,17 +31,21 @@ fun PluginTagTonalAssistChip(
         }
     }
     val primaryColor = Color(0xFFFFC400)
+    val labelResource = when(pluginType){
+        PluginType.Client -> R.string.plugin_type_client_label
+        PluginType.Environment -> R.string.plugin_type_environment_label
+    }
 
     AssistChip(
         enabled = false,
         onClick = {},
         label = {
-            Text(pluginType.name)
+            Text(stringResource(labelResource))
         },
         leadingIcon = {
             Icon(
                 painter = leadingIconPainter,
-                contentDescription = pluginType.name
+                contentDescription = stringResource(labelResource)
             )
         },
         modifier = modifier,
@@ -84,17 +89,21 @@ fun PluginTagTonalAssistChip(
             Color(0xFF30D158)
         }
     }
+    val labelResource = when(pluginRunModel){
+        PluginRunModel.OneTime -> R.string.plugin_run_model_one_time_label
+        PluginRunModel.Daemon -> R.string.plugin_run_model_daemon_label
+    }
 
     AssistChip(
         enabled = false,
         onClick = {},
         label = {
-            Text(pluginRunModel.name)
+            Text(stringResource(labelResource))
         },
         leadingIcon = {
             Icon(
                 painter = leadingIconPainter,
-                contentDescription = pluginRunModel.name
+                contentDescription = stringResource(labelResource)
             )
         },
         modifier = modifier,
@@ -155,17 +164,23 @@ fun PluginTagTonalAssistChip(
             Color(0xFFFF3B30)
         }
     }
+    val labelResource = when(pluginRequired){
+        ExecutionContext.LIMITED -> R.string.execution_context_app_shell_label
+        ExecutionContext.PERMISSIVE -> R.string.execution_context_permissive_label
+        ExecutionContext.ADB -> R.string.execution_context_adb_shell_label
+        ExecutionContext.ROOTD -> R.string.execution_context_root_shell_label
+    }
 
     AssistChip(
         enabled = false,
         onClick = {},
         label = {
-            Text(pluginRequired.name)
+            Text(stringResource(labelResource))
         },
         leadingIcon = {
             Icon(
                 painter = leadingIconPainter,
-                contentDescription = pluginRequired.name
+                contentDescription = stringResource(labelResource)
             )
         },
         modifier = modifier,

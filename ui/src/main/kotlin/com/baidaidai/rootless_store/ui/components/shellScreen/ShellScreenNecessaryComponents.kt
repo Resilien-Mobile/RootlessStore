@@ -9,6 +9,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import kotlinx.coroutines.launch
 
 object ShellScreenNecessaryComponents {
@@ -23,7 +24,7 @@ object ShellScreenNecessaryComponents {
 
         TopAppBar(
             title = {
-                Text("ShellScreen")
+                Text(stringResource(R.string.shell_screen_top_app_bar_title))
             },
             actions = {
                 IconButton(
@@ -35,7 +36,7 @@ object ShellScreenNecessaryComponents {
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_top),
-                        contentDescription = "Scroll to top"
+                        contentDescription = stringResource(R.string.shell_screen_top_app_bar_scroll_to_top_content_description)
                     )
                 }
                 IconButton(
@@ -47,13 +48,13 @@ object ShellScreenNecessaryComponents {
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_bottom),
-                        contentDescription = "Scroll to bottom"
+                        contentDescription = stringResource(R.string.shell_screen_top_app_bar_scroll_to_bottom_content_description)
                     )
                 }
                 IconButton(onClick = onClearOutput) {
                     Icon(
                         painterResource(R.drawable.material_symbols_delete),
-                        contentDescription = "Clear output"
+                        contentDescription = stringResource(R.string.shell_screen_top_app_bar_clear_output_content_description)
                     )
                 }
             }

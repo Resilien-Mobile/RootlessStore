@@ -77,7 +77,7 @@ fun CodeBrickTileList(
             trailingContent = {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_keyboard_arrow_down_icon),
-                    contentDescription = "Expand More"
+                    contentDescription = stringResource(R.string.code_brick_screen_tile_list_expand_content_description)
                 )
             },
             colors = unfocusedListItemStyle

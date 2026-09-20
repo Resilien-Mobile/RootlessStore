@@ -48,7 +48,7 @@ fun CodeBrickExecutionResultDialog(
                     }
                 }
             ) {
-                Text("Copy")
+                Text(stringResource(R.string.code_brick_screen_result_copy_button))
             }
         },
         confirmButton = {
