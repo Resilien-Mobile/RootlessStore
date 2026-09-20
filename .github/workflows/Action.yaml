@@ -26,7 +26,7 @@ jobs:
       - name: Grant gradlew permission
         run: chmod +x ./gradlew
 
-      # 组装 debug APK
+      # CI 不还原 JKS 证书，只组装 debug APK
       - name: Build debug APK
         run: ./gradlew assembleDebug
 
