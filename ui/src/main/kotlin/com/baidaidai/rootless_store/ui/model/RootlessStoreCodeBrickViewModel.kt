@@ -9,6 +9,7 @@ import com.baidaidai.rootless_store.application.codebrick.InstallPluginFromCodeB
 import com.baidaidai.rootless_store.application.codebrick.DeleteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ExecuteCodeBrickUseCase
 import com.baidaidai.rootless_store.application.codebrick.ObserveCodeBricksUseCase
+import com.baidaidai.rootless_store.application.codebrick.PostCodeBrickTokenUseCase
 import com.baidaidai.rootless_store.application.codebrick.UpdateCodeBrickUseCase
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
@@ -42,7 +43,8 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     private val deleteCodeBrickUseCase: DeleteCodeBrickUseCase,
     private val updateCodeBrickUseCase: UpdateCodeBrickUseCase,
     private val addCodeBrickFromClipboardUseCase: AddCodeBrickFromClipboardUseCase,
-    private val installPluginFromCodeBrickUseCase: InstallPluginFromCodeBrickUseCase
+    private val installPluginFromCodeBrickUseCase: InstallPluginFromCodeBrickUseCase,
+    private val postCodeBrickTokenUseCase: PostCodeBrickTokenUseCase
 ): ViewModel() {
 
     private val _codeBrickScreenUiState = MutableStateFlow(CodeBrickScreenUiState())
@@ -128,6 +130,17 @@ class RootlessStoreCodeBrickViewModel @Inject constructor(
     fun addCodeBrickFromClipboard(){
         viewModelScope.launch {
             addCodeBrickFromClipboardUseCase()
+                .onErr {
+                    _codeBrickError.emit(it)
+                }
+        }
+    }
+
+    fun postCodeBrickToken(
+        codeBrickConfig: CodeBrickConfig
+    ) {
+        viewModelScope.launch {
+            postCodeBrickTokenUseCase(codeBrickConfig)
                 .onErr {
                     _codeBrickError.emit(it)
                 }
