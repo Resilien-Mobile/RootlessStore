@@ -14,8 +14,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
+import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.ui.components.startScreen.StartScreenErrorDialog
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShizukuAdbScreenViewModel
 import com.baidaidai.rootless_store.ui.screens.ShizukuAdbScreen
@@ -42,7 +44,7 @@ class ShizukuActivity: ComponentActivity() {
                     topBar = {
                         TopAppBar(
                             title = {
-                                Text("Shizuku Auth")
+                                Text(stringResource(R.string.shizuku_adb_screen_top_app_bar_title))
                             }
                         )
                     }

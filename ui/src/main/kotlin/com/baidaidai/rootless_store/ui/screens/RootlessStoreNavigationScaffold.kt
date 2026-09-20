@@ -31,6 +31,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.window.core.layout.WindowSizeClass
 import com.baidaidai.rootless_store.ui.ShizukuActivity
+import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.navigation.`interface`.RootlessNavigationKey
 import com.baidaidai.rootless_store.ui.navigation.model.CodeBrickScreenKey
@@ -232,7 +233,7 @@ fun RootlessStoreNavigationScaffold(
                                     putExtra(Intent.EXTRA_TEXT, executionLog)
 
                                 }
-                                context.startActivity(Intent.createChooser(shareIntent, "Share"))
+                                context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_chooser_title)))
                             }
                         )
                     }

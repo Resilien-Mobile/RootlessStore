@@ -190,7 +190,7 @@ fun InstalledPluginList(
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
             )
             Text(
-                text = "No Plugin Installed",
+                text = stringResource(R.string.plugin_screen_empty_state_message),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
             )
@@ -232,7 +232,7 @@ fun InstalledPluginList(
                                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                             }
 
-                            context.startActivity(Intent.createChooser(shareIntent, "Share plugin"))
+                            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_plugin_chooser_title)))
                         },
                         onOpenWebUiClick = {
 

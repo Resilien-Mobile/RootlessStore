@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
@@ -39,13 +40,13 @@ fun StartScreenErrorDialog(
                     sourceScreenViewModel.dismissSourceError()
                 }
             ) {
-                Text("Ok")
+                Text(stringResource(R.string.start_screen_error_dialog_ok_button))
             }
         },
         icon = {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_warning),
-                contentDescription = "Dialog Warning Logo"
+                contentDescription = stringResource(R.string.start_screen_error_dialog_warning_icon_content_description)
             )
         },
         title = {
@@ -82,13 +83,13 @@ fun StartScreenErrorDialog(
                     shizukuAdbScreenViewModel.dismissShizukuError()
                 }
             ) {
-                Text("Ok")
+                Text(stringResource(R.string.start_screen_error_dialog_ok_button))
             }
         },
         icon = {
             Icon(
                 painter = painterResource(R.drawable.material_symbols_warning),
-                contentDescription = "Dialog Warning Logo"
+                contentDescription = stringResource(R.string.start_screen_error_dialog_warning_icon_content_description)
             )
         },
         title = {

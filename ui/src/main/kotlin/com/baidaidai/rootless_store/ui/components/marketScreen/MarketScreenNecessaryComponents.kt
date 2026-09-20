@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 
 object MarketScreenNecessaryComponents {
 
@@ -27,7 +28,7 @@ object MarketScreenNecessaryComponents {
                 Text(sourceName)
             },
             subtitle = {
-                Text("Total Plugin: 0 available")
+                Text(stringResource(R.string.market_screen_top_app_bar_subtitle))
             },
             actions = {
                 IconButton(
@@ -35,7 +36,7 @@ object MarketScreenNecessaryComponents {
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_search),
-                        contentDescription = "Search"
+                        contentDescription = stringResource(R.string.market_screen_top_app_bar_search_content_description)
                     )
                 }
                 IconButton(
@@ -43,7 +44,7 @@ object MarketScreenNecessaryComponents {
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_filter_list),
-                        contentDescription = "Filter"
+                        contentDescription = stringResource(R.string.market_screen_top_app_bar_filter_content_description)
                     )
                 }
             },
@@ -53,7 +54,7 @@ object MarketScreenNecessaryComponents {
                 ) {
                     Icon(
                         painterResource(R.drawable.material_symbols_arrow_back),
-                        contentDescription = "Back"
+                        contentDescription = stringResource(R.string.market_screen_top_app_bar_back_content_description)
                     )
                 }
             },

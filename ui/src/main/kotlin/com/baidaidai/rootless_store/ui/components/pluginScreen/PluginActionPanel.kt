@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.ui.R
@@ -82,7 +83,7 @@ fun PluginActionPanel(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_ios_share),
-                    contentDescription = "Share"
+                    contentDescription = stringResource(R.string.plugin_screen_action_panel_share_content_description)
                 )
             }
 
@@ -95,7 +96,7 @@ fun PluginActionPanel(
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_globe_asia),
-                        contentDescription = "Share"
+                        contentDescription = stringResource(R.string.plugin_screen_action_panel_open_web_ui_content_description)
                     )
                 }
             }
@@ -108,7 +109,7 @@ fun PluginActionPanel(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_undo),
-                    contentDescription = "Share"
+                    contentDescription = stringResource(R.string.plugin_screen_action_panel_back_content_description)
                 )
             }
 
@@ -120,7 +121,7 @@ fun PluginActionPanel(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.material_symbols_delete),
-                    contentDescription = "Share"
+                    contentDescription = stringResource(R.string.plugin_screen_action_panel_uninstall_content_description)
                 )
             }
 

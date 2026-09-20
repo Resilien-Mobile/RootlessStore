@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -60,10 +61,10 @@ fun CodeBrickScreen(
     if (isInstallPluginRunModelDialogVisible && selectedInstallPluginCodeBrickConfig != null){
         AlertDialog(
             title = {
-                Text("Plugin Run Model")
+                Text(stringResource(R.string.code_brick_screen_install_plugin_run_model_dialog_title))
             },
             text = {
-                Text("Choose how this CodeBrick plugin should run.")
+                Text(stringResource(R.string.code_brick_screen_install_plugin_run_model_dialog_description))
             },
             confirmButton = {
                 Button(
@@ -80,7 +81,7 @@ fun CodeBrickScreen(
                         codeBrickViewModel.hideCodeBrickSettings()
                     }
                 ) {
-                    Text("OneTime")
+                    Text(stringResource(R.string.plugin_run_model_one_time_label))
                 }
             },
             dismissButton = {
@@ -98,7 +99,7 @@ fun CodeBrickScreen(
                         codeBrickViewModel.hideCodeBrickSettings()
                     }
                 ) {
-                    Text("Daemon")
+                    Text(stringResource(R.string.plugin_run_model_daemon_label))
                 }
             },
             onDismissRequest = {
@@ -195,7 +196,7 @@ fun CodeBrickScreen(
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
                 )
                 Text(
-                    text = "No Code Brick Added",
+                    text = stringResource(R.string.code_brick_screen_empty_state_message),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(0.6f)
                 )

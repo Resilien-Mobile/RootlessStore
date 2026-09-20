@@ -17,8 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 
 
@@ -102,7 +104,7 @@ fun HomeScreenCpuDashboardCard(
                 title = "UPTIME",
                 value = "${cpuDashboardConfig.uptime.inWholeSeconds} S"
             )
-            StatusCircularProgress(label = "Pressure", percentage = cpuDashboardConfig.aggregateMetrics.totalPercent)
+            StatusCircularProgress(label = stringResource(R.string.home_screen_cpu_dashboard_pressure_label), percentage = cpuDashboardConfig.aggregateMetrics.totalPercent)
         }
 
     }

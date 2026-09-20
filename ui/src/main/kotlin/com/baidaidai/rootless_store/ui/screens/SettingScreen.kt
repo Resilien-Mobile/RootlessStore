@@ -116,7 +116,7 @@ fun SettingScreen(
                         ) {
                             Icon(
                                 painter = painterResource(R.drawable.material_symbols_settings),
-                                contentDescription = "setting"
+                                contentDescription = stringResource(R.string.setting_screen_third_party_notification_setting_content_description)
                             )
                         }
                     }

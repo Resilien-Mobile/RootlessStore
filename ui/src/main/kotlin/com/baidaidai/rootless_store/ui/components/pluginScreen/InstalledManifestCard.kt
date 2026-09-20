@@ -89,7 +89,7 @@ fun InstalledManifestCard(
             ){
                 DynamicPluginIcon(
                     iconUri = pluginManifest.iconUri?.toUri(),
-                    contentDescription = "Plugin Icon",
+                    contentDescription = stringResource(R.string.plugin_screen_info_container_local_icon_content_description),
                     modifier = Modifier
                         .clip(CircleShape)
                 )
@@ -132,12 +132,12 @@ fun InstalledManifestCard(
                         if (isExecutionIndicatorActive){
                             Icon(
                                 painterResource(R.drawable.material_symbols_check),
-                                contentDescription = "started"
+                                contentDescription = stringResource(R.string.plugin_screen_info_container_local_started_content_description)
                             )
                         }else{
                             Icon(
                                 painter = painterResource(R.drawable.material_symbols_play_arrow),
-                                contentDescription = "start"
+                                contentDescription = stringResource(R.string.plugin_screen_info_container_local_start_content_description)
                             )
                         }
                     }
@@ -212,7 +212,7 @@ fun InstalledManifestCard(
             ){
                 DynamicPluginIcon(
                     iconUri = environmentManifest.iconUri?.toUri(),
-                    contentDescription = "Plugin Icon",
+                    contentDescription = stringResource(R.string.plugin_screen_info_container_local_icon_content_description),
                     modifier = Modifier
                         .clip(CircleShape)
                 )

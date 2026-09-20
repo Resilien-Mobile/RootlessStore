@@ -86,7 +86,7 @@ object StartScreenNecessaryComponents {
     ){
         TopAppBar(
             title = {
-                Text("Rootless Store")
+                Text(stringResource(R.string.start_screen_top_app_bar_title))
             },
             actions = {
                 IconButton(
@@ -94,7 +94,7 @@ object StartScreenNecessaryComponents {
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_settings),
-                        contentDescription = "Setting"
+                        contentDescription = stringResource(R.string.start_screen_top_app_bar_setting_content_description)
                     )
                 }
             },
@@ -237,7 +237,7 @@ object StartScreenNecessaryComponents {
         ) {
             Icon(
                 painter = painterResource(R.drawable.terminal_24px),
-                contentDescription = "Terminal"
+                contentDescription = stringResource(R.string.start_screen_floating_button_terminal_content_description)
             )
         }
     }
