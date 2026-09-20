@@ -26,7 +26,7 @@ class AddCodeBrickFromClipboardUseCase @Inject constructor(
 
         // Parse CodeBrick JSON
         val codeBrickJsonPayload = codeBrickGatewayImpl
-            .parseCodeBrickJson(jsonString = clipboardText)
+            .parseCodeBrickToken(jsonString = clipboardText)
             .getOrElse { codeBrickError ->
                 return Err(codeBrickError)
             }
