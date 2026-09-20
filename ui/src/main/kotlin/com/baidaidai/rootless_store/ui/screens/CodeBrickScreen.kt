@@ -19,16 +19,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickEditor
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickPreviewer
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickExecutionResultDialog
+import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickSharePreviewer
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickSetting
 import com.baidaidai.rootless_store.ui.model.RootlessStoreCodeBrickViewModel
 
@@ -41,6 +46,7 @@ fun CodeBrickScreen(
 
     val codeBricks by codeBrickViewModel.codeBricks.collectAsState()
     val codeBrickScreenUiState by codeBrickViewModel.codeBrickScreenUiState.collectAsState()
+    val density = LocalDensity.current
 
     // Editor show status
     if (codeBrickScreenUiState.isCodeBrickEditorVisible){
@@ -147,14 +153,32 @@ fun CodeBrickScreen(
                 itemsIndexed(
                     items = codeBricks
                 ){ index ,codeBrickConfig ->
-                    CodeBrickPreviewer(
-                        codeBrickConfig = codeBrickConfig,
-                        onExecuteClick = codeBrickViewModel::executeCodeBrick,
-                        onSettingsClick = {
-                            codeBrickViewModel.showCodeBrickSettings(codeBrickConfig)
-                        },
-                        onDeleteClick = codeBrickViewModel::deleteCodeBrick
-                    )
+                    var isSharePanelVisible by remember { mutableStateOf(false) }
+                    var cardSize by remember { mutableStateOf(IntSize.Zero) }
+
+                    if (isSharePanelVisible) {
+                        CodeBrickSharePreviewer(
+                            codeBrickConfig = codeBrickConfig,
+                            onShareButtonClick = codeBrickViewModel::postCodeBrickToken,
+                            onDismissClick = { isSharePanelVisible = false },
+                            modifier = Modifier
+                                .size(
+                                    width = with(density) { cardSize.width.toDp() },
+                                    height = with(density) { cardSize.height.toDp() }
+                                )
+                        )
+                    } else {
+                        CodeBrickPreviewer(
+                            codeBrickConfig = codeBrickConfig,
+                            onExecuteClick = codeBrickViewModel::executeCodeBrick,
+                            onSettingsClick = {
+                                codeBrickViewModel.showCodeBrickSettings(codeBrickConfig)
+                            },
+                            onDeleteClick = codeBrickViewModel::deleteCodeBrick,
+                            onCardLongClick = { isSharePanelVisible = !isSharePanelVisible },
+                            onSizeChanged = { cardSize = it }
+                        )
+                    }
                 }
             }
 

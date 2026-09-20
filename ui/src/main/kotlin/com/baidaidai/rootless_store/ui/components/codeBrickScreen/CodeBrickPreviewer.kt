@@ -1,6 +1,7 @@
 package com.baidaidai.rootless_store.ui.components.codeBrickScreen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,9 +22,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
@@ -35,8 +41,12 @@ fun CodeBrickPreviewer(
     codeBrickConfig: CodeBrickConfig,
     onExecuteClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
     onSettingsClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
-    onDeleteClick: (codeBrickConfig: CodeBrickConfig)-> Unit
+    onDeleteClick: (codeBrickConfig: CodeBrickConfig)-> Unit,
+    onCardLongClick: (codeBrickConfig: CodeBrickConfig)-> Unit = {},
+    onSizeChanged: (intSize: IntSize)-> Unit = {}
 ){
+
+    val hapticFeedback = LocalHapticFeedback.current
 
     // TODO("Add Carry out opportunity assessment")
     // Will Change It Default Color : Green / Error / Disabled
@@ -61,11 +71,23 @@ fun CodeBrickPreviewer(
         disabledContentColor = MaterialTheme.colorScheme.onPrimary,
     )
 
-    Box{
+    Box(
+        Modifier.pointerInput(codeBrickConfig) {
+            detectTapGestures(
+                onLongPress = {
+                    hapticFeedback.performHapticFeedback(
+                        HapticFeedbackType.LongPress
+                    )
+                    onCardLongClick(codeBrickConfig)
+                }
+            )
+        }
+    ){
         Column(
             modifier = modifier
                 .widthIn(min = 150.dp, max = 200.dp)
                 .clip(RoundedCornerShape(16.dp))
+                .onSizeChanged(onSizeChanged)
                 .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
                 .padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
@@ -152,6 +174,7 @@ private fun _preview_(){
         codeBrickConfig = codeBrickConfig,
         onExecuteClick = {},
         onDeleteClick = {},
-        onSettingsClick = {}
+        onSettingsClick = {},
+        onCardLongClick = {}
     )
 }
