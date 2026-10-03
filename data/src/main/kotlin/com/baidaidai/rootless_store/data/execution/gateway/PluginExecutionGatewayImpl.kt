@@ -88,7 +88,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    fun executePluginWithoutEnvironmentByShizuku(
+    fun executePluginByShizuku(
         pluginDirectory: String,
         pluginEntryPoint: String,
         shouldMonitor: Boolean

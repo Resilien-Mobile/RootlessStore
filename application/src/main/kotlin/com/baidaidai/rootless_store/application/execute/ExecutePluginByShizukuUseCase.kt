@@ -26,9 +26,9 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
         val pluginManifest = pluginRepositoryImpl.findPlugin(pluginId)!!
         val shouldMonitor = settingPreferencesRepositoryImpl.observePluginStatusNotificationEnabled().first()
 
-        // Dispatch to PluginExecutionGateway.executePluginWithoutEnvironmentByShizuku
+        // Dispatch to PluginExecutionGateway.executePluginByShizuku
         var pidSaved = false
-        val pluginExecutionResult = pluginExecutionGatewayImpl.executePluginWithoutEnvironmentByShizuku(
+        val pluginExecutionResult = pluginExecutionGatewayImpl.executePluginByShizuku(
             pluginEntryPoint = pluginManifest.entryPoint,
             pluginDirectory = pluginManifest.pluginPackageName,
             shouldMonitor = shouldMonitor
