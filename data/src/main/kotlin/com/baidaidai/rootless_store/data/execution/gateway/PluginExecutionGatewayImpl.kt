@@ -27,10 +27,16 @@ class PluginExecutionGatewayImpl @Inject constructor(
         pluginPackageDirectory: String,
         shouldMonitor: Boolean = false
     ): Flow<ExecutionResult> = callbackFlow {
-        val processBuilder = ProcessBuilder(
-            resolveLocalShellExecutable(), "-c", "cd $pluginPackageDirectory ;echo PID:$$;exec $pluginEntryPoint"
-        )
 
+        // Prepare Commands
+        val command = commandFactory(
+            shellExecutable = resolveLocalShellExecutable(),
+            pluginEntryPoint = pluginEntryPoint,
+            pluginPackageDirectory = pluginPackageDirectory
+        )
+        val processBuilder = ProcessBuilder(command)
+
+        // Prepare Environments
         val environment = processBuilder.environment()
 
         val oldPath = environment["PATH"].orEmpty()
@@ -47,8 +53,9 @@ class PluginExecutionGatewayImpl @Inject constructor(
         Log.d("executePluginEntryPoint","environmentPath: $environmentPath")
         Log.d("executePluginEntryPoint","environmentLdPath: $environmentLdPath")
 
+        // Start Process and
+        // register monitor
         val process = processBuilder.start()
-
         if (shouldMonitor){
             pluginProcessMonitor(process)
         }
@@ -78,8 +85,8 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
         awaitClose {
         }
-    }
-        .flowOn(Dispatchers.IO)
+
+    }.flowOn(Dispatchers.IO)
 
     fun executePluginWithoutEnvironmentByShizuku(
         pluginDirectory: String,
@@ -152,6 +159,42 @@ class PluginExecutionGatewayImpl @Inject constructor(
         }else{
             "sh"
         }
+    }
+
+    /**
+     * 构造供 [ProcessBuilder] 使用的命令参数列表。
+     *
+     * 该方法只负责根据传入的 Shell、插件入口点以及插件目录组装命令，
+     * 不负责启动进程或配置运行环境。
+     *
+     * 最终返回的参数列表通常形如：`sh -c cd <pluginPackageDirectory> ; echo PID:$$ ; exec <pluginEntryPoint>`
+     *
+     * @param shellExecutable 用于执行命令的 Shell 可执行文件，例如 `sh` 或 `su`。
+     * @param pluginEntryPoint 插件的可执行入口点。
+     * @param pluginPackageDirectory 插件所在目录，同时作为执行时的工作目录。
+     * @return 可直接传递给 [ProcessBuilder] 的命令参数列表。
+     *
+     * @since 2026-10-03
+     * @lastModified 2026-10-03
+     */
+    fun commandFactory(
+        shellExecutable: String,
+        pluginEntryPoint: String,
+        pluginPackageDirectory: String,
+    ): List<String> {
+
+        val commandList = mutableListOf<String>()
+
+        commandList += shellExecutable
+        commandList += "-c"
+        commandList += listOf(
+            "cd $pluginPackageDirectory",
+            "echo PID:$$",
+            "exec $pluginEntryPoint"
+        ).joinToString(" ; ")
+
+        return commandList
+
     }
 
 }
