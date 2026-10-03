@@ -22,14 +22,6 @@ class PluginExecutionGatewayImpl @Inject constructor(
     private val pluginProcessMonitor: PluginProcessMonitor
 ) {
 
-    internal fun resolveLocalShellExecutable(): String{
-        val shell = Shell.getShell()
-        return if (shell.isRoot){
-            "su"
-        }else{
-            "sh"
-        }
-    }
     fun executePluginEntryPoint(
         pluginEntryPoint: String,
         pluginPackageDirectory: String,
@@ -145,6 +137,20 @@ class PluginExecutionGatewayImpl @Inject constructor(
             processAbortResult != null
         }else{
             false
+        }
+    }
+
+    /**
+     * Shizuku 是例外，因为普通 process 无法直接调用
+     *
+     *需要通过 Binder, 所以判断也没有意义，这里不做判断
+     */
+    fun resolveLocalShellExecutable(): String{
+        val shell = Shell.getShell()
+        return if (shell.isRoot){
+            "su"
+        }else{
+            "sh"
         }
     }
 
