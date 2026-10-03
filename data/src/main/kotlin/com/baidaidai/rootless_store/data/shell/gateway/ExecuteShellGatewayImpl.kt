@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.data.shell.gateway
 
 import android.util.Log
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.shell.provider.ShellExecutionContextProviderImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointCallback
@@ -19,7 +19,7 @@ import kotlin.text.orEmpty
 
 class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
-    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
+    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val shellExecutionContextProviderImpl: ShellExecutionContextProviderImpl
 ) {
 
@@ -30,9 +30,13 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
         val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
 
+        // Jump To Directory 其实是 $HOME
+        // 并不是 ~/Plugin ，而是 ~/
+        // 降低未装载插件前，需要提权 /sdcard 的需求
         if(appShellContextConfig.shouldJumpToDirectory){
-            prepareWorkingDirectoryCommand(androidFileSystemCapabilityGatewayImpl.getDefaultPluginDirectoryPath())
+            prepareWorkingDirectoryCommand(androidFileSystemDefaultOperatorGatewayImpl.getInternalFilesRootDirectoryPath())
         }
+
         if(commandContent.startsWith("cd ")){
             val targetDirectory = commandContent.removePrefix("cd ").trim()
             prepareWorkingDirectoryCommand(targetDirectory)
