@@ -25,6 +25,10 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return File(context.cacheDir, PLUGIN_DIR_NAME)
     }
 
+    private fun getInternalFilesRootDirectory(): File {
+        return context.filesDir
+    }
+
     private fun getInternalEnvironmentRootDirectory(): File {
         return File(context.filesDir, ENVIRONMENT_DIR_NAME)
     }
@@ -66,10 +70,27 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return File(getExternalAppMagiskDirectoryFile(), MAGISK_TEMPLATE_DIR_NAME)
     } // /sdcard/Android/data/APP_PACKAGE/files/magisk/template
 
-    // Default FS Operator (Plugin)
-    fun getDefaultPluginDirectoryPath(): String {
+    /**
+     * Default FS Operator (Plugin)
+     *
+     * 获取标准 File 或 Path 的区域，
+     * 需显著使用 Internal 或 External，可包含 Plugin 和 Cache
+     */
+    fun getInternalPluginDirectoryPath(): String {
         return getInternalPluginRootDirectory().path
-    } // /File/Plugin
+    } // /File/Plugin: String
+
+    fun getInternalPluginDirectoryFile(): File {
+        return getInternalPluginRootDirectory()
+    } // /File/Plugin: File
+
+    fun getInternalFilesRootDirectoryPath(): String {
+        return getInternalFilesRootDirectory().path
+    } // ~/: String
+
+    fun getInternalFilesRootDirectoryFile(): File {
+        return getInternalFilesRootDirectory()
+    } // ~/: File
 
     fun getInternalPluginCacheDirectoryPath(): String {
         return getInternalPluginCacheDirectory().path
@@ -80,14 +101,14 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     } // /Cache/Plugin: File
 
     fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String {
-        val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
+        val defaultPluginDirectoryPath = getInternalPluginDirectoryPath()
         val pluginPackageName = pluginManifest.pluginPackageName
         val pluginEntryPoint = pluginManifest.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     } // /File/Plugin/PLUGIN/entry
 
     fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
-        val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
+        val defaultPluginDirectoryPath = getInternalPluginDirectoryPath()
         val pluginPackageName = pluginManifest.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
     } // /File/Plugin/PLUGIN
