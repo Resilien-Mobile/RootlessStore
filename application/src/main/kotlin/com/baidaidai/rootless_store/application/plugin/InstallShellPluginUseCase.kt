@@ -11,6 +11,9 @@ import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositor
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import java.io.File
 import javax.inject.Inject
 
@@ -23,17 +26,19 @@ class InstallShellPluginUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
 ) {
-    suspend operator fun invoke(uri: Uri): PluginError? {
+    suspend operator fun invoke(uri: Uri): Result<Unit, PluginError> {
         return try {
 
             // Parse PluginManifest
             val pluginManifest = pluginGatewayImpl
                 .parsePluginManifest(uri)
                 .getOrElse { throwable ->
-                    return PluginError(
-                        errorMessage = "Can't parse plugin manifest",
-                        errorCause = throwable.stackTrace.formatAsMultilineString(),
-                        errorCompanion = "Rootless Store could not read PluginManifest.json before installing this ADB shell plugin."
+                    return Err(
+                        PluginError(
+                            errorMessage = "Can't parse plugin manifest",
+                            errorCause = throwable.stackTrace.formatAsMultilineString(),
+                            errorCompanion = "Rootless Store could not read PluginManifest.json before installing this ADB shell plugin."
+                        )
                     )
                 }
 
@@ -60,32 +65,34 @@ class InstallShellPluginUseCase @Inject constructor(
             )
 
             if (!isShellPluginInstallSuccessful) {
-                return PluginError(
+                return Err(PluginError(
                     errorMessage = "Install shell plugin failed",
                     errorCause = "",
                     errorCompanion = "The shell plugin archive was staged, but Shizuku could not install it into the com.android.shell private plugin directory."
-                )
+                ))
             }
 
             if (!isShellPluginStagingFileDeleted) {
-                return PluginError(
+                return Err(PluginError(
                     errorMessage = "Delete shell plugin staging file failed",
                     errorCause = "",
                     errorCompanion = "The shell plugin installation finished, but Rootless Store could not delete the temporary staging zip."
-                )
+                ))
             }
+
 
             // Add Data, Register Plugin
             pluginRepositoryImpl.addPlugin(pluginManifest)
             pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
 
-            null
+            Ok(Unit)
+
         } catch (throwable: Throwable) {
-            PluginError(
+            Err(PluginError(
                 errorMessage = throwable.message ?: "Install shell plugin crashed",
                 errorCause = throwable.stackTrace.formatAsMultilineString(),
                 errorCompanion = "The shell plugin installation flow crashed unexpectedly during manifest parsing, staging, Shizuku installation, or cleanup."
-            )
+            ))
         }
     }
 }

@@ -9,6 +9,9 @@ import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 import javax.inject.Inject
 
 class InstallPluginUseCase @Inject constructor(
@@ -17,14 +20,17 @@ class InstallPluginUseCase @Inject constructor(
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val installShellPluginUseCase: InstallShellPluginUseCase
 ) {
-    suspend operator fun invoke(uri: Uri): PluginError? {
+    suspend operator fun invoke(uri: Uri): Result<Unit, PluginError> {
+
         val pluginManifest: PluginManifest = pluginGatewayImpl
             .parsePluginManifest(uri)
             .getOrElse { throwable ->
-                return PluginError(
-                    errorMessage = "Can't parse plugin manifest",
-                    errorCause = throwable.stackTrace.formatAsMultilineString(),
-                    errorCompanion = "Rootless Store could not read PluginManifest.json, or the manifest schema does not match the current plugin format."
+                return Err(
+                    PluginError(
+                        errorMessage = "Can't parse plugin manifest",
+                        errorCause = throwable.stackTrace.formatAsMultilineString(),
+                        errorCompanion = "Rootless Store could not read PluginManifest.json, or the manifest schema does not match the current plugin format."
+                    )
                 )
             }
 
@@ -35,22 +41,26 @@ class InstallPluginUseCase @Inject constructor(
             // Un-Zip, Install Plugin
             pluginGatewayImpl
                 .installPluginFromLocal(uri)
-                .onFailure { throwable ->
-                    return PluginError(
-                        errorMessage = "Can't Un-Zip / install Plugin",
-                        errorCause = throwable.stackTrace.formatAsMultilineString(),
-                        errorCompanion = "The package was recognized as a plugin, but Rootless Store could not extract it into app storage."
+                .getOrElse { throwable ->
+                    return Err(
+                        PluginError(
+                            errorMessage = "Can't Un-Zip / install Plugin",
+                            errorCause = throwable.stackTrace.formatAsMultilineString(),
+                            errorCompanion = "The package was recognized as a plugin, but Rootless Store could not extract it into app storage."
+                        )
                     )
                 }
 
             // Set Execute-able, Made it can call and use
             pluginGatewayImpl
                 .setPluginEntryPointExecutable(pluginManifest)
-                .onFailure { throwable ->
-                    return PluginError(
-                        errorMessage = "Can't set plugin executable",
-                        errorCause = throwable.stackTrace.formatAsMultilineString(),
-                        errorCompanion = "The plugin was extracted, but Rootless Store could not mark its entry point executable."
+                .getOrElse { throwable ->
+                    return Err(
+                        PluginError(
+                            errorMessage = "Can't set plugin executable",
+                            errorCause = throwable.stackTrace.formatAsMultilineString(),
+                            errorCompanion = "The plugin was extracted, but Rootless Store could not mark its entry point executable."
+                        )
                     )
                 }
 
@@ -58,7 +68,7 @@ class InstallPluginUseCase @Inject constructor(
             pluginRepositoryImpl.addPlugin(pluginManifest)
             pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
 
-            return null
+            return Ok(Unit)
         }
     }
 }
