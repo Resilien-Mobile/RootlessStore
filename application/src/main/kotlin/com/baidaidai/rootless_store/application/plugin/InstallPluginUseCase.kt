@@ -35,7 +35,10 @@ class InstallPluginUseCase @Inject constructor(
             }
 
         if (pluginManifest.requiredEnvironment == ExecutionContext.ADB){
-            return installShellPluginUseCase(uri)
+            return installShellPluginUseCase(
+                uri = uri,
+                pluginManifest = pluginManifest
+            )
         }else{
 
             // Un-Zip, Install Plugin

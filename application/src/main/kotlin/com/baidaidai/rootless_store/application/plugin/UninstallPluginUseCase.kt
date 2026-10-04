@@ -17,10 +17,21 @@ class UninstallPluginUseCase @Inject constructor(
     suspend operator fun invoke(
         pluginManifest: PluginManifest
     ){
+        val useRedundancyUninstall = pluginManifest.webUiEntryPoint != null
+
         if (pluginManifest.requiredEnvironment == ExecutionContext.ADB){
+            if (useRedundancyUninstall) {
+                pluginFileSystemGateway
+                    .uninstallPlugin(pluginManifest.pluginPackageName)
+                    .onFailure { return }
+            }
+
             uninstallShellPlugin(pluginManifest) ; return
         }
-        pluginFileSystemGateway.uninstallPlugin(pluginManifest.pluginPackageName)
+
+        pluginFileSystemGateway
+            .uninstallPlugin(pluginManifest.pluginPackageName)
+            .onFailure { return }
         deletePlugin(pluginManifest.pluginId)
     }
 
