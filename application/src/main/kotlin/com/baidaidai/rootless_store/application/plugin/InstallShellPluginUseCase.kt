@@ -5,37 +5,36 @@ import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
+import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.getOrElse
 import java.io.File
 import javax.inject.Inject
+import dagger.Lazy
 
 class InstallShellPluginUseCase @Inject constructor(
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
     private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
-    private val pluginGatewayImpl: PluginGatewayImpl,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
+    private val installPluginUseCase: Lazy<InstallPluginUseCase>,
 ) {
-    suspend operator fun invoke(uri: Uri): PluginError? {
+    suspend operator fun invoke(
+        uri: Uri,
+        pluginManifest: PluginManifest,
+    ): Result<Unit, PluginError> {
         return try {
 
-            // Parse PluginManifest
-            val pluginManifest = pluginGatewayImpl
-                .parsePluginManifest(uri)
-                .getOrElse { throwable ->
-                    return PluginError(
-                        errorMessage = "Can't parse plugin manifest",
-                        errorCause = throwable.stackTrace.formatAsMultilineString(),
-                        errorCompanion = "Rootless Store could not read PluginManifest.json before installing this ADB shell plugin."
-                    )
-                }
+            val useRedundancyInstall = pluginManifest.webUiEntryPoint != null
 
             // Copy to /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
             val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryPath()
@@ -60,32 +59,43 @@ class InstallShellPluginUseCase @Inject constructor(
             )
 
             if (!isShellPluginInstallSuccessful) {
-                return PluginError(
+                return Err(PluginError(
                     errorMessage = "Install shell plugin failed",
                     errorCause = "",
                     errorCompanion = "The shell plugin archive was staged, but Shizuku could not install it into the com.android.shell private plugin directory."
-                )
+                ))
             }
 
             if (!isShellPluginStagingFileDeleted) {
-                return PluginError(
+                return Err(PluginError(
                     errorMessage = "Delete shell plugin staging file failed",
                     errorCause = "",
                     errorCompanion = "The shell plugin installation finished, but Rootless Store could not delete the temporary staging zip."
-                )
+                ))
             }
+
+            if (useRedundancyInstall) {
+                installPluginUseCase.get()(
+                    uri = uri,
+                    pluginManifest = pluginManifest
+                ).getOrElse { pluginError ->
+                    return Err(pluginError)
+                }
+            }
+
 
             // Add Data, Register Plugin
             pluginRepositoryImpl.addPlugin(pluginManifest)
             pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)
 
-            null
+            Ok(Unit)
+
         } catch (throwable: Throwable) {
-            PluginError(
+            Err(PluginError(
                 errorMessage = throwable.message ?: "Install shell plugin crashed",
                 errorCause = throwable.stackTrace.formatAsMultilineString(),
                 errorCompanion = "The shell plugin installation flow crashed unexpectedly during manifest parsing, staging, Shizuku installation, or cleanup."
-            )
+            ))
         }
     }
 }

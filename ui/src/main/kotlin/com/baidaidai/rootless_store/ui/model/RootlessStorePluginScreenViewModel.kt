@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.github.michaelbull.result.getError
 import javax.inject.Inject
 import kotlin.collections.emptyList
 
@@ -135,12 +136,9 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         packageUri: Uri
     ){
         viewModelScope.launch {
-            val installationError = installLocalPackageUseCase(packageUri)
-            if (installationError is PluginError){
-                _pluginError.emit(installationError)
-            }else{
-                _pluginError.emit(null)
-            }
+            // 会返回 Error？，若 Error 则直接返回，若没有 Error 则推 Null
+            val installationError = installLocalPackageUseCase(packageUri).getError()
+            _pluginError.emit(installationError)
         }
     }
 

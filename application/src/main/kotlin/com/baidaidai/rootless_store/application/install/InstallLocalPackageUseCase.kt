@@ -7,6 +7,8 @@ import com.baidaidai.rootless_store.application.plugin.InstallPluginUseCase
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Result
 import javax.inject.Inject
 
 class InstallLocalPackageUseCase @Inject constructor(
@@ -15,15 +17,19 @@ class InstallLocalPackageUseCase @Inject constructor(
     private val installEnvironmentUseCase: InstallEnvironmentUseCase,
     private val installMagiskPluginUseCase: InstallMagiskPluginUseCase
 ) {
-    suspend operator fun invoke(uri: Uri): PluginError? {
+    suspend operator fun invoke(uri: Uri): Result<Unit, PluginError> {
         return when (resolveLocalPackageType(uri)) {
             LocalPackageType.Plugin -> installPluginUseCase(uri)
             LocalPackageType.Environment -> installEnvironmentUseCase(uri)
             LocalPackageType.MagiskModule -> installMagiskPluginUseCase(uri)
-            null -> PluginError(
-                errorMessage = "Neither PluginManifest.json nor EnvironmentManifest.json was found.",
-                errorCause = "Unsupported local package: $uri"
-            )
+            null -> {
+                Err(
+                    PluginError(
+                        errorMessage = "Neither PluginManifest.json nor EnvironmentManifest.json was found.",
+                        errorCause = "Unsupported local package: $uri"
+                    )
+                )
+            }
         }
     }
 
