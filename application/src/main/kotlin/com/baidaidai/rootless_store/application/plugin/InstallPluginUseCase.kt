@@ -71,4 +71,45 @@ class InstallPluginUseCase @Inject constructor(
             return Ok(Unit)
         }
     }
+
+    /**
+     * 安装一个提供 WebUI 的 ADB 插件内部副本。
+     *
+     * 该方法仅用于 `侧载`  操作，沿用普通的内部插件安装流程，
+     * 但不会写入插件信息或插件状态记录。只有当 Shell 插件安装和本方法都成功后，
+     * 调用方才会注册该插件。
+     *
+     * @since 2026-10-04
+     * @lastModified 2026-10-04
+     */
+    internal operator fun invoke(
+        uri: Uri,
+        pluginManifest: PluginManifest
+    ): Result<Unit, PluginError> {
+        pluginGatewayImpl
+            .installPluginFromLocal(uri)
+            .getOrElse { throwable ->
+                return Err(
+                    PluginError(
+                        errorMessage = "Can't Un-Zip / install Plugin",
+                        errorCause = throwable.stackTrace.formatAsMultilineString(),
+                        errorCompanion = "The package was recognized as a plugin, but Rootless Store could not extract it into app storage."
+                    )
+                )
+            }
+
+        pluginGatewayImpl
+            .setPluginEntryPointExecutable(pluginManifest)
+            .getOrElse { throwable ->
+                return Err(
+                    PluginError(
+                        errorMessage = "Can't set plugin executable",
+                        errorCause = throwable.stackTrace.formatAsMultilineString(),
+                        errorCompanion = "The plugin was extracted, but Rootless Store could not mark its entry point executable."
+                    )
+                )
+            }
+
+        return Ok(Unit)
+    }
 }
