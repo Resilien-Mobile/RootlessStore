@@ -8,6 +8,7 @@ import io.ktor.utils.io.jvm.javaio.toInputStream
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
@@ -42,32 +43,47 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
 
     // Un-Zip FS Operator
     fun unzipFromFileToDirectory(originFileUri: Uri, targetDirectory: File) {
+        val inputStream = context.contentResolver.openInputStream(originFileUri)
+            ?: error("Could not open plugin package: $originFileUri")
+
+        inputStream.use { unzipInputStreamToDirectory(it, targetDirectory) }
+    }
+
+    fun unzipFromByteChannelToDirectory(
+        originFileByteChannel: ByteReadChannel,
+        targetDirectory: File
+    ) {
+        originFileByteChannel.toInputStream().use { unzipInputStreamToDirectory(it, targetDirectory) }
+    }
+
+    private fun unzipInputStreamToDirectory(
+        inputStream: InputStream,
+        targetDirectory: File
+    ) {
         targetDirectory.mkdirs()
         val canonicalTargetDirectory = targetDirectory.canonicalFile
 
-        context.contentResolver.openInputStream(originFileUri).use { inputStream ->
-            ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
-                var zipEntry = zipInputStream.nextEntry
-                while (zipEntry != null) {
-                    val targetFile = File(targetDirectory, zipEntry.name).canonicalFile
-                    if (!targetFile.path.startsWith(canonicalTargetDirectory.path + File.separator)) {
-                        zipInputStream.closeEntry()
-                        zipEntry = zipInputStream.nextEntry
-                        continue
-                    }
-
-                    if (zipEntry.isDirectory) {
-                        targetFile.mkdirs()
-                    } else {
-                        targetFile.parentFile?.mkdirs()
-                        FileOutputStream(targetFile).use { outputStream ->
-                            zipInputStream.copyTo(outputStream)
-                        }
-                    }
-
+        ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+            var zipEntry = zipInputStream.nextEntry
+            while (zipEntry != null) {
+                val targetFile = File(targetDirectory, zipEntry.name).canonicalFile
+                if (!targetFile.path.startsWith(canonicalTargetDirectory.path + File.separator)) {
                     zipInputStream.closeEntry()
                     zipEntry = zipInputStream.nextEntry
+                    continue
                 }
+
+                if (zipEntry.isDirectory) {
+                    targetFile.mkdirs()
+                } else {
+                    targetFile.parentFile?.mkdirs()
+                    FileOutputStream(targetFile).use { outputStream ->
+                        zipInputStream.copyTo(outputStream)
+                    }
+                }
+
+                zipInputStream.closeEntry()
+                zipEntry = zipInputStream.nextEntry
             }
         }
     }
