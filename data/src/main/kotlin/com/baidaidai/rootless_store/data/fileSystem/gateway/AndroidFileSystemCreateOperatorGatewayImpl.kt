@@ -55,6 +55,17 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         return targetFile
     }
 
+    fun copyFileToFile(originFile: File, targetFile: File): File {
+        targetFile.parentFile?.mkdirs()
+        originFile.inputStream().use { originInputStream ->
+            FileOutputStream(targetFile).use { targetOutputStream ->
+                originInputStream.copyTo(targetOutputStream)
+            }
+        }
+
+        return targetFile
+    }
+
     private fun hasInternalDirectory(path: String): Boolean {
         val targetFile = File(context.filesDir, path)
         return targetFile.exists()

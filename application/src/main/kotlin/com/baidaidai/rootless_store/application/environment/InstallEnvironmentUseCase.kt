@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.application.environment
 
-import android.net.Uri
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.environment.gateway.EnvironmentGatewayImpl
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
@@ -12,15 +11,16 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import javax.inject.Inject
+import java.io.File
 
 class InstallEnvironmentUseCase @Inject constructor(
     private val environmentGatewayImpl: EnvironmentGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val environmentStatusRepositoryImpl: EnvironmentStatusRepositoryImpl
 ) {
-    suspend operator fun invoke(uri: Uri): Result<Unit, PluginError> {
+    suspend operator fun invoke(packageFile: File): Result<Unit, PluginError> {
         val environmentManifest: EnvironmentManifest = environmentGatewayImpl
-            .parseEnvironmentManifest(uri)
+            .parseEnvironmentManifest(packageFile)
             .getOrElse { throwable ->
                 return Err(
                     PluginError(
@@ -33,7 +33,7 @@ class InstallEnvironmentUseCase @Inject constructor(
 
         // Un-Zip, Install Environment
         environmentGatewayImpl
-            .installEnvironmentFromLocal(uri)
+            .installEnvironmentFromLocal(packageFile)
             .getOrElse { throwable ->
                 return Err(
                     PluginError(

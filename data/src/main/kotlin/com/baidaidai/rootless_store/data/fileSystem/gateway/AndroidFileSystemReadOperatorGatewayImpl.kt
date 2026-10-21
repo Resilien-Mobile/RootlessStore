@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.json.Json
 import java.io.BufferedInputStream
 import java.io.File
+import java.io.InputStream
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
@@ -23,71 +24,108 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
 
     // Read FS Operator
     private fun loadRawManifest(uri: Uri, manifestFileName: String): String? {
-        context.contentResolver.openInputStream(uri).use { inputStream ->
-            ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
-                /**
-                 * The entry is like relative path, but root path is zipFile/...
-                 */
-                var zipEntry = zipInputStream.nextEntry
-                while (zipEntry != null) {
-                    val entryPath = zipEntry.name
-                    val fileNameOnly = entryPath.substringAfterLast('/')
-                    val isTarget = !zipEntry.isDirectory &&
-                        fileNameOnly.equals(manifestFileName, ignoreCase = true)
+        val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+        return inputStream.use { loadRawManifest(it, manifestFileName) }
+    }
 
-                    if (isTarget) {
-                        val json = zipInputStream.readBytes().toString(Charsets.UTF_8)
-                        Log.d("readZipContent", "$manifestFileName content: $json")
+    private fun loadRawManifest(file: File, manifestFileName: String): String? {
+        return file.inputStream().use { loadRawManifest(it, manifestFileName) }
+    }
 
-                        zipInputStream.closeEntry()
-                        return json
-                    }
+    private fun loadRawManifest(inputStream: InputStream, manifestFileName: String): String? {
+        ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+            var zipEntry = zipInputStream.nextEntry
+            while (zipEntry != null) {
+                val entryPath = zipEntry.name
+                val fileNameOnly = entryPath.substringAfterLast('/')
+                val isTarget = !zipEntry.isDirectory &&
+                    fileNameOnly.equals(manifestFileName, ignoreCase = true)
 
+                if (isTarget) {
+                    val content = zipInputStream.readBytes().toString(Charsets.UTF_8)
+                    Log.d("readZipContent", "$manifestFileName content: $content")
                     zipInputStream.closeEntry()
-                    zipEntry = zipInputStream.nextEntry
+                    return content
                 }
 
-                Log.w("readZipContent", "$manifestFileName not found, uri=$uri")
-                return null
+                zipInputStream.closeEntry()
+                zipEntry = zipInputStream.nextEntry
             }
+
+            Log.w("readZipContent", "$manifestFileName not found")
+            return null
         }
     }
 
     fun hasFileInZip(uri: Uri, fileName: String): Boolean {
-        context.contentResolver.openInputStream(uri).use { inputStream ->
-            ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
-                var zipEntry = zipInputStream.nextEntry
-                while (zipEntry != null) {
-                    val entryPath = zipEntry.name
-                    val fileNameOnly = entryPath.substringAfterLast('/')
-                    val isTarget = !zipEntry.isDirectory &&
-                            fileNameOnly.equals(fileName, ignoreCase = true)
-
-                    if (isTarget) {
-                        zipInputStream.closeEntry()
-                        return true
-                    }
-
-                    zipInputStream.closeEntry()
-                    zipEntry = zipInputStream.nextEntry
-                }
-
-                return false
-            }
-        }
+        val inputStream = context.contentResolver.openInputStream(uri) ?: return false
+        return inputStream.use { hasFileInZip(it, fileName) }
     } // Confirm File Exists in Zip
+
+    fun hasFileInZip(file: File, fileName: String): Boolean {
+        return file.inputStream().use { hasFileInZip(it, fileName) }
+    }
+
+    private fun hasFileInZip(inputStream: InputStream, fileName: String): Boolean {
+        ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+            var zipEntry = zipInputStream.nextEntry
+            while (zipEntry != null) {
+                val fileNameOnly = zipEntry.name.substringAfterLast('/')
+                if (!zipEntry.isDirectory && fileNameOnly.equals(fileName, ignoreCase = true)) {
+                    zipInputStream.closeEntry()
+                    return true
+                }
+                zipInputStream.closeEntry()
+                zipEntry = zipInputStream.nextEntry
+            }
+            return false
+        }
+    }
+
+    fun loadBytesInZip(file: File, fileName: String): ByteArray? {
+        return file.inputStream().use { loadBytesInZip(it, fileName) }
+    }
+
+    private fun loadBytesInZip(inputStream: InputStream, fileName: String): ByteArray? {
+        ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+            var zipEntry = zipInputStream.nextEntry
+            while (zipEntry != null) {
+                val fileNameOnly = zipEntry.name.substringAfterLast('/')
+                if (!zipEntry.isDirectory && fileNameOnly.equals(fileName, ignoreCase = true)) {
+                    val fileBytes = zipInputStream.readBytes()
+                    zipInputStream.closeEntry()
+                    return fileBytes
+                }
+                zipInputStream.closeEntry()
+                zipEntry = zipInputStream.nextEntry
+            }
+            return null
+        }
+    }
 
     fun loadRawMagiskModuleProp(uri: Uri): String {
         return loadRawManifest(uri, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
     } // Get Magisk module.prop File
 
+    fun loadRawMagiskModuleProp(file: File): String {
+        return loadRawManifest(file, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
+    }
+
     fun loadRawPluginManifest(uri: Uri): String {
         return loadRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     } // Get JSON File
 
+    fun loadRawPluginManifest(file: File): String {
+        return loadRawManifest(file, PLUGIN_MANIFEST_FILE_NAME) ?: ""
+    }
+
     fun loadRawEnvironmentManifest(uri: Uri): String {
         return loadRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     } // Get JSON File
+
+    fun loadRawEnvironmentManifest(file: File): String {
+        return loadRawManifest(file, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
+    }
 
     fun loadFileContent(filePath: String): String {
         return File(filePath).readText()

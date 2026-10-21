@@ -15,6 +15,7 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         private const val ENVIRONMENT_DIR_NAME = "Environment"
         private const val MAGISK_DIR_NAME = "Magisk"
         private const val MAGISK_TEMPLATE_DIR_NAME = "template"
+        private const val PACKAGE_DIR_NAME = "Package"
     }
 
     private fun getInternalPluginRootDirectory(): File {
@@ -61,6 +62,10 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     fun getExternalAppCacheDirectoryFile(): File {
         return getExternalAppCacheRootDirectory()
     } // /sdcard/Android/data/APP_PACKAGE/cache
+
+    fun getExternalAppPackageCacheDirectoryFile(): File {
+        return File(getExternalAppCacheRootDirectory(), PACKAGE_DIR_NAME)
+    } // /sdcard/Android/data/APP_PACKAGE/cache/Package
 
     fun getExternalAppMagiskDirectoryFile(): File {
         return File(getExternalAppFilesRootDirectory(), MAGISK_DIR_NAME)

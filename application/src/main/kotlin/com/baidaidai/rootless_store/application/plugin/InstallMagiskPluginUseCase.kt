@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.application.plugin
 
-import android.net.Uri
 import com.baidaidai.illusioncube.IllusionCube
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
@@ -21,7 +20,6 @@ import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.getOrElse
 import kotlinx.serialization.json.Json
 import java.io.File
 import javax.inject.Inject
@@ -43,11 +41,11 @@ class InstallMagiskPluginUseCase @Inject constructor(
         isLenient = true
     }
 
-    suspend operator fun invoke(uri: Uri): Result<Unit, PluginError> {
+    suspend operator fun invoke(packageFile: File): Result<Unit, PluginError> {
 
         // Read module.prop
         val magiskModulePropContent = runCatching {
-            androidFileSystemReadOperatorGatewayImpl.loadRawMagiskModuleProp(uri)
+            androidFileSystemReadOperatorGatewayImpl.loadRawMagiskModuleProp(packageFile)
         }.getOrElse { throwable ->
             return Err(
                 PluginError(
@@ -97,7 +95,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
         // Some Magisk modules use action.sh as the actual entry point instead of service.sh.
         val hasActionScript = runCatching {
             androidFileSystemReadOperatorGatewayImpl.hasFileInZip(
-                uri = uri,
+                file = packageFile,
                 fileName = "action.sh"
             )
         }.getOrElse { throwable ->
@@ -137,7 +135,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
         // Un-zip magisk module to template directory
         runCatching {
             androidFileSystemUnzipOperatorGatewayImpl.unzipFromFileToDirectory(
-                originFileUri = uri,
+                originFile = packageFile,
                 targetDirectory = magiskTemplateDirectory
             )
         }.getOrElse { throwable ->

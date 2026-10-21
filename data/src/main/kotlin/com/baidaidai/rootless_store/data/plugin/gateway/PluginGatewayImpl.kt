@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.plugin.gateway
 
-import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemChmodOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
@@ -26,12 +25,12 @@ class PluginGatewayImpl @Inject constructor(
 ): PluginGateway {
 
     // Create
-    fun installPluginFromLocal(originFileUri: Uri): Result<Unit> = runCatching {
-        val pluginManifest = parsePluginManifest(originFileUri).getOrThrow()
+    fun installPluginFromLocal(originFile: File): Result<Unit> = runCatching {
+        val pluginManifest = parsePluginManifest(originFile).getOrThrow()
         val targetDirectory = resolvePluginPackageDirectory(pluginManifest.pluginPackageName)
 
         androidFileSystemUnzipOperatorGatewayImpl.unzipFromFileToDirectory(
-            originFileUri = originFileUri,
+            originFile = originFile,
             targetDirectory = targetDirectory
         )
     }
@@ -66,8 +65,8 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
-    fun parsePluginManifest(originFileUri: Uri): Result<PluginManifest> = runCatching {
-        androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(uri = originFileUri).let {
+    fun parsePluginManifest(originFile: File): Result<PluginManifest> = runCatching {
+        androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(originFile).let {
             androidFileSystemReadOperatorGatewayImpl.parsePluginManifest(it)
         }
     }
