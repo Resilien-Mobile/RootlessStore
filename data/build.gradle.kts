@@ -67,6 +67,10 @@ dependencies {
     // kotlin-result
     implementation("com.michael-bull.kotlin-result:kotlin-result:2.3.1")
 
+    // bouncy castle
+    implementation("org.bouncycastle:bcprov-jdk18on:1.86")  // 基础密码学算法
+    implementation("org.bouncycastle:bcpkix-jdk18on:1.86")  // 高级证书API
+
 
     // Local Modules
     implementation(project(":illusioncube"))
