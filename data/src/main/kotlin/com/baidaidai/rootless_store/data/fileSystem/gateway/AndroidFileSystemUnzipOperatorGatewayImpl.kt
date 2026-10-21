@@ -1,7 +1,6 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
 import android.content.Context
-import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.jvm.javaio.toInputStream
@@ -9,12 +8,12 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.io.FileInputStream
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
 
 class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl
 ) {
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
@@ -42,11 +41,32 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     } // /File/Plugin/PLUGIN
 
     // Un-Zip FS Operator
-    fun unzipFromFileToDirectory(originFileUri: Uri, targetDirectory: File) {
-        val inputStream = context.contentResolver.openInputStream(originFileUri)
-            ?: error("Could not open plugin package: $originFileUri")
+    fun unzipFromFileToDirectory(originFile: File, targetDirectory: File) {
+        FileInputStream(originFile).use { unzipInputStreamToDirectory(it, targetDirectory) }
+    }
 
-        inputStream.use { unzipInputStreamToDirectory(it, targetDirectory) }
+    fun extractFilesFromZip(
+        originFile: File,
+        targetDirectory: File,
+        fileNames: Set<String>
+    ) {
+        targetDirectory.mkdirs()
+        FileInputStream(originFile).use { inputStream ->
+            ZipInputStream(BufferedInputStream(inputStream)).use { zipInputStream ->
+                var zipEntry = zipInputStream.nextEntry
+                while (zipEntry != null) {
+                    if (!zipEntry.isDirectory && zipEntry.name in fileNames) {
+                        val targetFile = File(targetDirectory, zipEntry.name)
+                        targetFile.parentFile?.mkdirs()
+                        FileOutputStream(targetFile).use { outputStream ->
+                            zipInputStream.copyTo(outputStream)
+                        }
+                    }
+                    zipInputStream.closeEntry()
+                    zipEntry = zipInputStream.nextEntry
+                }
+            }
+        }
     }
 
     fun unzipFromByteChannelToDirectory(
@@ -88,98 +108,14 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    @Suppress("UNUSED_PARAMETER")
-    fun unzipFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
-
-        // Get file's name, always powered by readManiFestJsonContent
-        val directoryName = when {
-
-            !directoryName.isNullOrBlank() -> {
-                directoryName.trim()
-            }
-
-            else -> {
-                androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(originFileUri).let { json ->
-                    androidFileSystemReadOperatorGatewayImpl.parsePluginManifest(json).pluginPackageName
-                }.trim()
-            }
-        }
-
-        // Resolve Target Directory
-        val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
-        val createdFileDirectory = resolveChildFile(internalPluginRootDirectory, directoryName).apply {
-            mkdirs()
-        }
-
-        // Open IO Stream
-        context.contentResolver.openInputStream(originFileUri).use { fis ->
-            // Unzip from File Input Stream
-            ZipInputStream(BufferedInputStream(fis)).use { zis ->
-                var entry = zis.nextEntry
-                while (entry != null) {
-                    val outFile = File(createdFileDirectory, entry.name)
-
-                    if (entry.isDirectory) {
-                        outFile.mkdirs()
-                    } else {
-                        outFile.parentFile?.mkdirs()
-                        FileOutputStream(outFile).use { out ->
-                            zis.copyTo(out)
-                        }
-                    }
-
-                    zis.closeEntry()
-                    entry = zis.nextEntry
-                }
-            }
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun unzipEnvironmentFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
-
-        // Get file's name, always powered by readManiFestJsonContent
-        val directoryName = when {
-
-            !directoryName.isNullOrBlank() -> {
-                directoryName.trim()
-            }
-
-            else -> {
-                androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(originFileUri).let { json ->
-                    androidFileSystemReadOperatorGatewayImpl.parseEnvironmentManifest(json).environmentPackageName
-                }.trim()
-            }
-        }
-
-        // Resolve Target Directory
-        val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
-        val createdFileDirectory = resolveChildFile(internalEnvironmentRootDirectory, directoryName).apply {
-            mkdirs()
-        }
-
-        // Open IO Stream
-        context.contentResolver.openInputStream(originFileUri).use { fis ->
-            // Unzip from File Input Stream
-            ZipInputStream(BufferedInputStream(fis)).use { zis ->
-                var entry = zis.nextEntry
-                while (entry != null) {
-                    val outFile = File(createdFileDirectory, entry.name)
-
-                    if (entry.isDirectory) {
-                        outFile.mkdirs()
-                    } else {
-                        outFile.parentFile?.mkdirs()
-                        FileOutputStream(outFile).use { out ->
-                            zis.copyTo(out)
-                        }
-                    }
-
-                    zis.closeEntry()
-                    entry = zis.nextEntry
-                }
-            }
-        }
+    fun unzipEnvironmentFromFile(
+        originFile: File,
+        pluginRootDirectory: File,
+        directoryName: String
+    ) {
+        val targetDirectory = resolveChildFile(pluginRootDirectory, directoryName.trim())
+        targetDirectory.mkdirs()
+        FileInputStream(originFile).use { unzipInputStreamToDirectory(it, targetDirectory) }
     }
 
     @Suppress("UNUSED_PARAMETER")

@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.application.plugin
 
-import android.net.Uri
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
@@ -13,6 +12,7 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import javax.inject.Inject
+import java.io.File
 
 class InstallPluginUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
@@ -20,10 +20,10 @@ class InstallPluginUseCase @Inject constructor(
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val installShellPluginUseCase: InstallShellPluginUseCase
 ) {
-    suspend operator fun invoke(uri: Uri): Result<Unit, PluginError> {
+    suspend operator fun invoke(packageFile: File): Result<Unit, PluginError> {
 
         val pluginManifest: PluginManifest = pluginGatewayImpl
-            .parsePluginManifest(uri)
+            .parsePluginManifest(packageFile)
             .getOrElse { throwable ->
                 return Err(
                     PluginError(
@@ -36,14 +36,14 @@ class InstallPluginUseCase @Inject constructor(
 
         if (pluginManifest.requiredEnvironment == ExecutionContext.ADB){
             return installShellPluginUseCase(
-                uri = uri,
+                packageFile = packageFile,
                 pluginManifest = pluginManifest
             )
         }else{
 
             // Un-Zip, Install Plugin
             pluginGatewayImpl
-                .installPluginFromLocal(uri)
+                .installPluginFromLocal(packageFile)
                 .getOrElse { throwable ->
                     return Err(
                         PluginError(
@@ -86,11 +86,11 @@ class InstallPluginUseCase @Inject constructor(
      * @lastModified 2026-10-04
      */
     internal operator fun invoke(
-        uri: Uri,
+        packageFile: File,
         pluginManifest: PluginManifest
     ): Result<Unit, PluginError> {
         pluginGatewayImpl
-            .installPluginFromLocal(uri)
+            .installPluginFromLocal(packageFile)
             .getOrElse { throwable ->
                 return Err(
                     PluginError(

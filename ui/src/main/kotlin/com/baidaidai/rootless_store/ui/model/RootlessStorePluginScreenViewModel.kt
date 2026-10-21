@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baidaidai.rootless_store.application.environment.ResolveEnvironmentShareUriUseCase
 import com.baidaidai.rootless_store.application.install.InstallLocalPackageUseCase
-import com.baidaidai.rootless_store.application.install.ResolveLocalPackageMetaInfoUseCase
+import com.baidaidai.rootless_store.application.install.PrepareLocalPackageInstallUseCase
+import com.baidaidai.rootless_store.application.install.CleanupPreparedLocalPackageUseCase
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.environment.model.EnvironmentStatus
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.github.michaelbull.result.getError
+import com.github.michaelbull.result.getOrElse
 import javax.inject.Inject
 import kotlin.collections.emptyList
 
@@ -57,7 +59,8 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     private val resolvePluginShareUriUseCase: ResolvePluginShareUriUseCase,
     private val resolvePluginWebUiUriUseCase: ResolvePluginWebUiUriUseCase,
     private val resolveEnvironmentShareUriUseCase: ResolveEnvironmentShareUriUseCase,
-    private val resolveLocalPackageMetaInfoUseCase: ResolveLocalPackageMetaInfoUseCase,
+    private val prepareLocalPackageInstallUseCase: PrepareLocalPackageInstallUseCase,
+    private val cleanupPreparedLocalPackageUseCase: CleanupPreparedLocalPackageUseCase,
     observePluginTotalCountUseCase: ObservePluginTotalCountUseCase
 ): ViewModel() {
 
@@ -104,49 +107,56 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     fun prepareLocalPackageInstall(
         packageUri: Uri
     ) {
+        clearLocalPackageInstallConfirmation()
         viewModelScope.launch {
-            val localPackageMetaInfo = resolveLocalPackageMetaInfoUseCase(packageUri)
 
-            if (localPackageMetaInfo == null) {
-                installLocalPackage(packageUri)
+            val packageSingerInfo = prepareLocalPackageInstallUseCase(packageUri)
+                .getOrElse { pluginError ->
+                    _pluginError.emit(pluginError)
+                    return@launch
+                }
+
+            if (packageSingerInfo == null) {
+                installLocalPackage()
                 return@launch
             }
 
             _pluginScreenUiState.update { uiState ->
                 uiState.copy(
-                    localPackageUri = packageUri,
-                    localPackageMetaInfo = localPackageMetaInfo,
+                    packageSignatureInfo = packageSingerInfo,
                     isLocalPackageConfirmationSheetVisible = true
                 )
             }
+
         }
     }
 
     fun confirmLocalPackageInstall() {
-        val packageUri = pluginScreenUiState.value.localPackageUri ?: return
         clearLocalPackageInstallConfirmation()
-        installLocalPackage(packageUri)
+        installLocalPackage()
     }
-
     fun dismissLocalPackageInstallConfirmation() {
         clearLocalPackageInstallConfirmation()
+        viewModelScope.launch {
+            cleanupPreparedLocalPackageUseCase()
+        }
     }
 
-    private fun installLocalPackage(
-        packageUri: Uri
-    ){
+    private fun installLocalPackage(){
         viewModelScope.launch {
-            // 会返回 Error？，若 Error 则直接返回，若没有 Error 则推 Null
-            val installationError = installLocalPackageUseCase(packageUri).getError()
-            _pluginError.emit(installationError)
+            try {
+                val installationError = installLocalPackageUseCase().getError()
+                _pluginError.emit(installationError)
+            } finally {
+                cleanupPreparedLocalPackageUseCase()
+            }
         }
     }
 
     private fun clearLocalPackageInstallConfirmation() {
         _pluginScreenUiState.update { uiState ->
             uiState.copy(
-                localPackageUri = null,
-                localPackageMetaInfo = null,
+                packageSignatureInfo = null,
                 isLocalPackageConfirmationSheetVisible = false
             )
         }

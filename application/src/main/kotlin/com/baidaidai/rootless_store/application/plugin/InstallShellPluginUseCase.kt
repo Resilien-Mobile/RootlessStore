@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.application.plugin
 
-import android.net.Uri
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
@@ -29,7 +28,7 @@ class InstallShellPluginUseCase @Inject constructor(
     private val installPluginUseCase: Lazy<InstallPluginUseCase>,
 ) {
     suspend operator fun invoke(
-        uri: Uri,
+        packageFile: File,
         pluginManifest: PluginManifest,
     ): Result<Unit, PluginError> {
         return try {
@@ -40,8 +39,8 @@ class InstallShellPluginUseCase @Inject constructor(
             val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryPath()
             val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
 
-            androidFileSystemCreateOperatorGatewayImpl.copyUriToFile(
-                originFileUri = uri,
+            androidFileSystemCreateOperatorGatewayImpl.copyFileToFile(
+                originFile = packageFile,
                 targetFile = shellPluginStagingFile
             )
 
@@ -76,7 +75,7 @@ class InstallShellPluginUseCase @Inject constructor(
 
             if (useRedundancyInstall) {
                 installPluginUseCase.get()(
-                    uri = uri,
+                    packageFile = packageFile,
                     pluginManifest = pluginManifest
                 ).getOrElse { pluginError ->
                     return Err(pluginError)

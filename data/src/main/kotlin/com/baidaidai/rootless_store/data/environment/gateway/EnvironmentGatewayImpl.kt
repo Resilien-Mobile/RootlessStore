@@ -1,8 +1,9 @@
 package com.baidaidai.rootless_store.data.environment.gateway
 
 import android.content.Context
-import android.net.Uri
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.market.remote.datasource.MarketPackageRemoteDataSource
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -14,13 +15,20 @@ import javax.inject.Inject
 class EnvironmentGatewayImpl @Inject constructor(
     @ApplicationContext val context: Context,
     private val marketPackageRemoteDataSource: MarketPackageRemoteDataSource,
-    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
+    private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
+    private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
+    private val androidFileSystemUnzipOperatorGatewayImpl: AndroidFileSystemUnzipOperatorGatewayImpl
 ) {
     private val defaultEnvironmentDirectory = File(context.filesDir, "Environment")
 
     // Install Environment
-    fun installEnvironmentFromLocal(originFileUri: Uri): Result<Unit> = runCatching {
-        installEnvironment(originFileUri)
+    fun installEnvironmentFromLocal(originFile: File): Result<Unit> = runCatching {
+        val environmentManifest = parseEnvironmentManifest(originFile).getOrThrow()
+        androidFileSystemUnzipOperatorGatewayImpl.unzipEnvironmentFromFile(
+            originFile = originFile,
+            pluginRootDirectory = defaultEnvironmentDirectory,
+            directoryName = environmentManifest.environmentPackageName
+        )
     }
 
     suspend fun installEnvironmentFromMarket(
@@ -66,25 +74,9 @@ class EnvironmentGatewayImpl @Inject constructor(
 
 
     // Parse local environment manifest
-    fun parseEnvironmentManifest(originFileUri: Uri): Result<EnvironmentManifest> = runCatching {
-        androidFileSystemCapabilityGatewayImpl.loadRawEnvironmentManifest(uri = originFileUri).let {
-            androidFileSystemCapabilityGatewayImpl.parseEnvironmentManifest(it)
-        }
-    }
-
-    // Only Un-Zip operation, which from given zip file
-    private fun installEnvironment(
-        originFileUri: Uri,
-        destinationDirectory: File = defaultEnvironmentDirectory
-    ) {
-        if (androidFileSystemCapabilityGatewayImpl.hasEnvironmentDirectory()) {
-            androidFileSystemCapabilityGatewayImpl.unzipEnvironmentFromFile(
-                originFileUri = originFileUri,
-                pluginRootDirectory = destinationDirectory
-            )
-        } else {
-            androidFileSystemCapabilityGatewayImpl.ensureFilesDirectory("Environment")
-            installEnvironment(originFileUri)
+    fun parseEnvironmentManifest(originFile: File): Result<EnvironmentManifest> = runCatching {
+        androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(originFile).let {
+            androidFileSystemReadOperatorGatewayImpl.parseEnvironmentManifest(it)
         }
     }
 

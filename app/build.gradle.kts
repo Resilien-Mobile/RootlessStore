@@ -34,6 +34,15 @@ android {
         }
     }
 
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/LICENSE.md",
+                "META-INF/NOTICE.md"
+            )
+        }
+    }
+
     defaultConfig {
         applicationId = "com.baidaidai.rootless_store"
         minSdk = 26

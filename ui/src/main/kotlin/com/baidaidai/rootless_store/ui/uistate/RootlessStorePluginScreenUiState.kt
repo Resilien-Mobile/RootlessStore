@@ -1,10 +1,8 @@
 package com.baidaidai.rootless_store.ui.uistate
 
-import android.net.Uri
-import com.baidaidai.rootless_store.domain.install.model.LocalPackageMetaInfo
+import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 
 data class RootlessStorePluginScreenUiState(
-    val localPackageUri: Uri? = null,
-    val localPackageMetaInfo: LocalPackageMetaInfo? = null,
+    val packageSignatureInfo: PackageSignatureInfo? = null,
     val isLocalPackageConfirmationSheetVisible: Boolean = false
 )
