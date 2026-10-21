@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.domain.install.model
 
-data class LocalPackageMetaInfo(
+data class PackageSignatureInfo(
     val displayName: String,
     val author: String,
     val validSigner: Boolean = false,
