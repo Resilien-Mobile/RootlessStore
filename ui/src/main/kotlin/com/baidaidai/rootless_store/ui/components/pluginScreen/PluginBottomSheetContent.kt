@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.baidaidai.rootless_store.domain.install.model.LocalPackageMetaInfo
+import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.ui.theme.ColorFactory
 import com.baidaidai.rootless_store.ui.theme.SuccessColorSet
@@ -40,16 +40,16 @@ private enum class VerifyState {
 @Composable
 fun PluginBottomSheetContent(
     modifier: Modifier = Modifier,
-    localPackageMetaInfo: LocalPackageMetaInfo? = null,
+    packageSignatureInfo: PackageSignatureInfo? = null,
     onDismiss: ()-> Unit = {},
     onConfirm: ()-> Unit = {}
 ){
 
-    val packageDisplayName = localPackageMetaInfo?.displayName ?: "Demo Plugin"
-    val packageAuthor = localPackageMetaInfo?.author ?: "Unknown"
-    val hasValidSigner = localPackageMetaInfo?.validSigner == true
+    val packageDisplayName = packageSignatureInfo?.displayName ?: "Demo Plugin"
+    val packageAuthor = packageSignatureInfo?.author ?: "Unknown"
+    val hasValidSigner = packageSignatureInfo?.validSigner == true
 
-    val signatureStatus = when(localPackageMetaInfo?.isSigned){
+    val signatureStatus = when(packageSignatureInfo?.isSigned){
         true -> "Signed"
         else -> "Unsigned"
     }
@@ -64,8 +64,8 @@ fun PluginBottomSheetContent(
         ColorFactory(WarningColorSet).onColor
     }
 
-    val verifyState = if (localPackageMetaInfo?.isSigned == true) {
-        if (localPackageMetaInfo.validSigner){
+    val verifyState = if (packageSignatureInfo?.isSigned == true) {
+        if (packageSignatureInfo.validSigner){
             VerifyState.Signed
         }else{
             VerifyState.Untrusted
@@ -253,7 +253,7 @@ fun PluginBottomSheetContent(
 @Composable
 private fun _preview_() {
     PluginBottomSheetContent(
-        localPackageMetaInfo = LocalPackageMetaInfo(
+        packageSignatureInfo = PackageSignatureInfo(
             displayName = "Demo Plugin",
             author = "Rootless Store",
             validSigner = false,

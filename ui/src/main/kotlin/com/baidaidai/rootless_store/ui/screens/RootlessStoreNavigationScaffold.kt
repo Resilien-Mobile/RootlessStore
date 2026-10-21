@@ -343,7 +343,7 @@ fun RootlessStoreNavigationScaffold(
                     }
                 ) {
                     PluginBottomSheetContent(
-                        localPackageMetaInfo = pluginScreenUiState.localPackageMetaInfo!!,
+                        packageSignatureInfo = pluginScreenUiState.packageSignatureInfo!!,
                         onDismiss = {
                             pluginScreenViewModel.dismissLocalPackageInstallConfirmation()
                         },
