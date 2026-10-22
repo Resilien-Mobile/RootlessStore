@@ -129,10 +129,14 @@ class PackageSignatureGatewayImpl @Inject constructor(
     private fun loadTrustedCertificate(): X509Certificate {
         context.resources.openRawResource(R.raw.resilienmobile).use { inputStream ->
             PEMParser(InputStreamReader(inputStream)).use { pemParser ->
+
                 val certificateHolder = pemParser.readObject() as X509CertificateHolder
+
+                // 转换成 Java 可读懂的证书 API
                 return JcaX509CertificateConverter()
                     .setProvider(bouncyCastleProvider)
                     .getCertificate(certificateHolder)
+
             }
         }
     }
