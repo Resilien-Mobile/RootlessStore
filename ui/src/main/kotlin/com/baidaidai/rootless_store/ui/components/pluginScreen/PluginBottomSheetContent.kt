@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.ui.components.pluginScreen
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,11 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.ui.theme.ColorFactory
@@ -44,6 +47,8 @@ fun PluginBottomSheetContent(
     onDismiss: ()-> Unit = {},
     onConfirm: ()-> Unit = {}
 ){
+
+    val context = LocalContext.current
 
     val packageDisplayName = packageSignatureInfo?.displayName ?: "Demo Plugin"
     val packageAuthor = packageSignatureInfo?.author ?: "Unknown"
@@ -233,7 +238,11 @@ fun PluginBottomSheetContent(
                 disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 disabledContentColor = MaterialTheme.colorScheme.onSurface
             ),
-            onClick = {},
+            onClick = {
+                val url = "https://resilien-mobile.github.io/RootlessStore_WiKi/signature/"
+                val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+                context.startActivity(intent)
+            },
             modifier = Modifier
                 .size(15.dp)
                 .align(Alignment.TopEnd)
