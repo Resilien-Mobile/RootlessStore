@@ -272,6 +272,17 @@
 
     <!-- Setting Screen: About -->
     <string name="setting_screen_about_rootless_store_headline">About Rootless Store</string>
+    <string name="setting_screen_about_rootless_store_supporting">Show RootlessStore Information</string>
+    <string name="setting_screen_about_app_title">RootlessStore</string>
+    <string name="setting_screen_about_version">Version: %1$s</string>
+    <string name="setting_screen_about_source_prefix">"View source on "</string>
+    <string name="setting_screen_about_github_label">GitHub</string>
+    <string name="setting_screen_about_source_suffix">""</string>
+    <string name="setting_screen_about_qq_label">QQ</string>
+    <string name="setting_screen_about_telegram_label">Telegram</string>
+    <string name="setting_screen_about_twitter_label">Twitter</string>
+    <string name="setting_screen_developer_options_remaining_taps">%1$d more taps to enable developer options</string>
+    <string name="setting_screen_developer_options_enabled">You are a developer</string>
 
     <!-- Third Party Notification Screen: Top App Bar -->
     <string name="third_party_notification_screen_top_app_bar_title">Third-Party Notification</string>

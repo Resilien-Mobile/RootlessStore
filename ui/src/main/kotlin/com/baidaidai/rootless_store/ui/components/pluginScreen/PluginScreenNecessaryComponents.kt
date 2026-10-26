@@ -22,6 +22,7 @@ object PluginScreenNecessaryComponents {
         onEditClick:()-> Unit = {},
         onFilterClick:()-> Unit = {},
         onCertificateClick: () -> Unit = {},
+        isCertificateEnabled: Boolean = false,
         pluginCount: Int = 0,
         scrollBehavior: TopAppBarScrollBehavior
     ){
@@ -46,7 +47,8 @@ object PluginScreenNecessaryComponents {
             },
             actions = {
                 IconButton(
-                    onClick = onCertificateClick
+                    onClick = onCertificateClick,
+                    enabled = isCertificateEnabled
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.material_symbols_license),

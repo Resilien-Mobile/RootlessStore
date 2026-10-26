@@ -5,27 +5,31 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -34,17 +38,22 @@ import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSettingScreenViewModel
 import androidx.core.net.toUri
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenListItemDefault
+import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenAboutAlertDialogContent
 import com.baidaidai.rootless_store.ui.components.settingScreen.SettingScreenListItemPermission
+import kotlinx.coroutines.launch
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
     contentPaddingValues: PaddingValues,
     settingScreenViewModel: RootlessStoreSettingScreenViewModel = hiltViewModel(),
+    snackBarHostState: SnackbarHostState,
     onThirdPartyNotificationSettingClick: ()-> Unit
 ){
 
     val settingScreenPreferences by settingScreenViewModel.settingScreenPreferences.collectAsState()
+    val settingScreenUiState by settingScreenViewModel.settingScreenUiState.collectAsState()
     val context = LocalContext.current
 
     LazyColumn(
@@ -52,12 +61,11 @@ fun SettingScreen(
             .background(color = MaterialTheme.colorScheme.background)
             .padding(
                 top = contentPaddingValues.calculateTopPadding(),
-                start = contentPaddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                end = contentPaddingValues.calculateEndPadding(LocalLayoutDirection.current)
+                start = 16.dp,
+                end = 16.dp
             ),
         contentPadding = PaddingValues(
-            horizontal = 16.dp,
-            vertical = 16.dp
+            bottom = contentPaddingValues.calculateBottomPadding()
         )
     ) {
         item {
@@ -240,15 +248,62 @@ fun SettingScreen(
         item {
             Text(
                 text = stringResource(R.string.setting_screen_section_about_title),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier
+                    .padding(6.dp),
             )
         }
         item {
-            ListItem(
-                headlineContent = {
-                    Text(stringResource(R.string.setting_screen_about_rootless_store_headline))
-                }
-            )
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+            ){
+                SettingScreenListItemPermission(
+                    headlineText = stringResource(R.string.setting_screen_about_rootless_store_headline),
+                    supportingText = stringResource(R.string.setting_screen_about_rootless_store_supporting),
+                    leadingContent = {
+                        Icon(
+                            painter = painterResource(R.drawable.material_symbols_info_i),
+                            contentDescription = null
+                        )
+                    },
+                    onOpenSettings = settingScreenViewModel::showAboutDialog
+                )
+            }
+        }
+    }
+
+    if (settingScreenUiState.isAboutDialogVisible) {
+        val snackbarScope = rememberCoroutineScope()
+
+        BasicAlertDialog(
+            onDismissRequest = settingScreenViewModel::dismissAboutDialog
+        ) {
+            Surface(
+                shape = AlertDialogDefaults.shape,
+                color = AlertDialogDefaults.containerColor,
+                tonalElevation = AlertDialogDefaults.TonalElevation
+            ) {
+                SettingScreenAboutAlertDialogContent(
+                    onVersionClick = {
+                        val remainingTaps = settingScreenViewModel.onAboutVersionClicked()
+                        snackbarScope.launch {
+                            snackBarHostState.currentSnackbarData?.dismiss()
+                            snackBarHostState.showSnackbar(
+                                message = if (remainingTaps > 0) {
+                                    context.getString(
+                                        R.string.setting_screen_developer_options_remaining_taps,
+                                        remainingTaps
+                                    )
+                                } else {
+                                    context.getString(R.string.setting_screen_developer_options_enabled)
+                                },
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 }

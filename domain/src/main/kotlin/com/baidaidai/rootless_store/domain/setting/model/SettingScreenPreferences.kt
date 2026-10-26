@@ -5,5 +5,6 @@ data class SettingScreenPreferences(
     val isPluginStatusNotificationEnabled: Boolean = false,
     val isThirdPartyNotificationPushEnabled: Boolean = false,
     val isInsecureConnectionAllowed: Boolean = false,
-    val isDotProtectedConnectionEnabled: Boolean = false
+    val isDotProtectedConnectionEnabled: Boolean = false,
+    val isDeveloperOptionsEnabled: Boolean = false
 )
