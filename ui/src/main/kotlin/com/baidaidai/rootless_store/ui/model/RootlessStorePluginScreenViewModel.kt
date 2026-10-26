@@ -19,11 +19,14 @@ import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentsU
 import com.baidaidai.rootless_store.application.environment.ObserveEnvironmentStatusUseCase
 import com.baidaidai.rootless_store.application.environment.DisableEnvironmentUseCase
 import com.baidaidai.rootless_store.application.environment.EnableEnvironmentUseCase
+import com.baidaidai.rootless_store.application.environment.InstallEnvironmentUseCase
 import com.baidaidai.rootless_store.application.plugin.DisablePluginUseCase
 import com.baidaidai.rootless_store.application.plugin.EnablePluginUseCase
 import com.baidaidai.rootless_store.application.environment.UninstallEnvironmentUseCase
+import com.baidaidai.rootless_store.application.plugin.InstallPluginUseCase
 import com.baidaidai.rootless_store.application.plugin.ResolvePluginShareUriUseCase
 import com.baidaidai.rootless_store.application.plugin.ResolvePluginWebUiUriUseCase
+import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
 import com.baidaidai.rootless_store.domain.plugin.model.PluginStatus
 import com.baidaidai.rootless_store.ui.uistate.RootlessStorePluginScreenUiState
@@ -49,6 +52,8 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     private val observeEnvironmentStatusUseCase: ObserveEnvironmentStatusUseCase,
     private val observePluginStatusUseCase: ObservePluginStatusUseCase,
     private val installLocalPackageUseCase: InstallLocalPackageUseCase,
+    private val installPluginUseCase: InstallPluginUseCase,
+    private val installEnvironmentUseCase: InstallEnvironmentUseCase,
     private val enablePluginUseCase: EnablePluginUseCase,
     private val disablePluginUseCase: DisablePluginUseCase,
     private val enableEnvironmentUseCase: EnableEnvironmentUseCase,
@@ -132,9 +137,17 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     }
 
     fun confirmLocalPackageInstall() {
+        val packageSignatureInfo = _pluginScreenUiState.value.packageSignatureInfo
         clearLocalPackageInstallConfirmation()
-        installLocalPackage()
+
+        viewModelScope.launch {
+            when (packageSignatureInfo!!.packageType) {
+                LocalPackageType.Plugin -> installPluginUseCase()
+                else -> installEnvironmentUseCase()
+            }
+        }
     }
+
     fun dismissLocalPackageInstallConfirmation() {
         clearLocalPackageInstallConfirmation()
         viewModelScope.launch {

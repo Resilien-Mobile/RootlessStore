@@ -30,8 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.ui.R
+import com.baidaidai.rootless_store.ui.components.common.VerticalSpacer
 import com.baidaidai.rootless_store.ui.theme.ColorFactory
 import com.baidaidai.rootless_store.ui.theme.SuccessColorSet
 import com.baidaidai.rootless_store.ui.theme.WarningColorSet
@@ -197,9 +199,7 @@ fun PluginBottomSheetContent(
                 )
             }
 
-            androidx.compose.foundation.layout.Spacer(
-                modifier = Modifier.height(12.dp)
-            )
+            VerticalSpacer(20.dp)
 
             Text(
                 text = packageDescription,
@@ -209,9 +209,7 @@ fun PluginBottomSheetContent(
                 fontWeight = FontWeight(440)
             )
 
-            androidx.compose.foundation.layout.Spacer(
-                modifier = Modifier.height(20.dp)
-            )
+            VerticalSpacer(20.dp)
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -263,6 +261,7 @@ fun PluginBottomSheetContent(
 private fun _preview_() {
     PluginBottomSheetContent(
         packageSignatureInfo = PackageSignatureInfo(
+            packageType = LocalPackageType.Plugin,
             displayName = "Demo Plugin",
             author = "Rootless Store",
             validSigner = false,
