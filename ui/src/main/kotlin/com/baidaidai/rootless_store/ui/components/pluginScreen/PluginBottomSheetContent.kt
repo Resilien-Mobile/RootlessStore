@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
+import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.ui.theme.ColorFactory
@@ -263,6 +264,7 @@ fun PluginBottomSheetContent(
 private fun _preview_() {
     PluginBottomSheetContent(
         packageSignatureInfo = PackageSignatureInfo(
+            packageType = LocalPackageType.Plugin,
             displayName = "Demo Plugin",
             author = "Rootless Store",
             validSigner = false,
