@@ -33,9 +33,10 @@ class PackageSignatureGatewayImpl @Inject constructor(
 ) {
     private val bouncyCastleProvider = BouncyCastleProvider()
     private val logTag = "PackageSignatureGateway"
+
     // 这个只是转换器，给 Kotlin 使用的 Java API 证书
-    private val certificateConverter = JcaX509CertificateConverter()
-        .setProvider(bouncyCastleProvider)  // 面向 Java API 的证书转换器
+    private val certificateConverter =
+        JcaX509CertificateConverter().setProvider(bouncyCastleProvider)  // 面向 Java API 的证书转换器
 
     /**
      * 判断外层 Package 是否带有签名，并验证其内部 package.zip。
@@ -240,49 +241,53 @@ class PackageSignatureGatewayImpl @Inject constructor(
      */
     private suspend fun loadTrustedCaCertificates(): Set<X509Certificate> {
         Log.d(logTag, "Loading built-in and enabled custom CA certificates")
-        val certificateConverter = JcaX509CertificateConverter()
-            .setProvider(bouncyCastleProvider)
-        val trustedCaCertificates = mutableSetOf<X509Certificate>()
 
-        try {
-            context.resources.openRawResource(R.raw.resilienmobile).use { inputStream ->
-                PEMParser(InputStreamReader(inputStream)).use { pemParser ->
-                    val certificateHolder = pemParser.readObject() as X509CertificateHolder
-                    trustedCaCertificates += certificateConverter.getCertificate(certificateHolder)
+        val trustedCaCertificates = mutableSetOf<X509Certificate>()
+        val enabledCaCertificates = caCertificateRepositoryImpl.getEnabledCaCertificates()
+
+        runCatching {
+
+            context
+                .resources
+                .openRawResource(R.raw.resilienmobile)
+                .use { inputStream ->
+                    PEMParser(
+                        InputStreamReader(inputStream)
+                    ).use { pemParser ->
+
+                        val certificateHolder = pemParser.readObject() as X509CertificateHolder
+                        trustedCaCertificates += certificateConverter.getCertificate(certificateHolder)
+
+                    }
+                }
+
+            Log.d(logTag, "Loaded built-in CA certificate")
+        }.onFailure { throwable ->
+            Log.e(logTag, "Could not load built-in CA certificate", throwable)
+        }
+
+        enabledCaCertificates
+            .forEachIndexed { index, caCertificate ->
+                runCatching {
+
+                    val certificate = certificateConverter.getCertificate(
+                        X509CertificateHolder(caCertificate.derBytes)
+                    )
+
+                    certificate.checkValidity()
+
+                    trustedCaCertificates += certificate
+
+                }.onSuccess {
+                    Log.d(logTag, "Loaded enabled CA certificate at index $index")
+                }.onFailure { throwable ->
+                    Log.w(logTag, "Skipped invalid enabled CA certificate at index $index", throwable)
                 }
             }
-            Log.d(logTag, "Loaded built-in CA certificate")
-        } catch (exception: Exception) {
-            Log.e(logTag, "Could not load built-in CA certificate", exception)
-            throw exception
-        }
-
-        val enabledCaCertificates = try {
-            caCertificateRepositoryImpl.getEnabledCaCertificates()
-        } catch (exception: Exception) {
-            Log.e(logTag, "Could not read enabled CA certificates from repository", exception)
-            throw exception
-        }
-        Log.d(logTag, "Repository returned ${enabledCaCertificates.size} enabled CA certificates")
-
-        enabledCaCertificates.forEachIndexed { index, caCertificate ->
-            runCatching {
-                val certificate = certificateConverter.getCertificate(
-                    X509CertificateHolder(caCertificate.derBytes)
-                )
-
-                certificate.checkValidity()
-
-                trustedCaCertificates += certificate
-            }.onSuccess {
-                Log.d(logTag, "Loaded enabled CA certificate at index $index")
-            }.onFailure { throwable ->
-                Log.w(logTag, "Skipped invalid enabled CA certificate at index $index", throwable)
-            }
-        }
 
         Log.i(logTag, "Loaded ${trustedCaCertificates.size} usable CA trust anchors")
         return trustedCaCertificates
+
     }
 
     // 将 CMS 携带的中间证书链构建到任一已启用的 CA 信任锚。
