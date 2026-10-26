@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.runtime.Composable
@@ -20,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -61,6 +64,7 @@ import com.baidaidai.rootless_store.ui.components.thirdPartyNotificationScreen.T
 import com.baidaidai.rootless_store.ui.model.RootlessStoreExecuteScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreMarketScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStorePluginScreenViewModel
+import com.baidaidai.rootless_store.ui.model.RootlessStoreSettingScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreShellScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreSourceScreenViewModel
 import com.baidaidai.rootless_store.ui.model.RootlessStoreThirdPartyNotificationScreenViewModel
@@ -78,6 +82,7 @@ fun RootlessStoreNavigationScaffold(
     // VM & VM Data
     val marketScreenViewModel = hiltViewModel<RootlessStoreMarketScreenViewModel>()
     val shellScreenViewModel = hiltViewModel<RootlessStoreShellScreenViewModel>()
+    val settingScreenViewModel = hiltViewModel<RootlessStoreSettingScreenViewModel>()
     val thirdPartyNotificationScreenViewModel = hiltViewModel<RootlessStoreThirdPartyNotificationScreenViewModel>()
     val codeBrickViewModel = hiltViewModel<RootlessStoreCodeBrickViewModel>()
     val pluginCount by pluginScreenViewModel.pluginCount.collectAsState()
@@ -108,6 +113,7 @@ fun RootlessStoreNavigationScaffold(
     var sourceRemoteEndpoint by rememberSaveable{ mutableStateOf("") }
     var currentError by rememberSaveable { mutableStateOf<RootlessStoreError?>(null) }
     val context = LocalContext.current
+    val snackBarHostState = remember { SnackbarHostState() }
     val viewModelStoreOwner = LocalViewModelStoreOwner.current!!
     val scrollBehavior = when(currentDestination){
         PluginScreenKey, CodeBrickScreenKey, MarketScreenKey, SettingScreenKey -> TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -198,6 +204,9 @@ fun RootlessStoreNavigationScaffold(
         }
 
         Scaffold(
+            snackbarHost = {
+                SnackbarHost(hostState = snackBarHostState)
+            },
             topBar = {
                 when(currentDestination){
                     PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenTopAppBar(
@@ -475,6 +484,8 @@ fun RootlessStoreNavigationScaffold(
                     entry<SettingScreenKey> {
                         SettingScreen(
                             contentPaddingValues = contentPadding,
+                            settingScreenViewModel = settingScreenViewModel,
+                            snackBarHostState = snackBarHostState,
                             onThirdPartyNotificationSettingClick = {
                                 navigationBackStack.add(ThirdPartyNotificationScreenKey)
                             }
