@@ -63,9 +63,17 @@ class PackageSignatureGatewayImpl @Inject constructor(
         return runCatching {
 
             // 将 package.zip 作为待验证内容，结合 sign.p7s 解析 CMS SignedData。
+            val contentInfo = PEMParser(
+                InputStreamReader(
+                    ByteArrayInputStream(signatureBytes)
+                )
+            ).use { pemParser ->
+                pemParser.readObject() as? ContentInfo
+            } ?: throw IllegalArgumentException("sign.p7s PEM does not contain a CMS ContentInfo")
+
             val signedData = CMSSignedData(
                 CMSProcessableByteArray(packageBytes),
-                signatureBytes
+                contentInfo
             )
 
             // 获取 CMS 中所有签名者，不限制数量。
