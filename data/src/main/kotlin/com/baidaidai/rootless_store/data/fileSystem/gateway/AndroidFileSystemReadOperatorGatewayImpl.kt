@@ -57,6 +57,11 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     }
 
+    fun loadBytesFromUri(uri: Uri): ByteArray? {
+        val inputStream = context.contentResolver.openInputStream(uri) ?: return null
+        return inputStream.use { it.readBytes() }
+    }
+
     fun hasFileInZip(uri: Uri, fileName: String): Boolean {
         val inputStream = context.contentResolver.openInputStream(uri) ?: return false
         return inputStream.use { hasFileInZip(it, fileName) }

@@ -32,6 +32,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.window.core.layout.WindowSizeClass
 import com.baidaidai.rootless_store.ui.ShizukuActivity
+import com.baidaidai.rootless_store.ui.CertificateActivity
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.navigation.`interface`.RootlessNavigationKey
@@ -203,6 +204,11 @@ fun RootlessStoreNavigationScaffold(
                         pluginCount = pluginCount,
                         onEditClick = {
                             pluginScreenViewModel.toggleBadgeVisibility()
+                        },
+                        onCertificateClick = {
+                            context.startActivity(
+                                Intent(context, CertificateActivity::class.java)
+                            )
                         },
                         scrollBehavior = scrollBehavior
                     )

@@ -82,6 +82,14 @@
     <string name="plugin_screen_top_app_bar_subtitle">已安装了 {pluginCount} 个插件</string>
     <string name="plugin_screen_top_app_bar_edit_button">编辑</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">筛选</string>
+    <string name="plugin_screen_top_app_bar_certificate_content_description">证书</string>
+    <string name="certificate_screen_add_certificate_content_description">添加证书</string>
+    <string name="plugin_ca_certificate_name_label">证书名称</string>
+    <string name="plugin_ca_certificate_select_file_button">选择 DER 或 PEM 证书</string>
+    <string name="plugin_ca_certificate_dismiss_button">取消</string>
+    <string name="plugin_ca_certificate_confirm_button">确认</string>
+    <string name="certificate_screen_top_app_bar_subtitle">已加载 {certificateCount} 个自定义证书</string>
+    <string name="certificate_screen_empty_state_message">还没加载自定义证书</string>
 
     <!-- Plugin Screen: Secondary Tab Row -->
     <string name="plugin_screen_secondary_tab_row_plugins_label">插件</string>

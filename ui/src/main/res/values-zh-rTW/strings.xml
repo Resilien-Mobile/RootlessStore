@@ -82,6 +82,14 @@
     <string name="plugin_screen_top_app_bar_subtitle">已安裝 {pluginCount} 個外掛</string>
     <string name="plugin_screen_top_app_bar_edit_button">編輯</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">篩選</string>
+    <string name="plugin_screen_top_app_bar_certificate_content_description">憑證</string>
+    <string name="certificate_screen_add_certificate_content_description">新增憑證</string>
+    <string name="plugin_ca_certificate_name_label">憑證名稱</string>
+    <string name="plugin_ca_certificate_select_file_button">選擇 DER 或 PEM 憑證</string>
+    <string name="plugin_ca_certificate_dismiss_button">取消</string>
+    <string name="plugin_ca_certificate_confirm_button">確認</string>
+    <string name="certificate_screen_top_app_bar_subtitle">已載入 {certificateCount} 個自訂憑證</string>
+    <string name="certificate_screen_empty_state_message">尚未載入自訂憑證</string>
 
     <!-- Plugin Screen: Secondary Tab Row -->
     <string name="plugin_screen_secondary_tab_row_plugins_label">外掛</string>

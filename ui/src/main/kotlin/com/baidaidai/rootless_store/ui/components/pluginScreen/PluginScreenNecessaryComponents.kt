@@ -21,6 +21,7 @@ object PluginScreenNecessaryComponents {
     fun PluginScreenTopAppBar(
         onEditClick:()-> Unit = {},
         onFilterClick:()-> Unit = {},
+        onCertificateClick: () -> Unit = {},
         pluginCount: Int = 0,
         scrollBehavior: TopAppBarScrollBehavior
     ){
@@ -44,6 +45,16 @@ object PluginScreenNecessaryComponents {
                 }
             },
             actions = {
+                IconButton(
+                    onClick = onCertificateClick
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.material_symbols_license),
+                        contentDescription = stringResource(
+                            R.string.plugin_screen_top_app_bar_certificate_content_description
+                        )
+                    )
+                }
                 IconButton(
                     onClick = onFilterClick
                 ) {
