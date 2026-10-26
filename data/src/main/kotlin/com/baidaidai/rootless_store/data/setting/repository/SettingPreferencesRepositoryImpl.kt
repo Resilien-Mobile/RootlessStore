@@ -33,7 +33,8 @@ class SettingPreferencesRepositoryImpl @Inject constructor(
                     isPluginStatusNotificationEnabled = preferences[NOTIFY_PLUGIN_STATUS] ?: false,
                     isThirdPartyNotificationPushEnabled = preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] ?: false,
                     isInsecureConnectionAllowed = preferences[ALLOW_INSECURE_CONNECTION] ?: false,
-                    isDotProtectedConnectionEnabled = preferences[USE_DOT_PROTECTED_CONNECTION] ?: false
+                    isDotProtectedConnectionEnabled = preferences[USE_DOT_PROTECTED_CONNECTION] ?: false,
+                    isDeveloperOptionsEnabled = preferences[ENABLE_DEVELOPER_OPTIONS] ?: false
                 )
             }
 
@@ -94,11 +95,18 @@ class SettingPreferencesRepositoryImpl @Inject constructor(
         }
     }
 
+    suspend fun enableDeveloperOptions() {
+        context.rootlessStorePreferencesDataStore.edit { preferences ->
+            preferences[ENABLE_DEVELOPER_OPTIONS] = true
+        }
+    }
+
     private companion object {
         val NOTIFY_PLUGIN_STATUS = booleanPreferencesKey("setting_notify_plugin_status")
         val USE_THIRD_PARTY_NOTIFICATION_PUSH = booleanPreferencesKey("setting_use_third_party_notification_push")
         val ALLOW_INSECURE_CONNECTION = booleanPreferencesKey("setting_allow_insecure_connection")
         val USE_DOT_PROTECTED_CONNECTION = booleanPreferencesKey("setting_use_dot_protected_connection")
         val ENABLE_AUTO_UPDATE = booleanPreferencesKey("setting_enable_auto_update")
+        val ENABLE_DEVELOPER_OPTIONS = booleanPreferencesKey("setting_enable_developer_options")
     }
 }

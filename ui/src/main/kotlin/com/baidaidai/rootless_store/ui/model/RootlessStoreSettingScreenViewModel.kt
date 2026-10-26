@@ -2,6 +2,7 @@ package com.baidaidai.rootless_store.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.baidaidai.rootless_store.application.setting.EnableDeveloperOptionsUseCase
 import com.baidaidai.rootless_store.application.setting.ObserveSettingScreenPreferencesUseCase
 import com.baidaidai.rootless_store.application.setting.SetAutoUpdateEnabledUseCase
 import com.baidaidai.rootless_store.application.setting.SetDotProtectedConnectionEnabledUseCase
@@ -10,11 +11,18 @@ import com.baidaidai.rootless_store.application.setting.SetPluginStatusNotificat
 import com.baidaidai.rootless_store.application.setting.SetThirdPartyNotificationPushEnabledUseCase
 import com.baidaidai.rootless_store.domain.setting.model.SettingScreenPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+data class RootlessStoreSettingScreenUiState(
+    val isAboutDialogVisible: Boolean = false
+)
 
 @HiltViewModel
 class RootlessStoreSettingScreenViewModel @Inject constructor(
@@ -24,7 +32,13 @@ class RootlessStoreSettingScreenViewModel @Inject constructor(
     private val setInsecureConnectionAllowedUseCase: SetInsecureConnectionAllowedUseCase,
     private val setDotProtectedConnectionEnabledUseCase: SetDotProtectedConnectionEnabledUseCase,
     private val setAutoUpdateEnabledUseCase: SetAutoUpdateEnabledUseCase,
+    private val enableDeveloperOptionsUseCase: EnableDeveloperOptionsUseCase,
 ) : ViewModel() {
+
+    private var developerOptionsTapCount = 0
+
+    private val _settingScreenUiState = MutableStateFlow(RootlessStoreSettingScreenUiState())
+    val settingScreenUiState = _settingScreenUiState.asStateFlow()
 
     val settingScreenPreferences: StateFlow<SettingScreenPreferences> =
         observeSettingScreenPreferencesUseCase().stateIn(
@@ -32,6 +46,35 @@ class RootlessStoreSettingScreenViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(1_000),
             initialValue = SettingScreenPreferences()
         )
+
+    fun showAboutDialog() {
+        _settingScreenUiState.update { uiState ->
+            uiState.copy(isAboutDialogVisible = true)
+        }
+    }
+
+    fun dismissAboutDialog() {
+        _settingScreenUiState.update { uiState ->
+            uiState.copy(isAboutDialogVisible = false)
+        }
+    }
+
+    fun onAboutVersionClicked(): Int {
+        if (settingScreenPreferences.value.isDeveloperOptionsEnabled ||
+            developerOptionsTapCount >= 6
+        ) {
+            return 0
+        }
+
+        developerOptionsTapCount++
+        val remainingTaps = 6 - developerOptionsTapCount
+        if (remainingTaps == 0) {
+            viewModelScope.launch {
+                enableDeveloperOptionsUseCase()
+            }
+        }
+        return remainingTaps
+    }
 
     fun setPluginStatusNotificationEnabled(isEnabled: Boolean) {
         viewModelScope.launch {
