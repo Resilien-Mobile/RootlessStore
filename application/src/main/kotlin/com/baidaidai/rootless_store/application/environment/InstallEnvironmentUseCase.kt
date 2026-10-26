@@ -1,6 +1,7 @@
 package com.baidaidai.rootless_store.application.environment
 
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
+import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.environment.gateway.EnvironmentGatewayImpl
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentStatusRepositoryImpl
@@ -14,10 +15,20 @@ import javax.inject.Inject
 import java.io.File
 
 class InstallEnvironmentUseCase @Inject constructor(
+    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val environmentGatewayImpl: EnvironmentGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val environmentStatusRepositoryImpl: EnvironmentStatusRepositoryImpl
 ) {
+
+    suspend operator fun invoke(): Result<Unit, PluginError> {
+        val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+            .getExternalAppPackageCacheDirectoryFile()
+        val localPackageFile = File(packageDirectory, "package.zip")
+
+        return invoke(localPackageFile)
+    }
+
     suspend operator fun invoke(packageFile: File): Result<Unit, PluginError> {
         val environmentManifest: EnvironmentManifest = environmentGatewayImpl
             .parseEnvironmentManifest(packageFile)

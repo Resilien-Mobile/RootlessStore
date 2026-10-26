@@ -5,6 +5,7 @@ import android.util.Log
 import com.baidaidai.rootless_store.data.R
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.signature.repository.CaCertificateRepositoryImpl
+import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -88,7 +89,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
      *
      *
      */
-    private suspend fun hasTrustedContentSignature(
+    internal suspend fun hasTrustedContentSignature(
         packageBytes: ByteArray,
         signatureBytes: ByteArray
     ): Boolean {
@@ -239,7 +240,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
      * @since 2026.10.26
      * @version 0.1.0
      */
-    private suspend fun loadTrustedCaCertificates(): Set<X509Certificate> {
+    internal suspend fun loadTrustedCaCertificates(): Set<X509Certificate> {
         Log.d(logTag, "Loading built-in and enabled custom CA certificates")
 
         val trustedCaCertificates = mutableSetOf<X509Certificate>()
@@ -291,7 +292,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
     }
 
     // 将 CMS 携带的中间证书链构建到任一已启用的 CA 信任锚。
-    private fun hasTrustedCertificatePath(
+    internal fun hasTrustedCertificatePath(
         signerCertificate: X509Certificate,
         trustedCaCertificates: Set<X509Certificate>
     ): Boolean {
@@ -338,6 +339,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
 
         if (pluginManifest != null) {
             return PackageSignatureInfo(
+                packageType = LocalPackageType.Plugin,
                 displayName = pluginManifest.pluginRenderingName,
                 author = pluginManifest.author,
                 validSigner = signatureStatus == PackageSignatureStatus.Trusted,
@@ -354,6 +356,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
             ?: error("Signed package did not contain a supported Plugin or Environment manifest")
 
         return PackageSignatureInfo(
+            packageType = LocalPackageType.Environment,
             displayName = environmentManifest.environmentRenderingName,
             author = environmentManifest.author,
             validSigner = signatureStatus == PackageSignatureStatus.Trusted,
