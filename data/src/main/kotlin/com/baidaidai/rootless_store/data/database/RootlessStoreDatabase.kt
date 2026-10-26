@@ -5,6 +5,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.baidaidai.rootless_store.data.codebrick.database.CodeBrickDao
 import com.baidaidai.rootless_store.data.codebrick.database.CodeBrickEntity
+import com.baidaidai.rootless_store.data.signature.database.CaCertificateDao
+import com.baidaidai.rootless_store.data.signature.database.CaCertificateEntity
 import com.baidaidai.rootless_store.data.database.converter.RoomCollectionTypeConverters
 import com.baidaidai.rootless_store.data.execution.database.PluginExecutionDao
 import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntity
@@ -30,7 +32,8 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         EnvironmentEntity::class,
         EnvironmentStatusEntity::class,
         NotificationPreferenceEntity::class,
-        CodeBrickEntity::class
+        CodeBrickEntity::class,
+        CaCertificateEntity::class
         // 其它表也一起加进来
     ],
     version = 5,
@@ -46,6 +49,7 @@ abstract class RootlessStoreDatabase : RoomDatabase() {
     abstract fun pluginExecutionDao(): PluginExecutionDao
     abstract fun notificationPreferenceDao(): NotificationPreferenceDao
     abstract fun codeBrickDao(): CodeBrickDao
+    abstract fun caCertificateDao(): CaCertificateDao
 
     // 其它 DAO 也在这里暴露
 }
