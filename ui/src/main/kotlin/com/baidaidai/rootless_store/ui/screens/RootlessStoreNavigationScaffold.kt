@@ -88,6 +88,7 @@ fun RootlessStoreNavigationScaffold(
     val pluginCount by pluginScreenViewModel.pluginCount.collectAsState()
     val pluginSourceCount by sourceScreenViewModel.pluginSourceCount.collectAsState()
     val pluginScreenUiState by pluginScreenViewModel.pluginScreenUiState.collectAsState()
+    val settingScreenPreferences by settingScreenViewModel.settingScreenPreferences.collectAsState()
 
     // Navigation
     val navigationBackStack = rememberNavBackStack(HomeScreenKey)
@@ -211,6 +212,7 @@ fun RootlessStoreNavigationScaffold(
                 when(currentDestination){
                     PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenTopAppBar(
                         pluginCount = pluginCount,
+                        isCertificateEnabled = settingScreenPreferences.isDeveloperOptionsEnabled,
                         onEditClick = {
                             pluginScreenViewModel.toggleBadgeVisibility()
                         },
