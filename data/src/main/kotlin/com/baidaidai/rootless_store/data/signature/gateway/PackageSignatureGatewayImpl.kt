@@ -19,6 +19,10 @@ import org.bouncycastle.openssl.PEMParser
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStreamReader
+import java.security.cert.CertPathBuilder
+import java.security.cert.PKIXBuilderParameters
+import java.security.cert.TrustAnchor
+import java.security.cert.X509CertSelector
 import java.security.cert.X509Certificate
 import javax.inject.Inject
 
@@ -34,10 +38,12 @@ class PackageSignatureGatewayImpl @Inject constructor(
         .setProvider(bouncyCastleProvider)  // 面向 Java API 的证书转换器
 
     // 判断本地外层包是否带签名，并校验其 package.zip 内容与证书链。
-    fun resolvePackageSignature(packageContainerFile: File): PackageSignatureStatus {
+    suspend fun resolvePackageSignature(packageContainerFile: File): PackageSignatureStatus {
+
         val signatureBytes = androidFileSystemReadOperatorGatewayImpl
             .loadBytesInZip(packageContainerFile, "sign.p7s")
             ?: return PackageSignatureStatus.Unsigned
+
         val packageBytes = androidFileSystemReadOperatorGatewayImpl
             .loadBytesInZip(packageContainerFile, "package.zip")
 
@@ -54,15 +60,47 @@ class PackageSignatureGatewayImpl @Inject constructor(
         }
     }
 
-    // 第二阶段：校验 package.zip 的 CMS 内容签名，并使用内置 CA 公钥验证开发者证书。
-    // 不构建 PKIX 证书链，只接受由内置证书直接签发的开发者证书。
-    private fun hasTrustedContentSignature(
+    /**
+     * 第二阶段：校验 package.zip 的 CMS 内容签名，并将开发者证书链验证到受信任 CA
+     *
+     * 这个方法目前只支持使用 PEM 格式的证书进行校验，无法保证 DER 格式的证书一定按预想的方式进行
+     *
+     * @param packageBytes 插件包 package.zip 的 ByteArray 流
+     * @param signatureBytes CMS 签名文件 sign.p7s 的 ByteArray 流
+     * @param trustedCaCertificates 可信赖的根证书列表，包括但不限于内部证书、自定义根证书
+     *
+     * @return Boolean - 用于返回结果，是否插件包 package.zip 被合法地签名了
+     *
+     * @since 2026.10.26
+     * @version 0.1.0
+     *
+     *
+     *
+     */
+    private suspend fun hasTrustedContentSignature(
         packageBytes: ByteArray,
         signatureBytes: ByteArray
     ): Boolean {
-        return runCatching {
 
-            // 将 package.zip 作为待验证内容，结合 sign.p7s 解析 CMS SignedData。
+        val trustedCaCertificates = loadTrustedCaCertificates()
+
+        Log.d(
+            logTag,
+            "Starting CMS validation. packageBytes=${packageBytes.size}, " +
+                "signatureBytes=${signatureBytes.size}, trustAnchors=${trustedCaCertificates.size}"
+        )
+
+        val validationResult = runCatching {
+
+            debugPCKS7FileFormat(signatureBytes)
+
+            /**
+             * 之前将 PEM 格式的 sign.p7s 原文直接交给 CMSSignedData 按 ASN.1 解析，
+             * 导致开头的 '-' 被误读为 ASN.1 标签，并在验签前抛出 "unknown tag 13"
+             *
+             * 这里先将 PEM 解析为 CMS ContentInfo，再与 package.zip 的分离内容组合，
+             * 以便继续进行签名校验。
+             */
             val contentInfo = PEMParser(
                 InputStreamReader(
                     ByteArrayInputStream(signatureBytes)
@@ -71,91 +109,193 @@ class PackageSignatureGatewayImpl @Inject constructor(
                 pemParser.readObject() as? ContentInfo
             } ?: throw IllegalArgumentException("sign.p7s PEM does not contain a CMS ContentInfo")
 
-            val signedData = CMSSignedData(
+            val cmsData = CMSSignedData(
                 CMSProcessableByteArray(packageBytes),
                 contentInfo
             )
+            val certificates = cmsData.certificates
+            val signers = cmsData.signerInfos.signers
 
-            // 获取 CMS 中所有签名者，不限制数量。
-            // 只要其中任意一位的签名受到内置 CA 信任，便可通过验证。
-            val signers = signedData.signerInfos.signers
-            if (signers.isEmpty()) return@runCatching false
+            // 获取 CMS 中所有签名者
+            check(signers.isNotEmpty()) {
+                "CMS contains no signers"
+            }
+            check(trustedCaCertificates.isNotEmpty()) {
+                "No trusted CA certificates are available"
+            }
 
-            // 加载 Rootless Store 内置的可信 CA 证书。
-            // 内置 CA 即使由上级 CA 签发，也不需要继续向上验证。
-            val trustedCertificate = loadTrustedCertificate()
+            // 将 CMS(p7s文件) 携带的证书转换为 Java X509Certificate
 
-            // 将 CMS 携带的证书转换为 Java X509Certificate。
-            val certificateConverter = JcaX509CertificateConverter()
-                .setProvider(bouncyCastleProvider)
-
-            // 遍历 CMS 携带的候选证书，不使用 sid 限定证书匹配。
-            // 只要某张由内置 CA 直接签发的开发者证书可以验证任意一个 CMS 签名，即接受。
-            // 核心验证签名算法
-            signedData
-                .certificates
+            /**
+             * BC API，拿到证书链，方便后续转化和校验
+             */
+            val cmsCertificateList = certificates
                 .getMatches(null)
-                .any { certificateHolder ->
-                    runCatching {
-                        val candidate = certificateConverter.getCertificate(
-                            certificateHolder
-                        )
+                .toList()
 
-                        // 检查候选证书的颁发者是否为内置 CA。
-                        // 名称匹配不代表签名合法，还需要使用 CA 公钥验证。
-                        require(
-                            candidate.issuerX500Principal ==
-                                    trustedCertificate.subjectX500Principal
-                        )
+            val cmsCertificateListJava = cmsCertificateList.mapNotNull { certificateContent ->  // Java API 证书链
+                runCatching {
+                    certificateConverter.getCertificate(certificateContent)
+                }.getOrElse { throwable ->
+                    Log.w(logTag, "Could not convert a CMS certificate", throwable)
 
-                        // 开发者证书应在有效期内，并且不能是 CA 证书。
-                        candidate.checkValidity()
-                        require(candidate.basicConstraints == -1)
-
-                        // 如果有 KeyUsage 扩展，则必须允许 digitalSignature。
-                        val keyUsage = candidate.keyUsage
-                        require(
-                            keyUsage == null || (keyUsage.isNotEmpty() && keyUsage[0])
-                        )
-
-                        // 第一步：使用内置 CA 的公钥验证开发者证书的数字签名。
-                        // 不进行 PKIX 证书链构建。
-                        candidate.verify(
-                            trustedCertificate.publicKey,
-                            bouncyCastleProvider
-                        )
-
-                        // 第二步：使用开发者证书的公钥，验证 CMS 数字签名。
-                        // 同时检查 sign.p7s 与 package.zip 的内容是否匹配。
-                        // 任意一个签名验证成功即可，不要求所有 CMS 签名者可信。
-                        signers.any { signerInformation ->
-                            runCatching {
-                                signerInformation.verify(
-                                    JcaSimpleSignerInfoVerifierBuilder()
-                                        .setProvider(bouncyCastleProvider)
-                                        .build(candidate)
-                                )
-                            }.getOrDefault(false)
-                        }
-                    }.getOrDefault(false)
+                    null
                 }
-        }.getOrDefault(false)
-    }
+            }
+            Log.d(
+                logTag,
+                "CMS parsed. signers=${signers.size}, " +
+                    "certificateHolders=${cmsCertificateList.size}, " +
+                    "convertedCertificates=${cmsCertificateListJava.size}"
+            )
 
-    // 加载 Rootless Store 内置的信任锚点证书。
-    private fun loadTrustedCertificate(): X509Certificate {
-        context.resources.openRawResource(R.raw.resilienmobile).use { inputStream ->
-            PEMParser(InputStreamReader(inputStream)).use { pemParser ->
+            // 每个 CMS 签名只使用其 signer identifier 对应的证书进行验证。
+            signers
+                .withIndex()
+                .any { (signerIndex, signerInformation) ->
 
-                val certificateHolder = pemParser.readObject() as X509CertificateHolder
+                    /**
+                     * 如果 p7s 文件里，任意一个签名者，都不能和 Rootless Store 保存的证书信息匹配上
+                     * 那就直接跳出去吧
+                     *
+                     * 这一步只浅筛，是否有有效签名者，不进行内容计算
+                     *
+                     * Holder只是指针引用，保存了 Cert 的原始记录
+                     */
+                    val signerCertificateHolder = cmsCertificateList
+                        .firstOrNull { certificateHolder ->
+                            signerInformation.sid.match(certificateHolder)
+                        }
+                        ?: return@any false
 
-                // 转换成 Java 可读懂的证书 API
-                return JcaX509CertificateConverter()
-                    .setProvider(bouncyCastleProvider)
-                    .getCertificate(certificateHolder)
+                    runCatching {
+
+                        val signerCertificate = certificateConverter.getCertificate(
+                            signerCertificateHolder
+                        )
+
+                        // 签名者必须是有效期内的非 CA 证书，并允许数字签名用途。
+                        signerCertificate.checkValidity()
+
+                        // 验证 CMS 内容签名
+                        val contentSignatureValid = signerInformation.verify(
+                            JcaSimpleSignerInfoVerifierBuilder()
+                                .setProvider(bouncyCastleProvider)
+                                .build(signerCertificate)
+                        )
+                        check(contentSignatureValid){
+                            "CMS content signature is invalid for signer index $signerIndex"
+                        }
+
+                        val trustedCertificatePathFound = hasTrustedCertificatePath(
+                            signerCertificate = signerCertificate,
+                            trustedCaCertificates = trustedCaCertificates
+                        )
+                        check(trustedCertificatePathFound){
+                            "No trusted certificate path for signer index $signerIndex"
+                        }
+
+                        true
+
+                    }.onFailure { throwable ->
+
+                        Log.w(logTag, "Signer validation failed at index $signerIndex", throwable)
+
+                    }.getOrDefault(false)
 
             }
+        }.onFailure { throwable ->
+
+            Log.e(logTag, "CMS validation failed before signer verification", throwable)
+
         }
+
+        val isTrusted = validationResult.getOrDefault(false)
+
+        Log.i(logTag, "CMS validation result: ${if (isTrusted) "trusted" else "untrusted"}")
+
+        return isTrusted
+
+    }
+
+    // 将内置 CA 与用户启用的 DER 证书合并为本次验证使用的信任锚集合。
+    private suspend fun loadTrustedCaCertificates(): Set<X509Certificate> {
+        Log.d(logTag, "Loading built-in and enabled custom CA certificates")
+        val certificateConverter = JcaX509CertificateConverter()
+            .setProvider(bouncyCastleProvider)
+        val trustedCaCertificates = mutableSetOf<X509Certificate>()
+
+        try {
+            context.resources.openRawResource(R.raw.resilienmobile).use { inputStream ->
+                PEMParser(InputStreamReader(inputStream)).use { pemParser ->
+                    val certificateHolder = pemParser.readObject() as X509CertificateHolder
+                    trustedCaCertificates += certificateConverter.getCertificate(certificateHolder)
+                }
+            }
+            Log.d(logTag, "Loaded built-in CA certificate")
+        } catch (exception: Exception) {
+            Log.e(logTag, "Could not load built-in CA certificate", exception)
+            throw exception
+        }
+
+        val enabledCaCertificates = try {
+            caCertificateRepositoryImpl.getEnabledCaCertificates()
+        } catch (exception: Exception) {
+            Log.e(logTag, "Could not read enabled CA certificates from repository", exception)
+            throw exception
+        }
+        Log.d(logTag, "Repository returned ${enabledCaCertificates.size} enabled CA certificates")
+
+        enabledCaCertificates.forEachIndexed { index, caCertificate ->
+            runCatching {
+                val certificate = certificateConverter.getCertificate(
+                    X509CertificateHolder(caCertificate.derBytes)
+                )
+
+                certificate.checkValidity()
+
+                trustedCaCertificates += certificate
+            }.onSuccess {
+                Log.d(logTag, "Loaded enabled CA certificate at index $index")
+            }.onFailure { throwable ->
+                Log.w(logTag, "Skipped invalid enabled CA certificate at index $index", throwable)
+            }
+        }
+
+        Log.i(logTag, "Loaded ${trustedCaCertificates.size} usable CA trust anchors")
+        return trustedCaCertificates
+    }
+
+    // 将 CMS 携带的中间证书链构建到任一已启用的 CA 信任锚。
+    private fun hasTrustedCertificatePath(
+        signerCertificate: X509Certificate,
+        trustedCaCertificates: Set<X509Certificate>
+    ): Boolean {
+
+        return runCatching {
+
+            val trustAnchors = trustedCaCertificates.map {
+                TrustAnchor(it, null)
+            }.toSet()
+
+            val selector = X509CertSelector().apply {
+                certificate = signerCertificate
+            }
+
+            val parameters = PKIXBuilderParameters(
+                trustAnchors,
+                selector
+            ).apply {
+                isRevocationEnabled = false
+            }
+
+            CertPathBuilder.getInstance(
+                "PKIX",
+                bouncyCastleProvider
+            ).build(parameters)
+
+        }.isSuccess
+
     }
 
     /**

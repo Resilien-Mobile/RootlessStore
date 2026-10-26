@@ -49,8 +49,7 @@ class PrepareLocalPackageInstallUseCase @Inject constructor(
         }
     }
 
-
-    private fun preparePackage(uri: Uri): Result<PackageSignatureInfo?, PluginError> {
+    private suspend fun preparePackage(uri: Uri): Result<PackageSignatureInfo?, PluginError> {
 
         // 准备稳定的 cache/Package 工作区，并先将 SAF 内容落到本地文件。
         val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
