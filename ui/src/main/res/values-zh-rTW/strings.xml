@@ -268,6 +268,17 @@
 
     <!-- Setting Screen: About -->
     <string name="setting_screen_about_rootless_store_headline">關於 Rootless Store</string>
+    <string name="setting_screen_about_rootless_store_supporting">檢視 Rootless Store 資訊</string>
+    <string name="setting_screen_about_app_title">RootlessStore</string>
+    <string name="setting_screen_about_version">版本：%1$s</string>
+    <string name="setting_screen_about_source_prefix">"在 "</string>
+    <string name="setting_screen_about_github_label">GitHub</string>
+    <string name="setting_screen_about_source_suffix">" 查看原始碼"</string>
+    <string name="setting_screen_about_qq_label">QQ</string>
+    <string name="setting_screen_about_telegram_label">Telegram</string>
+    <string name="setting_screen_about_twitter_label">Twitter</string>
+    <string name="setting_screen_developer_options_remaining_taps">再點擊 %1$d 次即可開啟開發者選項</string>
+    <string name="setting_screen_developer_options_enabled">您已是開發者</string>
 
     <!-- Third Party Notification Screen: Top App Bar -->
     <string name="third_party_notification_screen_top_app_bar_title">第三方通知</string>
