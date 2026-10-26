@@ -1,4 +1,7 @@
 package com.baidaidai.rootless_store.ui.theme
+import androidx.compose.material3.ListItemColors
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF006877)
@@ -239,6 +242,37 @@ val WarningColorSet = ColorSet(
     )
 )
 
+@Composable
+fun getListItemColors(): ListItemColors {
+
+    return ListItemColors(
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        leadingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        trailingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        overlineContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        supportingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        disabledContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledLeadingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledTrailingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledOverlineContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        disabledSupportingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        selectedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedLeadingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedTrailingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedOverlineContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        selectedSupportingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        draggedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        draggedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        draggedLeadingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        draggedTrailingContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        draggedOverlineContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        draggedSupportingContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    )
+
+}
 
 
 
