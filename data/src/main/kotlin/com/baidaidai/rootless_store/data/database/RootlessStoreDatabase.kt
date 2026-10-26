@@ -36,7 +36,7 @@ import com.baidaidai.rootless_store.data.source.database.PluginSourceEntity
         CaCertificateEntity::class
         // 其它表也一起加进来
     ],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 @TypeConverters(RoomCollectionTypeConverters::class)
