@@ -1,11 +1,14 @@
 package com.baidaidai.rootless_store.data.signature.gateway
 
 import android.content.Context
+import android.util.Log
 import com.baidaidai.rootless_store.data.R
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
+import com.baidaidai.rootless_store.data.signature.repository.CaCertificateRepositoryImpl
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
+import org.bouncycastle.asn1.cms.ContentInfo
 import org.bouncycastle.cert.X509CertificateHolder
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter
 import org.bouncycastle.cms.CMSProcessableByteArray
@@ -13,6 +16,7 @@ import org.bouncycastle.cms.CMSSignedData
 import org.bouncycastle.cms.jcajce.JcaSimpleSignerInfoVerifierBuilder
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.bouncycastle.openssl.PEMParser
+import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStreamReader
 import java.security.cert.X509Certificate
@@ -20,9 +24,14 @@ import javax.inject.Inject
 
 class PackageSignatureGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl
+    private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
+    private val caCertificateRepositoryImpl: CaCertificateRepositoryImpl
 ) {
     private val bouncyCastleProvider = BouncyCastleProvider()
+    private val logTag = "PackageSignatureGateway"
+    // 这个只是转换器，给 Kotlin 使用的 Java API 证书
+    private val certificateConverter = JcaX509CertificateConverter()
+        .setProvider(bouncyCastleProvider)  // 面向 Java API 的证书转换器
 
     // 判断本地外层包是否带签名，并校验其 package.zip 内容与证书链。
     fun resolvePackageSignature(packageContainerFile: File): PackageSignatureStatus {
@@ -178,5 +187,68 @@ class PackageSignatureGatewayImpl @Inject constructor(
             validSigner = signatureStatus == PackageSignatureStatus.Trusted,
             isSigned = true
         )
+    }
+
+    private fun debugPCKS7FileFormat(
+        signatureBytes: ByteArray
+    ){
+        // 检查 sign.p7s 的真实编码格式
+        val prefix = signatureBytes.take(32)
+
+        val prefixHex = prefix.joinToString(" ") { byte ->
+            "%02X".format(byte.toInt() and 0xFF)
+        }
+
+        val prefixAscii = prefix.joinToString("") { byte ->
+            val code = byte.toInt() and 0xFF
+            if (code in 32..126) code.toChar().toString() else "."
+        }
+
+        val formatHint = when {
+            signatureBytes.size >= 2 &&
+                    signatureBytes[0] == 0x30.toByte() ->
+                "ASN.1 SEQUENCE candidate"
+
+            prefixAscii.startsWith("-----BEGIN") ->
+                "PEM candidate"
+
+            signatureBytes.size >= 2 &&
+                    signatureBytes[0] == 0x50.toByte() &&
+                    signatureBytes[1] == 0x4B.toByte() ->
+                "ZIP candidate"
+
+            else ->
+                "Unknown (possibly Base64 or another format)"
+        }
+
+        Log.d(
+            logTag,
+            "sign.p7s header hex=$prefixHex ascii=$prefixAscii format=$formatHint"
+        )
+    }
+
+    companion object {
+        // 判断证书内容是否为 PEM 编码。
+        fun isPemCertificate(certificateBytes: ByteArray): Boolean {
+            val certificateText = certificateBytes.toString(Charsets.US_ASCII)
+            return certificateText
+                .trimStart('\uFEFF', ' ', '\t', '\r', '\n')
+                .startsWith("-----BEGIN CERTIFICATE-----")
+        }
+
+        // 使用 Bouncy Castle 将 PEM X.509 证书解析为 DER 编码。
+        fun resolvePemCertificateToDer(certificateBytes: ByteArray): ByteArray {
+            val pemReader = InputStreamReader(
+                ByteArrayInputStream(certificateBytes),
+                Charsets.US_ASCII
+            )
+
+            return PEMParser(pemReader).use { pemParser ->
+                val certificateHolder = pemParser.readObject() as? X509CertificateHolder
+                    ?: error("PEM content does not contain an X.509 certificate")
+
+                certificateHolder.encoded
+            }
+        }
     }
 }
