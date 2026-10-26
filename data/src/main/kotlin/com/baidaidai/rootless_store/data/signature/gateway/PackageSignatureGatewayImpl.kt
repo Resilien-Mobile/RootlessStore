@@ -85,9 +85,6 @@ class PackageSignatureGatewayImpl @Inject constructor(
      *
      * @since 2026.10.26
      * @version 0.1.0
-     *
-     *
-     *
      */
     internal suspend fun hasTrustedContentSignature(
         packageBytes: ByteArray,
@@ -171,8 +168,6 @@ class PackageSignatureGatewayImpl @Inject constructor(
                      * 那就直接跳出去吧
                      *
                      * 这一步只浅筛，是否有有效签名者，不进行内容计算
-                     *
-                     * Holder只是指针引用，保存了 Cert 的原始记录
                      */
                     val signerCertificateHolder = cmsCertificateList
                         .firstOrNull { certificateHolder ->
@@ -186,7 +181,6 @@ class PackageSignatureGatewayImpl @Inject constructor(
                             signerCertificateHolder
                         )
 
-                        // 签名者必须是有效期内的非 CA 证书，并允许数字签名用途。
                         signerCertificate.checkValidity()
 
                         // 验证 CMS 内容签名
@@ -291,7 +285,18 @@ class PackageSignatureGatewayImpl @Inject constructor(
 
     }
 
-    // 将 CMS 携带的中间证书链构建到任一已启用的 CA 信任锚。
+    /**
+     * 检查签名者证书能否构建到受信任的 CA 锚点。
+     *
+     * 使用 Bouncy Castle 的 PKIX CertPathBuilder，以签名者证书作为目标，
+     * 尝试从提供的信任锚集合中构建证书路径；此处不执行证书吊销检查。
+     *
+     * @param signerCertificate CMS 签名者证书
+     * @param trustedCaCertificates 可作为信任锚的 CA 证书集合
+     * @return 成功构建证书路径时为 true，否则为 false
+     * @since 2026.10.26
+     * @version 0.1.0
+     */
     internal fun hasTrustedCertificatePath(
         signerCertificate: X509Certificate,
         trustedCaCertificates: Set<X509Certificate>
