@@ -51,6 +51,7 @@ import com.baidaidai.rootless_store.ui.navigation.model.ThirdPartyNotificationSc
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
 import com.baidaidai.rootless_store.ui.components.codeBrickScreen.CodeBrickScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.executeScreen.ExecuteScreenNecessaryComponents
+import com.baidaidai.rootless_store.ui.components.executeScreen.ShizukuPermissionDialog
 import com.baidaidai.rootless_store.ui.components.marketScreen.MarketScreenNecessaryComponents
 import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginBottomSheetContent
 import com.baidaidai.rootless_store.ui.components.pluginScreen.PluginScreenNecessaryComponents
@@ -188,6 +189,7 @@ fun RootlessStoreNavigationScaffold(
         }else{
             resolveExecuteScreenViewModel("abc")
         }
+    val executionError by currentExecuteViewModel.executionError.collectAsState()
 
     Row(modifier = Modifier.fillMaxSize()) {
         if(rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Expanded){
@@ -392,6 +394,23 @@ fun RootlessStoreNavigationScaffold(
             // Application Error Dialog
             if (currentError is RootlessStoreError){
                 StartScreenErrorDialog(sourceScreenViewModel, currentError)
+            }
+
+            if (executionError != null) {
+                ShizukuPermissionDialog(
+                    errorCompanion = executionError?.errorCompanion.orEmpty(),
+                    onGo = {
+                        currentExecuteViewModel.clearExecutionError()
+                        navigationBackStack.removeLastOrNull()
+                        context.startActivity(
+                            Intent(context, ShizukuActivity::class.java)
+                        )
+                    },
+                    onDismiss = {
+                        currentExecuteViewModel.clearExecutionError()
+                        navigationBackStack.removeLastOrNull()
+                    }
+                )
             }
 
             NavDisplay(

@@ -29,6 +29,17 @@ class ShizukuPermissionGatewayImpl @Inject constructor() {
     }
 
     /**
+     * 检查 Shizuku 服务是否可用，且当前 App 是否已获得 Shizuku 权限。
+     */
+    fun canUseShizuku(): Boolean {
+        val shizukuBinderAvailable = Shizuku.pingBinder()
+        if (!shizukuBinderAvailable) return false
+
+        val appHasShizukuPermission = hasShizukuPermission()
+        return appHasShizukuPermission
+    }
+
+    /**
      * Check Shizuku Permission Granted,
      * Or Try to Access Shizuku Permission
      */
