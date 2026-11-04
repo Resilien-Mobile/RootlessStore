@@ -32,12 +32,4 @@ class StoreStatusRepositoryImpl @Inject constructor(
 
     fun isShizukuAvailable(): Boolean = storeStatusGatewayImpl.isShizukuAvailable()
 
-    fun observeExecutionContextPreference(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeExecutionContextPreference()
-
-    suspend fun setExecutionContextPreference(executionContext: ExecutionContext) = storeStatusGatewayImpl.setExecutionContextPreference(executionContext)
-
-    fun observeExecutionContextChooserEnabled(): Flow<Boolean> = storeStatusGatewayImpl.observeExecutionContextChooserEnabled()
-
-    suspend fun setExecutionContextChooserEnabled(isEnabled: Boolean) = storeStatusGatewayImpl.setExecutionContextChooserEnabled(isEnabled)
-
 }

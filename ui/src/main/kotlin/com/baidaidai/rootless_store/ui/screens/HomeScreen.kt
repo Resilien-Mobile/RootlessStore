@@ -20,7 +20,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 import com.baidaidai.rootless_store.ui.adaptive.RootlessStoreWindowSize
-import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenContextSwitchDialog
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenCpuDashboardCard
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeScreenNetworkDashboard
 import com.baidaidai.rootless_store.ui.components.homeScreen.HomeStatusOverview
@@ -47,7 +46,6 @@ fun HomeScreen(
     val kernelVersion by homeScreenViewModel.kernelVersion.collectAsState()
     val androidPlatformVersion by homeScreenViewModel.androidPlatformVersion.collectAsState()
     val executionContext by homeScreenViewModel.executionContext.collectAsState()
-    val isContextDialogVisible by homeScreenViewModel.isContextDialogVisible.collectAsState()
     val latestVersionTag by homeScreenViewModel.latestVersionTag.collectAsState()
     val cpuDashboardConfig by homeScreenViewModel.cpuDashboardConfig.collectAsState()
     val networkDashboardConfig by homeScreenViewModel.networkDashboardConfig.collectAsState()
@@ -63,15 +61,6 @@ fun HomeScreen(
         storageStatus = storageStatus,
         temperatureStatus = temperatureStatus
     )
-
-    if (isContextDialogVisible){
-        HomeScreenContextSwitchDialog(
-            onDismissRequest = homeScreenViewModel::toggleContextDialogVisibility,
-            homeScreenViewModel = homeScreenViewModel,
-            onApplyExecutionContext = homeScreenViewModel::setExecutionContextPreference,
-            onResetExecutionContextPreference = homeScreenViewModel::resetExecutionContextPreference
-        )
-    }
 
     if(rootlessStoreWidthWindowSize == RootlessStoreWindowSize.Compact){
         LazyColumn(
@@ -102,8 +91,7 @@ fun HomeScreen(
                 /* Device Status Overview */
                 HomeStatusOverview(
                     deviceStatus = deviceStatusSummary,
-                    onOpenShizukuSetup = onOpenShizukuSetup,
-                    onOpenExecutionContextChooser = homeScreenViewModel::toggleContextDialogVisibility
+                    onOpenShizukuSetup = onOpenShizukuSetup
                 )
             }
 
@@ -142,7 +130,6 @@ fun HomeScreen(
             HomeStatusOverview(
                 deviceStatus = deviceStatusSummary,
                 onOpenShizukuSetup = onOpenShizukuSetup,
-                onOpenExecutionContextChooser = homeScreenViewModel::toggleContextDialogVisibility,
                 modifier = resolveBasicWidthModifier()
             )
 

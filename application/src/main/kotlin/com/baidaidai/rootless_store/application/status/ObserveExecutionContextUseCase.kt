@@ -23,7 +23,6 @@ class ObserveExecutionContextUseCase @Inject constructor(
 
         while (true){
 
-            val isExecutionContextChooserEnabled = storeStatusRepositoryImpl.observeExecutionContextChooserEnabled().first()
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
                 if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
@@ -34,14 +33,7 @@ class ObserveExecutionContextUseCase @Inject constructor(
                 }
             val seLinuxStatus = storeStatusRepositoryImpl.getSeLinuxStatus()
 
-            val executionContextPreference = if (isExecutionContextChooserEnabled) storeStatusRepositoryImpl.observeExecutionContextPreference().first() else null
-
             val executionContext = when {
-                (executionContextPreference != null) -> {
-                    Log.d("ExecutionContext", "Now At ContextPreference")
-                    Log.d("ExecutionContext", executionContextPreference.toString())
-                    executionContextPreference
-                }
                 isRoot -> {
                     Log.d("ExecutionContext", "Root")
                     ExecutionContext.ROOTD

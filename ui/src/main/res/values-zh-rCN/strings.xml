@@ -34,12 +34,6 @@
     <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">了解如何开发 Rootless Store 插件</string>
     <string name="home_screen_cpu_dashboard_pressure_label">负载</string>
 
-    <!-- Home Screen: Context Switch Dialog -->
-    <string name="home_screen_context_switch_dialog_title">切换执行环境</string>
-    <string name="home_screen_context_switch_dialog_revert_button">默认</string>
-    <string name="home_screen_context_switch_dialog_cancel_button">取消</string>
-    <string name="home_screen_context_switch_dialog_confirm_button">确认</string>
-
     <!-- Shizuku ADB Screen: Top App Bar -->
     <string name="shizuku_adb_screen_top_app_bar_title">Shizuku 授权</string>
 

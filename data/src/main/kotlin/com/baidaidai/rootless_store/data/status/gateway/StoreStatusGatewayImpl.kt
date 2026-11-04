@@ -1,12 +1,6 @@
 package com.baidaidai.rootless_store.data.status.gateway
 
-import android.content.Context
 import android.util.Log
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.baidaidai.rootless_store.data.datastore.rootlessStorePreferencesDataStore
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
 import com.baidaidai.rootless_store.data.status.datasource.AndroidPlatformVersionDataSource
@@ -26,13 +20,9 @@ import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 import com.baidaidai.rootless_store.domain.status.model.TemperatureStatus
 import com.topjohnwu.superuser.Shell
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import java.io.IOException
 import javax.inject.Inject
 import kotlin.time.Duration
 
@@ -46,11 +36,8 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
-    private val networkStatusDataSource: NetworkStatusDataSource,
-    @ApplicationContext context: Context
+    private val networkStatusDataSource: NetworkStatusDataSource
 ) {
-
-    private val dataStore = context.rootlessStorePreferencesDataStore
 
     // Status
     fun observeMemoryStatus(): Flow<MemoryStatus> = flow {
@@ -164,52 +151,6 @@ class StoreStatusGatewayImpl @Inject constructor(
 
     fun findVpnNetworkInterfaceName(): String? {
         return networkStatusDataSource.findVpnNetworkInterfaceName()
-    }
-
-    // Preference
-    fun observeExecutionContextPreference(): Flow<ExecutionContext> {
-        return dataStore.data
-            .catch { error ->
-                if (error is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw error
-                }
-            }
-            .map { preference ->
-                preference[EXECUTION_CONTEXT]?.let { ExecutionContext.valueOf(it) } ?: ExecutionContext.LIMITED
-            }
-    }
-
-    suspend fun setExecutionContextPreference(executionContext: ExecutionContext) {
-        dataStore.edit { preference ->
-            preference[EXECUTION_CONTEXT] = executionContext.name
-        }
-    }
-
-    fun observeExecutionContextChooserEnabled(): Flow<Boolean> {
-        return dataStore.data
-            .catch { error ->
-                if (error is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    throw error
-                }
-            }
-            .map { preference ->
-                preference[EXECUTION_CONTEXT_CHOOSER_ENABLED] ?: false
-            }
-    }
-
-    suspend fun setExecutionContextChooserEnabled(isEnabled: Boolean) {
-        dataStore.edit { preference ->
-            preference[EXECUTION_CONTEXT_CHOOSER_ENABLED] = isEnabled
-        }
-    }
-
-    private companion object {
-        val EXECUTION_CONTEXT = stringPreferencesKey("execute_context")
-        val EXECUTION_CONTEXT_CHOOSER_ENABLED = booleanPreferencesKey("enable_chooser")
     }
 
 }
