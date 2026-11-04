@@ -25,7 +25,7 @@ class ObserveExecutionContextUseCase @Inject constructor(
 
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
+                if (!isRoot && ShizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
                     shizukuUserServiceGatewayImpl.startShizukuUserService()
                     true
                 } else {

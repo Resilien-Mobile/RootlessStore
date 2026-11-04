@@ -12,16 +12,6 @@ class ShizukuPermissionGatewayImpl @Inject constructor() {
     private val requestCode = 1001
 
     /**
-     * 通过响应 ping 回答，确保 Shizuku 那边的状态还好
-     */
-    @Deprecated(
-        message = "这个方法不属于 ShizukuPermissionGatewayImpl 的操作范畴，建议尽快转移到更合适的位置。"
-    )
-    fun pingShizuku(): Boolean{
-        return Shizuku.pingBinder()
-    }
-
-    /**
      * Check if user already granted the Shizuku permission
      */
     fun hasShizukuPermission(): Boolean{
@@ -71,4 +61,16 @@ class ShizukuPermissionGatewayImpl @Inject constructor() {
             }
         }
     }
+
+    companion object {
+
+        /**
+         * 通过响应 ping 回答，确保 Shizuku 那边的状态还好。
+         */
+        fun pingShizuku(): Boolean {
+            return Shizuku.pingBinder()
+        }
+
+    }
+
 }
