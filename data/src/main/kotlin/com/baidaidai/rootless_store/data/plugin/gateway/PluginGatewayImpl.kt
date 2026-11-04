@@ -54,6 +54,21 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
+    fun setPluginExecuteFilesExecutable(
+        pluginManifest: PluginManifest
+    ): Result<Unit> =
+        runCatching {
+            val executableFiles = pluginManifest.executableFiles ?: return@runCatching
+            val pluginPackageName = pluginManifest.pluginPackageName
+
+            executableFiles.forEach { executableFilePath ->
+                androidFileSystemChmodOperatorGatewayImpl.setPluginExecutableFiles(
+                    pluginPackageName = pluginPackageName,
+                    executableFilePath = executableFilePath
+                )
+            }
+        }
+
     // Delete
     override fun uninstallPlugin(
         pluginPackageName: String  // Should use pluginManifest<Room/Local>

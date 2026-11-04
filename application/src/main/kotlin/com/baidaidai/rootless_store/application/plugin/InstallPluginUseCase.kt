@@ -78,6 +78,19 @@ class InstallPluginUseCase @Inject constructor(
                     )
                 }
 
+            // Set additional executable files for chained scripts
+            pluginGatewayImpl
+                .setPluginExecuteFilesExecutable(pluginManifest)
+                .getOrElse { throwable ->
+                    return Err(
+                        PluginError(
+                            errorMessage = "Can't set plugin executable files",
+                            errorCause = throwable.stackTrace.formatAsMultilineString(),
+                            errorCompanion = "The plugin was extracted, but a declared executable file is missing or could not be marked executable: ${throwable.message}"
+                        )
+                    )
+                }
+
             // Add Data, Register Plugin
             pluginRepositoryImpl.addPlugin(pluginManifest)
             pluginStatusRepositoryImpl.registerPluginStatus(pluginManifest.pluginId, PluginOrigin.Local)

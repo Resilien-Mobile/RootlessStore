@@ -32,6 +32,24 @@ class AndroidFileSystemChmodOperatorGatewayImpl @Inject constructor(
         return File(pluginRootDirectory, child).setExecutable(true)
     }
 
+    fun setPluginExecutableFiles(
+        pluginPackageName: String,
+        executableFilePath: String
+    ) {
+        val pluginPackageDirectory = File(getInternalPluginRootDirectory(), pluginPackageName).canonicalFile
+        val pluginExecutableFile = File(pluginPackageDirectory, executableFilePath).canonicalFile
+
+        check(pluginExecutableFile.toPath().startsWith(pluginPackageDirectory.toPath())) {
+            "Plugin executable file is outside the package: $executableFilePath"
+        }
+        check(pluginExecutableFile.isFile) {
+            "Plugin executable file not found: $executableFilePath"
+        }
+        check(pluginExecutableFile.setExecutable(true)) {
+            "Could not make plugin file executable: $executableFilePath"
+        }
+    }
+
     fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean {
         val environmentRootDirectory = getInternalEnvironmentRootDirectory()
         val environmentPackageName = environmentManifest.environmentPackageName
