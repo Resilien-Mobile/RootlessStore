@@ -74,7 +74,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && shizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
+                if (!isRoot && ShizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
                     Log.d("ExecutionContext", "Attempt startShizukuUserService Shizuku Endpoint")
                     val isUserServiceStarted = shizukuUserServiceGatewayImpl.startShizukuUserService()
                     Log.d("ExecutionContext", "Bind result: $isUserServiceStarted")

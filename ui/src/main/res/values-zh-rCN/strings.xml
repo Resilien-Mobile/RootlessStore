@@ -152,6 +152,11 @@
     <string name="execute_screen_top_app_bar_stop_content_description">停止</string>
     <string name="execute_screen_top_app_bar_back_content_description">返回</string>
 
+    <!-- Execute Screen: Shizuku Permission Dialog -->
+    <string name="execute_screen_shizuku_permission_dialog_title">Oops!</string>
+    <string name="execute_screen_shizuku_permission_dialog_go">前往</string>
+    <string name="execute_screen_shizuku_permission_dialog_dismiss">关闭</string>
+
     <!-- Start Screen: Navigation Bar -->
     <string name="start_screen_navigation_bar_home_label">主页</string>
     <string name="start_screen_navigation_bar_plugin_label">插件页</string>

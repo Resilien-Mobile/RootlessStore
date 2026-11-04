@@ -1,0 +1,3 @@
+<resources>
+    <string name="execute_plugin_shizuku_permission_denied">Shizuku permission was denied, so this plugin cannot run. Would you like to open Shizuku to grant it?</string>
+</resources>
