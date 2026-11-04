@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.ui.components.homeScreen
 
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,16 +21,12 @@ import com.baidaidai.rootless_store.domain.status.model.DeviceStatusSummary
 fun ExecutionContextChip(
     deviceStatus: DeviceStatusSummary,
     onOpenShizukuSetup: () -> Unit,
-    onOpenExecutionContextChooser: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     Surface(
         modifier = modifier
             .scale(0.95f)
-            .combinedClickable(
-                onClick = onOpenShizukuSetup,
-                onLongClick = onOpenExecutionContextChooser
-            ),
+            .clickable(onClick = onOpenShizukuSetup),
         shape = AssistChipDefaults.shape,
         color = MaterialTheme.colorScheme.primaryContainer,
         contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -59,7 +55,6 @@ fun ExecutionContextChip(
 private fun _preview_() {
     ExecutionContextChip(
         deviceStatus = DeviceStatusSummary(),
-        onOpenShizukuSetup = {},
-        onOpenExecutionContextChooser = {}
+        onOpenShizukuSetup = {}
     )
 }

@@ -38,12 +38,6 @@
     <string name="home_screen_how_to_develop_rootless_store_plugin_supporting">Learn how to develop Rootless Store plugins</string>
     <string name="home_screen_cpu_dashboard_pressure_label">Pressure</string>
 
-    <!-- Home Screen: Context Switch Dialog -->
-    <string name="home_screen_context_switch_dialog_title">Context Switcher</string>
-    <string name="home_screen_context_switch_dialog_revert_button">Revert</string>
-    <string name="home_screen_context_switch_dialog_cancel_button">Cancel</string>
-    <string name="home_screen_context_switch_dialog_confirm_button">Confirm</string>
-
     <!-- Shizuku ADB Screen: Top App Bar -->
     <string name="shizuku_adb_screen_top_app_bar_title">Shizuku Auth</string>
 
