@@ -156,6 +156,11 @@
     <string name="execute_screen_top_app_bar_stop_content_description">Stop</string>
     <string name="execute_screen_top_app_bar_back_content_description">Back</string>
 
+    <!-- Execute Screen: Shizuku Permission Dialog -->
+    <string name="execute_screen_shizuku_permission_dialog_title">Oops!</string>
+    <string name="execute_screen_shizuku_permission_dialog_go">Go</string>
+    <string name="execute_screen_shizuku_permission_dialog_dismiss">Dismiss</string>
+
     <!-- Start Screen: Navigation Bar -->
     <string name="start_screen_navigation_bar_home_label">Home</string>
     <string name="start_screen_navigation_bar_plugin_label">Plugin</string>

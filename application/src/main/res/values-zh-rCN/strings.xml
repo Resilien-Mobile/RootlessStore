@@ -1,0 +1,4 @@
+<resources>
+    <!-- Execute Plugin Use Case: Shizuku Permission -->
+    <string name="execute_plugin_shizuku_permission_denied">Shizuku 权限已被拒绝，因此无法运行此插件。要打开 Shizuku 授予权限吗？</string>
+</resources>
