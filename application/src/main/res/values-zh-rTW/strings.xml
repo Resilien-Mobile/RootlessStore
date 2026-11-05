@@ -1,4 +1,5 @@
 <resources>
     <!-- Execute Plugin Use Case: Shizuku Permission -->
     <string name="execute_plugin_shizuku_permission_denied">Shizuku 權限遭拒，因此無法執行此插件。要開啟 Shizuku 授予權限嗎？</string>
+    <string name="uninstall_plugin_shizuku_permission_required">解除安裝此插件需要 Shizuku 權限。請授予權限後再次嘗試。</string>
 </resources>

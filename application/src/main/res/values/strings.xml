@@ -1,3 +1,4 @@
 <resources>
     <string name="execute_plugin_shizuku_permission_denied">Shizuku permission was denied, so this plugin cannot run. Would you like to open Shizuku to grant it?</string>
+    <string name="uninstall_plugin_shizuku_permission_required">Shizuku permission is required to uninstall this plugin. Please grant permission and try again.</string>
 </resources>
