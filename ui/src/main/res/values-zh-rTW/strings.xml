@@ -74,7 +74,6 @@
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">外掛頁</string>
     <string name="plugin_screen_top_app_bar_subtitle">已安裝 {pluginCount} 個外掛</string>
-    <string name="plugin_screen_top_app_bar_edit_button">編輯</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">篩選</string>
     <string name="plugin_screen_top_app_bar_certificate_content_description">憑證</string>
     <string name="certificate_screen_add_certificate_content_description">新增憑證</string>
