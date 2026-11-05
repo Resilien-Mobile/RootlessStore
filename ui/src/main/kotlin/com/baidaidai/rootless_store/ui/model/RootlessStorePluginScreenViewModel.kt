@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.github.michaelbull.result.getError
 import com.github.michaelbull.result.getOrElse
+import com.github.michaelbull.result.onErr
 import javax.inject.Inject
 import kotlin.collections.emptyList
 
@@ -180,6 +181,9 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     ){
         viewModelScope.launch {
             uninstallPluginUseCase(pluginManifest)
+                .onErr {
+                    _pluginError.emit(it)
+                }
         }
     }
 
