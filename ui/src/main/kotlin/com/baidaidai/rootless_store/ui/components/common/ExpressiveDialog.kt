@@ -31,10 +31,10 @@ fun ExpressiveDialog(
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
 
-                if (enableSubTitle){
+                if (enableSubTitle || subtitle != null){
                     subtitle?.invoke()
 
-                    if (enableContent){
+                    if (enableContent || content != null){
                         Spacer(modifier = Modifier.height(12.dp))
                         HorizontalDivider(
                             modifier = Modifier.fillMaxWidth(),
