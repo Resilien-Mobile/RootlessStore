@@ -7,7 +7,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFlexibleTopAppBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
@@ -19,7 +18,6 @@ object PluginScreenNecessaryComponents {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     @Composable
     fun PluginScreenTopAppBar(
-        onEditClick:()-> Unit = {},
         onFilterClick:()-> Unit = {},
         onCertificateClick: () -> Unit = {},
         isCertificateEnabled: Boolean = false,
@@ -37,13 +35,6 @@ object PluginScreenNecessaryComponents {
                         mapOf("pluginCount" to pluginCount)
                     )
                 )
-            },
-            navigationIcon = {
-                TextButton(
-                    onClick = onEditClick
-                ) {
-                    Text(stringResource(R.string.plugin_screen_top_app_bar_edit_button))
-                }
             },
             actions = {
                 IconButton(

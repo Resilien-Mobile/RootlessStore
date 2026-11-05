@@ -215,9 +215,6 @@ fun RootlessStoreNavigationScaffold(
                     PluginScreenKey -> PluginScreenNecessaryComponents.PluginScreenTopAppBar(
                         pluginCount = pluginCount,
                         isCertificateEnabled = settingScreenPreferences.isDeveloperOptionsEnabled,
-                        onEditClick = {
-                            pluginScreenViewModel.toggleBadgeVisibility()
-                        },
                         onCertificateClick = {
                             context.startActivity(
                                 Intent(context, CertificateActivity::class.java)

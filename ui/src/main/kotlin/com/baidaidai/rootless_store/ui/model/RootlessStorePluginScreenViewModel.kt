@@ -70,7 +70,6 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
     observePluginTotalCountUseCase: ObservePluginTotalCountUseCase
 ): ViewModel() {
 
-    private val _isBadgeVisible = MutableStateFlow(false)
     private val _pluginScreenUiState = MutableStateFlow(RootlessStorePluginScreenUiState())
 
     private val _pluginError = MutableSharedFlow<PluginError?>()
@@ -94,7 +93,6 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
         initialValue = 0
     )
 
-    val isBadgeVisible = _isBadgeVisible.asStateFlow()
     val pluginScreenUiState = _pluginScreenUiState.asStateFlow()
 
     /**
@@ -219,10 +217,6 @@ class RootlessStorePluginScreenViewModel @Inject constructor(
                 disableEnvironmentUseCase(environmentId)
             }
         }
-    }
-
-    fun toggleBadgeVisibility(){
-        _isBadgeVisible.update { !it }
     }
 
     fun resolvePluginShareUri(

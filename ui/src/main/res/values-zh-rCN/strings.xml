@@ -74,7 +74,6 @@
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">插件页</string>
     <string name="plugin_screen_top_app_bar_subtitle">已安装了 {pluginCount} 个插件</string>
-    <string name="plugin_screen_top_app_bar_edit_button">编辑</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">筛选</string>
     <string name="plugin_screen_top_app_bar_certificate_content_description">证书</string>
     <string name="certificate_screen_add_certificate_content_description">添加证书</string>

@@ -78,7 +78,6 @@
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">Plugin</string>
     <string name="plugin_screen_top_app_bar_subtitle">Installed {pluginCount} plugins</string>
-    <string name="plugin_screen_top_app_bar_edit_button">Edit</string>
     <string name="plugin_screen_top_app_bar_filter_content_description">Filter</string>
     <string name="plugin_screen_top_app_bar_certificate_content_description">Certificates</string>
     <string name="certificate_screen_add_certificate_content_description">Add certificate</string>
