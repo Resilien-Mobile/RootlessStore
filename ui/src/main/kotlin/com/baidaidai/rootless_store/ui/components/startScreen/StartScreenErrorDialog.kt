@@ -9,9 +9,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -52,21 +49,29 @@ fun StartScreenErrorDialog(
         title = {
             Text(error!!.errorMessage)
         },
-        subtitle = {
-            Text(
-                text = error?.errorCompanion.toString(),
-                style = MaterialTheme.typography.labelLarge
-            )
+        subtitle = if(!error?.errorCompanion.isNullOrEmpty()){
+            {
+                Text(
+                    text = error.errorCompanion.toString(),
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+        }else{
+            null
         },
-        content = {
-            Text(
-                text = error!!.errorCause,
-                modifier = Modifier
-                    .heightIn(max = 300.dp)
-                    .verticalScroll(
-                        state = rememberScrollState()
-                    )
-            )
+        content = if (!error?.errorCause.isNullOrEmpty()){
+            {
+                Text(
+                    text = error.errorCause!!,
+                    modifier = Modifier
+                        .heightIn(max = 300.dp)
+                        .verticalScroll(
+                            state = rememberScrollState()
+                        )
+                )
+            }
+        }else{
+            null
         }
     )
 }
@@ -96,14 +101,16 @@ fun StartScreenErrorDialog(
             Text(error!!.errorMessage)
         },
         text = {
-            Text(
-                text = error!!.errorCause,
-                modifier = Modifier
-                    .heightIn(max = 300.dp)
-                    .verticalScroll(
-                        state = rememberScrollState()
-                    )
-            )
+            error!!.errorCause?.let {
+                Text(
+                    text = it,
+                    modifier = Modifier
+                        .heightIn(max = 300.dp)
+                        .verticalScroll(
+                            state = rememberScrollState()
+                        )
+                )
+            }
         }
     )
 }
