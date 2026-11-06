@@ -119,8 +119,8 @@ class RootlessStoreHomeScreenViewModel @Inject constructor(
             Log.d("refreshLatestVersionTag",isAutoUpdateEnabled.toString())
 
             if(isAutoUpdateEnabled){
-                val latestVersionTag = fetchLatestVersionTagUseCase()
-                _latestVersionTag.value = latestVersionTag
+                val latestVersionTagResult = fetchLatestVersionTagUseCase()
+                _latestVersionTag.value = latestVersionTagResult.getOrNull()
             }
         }
     }

@@ -37,6 +37,8 @@ dependencies {
 
     // Other
     testImplementation(libs.junit)
+    testImplementation("io.mockk:mockk:1.14.11")
+    testImplementation("io.ktor:ktor-client-mock:3.5.0")
     implementation(libs.core)
     implementation(libs.api)
     implementation(libs.provider)

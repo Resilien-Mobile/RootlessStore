@@ -1,10 +1,14 @@
 package com.baidaidai.rootless_store.application.version
 
-import com.baidaidai.rootless_store.data.update.repository.StoreUpdateRepositoryImpl
+import com.baidaidai.rootless_store.data.update.gateway.StoreUpdateGatewayImpl
 import javax.inject.Inject
 
 class FetchLatestVersionTagUseCase @Inject constructor(
-    private val storeUpdateRepositoryImpl: StoreUpdateRepositoryImpl
+    private val storeUpdateGatewayImpl: StoreUpdateGatewayImpl,
 ) {
-    suspend operator fun invoke(): String? = storeUpdateRepositoryImpl.fetchLatestVersionTag()
+    suspend operator fun invoke(): Result<String> {
+
+        return storeUpdateGatewayImpl.fetchLatestVersionTag()
+
+    }
 }

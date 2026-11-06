@@ -131,6 +131,21 @@ class PluginExecutionGatewayImpl @Inject constructor(
         }
     }
 
+
+    /**
+     * 通过 Shizuku User Service 请求终止指定 PID 的插件进程。
+     *
+     * 调用链为：传入 PID、获取 Shizuku User Service、调用 `kill(pid)` 并返回当前判断结果。
+     * 当前实现只判断 `kill` 的返回值是否非空，不区分其 Boolean 值是 `true` 还是 `false`；
+     * PID 为空或服务调用结果为空时返回 `false`，调用过程中发生的异常会继续向上抛出。
+     *
+     * 此方法目前仍处于重构中，后续计划改用 `Result` 返回结果，并通过领域 Error 描述执行失败。
+     *
+     * @param pluginProcessPid 需要终止的插件进程 PID。
+     * @return 当前实现下的终止判断结果；非空服务返回值会被视为 `true`。
+     * @since 2026-03-27
+     * @lastModified 2026-08-24
+     */
     fun abortPluginProcessByShizuku(pluginProcessPid: Int?): Boolean{
         return if (pluginProcessPid != null){
             Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.findShizukuUserService() == null}")
