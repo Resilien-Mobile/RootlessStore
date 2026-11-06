@@ -1,32 +1,39 @@
 package com.baidaidai.rootless_store.data.shizuku.gateway
 
 import android.content.pm.PackageManager
+import com.baidaidai.rootless_store.domain.shizuku.api.ShizukuApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import rikka.shizuku.Shizuku
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ShizukuPermissionGatewayImpl @Inject constructor() {
+class ShizukuPermissionGatewayImpl @Inject constructor(
+    private val shizukuApi: ShizukuApi,
+) {
 
     private val requestCode = 1001
 
     /**
      * Check if user already granted the Shizuku permission
      */
-    fun hasShizukuPermission(): Boolean{
-        return Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
+    fun hasShizukuPermission(): Boolean {
+
+        return shizukuApi.hasShizukuPermission()
+
     }
 
     /**
      * 检查 Shizuku 服务是否可用，且当前 App 是否已获得 Shizuku 权限。
      */
     fun canUseShizuku(): Boolean {
-        val shizukuBinderAvailable = Shizuku.pingBinder()
+
+        val shizukuBinderAvailable = shizukuApi.isShizukuBinderAvailable()
         if (!shizukuBinderAvailable) return false
 
         val appHasShizukuPermission = hasShizukuPermission()
         return appHasShizukuPermission
+
     }
 
     /**
