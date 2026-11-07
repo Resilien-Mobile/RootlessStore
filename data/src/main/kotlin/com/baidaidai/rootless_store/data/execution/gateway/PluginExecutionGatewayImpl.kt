@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.execution.gateway
 
-import com.baidaidai.rootless_store.domain.execution.gateway.PluginExecutionGateway
 import android.util.Log
 import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
 import com.baidaidai.rootless_store.data.monitor.PluginProcessMonitor
@@ -21,12 +20,12 @@ class PluginExecutionGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
     private val pluginProcessMonitor: PluginProcessMonitor
-): PluginExecutionGateway {
+) {
 
-    override fun executePluginEntryPoint(
+    fun executePluginEntryPoint(
         pluginEntryPoint: String,
         pluginPackageDirectory: String,
-        shouldMonitor: Boolean
+        shouldMonitor: Boolean = false
     ): Flow<ExecutionResult> = callbackFlow {
 
         // Prepare Commands
@@ -89,7 +88,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    override fun executePluginByShizuku(
+    fun executePluginByShizuku(
         pluginDirectory: String,
         pluginEntryPoint: String,
         shouldMonitor: Boolean
@@ -124,7 +123,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
         awaitClose {  }
     }
 
-    override fun abortPluginProcess(pluginProcessPid: Int?){
+    fun abortPluginProcess(pluginProcessPid: Int?){
         if (pluginProcessPid != null){
             ProcessBuilder(
                 resolveLocalShellExecutable(), "-c", "kill -9 $pluginProcessPid"
@@ -147,7 +146,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
      * @since 2026-03-27
      * @lastModified 2026-08-24
      */
-    override fun abortPluginProcessByShizuku(pluginProcessPid: Int?): Boolean{
+    fun abortPluginProcessByShizuku(pluginProcessPid: Int?): Boolean{
         return if (pluginProcessPid != null){
             Log.d("exam","shizuku ${shizukuUserServiceGatewayImpl.findShizukuUserService() == null}")
             Log.d("pid","$pluginProcessPid")
@@ -168,7 +167,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
      *
      *需要通过 Binder, 所以判断也没有意义，这里不做判断
      */
-    override fun resolveLocalShellExecutable(): String{
+    fun resolveLocalShellExecutable(): String{
         val shell = Shell.getShell()
         return if (shell.isRoot){
             "su"
@@ -193,7 +192,7 @@ class PluginExecutionGatewayImpl @Inject constructor(
      * @since 2026-10-03
      * @lastModified 2026-10-03
      */
-    override fun commandFactory(
+    fun commandFactory(
         shellExecutable: String,
         pluginEntryPoint: String,
         pluginPackageDirectory: String,

@@ -24,7 +24,7 @@ class PluginSourceGatewayImpl @Inject constructor(
         return pluginSource
     }
 
-    override suspend fun fetchPluginSourceAuthenticationResult(authenticationInput: PluginSourceAuthenticationInput): PluginSourceAuthenticationResult {
+    suspend fun fetchPluginSourceAuthenticationResult(authenticationInput: PluginSourceAuthenticationInput): PluginSourceAuthenticationResult {
         return try {
             val ktorResponse = pluginSourceApi.fetchPluginSourceCredentials(authenticationInput)
             val httpStatusCode = ktorResponse.status.value

@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): AndroidFileSystemReadOperatorGateway {
+) {
     private companion object {
         private const val PLUGIN_MANIFEST_FILE_NAME = "PluginManifest.json"
         private const val ENVIRONMENT_MANIFEST_FILE_NAME = "EnvironmentManifest.json"
@@ -57,17 +57,17 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    override fun loadBytesFromUri(uri: Uri): ByteArray? {
+    fun loadBytesFromUri(uri: Uri): ByteArray? {
         val inputStream = context.contentResolver.openInputStream(uri) ?: return null
         return inputStream.use { it.readBytes() }
     }
 
-    override fun hasFileInZip(uri: Uri, fileName: String): Boolean {
+    fun hasFileInZip(uri: Uri, fileName: String): Boolean {
         val inputStream = context.contentResolver.openInputStream(uri) ?: return false
         return inputStream.use { hasFileInZip(it, fileName) }
     } // Confirm File Exists in Zip
 
-    override fun hasFileInZip(file: File, fileName: String): Boolean {
+    fun hasFileInZip(file: File, fileName: String): Boolean {
         return file.inputStream().use { hasFileInZip(it, fileName) }
     }
 
@@ -87,7 +87,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    override fun loadBytesInZip(file: File, fileName: String): ByteArray? {
+    fun loadBytesInZip(file: File, fileName: String): ByteArray? {
         return file.inputStream().use { loadBytesInZip(it, fileName) }
     }
 
@@ -108,35 +108,35 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    override fun loadRawMagiskModuleProp(uri: Uri): String {
+    fun loadRawMagiskModuleProp(uri: Uri): String {
         return loadRawManifest(uri, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
     } // Get Magisk module.prop File
 
-    override fun loadRawMagiskModuleProp(file: File): String {
+    fun loadRawMagiskModuleProp(file: File): String {
         return loadRawManifest(file, MAGISK_MODULE_PROP_FILE_NAME) ?: ""
     }
 
-    override fun loadRawPluginManifest(uri: Uri): String {
+    fun loadRawPluginManifest(uri: Uri): String {
         return loadRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     } // Get JSON File
 
-    override fun loadRawPluginManifest(file: File): String {
+    fun loadRawPluginManifest(file: File): String {
         return loadRawManifest(file, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     }
 
-    override fun loadRawEnvironmentManifest(uri: Uri): String {
+    fun loadRawEnvironmentManifest(uri: Uri): String {
         return loadRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     } // Get JSON File
 
-    override fun loadRawEnvironmentManifest(file: File): String {
+    fun loadRawEnvironmentManifest(file: File): String {
         return loadRawManifest(file, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     }
 
-    override fun loadFileContent(filePath: String): String {
+    fun loadFileContent(filePath: String): String {
         return File(filePath).readText()
     }
 
-    override fun parsePluginManifest(jsonContent: String): PluginManifest {
+    fun parsePluginManifest(jsonContent: String): PluginManifest {
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true
@@ -144,7 +144,7 @@ class AndroidFileSystemReadOperatorGatewayImpl @Inject constructor(
         return json.decodeFromString<PluginManifest>(jsonContent)
     } // Convert JSON to PluginManifest
 
-    override fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifest {
+    fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifest {
         val json = Json {
             ignoreUnknownKeys = true
             isLenient = true

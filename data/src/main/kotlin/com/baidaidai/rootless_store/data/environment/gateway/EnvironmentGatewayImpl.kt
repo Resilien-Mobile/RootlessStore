@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.environment.gateway
 
-import com.baidaidai.rootless_store.domain.environment.gateway.EnvironmentGateway
 import android.content.Context
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
@@ -19,11 +18,11 @@ class EnvironmentGatewayImpl @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
     private val androidFileSystemUnzipOperatorGatewayImpl: AndroidFileSystemUnzipOperatorGatewayImpl
-): EnvironmentGateway {
+) {
     private val defaultEnvironmentDirectory = File(context.filesDir, "Environment")
 
     // Install Environment
-    override fun installEnvironmentFromLocal(originFile: File): Result<Unit> = runCatching {
+    fun installEnvironmentFromLocal(originFile: File): Result<Unit> = runCatching {
         val environmentManifest = parseEnvironmentManifest(originFile).getOrThrow()
         androidFileSystemUnzipOperatorGatewayImpl.unzipEnvironmentFromFile(
             originFile = originFile,
@@ -32,7 +31,7 @@ class EnvironmentGatewayImpl @Inject constructor(
         )
     }
 
-    override suspend fun installEnvironmentFromMarket(
+    suspend fun installEnvironmentFromMarket(
         environmentUrl: String,
         environmentManifest: EnvironmentManifest
     ) {
@@ -45,23 +44,23 @@ class EnvironmentGatewayImpl @Inject constructor(
     }
 
     // Uninstall Environment
-    override fun uninstallEnvironment(environmentPackageName: String) {
+    fun uninstallEnvironment(environmentPackageName: String) {
         androidFileSystemCapabilityGatewayImpl.deleteEnvironmentDirectoryByPackageName(environmentPackageName)
     }
 
     // Environment Operation
-    override fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Result<Unit> = runCatching {
+    fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Result<Unit> = runCatching {
         androidFileSystemCapabilityGatewayImpl.setEnvironmentEntryPointExecutable(environmentManifest)
     }
 
     // Environment Config Getter
-    override fun resolveEnvironmentRuntimePath(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentRuntimePath(environmentManifest: EnvironmentManifest): String {
         val environmentPackageName = environmentManifest.environmentPackageName
 
         return "$defaultEnvironmentDirectory/$environmentPackageName"
     }
 
-    override fun resolveEnvironmentLdPath(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentLdPath(environmentManifest: EnvironmentManifest): String {
         val environmentPackageName = environmentManifest.environmentPackageName
 
         return environmentManifest.ldLibraryPath.joinToString(":") { libraryPath ->
@@ -69,13 +68,13 @@ class EnvironmentGatewayImpl @Inject constructor(
         }
     }
 
-    override fun resolveEnvironmentConfig(environmentManifest: EnvironmentManifest): Map<String, String> {
+    fun resolveEnvironmentConfig(environmentManifest: EnvironmentManifest): Map<String, String> {
         return environmentManifest.env
     }
 
 
     // Parse local environment manifest
-    override fun parseEnvironmentManifest(originFile: File): Result<EnvironmentManifest> = runCatching {
+    fun parseEnvironmentManifest(originFile: File): Result<EnvironmentManifest> = runCatching {
         androidFileSystemReadOperatorGatewayImpl.loadRawEnvironmentManifest(originFile).let {
             androidFileSystemReadOperatorGatewayImpl.parseEnvironmentManifest(it)
         }

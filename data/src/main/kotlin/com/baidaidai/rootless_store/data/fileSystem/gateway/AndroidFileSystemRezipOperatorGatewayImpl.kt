@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
-import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemRezipOperatorGateway
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -11,10 +10,10 @@ import javax.inject.Inject
 
 class AndroidFileSystemRezipOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): AndroidFileSystemRezipOperatorGateway {
+) {
 
     // Re-Zip FS Operator
-    override fun rezipFromFile(originPluginFile: File, targetZipFile: File) {
+    fun rezipFromFile(originPluginFile: File, targetZipFile: File) {
         targetZipFile.parentFile?.mkdirs()
 
         ZipOutputStream(FileOutputStream(targetZipFile)).use { zipOutputStream ->

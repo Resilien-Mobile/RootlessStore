@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.notification.repository
 
-import com.baidaidai.rootless_store.domain.notification.repository.NotificationPreferenceRepository
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.notification.database.NotificationPreferenceEntity
 import com.baidaidai.rootless_store.data.notification.mapper.NotificationPreferenceMapper.toNotificationPreference
@@ -10,11 +9,11 @@ import javax.inject.Inject
 
 class NotificationPreferenceRepositoryImpl @Inject constructor(
     rootlessStoreDatabase: RootlessStoreDatabase
-): NotificationPreferenceRepository {
+) {
     private val notificationPreferenceDao = rootlessStoreDatabase.notificationPreferenceDao()
 
     // Add
-    override suspend fun addNotificationPreference(
+    suspend fun addNotificationPreference(
         notificationPreference: NotificationPreference
     ) {
         val notificationPreferenceEntity = notificationPreference.toNotificationPreferenceEntity()
@@ -22,10 +21,10 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
     }
 
     // Update
-    override suspend fun updateNotificationPreference(
+    suspend fun updateNotificationPreference(
         apiKey: String,
-        notificationTitle: String?,
-        selfBuiltServer: String?,
+        notificationTitle: String? = null,
+        selfBuiltServer: String? = null,
         isCriticalWarningEnabled: Boolean
     ) {
         notificationPreferenceDao.updateNotificationPreference(
@@ -37,7 +36,7 @@ class NotificationPreferenceRepositoryImpl @Inject constructor(
     }
 
     // Read
-    override suspend fun findNotificationPreference(): NotificationPreference? {
+    suspend fun findNotificationPreference(): NotificationPreference? {
         return notificationPreferenceDao.findNotificationPreference()?.toNotificationPreference()
     }
 

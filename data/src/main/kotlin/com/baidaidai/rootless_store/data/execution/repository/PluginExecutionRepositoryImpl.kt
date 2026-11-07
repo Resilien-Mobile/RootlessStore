@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.execution.repository
 
-import com.baidaidai.rootless_store.domain.execution.repository.PluginExecutionRepository
 import com.baidaidai.rootless_store.data.database.RootlessStoreDatabase
 import com.baidaidai.rootless_store.data.execution.database.PluginExecutionEntity
 import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
@@ -13,27 +12,27 @@ import javax.inject.Inject
 class PluginExecutionRepositoryImpl @Inject constructor(
     private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
     private val rootlessStoreDatabase: RootlessStoreDatabase
-): PluginExecutionRepository {
+) {
 
     private val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
 
-    override suspend fun abortPluginProcess(pluginId: String){
+    suspend fun abortPluginProcess(pluginId: String){
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
         val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginId)
         pluginExecutionGatewayImpl.abortPluginProcess(pidSaved)
     }
 
-    override suspend fun abortPluginProcessByShizuku(pluginId: String){
+    suspend fun abortPluginProcessByShizuku(pluginId: String){
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
         val pidSaved = pluginExecutionDao.findPluginExecutionPidByPluginId(pluginId)
         pluginExecutionGatewayImpl.abortPluginProcessByShizuku(pidSaved)
     }
 
     // Create
-    override suspend fun createPluginExecution(
+    suspend fun createPluginExecution(
         pluginManifest: PluginManifest,
         executionPid: Int,
-        executionContext: ExecutionContext
+        executionContext: ExecutionContext = ExecutionContext.LIMITED
     ) {
         val pluginExecutionEntity = PluginExecutionEntity
             .fromPluginManifest(pluginManifest, executionPid)
@@ -43,7 +42,7 @@ class PluginExecutionRepositoryImpl @Inject constructor(
 
     // Update
     // Read
-    override suspend fun listPluginExecutionStatuses(): List<PluginExecutionStatus> {
+    suspend fun listPluginExecutionStatuses(): List<PluginExecutionStatus> {
         val pluginExecutionEntities = pluginExecutionDao.listPluginExecutions()
         val pluginExecutionStatuses = pluginExecutionEntities
             .map { pluginExecutionEntity ->
@@ -53,11 +52,11 @@ class PluginExecutionRepositoryImpl @Inject constructor(
     }
 
     // Delete
-    override suspend fun deletePluginExecutionByPluginId(pluginId: String) {
+    suspend fun deletePluginExecutionByPluginId(pluginId: String) {
         pluginExecutionDao.deletePluginExecutionByPluginId(pluginId)
     }
 
-    override suspend fun deleteAllPluginExecutions() {
+    suspend fun deleteAllPluginExecutions() {
         val pluginExecutionDao = rootlessStoreDatabase.pluginExecutionDao()
         pluginExecutionDao.deleteAllPluginExecutions()
     }
