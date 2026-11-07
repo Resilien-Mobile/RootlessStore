@@ -9,16 +9,16 @@ import javax.inject.Inject
 
 class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): AndroidFileSystemCreateOperatorGateway {
+) {
 
     // Create FS Operator
-    override fun ensureFilesDirectory(path: String) {
+    fun ensureFilesDirectory(path: String) {
         if (!hasInternalDirectory(path)) {
             File(context.filesDir, path).mkdirs()
         }
     } // /File
 
-    override fun ensureCacheDirectory(path: String) {
+    fun ensureCacheDirectory(path: String) {
         if (!hasCacheDirectory(path)) {
             File(context.cacheDir, path).mkdirs()
         }
@@ -28,22 +28,22 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         message = "Not Longer Recommended",
         replaceWith = ReplaceWith("resolveChildFile(destinationDirectory, fileNameWithoutExtension + \".zip\").createNewFile()")
     )
-    override fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean {
+    fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean {
         val isZipFileCreated = File(destinationDirectory, "$fileNameWithoutExtension.zip").createNewFile()
         return isZipFileCreated
     }
 
-    override fun resolveChildFile(parentDirectory: File, childName: String): File {
+    fun resolveChildFile(parentDirectory: File, childName: String): File {
         return File(parentDirectory, childName)
     } // /File/Plugin/PLUGIN
 
-    override fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
+    fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
         val targetFile = File(parentDirectory, fileName)
         targetFile.writeText(content)
         return targetFile
     }
 
-    override fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
+    fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
         targetFile.parentFile?.mkdirs()
 
         context.contentResolver.openInputStream(originFileUri).use { originInputStream ->
@@ -55,7 +55,7 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         return targetFile
     }
 
-    override fun copyFileToFile(originFile: File, targetFile: File): File {
+    fun copyFileToFile(originFile: File, targetFile: File): File {
         targetFile.parentFile?.mkdirs()
         originFile.inputStream().use { originInputStream ->
             FileOutputStream(targetFile).use { targetOutputStream ->
