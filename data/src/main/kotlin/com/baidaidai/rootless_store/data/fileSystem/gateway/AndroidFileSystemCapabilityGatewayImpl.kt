@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     @ApplicationContext val context: Context
-): AndroidFileSystemCapabilityGateway {
+){
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
@@ -48,55 +48,55 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Default FS Operator (Plugin)
-    override fun getDefaultPluginDirectoryPath(): String{
+    fun getDefaultPluginDirectoryPath(): String{
         return getInternalPluginRootDirectory().path
     } // /File/Plugin
-    override fun getCachePluginDirectoryPath(): String{
+    fun getCachePluginDirectoryPath(): String{
         return getInternalPluginCacheDirectory().path
     } // /Cache/Plugin: String
-    override fun getCachePluginDirectoryFile(): File{
+    fun getCachePluginDirectoryFile(): File{
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
-    override fun getShellPluginStagingDirectoryFile(): File {
+    fun getShellPluginStagingDirectoryFile(): File {
         val shellPluginStagingDirectory = File("/sdcard/RootlessStore")
         return shellPluginStagingDirectory
     } // /sdcard/RootlessStore
-    override fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String{
+    fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String{
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifest.pluginPackageName
         val pluginEntryPoint = pluginManifest.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     }  // /File/Plugin/PLUGIN/entry
-    override fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
+    fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
         val defaultPluginDirectoryPath = getDefaultPluginDirectoryPath()
         val pluginPackageName = pluginManifest.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
     }  // /File/Plugin/PLUGIN
 
     // Default FS Operator (Environment)
-    override fun getDefaultEnvironmentDirectoryPath(): String{
+    fun getDefaultEnvironmentDirectoryPath(): String{
         return getInternalEnvironmentRootDirectory().path
     } // /File/Environment
-    override fun getCacheEnvironmentDirectoryFile(): File{
+    fun getCacheEnvironmentDirectoryFile(): File{
         return getEnvironmentCacheDirectory()
     } // /Cache/Environment: File
-    override fun resolveEnvironmentPackageDirectory(environmentManifest: EnvironmentManifest): String {
+    fun resolveEnvironmentPackageDirectory(environmentManifest: EnvironmentManifest): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
         val environmentPackageName = environmentManifest.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
     }  // /File/Environment/ENVIRONMENT
 
     // Search FS Operator
-    override fun hasPluginDirectory(): Boolean{
+    fun hasPluginDirectory(): Boolean{
         return hasInternalDirectory(PLUGIN_DIR_NAME)
     }  // /File/Plugin?
-    override fun hasPluginCacheDirectory(): Boolean{
+    fun hasPluginCacheDirectory(): Boolean{
         return hasCacheDirectory(PLUGIN_DIR_NAME)  // Cache Directory's name is same
     }  // /Cache/Plugin?
-    override fun hasEnvironmentDirectory(): Boolean{
+    fun hasEnvironmentDirectory(): Boolean{
         return hasInternalDirectory(ENVIRONMENT_DIR_NAME)
     }  // /File/Environment?
-    override fun hasEnvironmentCacheDirectory(): Boolean{
+    fun hasEnvironmentCacheDirectory(): Boolean{
         return hasCacheDirectory(ENVIRONMENT_DIR_NAME)
     }  // /Cache/Environment?
     private fun hasInternalDirectory(path: String): Boolean{
@@ -111,12 +111,12 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }  // /Cache/?
 
     // Create FS Operator
-    override fun ensureFilesDirectory(path: String){
+    fun ensureFilesDirectory(path: String){
         if (!hasInternalDirectory(path)){
             File(context.filesDir, path).mkdirs()
         }
     }  // /File
-    override fun ensureCacheDirectory(path: String){
+    fun ensureCacheDirectory(path: String){
         if (!hasCacheDirectory(path)){
             File(context.cacheDir, path).mkdirs()
         }
@@ -125,19 +125,19 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         message = "Not Longer Recommended",
         replaceWith = ReplaceWith("resolveChildFile(destinationDirectory, fileNameWithoutExtension + \".zip\").createNewFile()")
     )
-    override fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean{
+    fun createEmptyZipFile(destinationDirectory: File, fileNameWithoutExtension: String): Boolean{
         val isZipFileCreated = File(destinationDirectory, "$fileNameWithoutExtension.zip").createNewFile()  // 创建了文件，而非单纯路径
         return isZipFileCreated
     }
-    override fun resolveChildFile(parentDirectory: File, childName: String): File {
+    fun resolveChildFile(parentDirectory: File, childName: String): File {
         return File(parentDirectory, childName)
     }  // /File/Plugin/PLUGIN
-    override fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
+    fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
         val targetFile = File(parentDirectory, fileName)
         targetFile.writeText(content)
         return targetFile
     }
-    override fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
+    fun copyUriToFile(originFileUri: Uri, targetFile: File): File {
         targetFile.parentFile?.mkdirs()
 
         context.contentResolver.openInputStream(originFileUri).use { originInputStream ->
@@ -151,7 +151,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
 
     // Un-Zip FS Operator
     @Suppress("UNUSED_PARAMETER")
-    override fun unzipFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String?) {
+    fun unzipFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
         // Get file's name, always powered by readManiFestJsonContent
         val directoryName = when {
@@ -200,7 +200,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
-    override fun unzipEnvironmentFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String?) {
+    fun unzipEnvironmentFromFile(originFileUri: Uri, pluginRootDirectory: File, directoryName: String? = null) {
 
         // Get file's name, always powered by readManiFestJsonContent
         val directoryName = when {
@@ -249,7 +249,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
-    override fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
+    fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
         // Resolve target directory for copy
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
@@ -281,7 +281,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
     @Suppress("UNUSED_PARAMETER")
-    override fun unzipEnvironmentFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
+    fun unzipEnvironmentFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String){
 
         // Resolve target directory for copy
         val internalEnvironmentRootDirectory = ensureInternalEnvironmentRootDirectory()
@@ -314,7 +314,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Re-Zip FS Operator
-    override fun rezipFromFile(originPluginFile: File, targetZipFile: File){
+    fun rezipFromFile(originPluginFile: File, targetZipFile: File){
         targetZipFile.parentFile?.mkdirs()
 
         ZipOutputStream(FileOutputStream(targetZipFile)).use { zipOutputStream ->
@@ -384,24 +384,24 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         }
     }
 
-    override fun loadRawPluginManifest(uri: Uri): String{
+    fun loadRawPluginManifest(uri: Uri): String{
         return loadRawManifest(uri, PLUGIN_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
-    override fun loadRawEnvironmentManifest(uri: Uri): String{
+    fun loadRawEnvironmentManifest(uri: Uri): String{
         return loadRawManifest(uri, ENVIRONMENT_MANIFEST_FILE_NAME) ?: ""
     }  // Get JSON File
-    override fun loadFileContent(filePath: String): String {
+    fun loadFileContent(filePath: String): String {
         return File(filePath).readText()
     }
 
-    override fun parsePluginManifest(jsonContent: String): PluginManifest {
+    fun parsePluginManifest(jsonContent: String): PluginManifest {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
             isLenient = true
         }
         return json.decodeFromString<PluginManifest>(jsonContent)
     }  // Convert JSON to PluginManifest
-    override fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifest {
+    fun parseEnvironmentManifest(jsonContent: String): EnvironmentManifest {
         val json = Json {
             ignoreUnknownKeys = true // JSON 多字段也不炸
             isLenient = true
@@ -414,36 +414,36 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
         message = "Recommended to use deleteDirectoryByPackageName method, instead of the deleteFile method",
         replaceWith = ReplaceWith("deleteDirectoryByPackageName(pluginPackageName)")
     )
-    override fun deleteFile(pluginPackageName: String): Boolean{
+    fun deleteFile(pluginPackageName: String): Boolean{
         val targetFile = File(getInternalPluginRootDirectory(), "${pluginPackageName}.zip")
 
         return targetFile.delete()
     }
-    override fun deleteDirectoryByPackageName(pluginPackageName: String): Boolean {
+    fun deleteDirectoryByPackageName(pluginPackageName: String): Boolean {
         val targetFile = File(getInternalPluginRootDirectory(), pluginPackageName)
 
         return targetFile.deleteRecursively()
     }
 
-    override fun deleteEnvironmentDirectoryByPackageName(environmentPackageName: String): Boolean {
+    fun deleteEnvironmentDirectoryByPackageName(environmentPackageName: String): Boolean {
         val targetFile = File(getInternalEnvironmentRootDirectory(), environmentPackageName)
 
         return targetFile.deleteRecursively()
     }
-    override fun deleteFileOrDirectory(filePath: String): Boolean {
+    fun deleteFileOrDirectory(filePath: String): Boolean {
         val targetFileOrDirectory = File(filePath)
         return targetFileOrDirectory.deleteRecursively()
     }
 
     // Chmod FS Operator
-    override fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Boolean{
+    fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Boolean{
         val pluginRootDirectory = getInternalPluginRootDirectory()
         val pluginPackageName = pluginManifest.pluginPackageName
         val pluginEntryPoint = pluginManifest.entryPoint
         val entryPointPath = "$pluginPackageName/$pluginEntryPoint"
         return File(pluginRootDirectory,entryPointPath).setExecutable(true)
     }
-    override fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean{
+    fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean{
         val environmentRootDirectory = getInternalEnvironmentRootDirectory()
         val environmentPackageName = environmentManifest.environmentPackageName
         val environmentEntryPoint = environmentManifest.entryPoint
@@ -452,7 +452,7 @@ class AndroidFileSystemCapabilityGatewayImpl @Inject constructor(
     }
 
     // Share FS Operator
-    override fun resolveShareUriFromFile(file: File): Uri{
+    fun resolveShareUriFromFile(file: File): Uri{
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
 

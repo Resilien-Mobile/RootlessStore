@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.shell.repository
 
-import com.baidaidai.rootless_store.domain.shell.repository.ShellPreferencesRepository
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -17,8 +16,8 @@ import javax.inject.Inject
 
 class ShellPreferencesRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): ShellPreferencesRepository {
-    override fun observeShellContextPreferences(): Flow<ShellContextPreferences> =
+) {
+    fun observeShellContextPreferences(): Flow<ShellContextPreferences> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -33,7 +32,7 @@ class ShellPreferencesRepositoryImpl @Inject constructor(
                 )
             }
 
-    override suspend fun setDirectoryJumpEnabled(isEnabled: Boolean) {
+    suspend fun setDirectoryJumpEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[SHOULD_JUMP_TO_DIRECTORY] = isEnabled
         }

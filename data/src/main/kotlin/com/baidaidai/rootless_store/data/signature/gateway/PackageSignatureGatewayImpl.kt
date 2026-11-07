@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.signature.gateway
 
-import com.baidaidai.rootless_store.domain.signature.gateway.PackageSignatureGateway
 import android.content.Context
 import android.util.Log
 import com.baidaidai.rootless_store.data.R
@@ -32,7 +31,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
     private val caCertificateRepositoryImpl: CaCertificateRepositoryImpl
-): PackageSignatureGateway {
+) {
     private val bouncyCastleProvider = BouncyCastleProvider()
     private val logTag = "PackageSignatureGateway"
 
@@ -51,7 +50,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
      * @since 2026.10.26
      * @version 0.1.0
      */
-    override suspend fun resolvePackageSignature(packageContainerFile: File): PackageSignatureStatus {
+    suspend fun resolvePackageSignature(packageContainerFile: File): PackageSignatureStatus {
 
         val signatureBytes = androidFileSystemReadOperatorGatewayImpl
             .loadBytesInZip(packageContainerFile, "sign.p7s")
@@ -332,7 +331,7 @@ class PackageSignatureGatewayImpl @Inject constructor(
     /**
      * 理论上，这个方法不应该存在于此处，因为属于辅助方法
      */
-    override fun resolveSignedPackageInfo(
+    fun resolveSignedPackageInfo(
         packageFile: File,
         signatureStatus: PackageSignatureStatus
     ): PackageSignatureInfo {

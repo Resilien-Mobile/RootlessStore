@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.setting.repository
 
-import com.baidaidai.rootless_store.domain.setting.repository.SettingPreferencesRepository
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
@@ -17,9 +16,9 @@ import javax.inject.Inject
 
 class SettingPreferencesRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context
-): SettingPreferencesRepository {
+) {
     // Read
-    override fun observeSettingScreenPreferences(): Flow<SettingScreenPreferences> =
+    fun observeSettingScreenPreferences(): Flow<SettingScreenPreferences> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -39,7 +38,7 @@ class SettingPreferencesRepositoryImpl @Inject constructor(
                 )
             }
 
-    override fun observeAutoUpdateEnabledPreference(): Flow<Boolean> =
+    fun observeAutoUpdateEnabledPreference(): Flow<Boolean> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -52,7 +51,7 @@ class SettingPreferencesRepositoryImpl @Inject constructor(
                 preferences[ENABLE_AUTO_UPDATE] ?: false
             }
 
-    override fun observePluginStatusNotificationEnabled(): Flow<Boolean> =
+    fun observePluginStatusNotificationEnabled(): Flow<Boolean> =
         context.rootlessStorePreferencesDataStore.data
             .catch { error ->
                 if (error is IOException) {
@@ -66,37 +65,37 @@ class SettingPreferencesRepositoryImpl @Inject constructor(
             }
 
     // Update
-    override suspend fun setPluginStatusNotificationEnabled(isEnabled: Boolean) {
+    suspend fun setPluginStatusNotificationEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[NOTIFY_PLUGIN_STATUS] = isEnabled
         }
     }
 
-    override suspend fun setThirdPartyNotificationPushEnabled(isEnabled: Boolean) {
+    suspend fun setThirdPartyNotificationPushEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[USE_THIRD_PARTY_NOTIFICATION_PUSH] = isEnabled
         }
     }
 
-    override suspend fun setInsecureConnectionAllowed(isAllowed: Boolean) {
+    suspend fun setInsecureConnectionAllowed(isAllowed: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[ALLOW_INSECURE_CONNECTION] = isAllowed
         }
     }
 
-    override suspend fun setDotProtectedConnectionEnabled(isEnabled: Boolean) {
+    suspend fun setDotProtectedConnectionEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[USE_DOT_PROTECTED_CONNECTION] = isEnabled
         }
     }
 
-    override suspend fun setAutoUpdateEnabled(isEnabled: Boolean) {
+    suspend fun setAutoUpdateEnabled(isEnabled: Boolean) {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[ENABLE_AUTO_UPDATE] = isEnabled
         }
     }
 
-    override suspend fun enableDeveloperOptions() {
+    suspend fun enableDeveloperOptions() {
         context.rootlessStorePreferencesDataStore.edit { preferences ->
             preferences[ENABLE_DEVELOPER_OPTIONS] = true
         }

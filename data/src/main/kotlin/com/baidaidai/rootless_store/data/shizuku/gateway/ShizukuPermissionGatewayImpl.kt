@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.shizuku.gateway
 
-import com.baidaidai.rootless_store.domain.shizuku.gateway.ShizukuPermissionGateway
 import android.content.pm.PackageManager
 import com.baidaidai.rootless_store.domain.shizuku.api.ShizukuApi
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -11,14 +10,14 @@ import javax.inject.Singleton
 @Singleton
 class ShizukuPermissionGatewayImpl @Inject constructor(
     private val shizukuApi: ShizukuApi,
-): ShizukuPermissionGateway {
+) {
 
     private val requestCode = 1001
 
     /**
      * Check if user already granted the Shizuku permission
      */
-    override fun hasShizukuPermission(): Boolean {
+    fun hasShizukuPermission(): Boolean {
 
         return shizukuApi.hasShizukuPermission()
 
@@ -27,7 +26,7 @@ class ShizukuPermissionGatewayImpl @Inject constructor(
     /**
      * 检查 Shizuku 服务是否可用，且当前 App 是否已获得 Shizuku 权限。
      */
-    override fun canUseShizuku(): Boolean {
+    fun canUseShizuku(): Boolean {
 
         val shizukuBinderAvailable = shizukuApi.isShizukuBinderAvailable()
         if (!shizukuBinderAvailable) return false
@@ -41,7 +40,7 @@ class ShizukuPermissionGatewayImpl @Inject constructor(
      * Check Shizuku Permission Granted,
      * Or Try to Access Shizuku Permission
      */
-    override suspend fun requestShizukuPermission(): Boolean {
+    suspend fun requestShizukuPermission(): Boolean {
 
         // If Shizuku is no alive, no-need to continue
         if (!Shizuku.pingBinder()) return false

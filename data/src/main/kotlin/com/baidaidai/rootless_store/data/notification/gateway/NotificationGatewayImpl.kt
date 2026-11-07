@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.notification.gateway
 
-import com.baidaidai.rootless_store.domain.notification.gateway.NotificationGateway
 import android.Manifest
 import android.app.PendingIntent
 import android.content.Context
@@ -18,12 +17,12 @@ class NotificationGatewayImpl @Inject constructor(
     @ApplicationContext
     private val context: Context,
     private val barkNotificationApi: BarkNotificationApi
-): NotificationGateway {
+) {
 
-    override fun sendLocalNotification(
+    fun sendLocalNotification(
         title: String,
         message: String,
-        notificationId: Int
+        notificationId: Int = 1001
     ){
 
         val intent = context.packageManager
@@ -57,9 +56,9 @@ class NotificationGatewayImpl @Inject constructor(
 
     }
 
-    override suspend fun sendBarkNotification(
-        title: String?,
-        message: String?,
+    suspend fun sendBarkNotification(
+        title: String? = null,
+        message: String? = null,
         apiKey: String
     ){
         val title = title ?: DEFAULT_NOTIFICATION_TITLE
@@ -72,9 +71,9 @@ class NotificationGatewayImpl @Inject constructor(
         )
     }
 
-    override suspend fun sendCriticalBarkNotification(
-        title: String?,
-        message: String?,
+    suspend fun sendCriticalBarkNotification(
+        title: String? = null,
+        message: String? = null,
         apiKey: String
     ){
         val title = title ?: DEFAULT_NOTIFICATION_TITLE

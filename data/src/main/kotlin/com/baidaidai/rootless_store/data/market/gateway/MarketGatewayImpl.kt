@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.market.gateway
 
-import com.baidaidai.rootless_store.domain.market.gateway.MarketGateway
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,8 +12,8 @@ import javax.inject.Inject
 
 class MarketGatewayImpl @Inject constructor(
     private val marketApi: MarketApi
-): MarketGateway {
-    override fun fetchMarketManifests(
+) {
+    fun fetchMarketManifests(
         pluginSourceEndpoint: String,
         onError: suspend (MarketError)-> Unit
     ): Flow<PagingData<MarketManifest>> {

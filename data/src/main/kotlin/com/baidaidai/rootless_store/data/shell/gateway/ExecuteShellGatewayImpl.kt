@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.shell.gateway
 
-import com.baidaidai.rootless_store.domain.shell.gateway.ExecuteShellGateway
 import android.util.Log
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.shell.provider.ShellExecutionContextProviderImpl
@@ -22,11 +21,11 @@ class ExecuteShellGatewayImpl @Inject constructor(
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
     private val shellExecutionContextProviderImpl: ShellExecutionContextProviderImpl
-): ExecuteShellGateway {
+) {
 
     private var currentDirectory: String = "/sdcard"
 
-    override fun executeCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByAppShell(commandContent: String): Flow<ShellResult> = callbackFlow {
         var commandContent = commandContent
 
         val appShellContextConfig = shellExecutionContextProviderImpl.resolveAppShellContext()
@@ -90,7 +89,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
 
     }.flowOn(Dispatchers.IO)
 
-    override fun executeCommandByAdbShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByAdbShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
         val adbShellContextConfig = shellExecutionContextProviderImpl.resolveAdbShellContext()
 
@@ -129,7 +128,7 @@ class ExecuteShellGatewayImpl @Inject constructor(
         awaitClose {  }
     }
 
-    override fun executeCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
+    fun executeCommandByRootShell(commandContent: String): Flow<ShellResult> = callbackFlow {
 
         var commandContent = commandContent
 

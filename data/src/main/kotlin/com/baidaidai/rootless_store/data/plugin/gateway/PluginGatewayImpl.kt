@@ -25,7 +25,7 @@ class PluginGatewayImpl @Inject constructor(
 ): PluginGateway {
 
     // Create
-    override fun installPluginFromLocal(originFile: File): Result<Unit> = runCatching {
+    fun installPluginFromLocal(originFile: File): Result<Unit> = runCatching {
         val pluginManifest = parsePluginManifest(originFile).getOrThrow()
         val targetDirectory = resolvePluginPackageDirectory(pluginManifest.pluginPackageName)
 
@@ -46,7 +46,7 @@ class PluginGatewayImpl @Inject constructor(
     }
 
     // Operator
-    override fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Result<Unit> = runCatching {
+    fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Result<Unit> = runCatching {
         check(
             androidFileSystemChmodOperatorGatewayImpl.setPluginEntryPointExecutable(pluginManifest)
         ) {
@@ -54,7 +54,7 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
-    override fun setPluginExecuteFilesExecutable(
+    fun setPluginExecuteFilesExecutable(
         pluginManifest: PluginManifest
     ): Result<Unit> =
         runCatching {
@@ -80,7 +80,7 @@ class PluginGatewayImpl @Inject constructor(
         }
     }
 
-    override fun parsePluginManifest(originFile: File): Result<PluginManifest> = runCatching {
+    fun parsePluginManifest(originFile: File): Result<PluginManifest> = runCatching {
         androidFileSystemReadOperatorGatewayImpl.loadRawPluginManifest(originFile).let {
             androidFileSystemReadOperatorGatewayImpl.parsePluginManifest(it)
         }

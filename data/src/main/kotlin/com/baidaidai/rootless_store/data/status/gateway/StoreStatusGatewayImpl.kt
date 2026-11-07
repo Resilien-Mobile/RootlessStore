@@ -1,6 +1,5 @@
 package com.baidaidai.rootless_store.data.status.gateway
 
-import com.baidaidai.rootless_store.domain.status.gateway.StoreStatusGateway
 import android.util.Log
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
@@ -38,10 +37,10 @@ class StoreStatusGatewayImpl @Inject constructor(
     private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
     private val cpuStatusDataSource: CpuStatusDataSource,
     private val networkStatusDataSource: NetworkStatusDataSource
-): StoreStatusGateway {
+) {
 
     // Status
-    override fun observeMemoryStatus(): Flow<MemoryStatus> = flow {
+    fun observeMemoryStatus(): Flow<MemoryStatus> = flow {
         while (true){
             val totalMemory = memoryStatusDataSource.getTotalMemory()
             val usedMemory = memoryStatusDataSource.getUsedMemory()
@@ -50,7 +49,7 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    override fun observeStorageStatus(): Flow<StorageStatus> = flow {
+    fun observeStorageStatus(): Flow<StorageStatus> = flow {
         while (true){
             val usedStorage = storageStatusDataSource.getUsedStorage()
             val totalStorage = storageStatusDataSource.getTotalStorage()
@@ -59,19 +58,19 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    override fun getSeLinuxStatus(): SeLinuxStatus = seLinuxStatusDataSource.getSeLinuxStatus()
+    fun getSeLinuxStatus(): SeLinuxStatus = seLinuxStatusDataSource.getSeLinuxStatus()
 
-    override fun getKernelVersion(): String = kernelVersionDataSource.getKernelVersion()
+    fun getKernelVersion(): String = kernelVersionDataSource.getKernelVersion()
 
-    override fun observeTemperatureStatus(): Flow<TemperatureStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
+    fun observeTemperatureStatus(): Flow<TemperatureStatus> = temperatureStatusDataSource.observeDeviceTemperatureStatus()
 
-    override fun getAndroidPlatformVersion(): AndroidPlatformVersion {
+    fun getAndroidPlatformVersion(): AndroidPlatformVersion {
         val releaseLabel = androidPlatformVersionDataSource.getReleaseLabel()
         val apiLevelLabel = androidPlatformVersionDataSource.getApiLevelLabel()
         return AndroidPlatformVersion(releaseLabel, apiLevelLabel)
     }
 
-    override fun observeAvailableExecutionContext(): Flow<ExecutionContext> = flow {
+    fun observeAvailableExecutionContext(): Flow<ExecutionContext> = flow {
         while (true){
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
@@ -108,49 +107,49 @@ class StoreStatusGatewayImpl @Inject constructor(
         }
     }
 
-    override fun isRootShellAvailable(): Boolean {
+    fun isRootShellAvailable(): Boolean {
         return Shell.getShell().isRoot
     }
 
-    override fun isShizukuAvailable(): Boolean {
+    fun isShizukuAvailable(): Boolean {
         shizukuUserServiceGatewayImpl.startShizukuUserService()
         return true
         // MVP后马上删，会抛error不稳定
     }
 
     // CPU Status
-    override suspend fun findCpuCoreMetrics(cpuCoreIndex: Int?): CpuCoreMetrics? {
+    suspend fun findCpuCoreMetrics(cpuCoreIndex: Int? = null): CpuCoreMetrics? {
         return cpuStatusDataSource(cpuCoreIndex)
     }
 
-    override suspend fun findCpuCoreCount(): Int? {
+    suspend fun findCpuCoreCount(): Int? {
         return cpuStatusDataSource.findCpuCoreCount()
     }
 
-    override suspend fun findSystemUptime(): Duration? {
+    suspend fun findSystemUptime(): Duration? {
         return cpuStatusDataSource.findSystemUptime()
     }
 
     // Network Status
-    override suspend fun findNetworkInterfaceMetrics(
-        networkInterfaceName: String
+    suspend fun findNetworkInterfaceMetrics(
+        networkInterfaceName: String = "wlan0"
     ): NetworkInterfaceMetrics? {
         return networkStatusDataSource(networkInterfaceName)
     }
 
-    override fun isCarrierAvailable(): Boolean {
+    fun isCarrierAvailable(): Boolean {
         return networkStatusDataSource.isCarrierAvailable()
     }
 
-    override fun isVpnAvailable(): Boolean {
+    fun isVpnAvailable(): Boolean {
         return networkStatusDataSource.isVpnAvailable()
     }
 
-    override fun findCarrierNetworkInterfaceName(): String? {
+    fun findCarrierNetworkInterfaceName(): String? {
         return networkStatusDataSource.findCarrierNetworkInterfaceName()
     }
 
-    override fun findVpnNetworkInterfaceName(): String? {
+    fun findVpnNetworkInterfaceName(): String? {
         return networkStatusDataSource.findVpnNetworkInterfaceName()
     }
 
