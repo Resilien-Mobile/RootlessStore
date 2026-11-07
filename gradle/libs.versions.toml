@@ -125,3 +125,4 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 
 # Coroutine
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutineAndroid" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutineAndroid" }
