@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.application.status
 
-import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
+import com.baidaidai.rootless_store.domain.status.gateway.StoreStatusGateway
 import com.baidaidai.rootless_store.domain.status.model.NetworkDashboardConfig
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -13,7 +13,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 class ObserveNetworkDashboardConfigUseCase @Inject constructor(
-    private val storeStatusGatewayImpl: StoreStatusGatewayImpl
+    private val storeStatusGateway: StoreStatusGateway
 ) {
     operator fun invoke(): Flow<NetworkDashboardConfig> {
         return flow {
@@ -35,28 +35,28 @@ class ObserveNetworkDashboardConfigUseCase @Inject constructor(
         return coroutineScope {
 
             // Get optional network availability
-            val isCarrierAvailable = storeStatusGatewayImpl.isCarrierAvailable()
-            val isVpnAvailable = storeStatusGatewayImpl.isVpnAvailable()
+            val isCarrierAvailable = storeStatusGateway.isCarrierAvailable()
+            val isVpnAvailable = storeStatusGateway.isVpnAvailable()
 
             // Resolve active network interface names
             val carrierNetworkInterfaceName = if (isCarrierAvailable) {
-                storeStatusGatewayImpl.findCarrierNetworkInterfaceName()
+                storeStatusGateway.findCarrierNetworkInterfaceName()
             } else {
                 null
             }
             val vpnNetworkInterfaceName = if (isVpnAvailable) {
-                storeStatusGatewayImpl.findVpnNetworkInterfaceName()
+                storeStatusGateway.findVpnNetworkInterfaceName()
             } else {
                 null
             }
 
             // Start network interface sampling
             val wlanNetworkInterfaceMetricsDeferred = async {
-                storeStatusGatewayImpl.findNetworkInterfaceMetrics()
+                storeStatusGateway.findNetworkInterfaceMetrics()
             }
             val vpnNetworkInterfaceMetricsDeferred = async {
                 if (isVpnAvailable && vpnNetworkInterfaceName != null) {
-                    storeStatusGatewayImpl.findNetworkInterfaceMetrics(
+                    storeStatusGateway.findNetworkInterfaceMetrics(
                         networkInterfaceName = vpnNetworkInterfaceName
                     )
                 } else {
@@ -65,7 +65,7 @@ class ObserveNetworkDashboardConfigUseCase @Inject constructor(
             }
             val carrierNetworkInterfaceMetricsDeferred = async {
                 if (isCarrierAvailable && carrierNetworkInterfaceName != null) {
-                    storeStatusGatewayImpl.findNetworkInterfaceMetrics(
+                    storeStatusGateway.findNetworkInterfaceMetrics(
                         networkInterfaceName = carrierNetworkInterfaceName
                     )
                 } else {

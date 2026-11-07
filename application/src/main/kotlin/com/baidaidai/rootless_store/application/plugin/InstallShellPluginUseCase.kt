@@ -2,8 +2,8 @@ package com.baidaidai.rootless_store.application.plugin
 
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
@@ -19,9 +19,9 @@ import javax.inject.Inject
 import dagger.Lazy
 
 class InstallShellPluginUseCase @Inject constructor(
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
+    private val androidFileSystemDeleteOperatorGateway: AndroidFileSystemDeleteOperatorGateway,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
@@ -36,7 +36,7 @@ class InstallShellPluginUseCase @Inject constructor(
             val useRedundancyInstall = pluginManifest.webUiEntryPoint != null
 
             // Copy to /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
-            val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryPath()
+            val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGateway.getExternalAppFilesDirectoryPath()
             val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
 
             androidFileSystemCreateOperatorGatewayImpl.copyFileToFile(
@@ -53,7 +53,7 @@ class InstallShellPluginUseCase @Inject constructor(
                 ) ?: false
 
             // Delete /storage/emulated/0/Android/data/com.baidaidai.rootless_store/files/_template_.zip
-            val isShellPluginStagingFileDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+            val isShellPluginStagingFileDeleted = androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
                 shellPluginStagingFile.path
             )
 

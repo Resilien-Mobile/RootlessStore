@@ -1,10 +1,10 @@
 package com.baidaidai.rootless_store.application.status
 
-import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
+import com.baidaidai.rootless_store.domain.status.repository.StoreStatusRepository
 import javax.inject.Inject
 
 class ObserveTemperatureStatusUseCase @Inject constructor(
-    private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl
+    private val storeStatusRepository: StoreStatusRepository
 ) {
-    operator fun invoke() = storeStatusRepositoryImpl.observeTemperatureStatus()
+    operator fun invoke() = storeStatusRepository.observeTemperatureStatus()
 }

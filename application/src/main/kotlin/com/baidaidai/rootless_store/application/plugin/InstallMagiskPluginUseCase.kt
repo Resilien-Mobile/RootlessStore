@@ -3,11 +3,11 @@ package com.baidaidai.rootless_store.application.plugin
 import com.baidaidai.illusioncube.IllusionCube
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemRezipOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemUnzipOperatorGateway
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
@@ -26,11 +26,11 @@ import javax.inject.Inject
 
 class InstallMagiskPluginUseCase @Inject constructor(
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemUnzipOperatorGatewayImpl: AndroidFileSystemUnzipOperatorGatewayImpl,
-    private val androidFileSystemRezipOperatorGatewayImpl: AndroidFileSystemRezipOperatorGatewayImpl,
-    private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
+    private val androidFileSystemUnzipOperatorGateway: AndroidFileSystemUnzipOperatorGateway,
+    private val androidFileSystemRezipOperatorGateway: AndroidFileSystemRezipOperatorGateway,
+    private val androidFileSystemDeleteOperatorGateway: AndroidFileSystemDeleteOperatorGateway,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl
@@ -120,21 +120,21 @@ class InstallMagiskPluginUseCase @Inject constructor(
         val pluginManifestJson = json.encodeToString(pluginManifest)
 
         // Build PluginManifest.json into temporary zip/plugin package
-        val magiskStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppMagiskDirectoryFile()
-        val magiskTemplateDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppMagiskTemplateDirectoryFile()
+        val magiskStagingDirectory = androidFileSystemDefaultOperatorGateway.getExternalAppMagiskDirectoryFile()
+        val magiskTemplateDirectory = androidFileSystemDefaultOperatorGateway.getExternalAppMagiskTemplateDirectoryFile()
         val magiskTemplateZipFile = File(magiskStagingDirectory, "_template_.zip")
 
-        androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             magiskTemplateDirectory.path
         )  // Delete Template Directory, Avoid old content
-        androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             magiskTemplateZipFile.path
         ) // Delete _template_.zip, Avoid old content
         magiskTemplateDirectory.mkdirs()
 
         // Un-zip magisk module to template directory
         runCatching {
-            androidFileSystemUnzipOperatorGatewayImpl.unzipFromFileToDirectory(
+            androidFileSystemUnzipOperatorGateway.unzipFromFileToDirectory(
                 originFile = packageFile,
                 targetDirectory = magiskTemplateDirectory
             )
@@ -167,7 +167,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
 
         // Re-zip to _template_.zip
         runCatching {
-            androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
+            androidFileSystemRezipOperatorGateway.rezipFromFile(
                 originPluginFile = magiskTemplateDirectory,
                 targetZipFile = magiskTemplateZipFile
             )
@@ -181,7 +181,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
             )
         }
 
-        val isMagiskTemplateDirectoryDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        val isMagiskTemplateDirectoryDeleted = androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             magiskTemplateDirectory.path
         )
         if (!isMagiskTemplateDirectoryDeleted) {
@@ -202,7 +202,7 @@ class InstallMagiskPluginUseCase @Inject constructor(
                 pluginManifest.entryPoint
             ) ?: false
 
-        val isMagiskTemplateArchiveDeleted = androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        val isMagiskTemplateArchiveDeleted = androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             magiskTemplateZipFile.path
         )
 

@@ -1,20 +1,20 @@
 package com.baidaidai.rootless_store.application.install
 
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CleanupPreparedLocalPackageUseCase @Inject constructor(
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
-    private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
+    private val androidFileSystemDeleteOperatorGateway: AndroidFileSystemDeleteOperatorGateway
 ) {
     suspend operator fun invoke() {
         withContext(Dispatchers.IO) {
-            val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+            val packageDirectory = androidFileSystemDefaultOperatorGateway
                 .getExternalAppPackageCacheDirectoryFile()
-            androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(packageDirectory.path)
+            androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(packageDirectory.path)
         }
     }
 }

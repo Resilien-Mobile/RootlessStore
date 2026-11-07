@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.application.install
 import com.baidaidai.rootless_store.application.environment.InstallEnvironmentUseCase
 import com.baidaidai.rootless_store.application.plugin.InstallMagiskPluginUseCase
 import com.baidaidai.rootless_store.application.plugin.InstallPluginUseCase
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.install.model.LocalPackageType
@@ -13,7 +13,7 @@ import java.io.File
 import javax.inject.Inject
 
 class InstallLocalPackageUseCase @Inject constructor(
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
     private val installPluginUseCase: InstallPluginUseCase,
     private val installEnvironmentUseCase: InstallEnvironmentUseCase,
@@ -21,7 +21,7 @@ class InstallLocalPackageUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Result<Unit, PluginError> {
 
-        val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+        val packageDirectory = androidFileSystemDefaultOperatorGateway
             .getExternalAppPackageCacheDirectoryFile()
         val packageFile = File(packageDirectory, "package.zip")
 

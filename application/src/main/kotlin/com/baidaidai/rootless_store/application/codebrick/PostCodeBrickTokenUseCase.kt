@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.application.codebrick
 
-import com.baidaidai.rootless_store.data.codebrick.gateway.CodeBrickGatewayImpl
+import com.baidaidai.rootless_store.domain.codebrick.gateway.CodeBrickGateway
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickToken
@@ -10,7 +10,7 @@ import com.github.michaelbull.result.getOrElse
 import javax.inject.Inject
 
 class PostCodeBrickTokenUseCase @Inject constructor(
-    private val codeBrickGatewayImpl: CodeBrickGatewayImpl
+    private val codeBrickGateway: CodeBrickGateway
 ) {
     suspend operator fun invoke(
         codeBrickConfig: CodeBrickConfig
@@ -24,13 +24,13 @@ class PostCodeBrickTokenUseCase @Inject constructor(
         )
 
         // Create CodeBrick token
-        val codeBrickToken = codeBrickGatewayImpl
+        val codeBrickToken = codeBrickGateway
             .createCodeBrickToken(codeBrickJsonToken)
             .getOrElse { codeBrickError ->
                 return Err(codeBrickError)
             }
 
         // Post CodeBrick token to clipboard
-        return codeBrickGatewayImpl.postClipboardText(codeBrickToken)
+        return codeBrickGateway.postClipboardText(codeBrickToken)
     }
 }

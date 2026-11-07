@@ -2,9 +2,9 @@ package com.baidaidai.rootless_store.application.codebrick
 
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRezipOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemRezipOperatorGateway
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
@@ -20,10 +20,10 @@ import javax.inject.Inject
 
 class InstallPluginFromCodeBrickUseCase @Inject constructor(
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl,
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemRezipOperatorGatewayImpl: AndroidFileSystemRezipOperatorGatewayImpl,
-    private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
+    private val androidFileSystemRezipOperatorGateway: AndroidFileSystemRezipOperatorGateway,
+    private val androidFileSystemDeleteOperatorGateway: AndroidFileSystemDeleteOperatorGateway,
     private val pluginGatewayImpl: PluginGatewayImpl,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
@@ -102,12 +102,12 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
     ) {
 
         // Prepare Temporary Shell Plugin Package Directory
-        val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGatewayImpl.getExternalAppFilesDirectoryFile()
+        val shellPluginStagingDirectory = androidFileSystemDefaultOperatorGateway.getExternalAppFilesDirectoryFile()
         val temporaryShellPluginPackageDirectory = File(
             shellPluginStagingDirectory,
             pluginManifest.pluginPackageName
         )
-        androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             temporaryShellPluginPackageDirectory.path
         )
         temporaryShellPluginPackageDirectory.mkdirs()
@@ -128,7 +128,7 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
 
         // Re-Zip Temporary Shell Plugin Package Directory to _template_.zip
         val shellPluginStagingFile = File(shellPluginStagingDirectory, "_template_.zip")
-        androidFileSystemRezipOperatorGatewayImpl.rezipFromFile(
+        androidFileSystemRezipOperatorGateway.rezipFromFile(
             originPluginFile = temporaryShellPluginPackageDirectory,
             targetZipFile = shellPluginStagingFile
         )
@@ -142,12 +142,12 @@ class InstallPluginFromCodeBrickUseCase @Inject constructor(
             ) ?: false
 
         // Delete Temporary Shell Plugin Package Directory
-        androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             temporaryShellPluginPackageDirectory.path
         )
 
         // Delete _template_.zip
-        androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(
+        androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(
             shellPluginStagingFile.path
         )
 

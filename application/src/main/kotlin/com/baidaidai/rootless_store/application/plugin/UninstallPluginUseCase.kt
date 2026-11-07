@@ -6,7 +6,7 @@ import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
+import com.baidaidai.rootless_store.domain.shizuku.gateway.ShizukuPermissionGateway
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
@@ -23,7 +23,7 @@ class UninstallPluginUseCase @Inject constructor(
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
     private val pluginFileSystemGateway: PluginGatewayImpl,
-    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
+    private val shizukuPermissionGateway: ShizukuPermissionGateway,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
 ) {
     suspend operator fun invoke(
@@ -56,7 +56,7 @@ class UninstallPluginUseCase @Inject constructor(
         pluginManifest: PluginManifest
     ): Result<Unit, PluginError> {
         // 权限检查：确认当前进程具备调用 Shizuku 的权限。
-        if (!shizukuPermissionGatewayImpl.canUseShizuku()) {
+        if (!shizukuPermissionGateway.canUseShizuku()) {
             return Err(
                 PluginError(
                     errorMessage = "Oops！",

@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.application.codebrick
 
-import com.baidaidai.rootless_store.data.codebrick.gateway.CodeBrickGatewayImpl
-import com.baidaidai.rootless_store.data.codebrick.repository.CodeBrickRepositoryImpl
+import com.baidaidai.rootless_store.domain.codebrick.gateway.CodeBrickGateway
+import com.baidaidai.rootless_store.domain.codebrick.repository.CodeBrickRepository
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.github.michaelbull.result.Err
@@ -11,21 +11,21 @@ import com.github.michaelbull.result.getOrElse
 import javax.inject.Inject
 
 class AddCodeBrickFromClipboardUseCase @Inject constructor(
-    private val codeBrickGatewayImpl: CodeBrickGatewayImpl,
-    private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
+    private val codeBrickGateway: CodeBrickGateway,
+    private val codeBrickRepository: CodeBrickRepository
 ) {
 
     suspend operator fun invoke(): Result<Unit, CodeBrickError> {
 
         // Find Clipboard Content
-        val clipboardText = codeBrickGatewayImpl
+        val clipboardText = codeBrickGateway
             .findClipboardText()
             .getOrElse { codeBrickError ->
                 return Err(codeBrickError)
             }
 
         // Parse CodeBrick JSON
-        val codeBrickJsonPayload = codeBrickGatewayImpl
+        val codeBrickJsonPayload = codeBrickGateway
             .parseCodeBrickToken(jsonString = clipboardText)
             .getOrElse { codeBrickError ->
                 return Err(codeBrickError)
@@ -40,7 +40,7 @@ class AddCodeBrickFromClipboardUseCase @Inject constructor(
         )
 
         // Add CodeBrick Config
-        codeBrickRepositoryImpl.addCodeBrick(codeBrickConfig)
+        codeBrickRepository.addCodeBrick(codeBrickConfig)
 
         return Ok(Unit)
 

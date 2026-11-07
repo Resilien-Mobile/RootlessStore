@@ -3,7 +3,7 @@ package com.baidaidai.rootless_store.application.execute
 import android.content.Context
 import com.baidaidai.rootless_store.application.R
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
+import com.baidaidai.rootless_store.domain.shizuku.gateway.ShizukuPermissionGateway
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import com.baidaidai.rootless_store.domain.execution.error.ExecutionError
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
@@ -20,7 +20,7 @@ class ExecutePluginUseCase @Inject constructor(
     private val executePluginByShizukuUseCase: ExecutePluginByShizukuUseCase,
     private val executePluginByAppShellUseCase: ExecutePluginByAppShellUseCase,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
+    private val shizukuPermissionGateway: ShizukuPermissionGateway,
 ) {
     suspend operator fun invoke(
         pluginId: String
@@ -32,7 +32,7 @@ class ExecutePluginUseCase @Inject constructor(
             return Ok(executePluginByAppShellUseCase(pluginId))
         }
 
-        if (!shizukuPermissionGatewayImpl.canUseShizuku()) {
+        if (!shizukuPermissionGateway.canUseShizuku()) {
             return Err(
                 ExecutionError(
                     errorMessage = "Oops!",

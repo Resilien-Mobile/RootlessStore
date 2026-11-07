@@ -1,11 +1,11 @@
 package com.baidaidai.rootless_store.application.setting
 
-import com.baidaidai.rootless_store.data.setting.repository.SettingPreferencesRepositoryImpl
+import com.baidaidai.rootless_store.domain.setting.repository.SettingPreferencesRepository
 import javax.inject.Inject
 
 class SetInsecureConnectionAllowedUseCase @Inject constructor(
-    private val settingPreferencesRepositoryImpl: SettingPreferencesRepositoryImpl
+    private val settingPreferencesRepository: SettingPreferencesRepository
 ) {
     suspend operator fun invoke(isAllowed: Boolean) =
-        settingPreferencesRepositoryImpl.setInsecureConnectionAllowed(isAllowed)
+        settingPreferencesRepository.setInsecureConnectionAllowed(isAllowed)
 }

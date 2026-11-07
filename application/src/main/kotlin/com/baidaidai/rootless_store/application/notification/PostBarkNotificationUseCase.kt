@@ -1,26 +1,26 @@
 package com.baidaidai.rootless_store.application.notification
 
-import com.baidaidai.rootless_store.data.notification.gateway.NotificationGatewayImpl
-import com.baidaidai.rootless_store.data.notification.repository.NotificationPreferenceRepositoryImpl
+import com.baidaidai.rootless_store.domain.notification.gateway.NotificationGateway
+import com.baidaidai.rootless_store.domain.notification.repository.NotificationPreferenceRepository
 import javax.inject.Inject
 
 class PostBarkNotificationUseCase @Inject constructor(
-    private val notificationGatewayImpl: NotificationGatewayImpl,
-    private val notificationPreferenceRepositoryImpl: NotificationPreferenceRepositoryImpl
+    private val notificationGateway: NotificationGateway,
+    private val notificationPreferenceRepository: NotificationPreferenceRepository
 ) {
 
     suspend operator fun invoke(){
-        val notificationPreference = notificationPreferenceRepositoryImpl.findNotificationPreference()
+        val notificationPreference = notificationPreferenceRepository.findNotificationPreference()
 
         if (notificationPreference != null){
             if (notificationPreference.isCriticalWarningEnabled){
-                notificationGatewayImpl
+                notificationGateway
                     .sendCriticalBarkNotification(
                         title = notificationPreference.notificationTitle,
                         apiKey = notificationPreference.apiKey
                     )
             }else{
-                notificationGatewayImpl
+                notificationGateway
                     .sendBarkNotification(
                         title = notificationPreference.notificationTitle,
                         apiKey = notificationPreference.apiKey
