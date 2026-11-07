@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.codebrick.gateway
 
+import com.baidaidai.rootless_store.domain.codebrick.gateway.CodeBrickGateway
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.domain.codebrick.error.CodeBrickError
 import com.baidaidai.rootless_store.domain.codebrick.gateway.CodeBrickDataSource
@@ -10,22 +11,22 @@ import javax.inject.Inject
 
 class CodeBrickGatewayImpl @Inject constructor(
     private val codeBrickDataSource: CodeBrickDataSource
-) {
+): CodeBrickGateway {
     private val json = Json {
         ignoreUnknownKeys = true
     }
 
-    fun findClipboardText(): Result<String, CodeBrickError> {
+    override fun findClipboardText(): Result<String, CodeBrickError> {
         return codeBrickDataSource.findClipboardText()
     }
 
-    fun postClipboardText(
+    override fun postClipboardText(
         clipboardText: String
     ): Result<Unit, CodeBrickError> {
         return codeBrickDataSource.postClipboardText(clipboardText)
     }
 
-    fun parseCodeBrickToken(
+    override fun parseCodeBrickToken(
         jsonString: String
     ): Result<CodeBrickToken, CodeBrickError> = runCatching {
         json.decodeFromString<CodeBrickToken>(jsonString)
@@ -38,7 +39,7 @@ class CodeBrickGatewayImpl @Inject constructor(
             )
         }
 
-    fun createCodeBrickToken(
+    override fun createCodeBrickToken(
         codeBrickToken: CodeBrickToken
     ): Result<String, CodeBrickError> = runCatching {
         json.encodeToString(codeBrickToken)

@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemSearchOperatorGateway
 import android.content.Context
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -8,26 +9,26 @@ import javax.inject.Inject
 
 class AndroidFileSystemSearchOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): AndroidFileSystemSearchOperatorGateway {
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
     }
 
     // Search FS Operator
-    fun hasPluginDirectory(): Boolean {
+    override fun hasPluginDirectory(): Boolean {
         return hasInternalDirectory(PLUGIN_DIR_NAME)
     } // /File/Plugin?
 
-    fun hasPluginCacheDirectory(): Boolean {
+    override fun hasPluginCacheDirectory(): Boolean {
         return hasCacheDirectory(PLUGIN_DIR_NAME)
     } // /Cache/Plugin?
 
-    fun hasEnvironmentDirectory(): Boolean {
+    override fun hasEnvironmentDirectory(): Boolean {
         return hasInternalDirectory(ENVIRONMENT_DIR_NAME)
     } // /File/Environment?
 
-    fun hasEnvironmentCacheDirectory(): Boolean {
+    override fun hasEnvironmentCacheDirectory(): Boolean {
         return hasCacheDirectory(ENVIRONMENT_DIR_NAME)
     } // /Cache/Environment?
 

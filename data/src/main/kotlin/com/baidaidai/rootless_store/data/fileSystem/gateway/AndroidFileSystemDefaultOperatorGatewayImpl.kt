@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
 import android.content.Context
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
@@ -9,7 +10,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): AndroidFileSystemDefaultOperatorGateway {
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
@@ -47,31 +48,31 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
     }
 
     // Default FS Operator (External)
-    fun getExternalAppFilesDirectoryPath(): String {
+    override fun getExternalAppFilesDirectoryPath(): String {
         return getExternalAppFilesRootDirectory().path
     } // /sdcard/Android/data/APP_PACKAGE/files
 
-    fun getExternalAppFilesDirectoryFile(): File {
+    override fun getExternalAppFilesDirectoryFile(): File {
         return getExternalAppFilesRootDirectory()
     } // /sdcard/Android/data/APP_PACKAGE/files
 
-    fun getExternalAppCacheDirectoryPath(): String {
+    override fun getExternalAppCacheDirectoryPath(): String {
         return getExternalAppCacheRootDirectory().path
     } // /sdcard/Android/data/APP_PACKAGE/cache
 
-    fun getExternalAppCacheDirectoryFile(): File {
+    override fun getExternalAppCacheDirectoryFile(): File {
         return getExternalAppCacheRootDirectory()
     } // /sdcard/Android/data/APP_PACKAGE/cache
 
-    fun getExternalAppPackageCacheDirectoryFile(): File {
+    override fun getExternalAppPackageCacheDirectoryFile(): File {
         return File(getExternalAppCacheRootDirectory(), PACKAGE_DIR_NAME)
     } // /sdcard/Android/data/APP_PACKAGE/cache/Package
 
-    fun getExternalAppMagiskDirectoryFile(): File {
+    override fun getExternalAppMagiskDirectoryFile(): File {
         return File(getExternalAppFilesRootDirectory(), MAGISK_DIR_NAME)
     } // /sdcard/Android/data/APP_PACKAGE/files/magisk
 
-    fun getExternalAppMagiskTemplateDirectoryFile(): File {
+    override fun getExternalAppMagiskTemplateDirectoryFile(): File {
         return File(getExternalAppMagiskDirectoryFile(), MAGISK_TEMPLATE_DIR_NAME)
     } // /sdcard/Android/data/APP_PACKAGE/files/magisk/template
 
@@ -81,53 +82,53 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
      * 获取标准 File 或 Path 的区域，
      * 需显著使用 Internal 或 External，可包含 Plugin 和 Cache
      */
-    fun getInternalPluginDirectoryPath(): String {
+    override fun getInternalPluginDirectoryPath(): String {
         return getInternalPluginRootDirectory().path
     } // /File/Plugin: String
 
-    fun getInternalPluginDirectoryFile(): File {
+    override fun getInternalPluginDirectoryFile(): File {
         return getInternalPluginRootDirectory()
     } // /File/Plugin: File
 
-    fun getInternalFilesRootDirectoryPath(): String {
+    override fun getInternalFilesRootDirectoryPath(): String {
         return getInternalFilesRootDirectory().path
     } // ~/: String
 
-    fun getInternalFilesRootDirectoryFile(): File {
+    override fun getInternalFilesRootDirectoryFile(): File {
         return getInternalFilesRootDirectory()
     } // ~/: File
 
-    fun getInternalPluginCacheDirectoryPath(): String {
+    override fun getInternalPluginCacheDirectoryPath(): String {
         return getInternalPluginCacheDirectory().path
     } // /Cache/Plugin: String
 
-    fun getInternalPluginCacheDirectoryFile(): File {
+    override fun getInternalPluginCacheDirectoryFile(): File {
         return getInternalPluginCacheDirectory()
     } // /Cache/Plugin: File
 
-    fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String {
+    override fun resolvePluginEntryPoint(pluginManifest: PluginManifest): String {
         val defaultPluginDirectoryPath = getInternalPluginDirectoryPath()
         val pluginPackageName = pluginManifest.pluginPackageName
         val pluginEntryPoint = pluginManifest.entryPoint
         return "$defaultPluginDirectoryPath/$pluginPackageName/$pluginEntryPoint"
     } // /File/Plugin/PLUGIN/entry
 
-    fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
+    override fun resolvePluginPackageDirectory(pluginManifest: PluginManifest): String {
         val defaultPluginDirectoryPath = getInternalPluginDirectoryPath()
         val pluginPackageName = pluginManifest.pluginPackageName
         return "$defaultPluginDirectoryPath/$pluginPackageName"
     } // /File/Plugin/PLUGIN
 
     // Default FS Operator (Environment)
-    fun getDefaultEnvironmentDirectoryPath(): String {
+    override fun getDefaultEnvironmentDirectoryPath(): String {
         return getInternalEnvironmentRootDirectory().path
     } // /File/Environment
 
-    fun getInternalEnvironmentCacheDirectoryFile(): File {
+    override fun getInternalEnvironmentCacheDirectoryFile(): File {
         return getInternalEnvironmentCacheDirectory()
     } // /Cache/Environment: File
 
-    fun resolveEnvironmentPackageDirectory(environmentManifest: EnvironmentManifest): String {
+    override fun resolveEnvironmentPackageDirectory(environmentManifest: EnvironmentManifest): String {
         val defaultEnvironmentDirectoryPath = getDefaultEnvironmentDirectoryPath()
         val environmentPackageName = environmentManifest.environmentPackageName
         return "$defaultEnvironmentDirectoryPath/$environmentPackageName"
