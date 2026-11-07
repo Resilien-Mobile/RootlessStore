@@ -1,7 +1,7 @@
 package com.baidaidai.rootless_store.application.plugin
 
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
 import com.baidaidai.rootless_store.data.plugin.gateway.PluginGatewayImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
 import com.baidaidai.rootless_store.data.plugin.repository.PluginStatusRepositoryImpl
@@ -16,7 +16,7 @@ import javax.inject.Inject
 import java.io.File
 
 class InstallPluginUseCase @Inject constructor(
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
     private val pluginStatusRepositoryImpl: PluginStatusRepositoryImpl,
     private val pluginGatewayImpl: PluginGatewayImpl,
@@ -24,7 +24,7 @@ class InstallPluginUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(): Result<Unit, PluginError> {
-        val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+        val packageDirectory = androidFileSystemDefaultOperatorGateway
             .getExternalAppPackageCacheDirectoryFile()
         val localPackageFile = File(packageDirectory, "package.zip")
 

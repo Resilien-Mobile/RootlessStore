@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.application.environment
 
-import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
+import com.baidaidai.rootless_store.domain.environment.repository.EnvironmentRepository
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGatewayImpl
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import kotlinx.coroutines.flow.Flow
@@ -9,14 +9,14 @@ import java.io.File
 import javax.inject.Inject
 
 class ObserveEnvironmentsUseCase @Inject constructor(
-    private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
+    private val environmentRepository: EnvironmentRepository,
     private val androidFileSystemCapabilityGatewayImpl: AndroidFileSystemCapabilityGatewayImpl
 ) {
     operator fun invoke(): Flow<List<EnvironmentManifest>> {
 
         val uriRegex = Regex("^https?://", RegexOption.IGNORE_CASE)
 
-        return environmentRepositoryImpl.observeEnvironments().map { environmentManifestList ->
+        return environmentRepository.observeEnvironments().map { environmentManifestList ->
             environmentManifestList.map { environmentManifest ->
 
                 // If user provide icon uri

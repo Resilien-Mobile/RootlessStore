@@ -1,24 +1,24 @@
 package com.baidaidai.rootless_store.application.plugin
 
-import com.baidaidai.rootless_store.data.execution.repository.PluginExecutionRepositoryImpl
+import com.baidaidai.rootless_store.domain.execution.repository.PluginExecutionRepository
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
+import com.baidaidai.rootless_store.domain.shizuku.gateway.ShizukuPermissionGateway
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import javax.inject.Inject
 
 class AbortPluginProcessUseCase @Inject constructor(
-    private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,
+    private val pluginExecutionRepository: PluginExecutionRepository,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl
+    private val shizukuPermissionGateway: ShizukuPermissionGateway
 ) {
     suspend operator fun invoke(pluginId: String) {
         val shouldUseShizuku = shouldUseShizuku(pluginId)
             .getOrElse { false }
 
         if (shouldUseShizuku) {
-            pluginExecutionRepositoryImpl.abortPluginProcessByShizuku(pluginId)
+            pluginExecutionRepository.abortPluginProcessByShizuku(pluginId)
         } else {
-            pluginExecutionRepositoryImpl.abortPluginProcess(pluginId)
+            pluginExecutionRepository.abortPluginProcess(pluginId)
         }
     }
 
@@ -38,7 +38,7 @@ class AbortPluginProcessUseCase @Inject constructor(
         runCatching {
 
             // 判断条件1：检查 App 是否拥有 Shizuku 权限。
-            val hasShizukuPermission = shizukuPermissionGatewayImpl.hasShizukuPermission()
+            val hasShizukuPermission = shizukuPermissionGateway.hasShizukuPermission()
 
             // 判断条件2：读取插件所要求的执行上下文，必须为 ADB。
             val pluginRequiredEnvironment = pluginRepositoryImpl

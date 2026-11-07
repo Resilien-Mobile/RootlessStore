@@ -1,9 +1,9 @@
 package com.baidaidai.rootless_store.application.execute
 
-import com.baidaidai.rootless_store.data.execution.gateway.PluginExecutionGatewayImpl
-import com.baidaidai.rootless_store.data.execution.repository.PluginExecutionRepositoryImpl
+import com.baidaidai.rootless_store.domain.execution.gateway.PluginExecutionGateway
+import com.baidaidai.rootless_store.domain.execution.repository.PluginExecutionRepository
 import com.baidaidai.rootless_store.data.plugin.repository.PluginRepositoryImpl
-import com.baidaidai.rootless_store.data.setting.repository.SettingPreferencesRepositoryImpl
+import com.baidaidai.rootless_store.domain.setting.repository.SettingPreferencesRepository
 import com.baidaidai.rootless_store.domain.execution.model.ExecutionResult
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import kotlinx.coroutines.flow.Flow
@@ -12,10 +12,10 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 class ExecutePluginByShizukuUseCase @Inject constructor(
-    private val pluginExecutionGatewayImpl: PluginExecutionGatewayImpl,
-    private val pluginExecutionRepositoryImpl: PluginExecutionRepositoryImpl,
+    private val pluginExecutionGateway: PluginExecutionGateway,
+    private val pluginExecutionRepository: PluginExecutionRepository,
     private val pluginRepositoryImpl: PluginRepositoryImpl,
-    private val settingPreferencesRepositoryImpl: SettingPreferencesRepositoryImpl
+    private val settingPreferencesRepository: SettingPreferencesRepository
 ) {
     private val pidRegex = Regex("""^\s*-\s*PID:(\d+)\s*$""")
 
@@ -24,11 +24,11 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
     ): Flow<ExecutionResult> {
 
         val pluginManifest = pluginRepositoryImpl.findPlugin(pluginId)!!
-        val shouldMonitor = settingPreferencesRepositoryImpl.observePluginStatusNotificationEnabled().first()
+        val shouldMonitor = settingPreferencesRepository.observePluginStatusNotificationEnabled().first()
 
         // Dispatch to PluginExecutionGateway.executePluginByShizuku
         var pidSaved = false
-        val pluginExecutionResult = pluginExecutionGatewayImpl.executePluginByShizuku(
+        val pluginExecutionResult = pluginExecutionGateway.executePluginByShizuku(
             pluginEntryPoint = pluginManifest.entryPoint,
             pluginDirectory = pluginManifest.pluginPackageName,
             shouldMonitor = shouldMonitor
@@ -40,7 +40,7 @@ class ExecutePluginByShizukuUseCase @Inject constructor(
                 val pid = parsePid(executionResult.output)
                 if (pid != null) {
                     pidSaved = true
-                    pluginExecutionRepositoryImpl.createPluginExecution(
+                    pluginExecutionRepository.createPluginExecution(
                         pluginManifest = pluginManifest,
                         executionPid = pid,
                         executionContext = ExecutionContext.ADB

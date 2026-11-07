@@ -3,7 +3,8 @@ package com.baidaidai.rootless_store.application.status
 import android.util.Log
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuUserServiceGatewayImpl
 import com.baidaidai.rootless_store.data.shizuku.gateway.ShizukuPermissionGatewayImpl
-import com.baidaidai.rootless_store.data.status.repository.StoreStatusRepositoryImpl
+import com.baidaidai.rootless_store.domain.shizuku.gateway.ShizukuPermissionGateway
+import com.baidaidai.rootless_store.domain.status.repository.StoreStatusRepository
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import com.baidaidai.rootless_store.domain.status.model.SeLinuxStatus
 import com.topjohnwu.superuser.Shell
@@ -14,8 +15,8 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 class ObserveExecutionContextUseCase @Inject constructor(
-    private val storeStatusRepositoryImpl: StoreStatusRepositoryImpl,
-    private val shizukuPermissionGatewayImpl: ShizukuPermissionGatewayImpl,
+    private val storeStatusRepository: StoreStatusRepository,
+    private val shizukuPermissionGateway: ShizukuPermissionGateway,
     private val shizukuUserServiceGatewayImpl: ShizukuUserServiceGatewayImpl,
 ) {
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -25,13 +26,13 @@ class ObserveExecutionContextUseCase @Inject constructor(
 
             val isRoot = Shell.getShell().isRoot
             val isShizukuAvailable =
-                if (!isRoot && ShizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGatewayImpl.hasShizukuPermission()) {
+                if (!isRoot && ShizukuPermissionGatewayImpl.pingShizuku() && shizukuPermissionGateway.hasShizukuPermission()) {
                     shizukuUserServiceGatewayImpl.startShizukuUserService()
                     true
                 } else {
                     false
                 }
-            val seLinuxStatus = storeStatusRepositoryImpl.getSeLinuxStatus()
+            val seLinuxStatus = storeStatusRepository.getSeLinuxStatus()
 
             val executionContext = when {
                 isRoot -> {

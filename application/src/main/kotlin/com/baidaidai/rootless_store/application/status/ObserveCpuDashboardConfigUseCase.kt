@@ -1,6 +1,6 @@
 package com.baidaidai.rootless_store.application.status
 
-import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
+import com.baidaidai.rootless_store.domain.status.gateway.StoreStatusGateway
 import com.baidaidai.rootless_store.domain.status.model.CpuDashboardConfig
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
 class ObserveCpuDashboardConfigUseCase @Inject constructor(
-    private val storeStatusGatewayImpl: StoreStatusGatewayImpl,
+    private val storeStatusGateway: StoreStatusGateway,
 ) {
     operator fun invoke(): Flow<CpuDashboardConfig> {
         return flow {
@@ -36,7 +36,7 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
 
             // Get available CPU core count
             val availableCpuCoreCount =
-                storeStatusGatewayImpl.findCpuCoreCount() ?: return@coroutineScope null
+                storeStatusGateway.findCpuCoreCount() ?: return@coroutineScope null
             if (availableCpuCoreCount <= 0) {
                 return@coroutineScope null
             }
@@ -44,19 +44,19 @@ class ObserveCpuDashboardConfigUseCase @Inject constructor(
 
             // Start total CPU sampling
             val aggregateMetricsDeferred = async {
-                storeStatusGatewayImpl.findCpuCoreMetrics(cpuCoreIndex = null)
+                storeStatusGateway.findCpuCoreMetrics(cpuCoreIndex = null)
             }
 
             // Start each CPU core sampling
             val coreMetricsDeferred = cpuCoreIndices.map { cpuCoreIndex ->
                 async {
-                    storeStatusGatewayImpl.findCpuCoreMetrics(cpuCoreIndex = cpuCoreIndex)
+                    storeStatusGateway.findCpuCoreMetrics(cpuCoreIndex = cpuCoreIndex)
                 }
             }
 
             // Start system uptime query
             val systemUptimeDeferred = async {
-                storeStatusGatewayImpl.findSystemUptime()
+                storeStatusGateway.findSystemUptime()
             }
 
             // Await all CPU sampling results

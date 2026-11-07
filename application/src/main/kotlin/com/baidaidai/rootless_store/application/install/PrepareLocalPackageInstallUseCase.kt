@@ -3,11 +3,11 @@ package com.baidaidai.rootless_store.application.install
 import android.net.Uri
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDeleteOperatorGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.signature.gateway.PackageSignatureGatewayImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemUnzipOperatorGateway
+import com.baidaidai.rootless_store.domain.signature.gateway.PackageSignatureGateway
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureStatus
 import com.baidaidai.rootless_store.domain.install.model.PackageSignatureInfo
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
@@ -22,11 +22,11 @@ import javax.inject.Inject
 
 class PrepareLocalPackageInstallUseCase @Inject constructor(
     private val androidFileSystemCreateOperatorGatewayImpl: AndroidFileSystemCreateOperatorGatewayImpl,
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
-    private val androidFileSystemDeleteOperatorGatewayImpl: AndroidFileSystemDeleteOperatorGatewayImpl,
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
+    private val androidFileSystemDeleteOperatorGateway: AndroidFileSystemDeleteOperatorGateway,
     private val androidFileSystemReadOperatorGatewayImpl: AndroidFileSystemReadOperatorGatewayImpl,
-    private val androidFileSystemUnzipOperatorGatewayImpl: AndroidFileSystemUnzipOperatorGatewayImpl,
-    private val packageSignatureGatewayImpl: PackageSignatureGatewayImpl
+    private val androidFileSystemUnzipOperatorGateway: AndroidFileSystemUnzipOperatorGateway,
+    private val packageSignatureGateway: PackageSignatureGateway
 ) {
 
     suspend operator fun invoke(uri: Uri): Result<PackageSignatureInfo?, PluginError> {
@@ -52,9 +52,9 @@ class PrepareLocalPackageInstallUseCase @Inject constructor(
     private suspend fun preparePackage(uri: Uri): Result<PackageSignatureInfo?, PluginError> {
 
         // 准备稳定的 cache/Package 工作区，并先将 SAF 内容落到本地文件。
-        val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+        val packageDirectory = androidFileSystemDefaultOperatorGateway
             .getExternalAppPackageCacheDirectoryFile()
-        val previousPackageDirectoryDeleted = androidFileSystemDeleteOperatorGatewayImpl
+        val previousPackageDirectoryDeleted = androidFileSystemDeleteOperatorGateway
             .deleteFileOrDirectory(packageDirectory.path)
 
         // 确认清除空的文件夹，并且文件夹存在且为空
@@ -82,7 +82,7 @@ class PrepareLocalPackageInstallUseCase @Inject constructor(
         }
 
         // 根据外层签名状态选择解包或 2.x 无签名兼容路径。
-        val packageSignatureStatus = packageSignatureGatewayImpl
+        val packageSignatureStatus = packageSignatureGateway
             .resolvePackageSignature(sourcePackageFile)
         if (packageSignatureStatus == PackageSignatureStatus.Unsigned) {
 
@@ -93,7 +93,7 @@ class PrepareLocalPackageInstallUseCase @Inject constructor(
         }
 
         // 签名包只解出约定的内层包和签名文件，安装流程后续只接收 package.zip。
-        androidFileSystemUnzipOperatorGatewayImpl.extractFilesFromZip(
+        androidFileSystemUnzipOperatorGateway.extractFilesFromZip(
             originFile = sourcePackageFile,
             targetDirectory = packageDirectory,
             fileNames = setOf("package.zip", "sign.p7s")
@@ -103,7 +103,7 @@ class PrepareLocalPackageInstallUseCase @Inject constructor(
         check(sourcePackageFile.delete()) { "Could not remove outer signed package" }
 
         // 从已归一化的内层包构造签名确认信息。
-        val packageSingerInfo = packageSignatureGatewayImpl.resolveSignedPackageInfo(
+        val packageSingerInfo = packageSignatureGateway.resolveSignedPackageInfo(
             packageFile = normalizedPackageFile,
             signatureStatus = packageSignatureStatus
         )
@@ -122,8 +122,8 @@ class PrepareLocalPackageInstallUseCase @Inject constructor(
     }
 
     private fun cleanupPackageDirectory() {
-        val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+        val packageDirectory = androidFileSystemDefaultOperatorGateway
             .getExternalAppPackageCacheDirectoryFile()
-        androidFileSystemDeleteOperatorGatewayImpl.deleteFileOrDirectory(packageDirectory.path)
+        androidFileSystemDeleteOperatorGateway.deleteFileOrDirectory(packageDirectory.path)
     }
 }

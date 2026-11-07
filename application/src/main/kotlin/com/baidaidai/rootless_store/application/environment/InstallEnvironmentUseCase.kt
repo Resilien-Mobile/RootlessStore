@@ -1,10 +1,10 @@
 package com.baidaidai.rootless_store.application.environment
 
 import com.baidaidai.rootless_store.core.util.formatAsMultilineString
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemDefaultOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.environment.gateway.EnvironmentGatewayImpl
-import com.baidaidai.rootless_store.data.environment.repository.EnvironmentRepositoryImpl
-import com.baidaidai.rootless_store.data.environment.repository.EnvironmentStatusRepositoryImpl
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
+import com.baidaidai.rootless_store.domain.environment.gateway.EnvironmentGateway
+import com.baidaidai.rootless_store.domain.environment.repository.EnvironmentRepository
+import com.baidaidai.rootless_store.domain.environment.repository.EnvironmentStatusRepository
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.error.PluginError
 import com.baidaidai.rootless_store.domain.plugin.model.PluginOrigin
@@ -15,14 +15,14 @@ import javax.inject.Inject
 import java.io.File
 
 class InstallEnvironmentUseCase @Inject constructor(
-    private val androidFileSystemDefaultOperatorGatewayImpl: AndroidFileSystemDefaultOperatorGatewayImpl,
-    private val environmentGatewayImpl: EnvironmentGatewayImpl,
-    private val environmentRepositoryImpl: EnvironmentRepositoryImpl,
-    private val environmentStatusRepositoryImpl: EnvironmentStatusRepositoryImpl
+    private val androidFileSystemDefaultOperatorGateway: AndroidFileSystemDefaultOperatorGateway,
+    private val environmentGateway: EnvironmentGateway,
+    private val environmentRepository: EnvironmentRepository,
+    private val environmentStatusRepository: EnvironmentStatusRepository
 ) {
 
     suspend operator fun invoke(): Result<Unit, PluginError> {
-        val packageDirectory = androidFileSystemDefaultOperatorGatewayImpl
+        val packageDirectory = androidFileSystemDefaultOperatorGateway
             .getExternalAppPackageCacheDirectoryFile()
         val localPackageFile = File(packageDirectory, "package.zip")
 
@@ -30,7 +30,7 @@ class InstallEnvironmentUseCase @Inject constructor(
     }
 
     suspend operator fun invoke(packageFile: File): Result<Unit, PluginError> {
-        val environmentManifest: EnvironmentManifest = environmentGatewayImpl
+        val environmentManifest: EnvironmentManifest = environmentGateway
             .parseEnvironmentManifest(packageFile)
             .getOrElse { throwable ->
                 return Err(
@@ -43,7 +43,7 @@ class InstallEnvironmentUseCase @Inject constructor(
             }
 
         // Un-Zip, Install Environment
-        environmentGatewayImpl
+        environmentGateway
             .installEnvironmentFromLocal(packageFile)
             .getOrElse { throwable ->
                 return Err(
@@ -56,7 +56,7 @@ class InstallEnvironmentUseCase @Inject constructor(
             }
 
         // Set Execute-able, Made it can call and use
-        environmentGatewayImpl
+        environmentGateway
             .setEnvironmentEntryPointExecutable(environmentManifest)
             .getOrElse { throwable ->
                 return Err(
@@ -69,8 +69,8 @@ class InstallEnvironmentUseCase @Inject constructor(
             }
 
         // Add Data, Register Environment
-        environmentRepositoryImpl.addEnvironment(environmentManifest)
-        environmentStatusRepositoryImpl.registerEnvironmentStatus(environmentManifest.environmentId, PluginOrigin.Local)
+        environmentRepository.addEnvironment(environmentManifest)
+        environmentStatusRepository.registerEnvironmentStatus(environmentManifest.environmentId, PluginOrigin.Local)
 
         return Ok(Unit)
     }

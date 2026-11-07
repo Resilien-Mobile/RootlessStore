@@ -1,12 +1,12 @@
 package com.baidaidai.rootless_store.application.codebrick
 
-import com.baidaidai.rootless_store.data.codebrick.repository.CodeBrickRepositoryImpl
+import com.baidaidai.rootless_store.domain.codebrick.repository.CodeBrickRepository
 import com.baidaidai.rootless_store.domain.codebrick.model.CodeBrickConfig
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
 import javax.inject.Inject
 
 class UpdateCodeBrickUseCase @Inject constructor(
-    private val codeBrickRepositoryImpl: CodeBrickRepositoryImpl
+    private val codeBrickRepository: CodeBrickRepository
 ) {
     suspend operator fun invoke(
         codeBrickTitle: String,
@@ -24,6 +24,6 @@ class UpdateCodeBrickUseCase @Inject constructor(
             boundTileIndex = boundTileIndex
         )
 
-        codeBrickRepositoryImpl.updateCodeBrick(codeBrickConfig)
+        codeBrickRepository.updateCodeBrick(codeBrickConfig)
     }
 }
