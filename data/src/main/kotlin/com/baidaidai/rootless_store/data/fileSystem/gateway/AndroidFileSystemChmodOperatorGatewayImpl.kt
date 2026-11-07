@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemChmodOperatorGateway
 import android.content.Context
 import com.baidaidai.rootless_store.domain.environment.manifest.EnvironmentManifest
 import com.baidaidai.rootless_store.domain.plugin.manifest.PluginManifest
@@ -9,7 +10,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemChmodOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): AndroidFileSystemChmodOperatorGateway {
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
@@ -24,7 +25,7 @@ class AndroidFileSystemChmodOperatorGatewayImpl @Inject constructor(
     }
 
     // Chmod FS Operator
-    fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Boolean {
+    override fun setPluginEntryPointExecutable(pluginManifest: PluginManifest): Boolean {
         val pluginRootDirectory = getInternalPluginRootDirectory()
         val pluginPackageName = pluginManifest.pluginPackageName
         val pluginEntryPoint = pluginManifest.entryPoint
@@ -32,7 +33,7 @@ class AndroidFileSystemChmodOperatorGatewayImpl @Inject constructor(
         return File(pluginRootDirectory, child).setExecutable(true)
     }
 
-    fun setPluginExecutableFiles(
+    override fun setPluginExecutableFiles(
         pluginPackageName: String,
         executableFilePath: String
     ) {
@@ -50,7 +51,7 @@ class AndroidFileSystemChmodOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean {
+    override fun setEnvironmentEntryPointExecutable(environmentManifest: EnvironmentManifest): Boolean {
         val environmentRootDirectory = getInternalEnvironmentRootDirectory()
         val environmentPackageName = environmentManifest.environmentPackageName
         val environmentEntryPoint = environmentManifest.entryPoint

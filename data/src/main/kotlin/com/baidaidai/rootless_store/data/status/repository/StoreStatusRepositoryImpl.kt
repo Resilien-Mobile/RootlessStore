@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.status.repository
 
+import com.baidaidai.rootless_store.domain.status.repository.StoreStatusRepository
 import com.baidaidai.rootless_store.data.status.gateway.StoreStatusGatewayImpl
 import com.baidaidai.rootless_store.domain.status.model.AndroidPlatformVersion
 import com.baidaidai.rootless_store.domain.status.model.ExecutionContext
@@ -12,24 +13,24 @@ import kotlinx.coroutines.flow.Flow
 
 class StoreStatusRepositoryImpl @Inject constructor(
     private val storeStatusGatewayImpl: StoreStatusGatewayImpl
-) {
+): StoreStatusRepository {
 
-    fun observeStorageStatus(): Flow<StorageStatus> = storeStatusGatewayImpl.observeStorageStatus()
+    override fun observeStorageStatus(): Flow<StorageStatus> = storeStatusGatewayImpl.observeStorageStatus()
 
-    fun observeMemoryStatus(): Flow<MemoryStatus> = storeStatusGatewayImpl.observeMemoryStatus()
+    override fun observeMemoryStatus(): Flow<MemoryStatus> = storeStatusGatewayImpl.observeMemoryStatus()
 
-    fun getSeLinuxStatus(): SeLinuxStatus = storeStatusGatewayImpl.getSeLinuxStatus()
+    override fun getSeLinuxStatus(): SeLinuxStatus = storeStatusGatewayImpl.getSeLinuxStatus()
 
-    fun getKernelVersion(): String = storeStatusGatewayImpl.getKernelVersion()
+    override fun getKernelVersion(): String = storeStatusGatewayImpl.getKernelVersion()
 
-    fun observeTemperatureStatus(): Flow<TemperatureStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
+    override fun observeTemperatureStatus(): Flow<TemperatureStatus> = storeStatusGatewayImpl.observeTemperatureStatus()
 
-    fun getAndroidPlatformVersion(): AndroidPlatformVersion = storeStatusGatewayImpl.getAndroidPlatformVersion()
+    override fun getAndroidPlatformVersion(): AndroidPlatformVersion = storeStatusGatewayImpl.getAndroidPlatformVersion()
 
-    fun observeAvailableExecutionContext(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeAvailableExecutionContext()
+    override fun observeAvailableExecutionContext(): Flow<ExecutionContext> = storeStatusGatewayImpl.observeAvailableExecutionContext()
 
-    fun isRootShellAvailable(): Boolean = storeStatusGatewayImpl.isRootShellAvailable()
+    override fun isRootShellAvailable(): Boolean = storeStatusGatewayImpl.isRootShellAvailable()
 
-    fun isShizukuAvailable(): Boolean = storeStatusGatewayImpl.isShizukuAvailable()
+    override fun isShizukuAvailable(): Boolean = storeStatusGatewayImpl.isShizukuAvailable()
 
 }
