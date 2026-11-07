@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -7,7 +8,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemDeleteOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): AndroidFileSystemDeleteOperatorGateway {
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
@@ -26,25 +27,25 @@ class AndroidFileSystemDeleteOperatorGatewayImpl @Inject constructor(
         message = "Recommended to use deleteDirectoryByPackageName method, instead of the deleteFile method",
         replaceWith = ReplaceWith("deleteDirectoryByPackageName(pluginPackageName)")
     )
-    fun deleteFile(pluginPackageName: String): Boolean {
+    override fun deleteFile(pluginPackageName: String): Boolean {
         val targetFile = File(getInternalPluginRootDirectory(), "${pluginPackageName}.zip")
 
         return targetFile.delete()
     }
 
-    fun deleteDirectoryByPackageName(pluginPackageName: String): Boolean {
+    override fun deleteDirectoryByPackageName(pluginPackageName: String): Boolean {
         val targetFile = File(getInternalPluginRootDirectory(), pluginPackageName)
 
         return targetFile.deleteRecursively()
     }
 
-    fun deleteEnvironmentDirectoryByPackageName(environmentPackageName: String): Boolean {
+    override fun deleteEnvironmentDirectoryByPackageName(environmentPackageName: String): Boolean {
         val targetFile = File(getInternalEnvironmentRootDirectory(), environmentPackageName)
 
         return targetFile.deleteRecursively()
     }
 
-    fun deleteFileOrDirectory(filePath: String): Boolean {
+    override fun deleteFileOrDirectory(filePath: String): Boolean {
         val targetFileOrDirectory = File(filePath)
         return targetFileOrDirectory.deleteRecursively()
     }

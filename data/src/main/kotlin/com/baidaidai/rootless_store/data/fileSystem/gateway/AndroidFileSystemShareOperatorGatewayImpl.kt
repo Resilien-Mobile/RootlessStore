@@ -9,10 +9,10 @@ import javax.inject.Inject
 
 class AndroidFileSystemShareOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): AndroidFileSystemShareOperatorGateway {
 
     // Share FS Operator
-    fun resolveShareUriFromFile(file: File): Uri {
+    override fun resolveShareUriFromFile(file: File): Uri {
         return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
     }
 

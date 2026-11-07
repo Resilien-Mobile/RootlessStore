@@ -1,13 +1,14 @@
 package com.baidaidai.rootless_store.data.update.gateway
 
+import com.baidaidai.rootless_store.domain.update.gateway.StoreUpdateGateway
 import android.util.Log
 import com.baidaidai.rootless_store.data.update.remote.api.GithubReleaseApi
 import javax.inject.Inject
 
 class StoreUpdateGatewayImpl @Inject constructor(
     private val githubReleaseApi: GithubReleaseApi,
-) {
-    suspend fun fetchLatestVersionTag(): Result<String> =
+): StoreUpdateGateway {
+    override suspend fun fetchLatestVersionTag(): Result<String> =
         runCatching {
             githubReleaseApi.fetchLatestRelease().tagName
         }

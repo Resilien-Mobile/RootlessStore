@@ -1,5 +1,6 @@
 package com.baidaidai.rootless_store.data.fileSystem.gateway
 
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemUnzipOperatorGateway
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.ktor.utils.io.ByteReadChannel
@@ -14,7 +15,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+): AndroidFileSystemUnzipOperatorGateway {
     private companion object {
         private const val PLUGIN_DIR_NAME = "Plugin"
         private const val ENVIRONMENT_DIR_NAME = "Environment"
@@ -41,11 +42,11 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     } // /File/Plugin/PLUGIN
 
     // Un-Zip FS Operator
-    fun unzipFromFileToDirectory(originFile: File, targetDirectory: File) {
+    override fun unzipFromFileToDirectory(originFile: File, targetDirectory: File) {
         FileInputStream(originFile).use { unzipInputStreamToDirectory(it, targetDirectory) }
     }
 
-    fun extractFilesFromZip(
+    override fun extractFilesFromZip(
         originFile: File,
         targetDirectory: File,
         fileNames: Set<String>
@@ -69,7 +70,7 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    fun unzipFromByteChannelToDirectory(
+    override fun unzipFromByteChannelToDirectory(
         originFileByteChannel: ByteReadChannel,
         targetDirectory: File
     ) {
@@ -108,7 +109,7 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
         }
     }
 
-    fun unzipEnvironmentFromFile(
+    override fun unzipEnvironmentFromFile(
         originFile: File,
         pluginRootDirectory: File,
         directoryName: String
@@ -119,7 +120,7 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String) {
+    override fun unzipFromUri(originFileByteChannel: ByteReadChannel, pluginRootDirectory: File, directoryName: String) {
 
         // Resolve target directory for copy
         val internalPluginRootDirectory = ensureInternalPluginRootDirectory()
@@ -152,7 +153,7 @@ class AndroidFileSystemUnzipOperatorGatewayImpl @Inject constructor(
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun unzipEnvironmentFromUri(
+    override fun unzipEnvironmentFromUri(
         originFileByteChannel: ByteReadChannel,
         pluginRootDirectory: File,
         directoryName: String
