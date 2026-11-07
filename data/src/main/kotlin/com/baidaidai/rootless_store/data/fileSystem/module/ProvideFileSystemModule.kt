@@ -10,15 +10,11 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemRez
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemSearchOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCapabilityGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemChmodOperatorGateway
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemCreateOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemReadOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemRezipOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemSearchOperatorGateway
-import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemUnzipOperatorGateway
 import dagger.Binds
 import dagger.Module
@@ -30,19 +26,9 @@ import dagger.hilt.components.SingletonComponent
 abstract class ProvideFileSystemModule {
 
     @Binds
-    abstract fun ProvideAndroidFileSystemCapabilityGateway(
-        implementation: AndroidFileSystemCapabilityGatewayImpl
-    ): AndroidFileSystemCapabilityGateway
-
-    @Binds
     abstract fun ProvideAndroidFileSystemChmodOperatorGateway(
         implementation: AndroidFileSystemChmodOperatorGatewayImpl
     ): AndroidFileSystemChmodOperatorGateway
-
-    @Binds
-    abstract fun ProvideAndroidFileSystemCreateOperatorGateway(
-        implementation: AndroidFileSystemCreateOperatorGatewayImpl
-    ): AndroidFileSystemCreateOperatorGateway
 
     @Binds
     abstract fun ProvideAndroidFileSystemDefaultOperatorGateway(
@@ -55,11 +41,6 @@ abstract class ProvideFileSystemModule {
     ): AndroidFileSystemDeleteOperatorGateway
 
     @Binds
-    abstract fun ProvideAndroidFileSystemReadOperatorGateway(
-        implementation: AndroidFileSystemReadOperatorGatewayImpl
-    ): AndroidFileSystemReadOperatorGateway
-
-    @Binds
     abstract fun ProvideAndroidFileSystemRezipOperatorGateway(
         implementation: AndroidFileSystemRezipOperatorGatewayImpl
     ): AndroidFileSystemRezipOperatorGateway
@@ -68,11 +49,6 @@ abstract class ProvideFileSystemModule {
     abstract fun ProvideAndroidFileSystemSearchOperatorGateway(
         implementation: AndroidFileSystemSearchOperatorGatewayImpl
     ): AndroidFileSystemSearchOperatorGateway
-
-    @Binds
-    abstract fun ProvideAndroidFileSystemShareOperatorGateway(
-        implementation: AndroidFileSystemShareOperatorGatewayImpl
-    ): AndroidFileSystemShareOperatorGateway
 
     @Binds
     abstract fun ProvideAndroidFileSystemUnzipOperatorGateway(
