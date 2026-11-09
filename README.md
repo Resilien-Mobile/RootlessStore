@@ -63,7 +63,7 @@ It stands on three core principles:
 - [x] Host status panel， More Expressive
 - [x] Add test matrix (not yet completed)
 - [x] More objective error cause
-- [ ] Certificate signature tamper-proof verification chain
+- [x] Certificate signature tamper-proof verification chain
 - [ ] A more intuitive demonstration of plugin execution methods
 - [ ] Improve filtering, state feedback, and permission boundaries
 - [ ] Publish to F-Droid
