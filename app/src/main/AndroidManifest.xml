@@ -43,6 +43,9 @@
         <activity
             android:name=".ui.CertificateActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.ProcessManagerActivity"
+            android:exported="false" />
         <activity android:name=".ui.ShizukuActivity"/>
         <provider
             android:name="rikka.shizuku.ShizukuProvider"

@@ -33,9 +33,11 @@ import com.baidaidai.rootless_store.domain.status.model.StorageStatus
 fun HomeStatusOverview(
     modifier: Modifier = Modifier,
     deviceStatus: DeviceStatusSummary,
-    onOpenShizukuSetup: () -> Unit = {}
+    onOpenShizukuSetup: () -> Unit = {},
+    onClick: () -> Unit = {}
 ){
     Surface(
+        onClick = onClick,
         color = MaterialTheme.colorScheme.surfaceContainer,
         modifier = modifier
             .clip(MaterialTheme.shapes.extraLarge)

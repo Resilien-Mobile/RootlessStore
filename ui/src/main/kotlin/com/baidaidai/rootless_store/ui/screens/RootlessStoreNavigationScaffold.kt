@@ -36,6 +36,7 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.window.core.layout.WindowSizeClass
 import com.baidaidai.rootless_store.ui.ShizukuActivity
 import com.baidaidai.rootless_store.ui.CertificateActivity
+import com.baidaidai.rootless_store.ui.ProcessManagerActivity
 import com.baidaidai.rootless_store.ui.R
 import com.baidaidai.rootless_store.domain.error.RootlessStoreError
 import com.baidaidai.rootless_store.ui.navigation.`interface`.RootlessNavigationKey
@@ -420,6 +421,11 @@ fun RootlessStoreNavigationScaffold(
                             rootlessStoreWidthWindowSize = rootlessStoreWidthWindowSize,
                             onOpenShizukuSetup = {
                                 context.startActivity(Intent(context, ShizukuActivity::class.java))
+                            },
+                            onOpenProcessManager = {
+                                context.startActivity(
+                                    Intent(context, ProcessManagerActivity::class.java)
+                                )
                             }
                         )
                     }

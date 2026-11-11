@@ -87,6 +87,7 @@
     <string name="plugin_ca_certificate_confirm_button">Confirm</string>
     <string name="certificate_screen_top_app_bar_subtitle">Injected {certificateCount} certificates</string>
     <string name="certificate_screen_empty_state_message">No custom certificates loaded</string>
+    <string name="process_manager_empty_state_message">Process List Unavailable</string>
 
     <!-- Plugin Screen: Secondary Tab Row -->
     <string name="plugin_screen_secondary_tab_row_plugins_label">Plugins</string>

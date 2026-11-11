@@ -83,6 +83,7 @@
     <string name="plugin_ca_certificate_confirm_button">确认</string>
     <string name="certificate_screen_top_app_bar_subtitle">已加载 {certificateCount} 个自定义证书</string>
     <string name="certificate_screen_empty_state_message">还没加载自定义证书</string>
+    <string name="process_manager_empty_state_message">进程列表不可用</string>
 
     <!-- Plugin Screen: Secondary Tab Row -->
     <string name="plugin_screen_secondary_tab_row_plugins_label">插件</string>
