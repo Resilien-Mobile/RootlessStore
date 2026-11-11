@@ -83,6 +83,7 @@
     <string name="plugin_ca_certificate_confirm_button">確認</string>
     <string name="certificate_screen_top_app_bar_subtitle">已載入 {certificateCount} 個自訂憑證</string>
     <string name="certificate_screen_empty_state_message">尚未載入自訂憑證</string>
+    <string name="process_manager_empty_state_message">處理程序列表無法使用</string>
 
     <!-- Plugin Screen: Secondary Tab Row -->
     <string name="plugin_screen_secondary_tab_row_plugins_label">外掛</string>

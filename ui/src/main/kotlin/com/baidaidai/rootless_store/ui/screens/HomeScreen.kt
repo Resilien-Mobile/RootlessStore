@@ -36,6 +36,7 @@ fun HomeScreen(
     rootlessStoreHeightWindowSize: RootlessStoreWindowSize,
     rootlessStoreWidthWindowSize: RootlessStoreWindowSize,
     onOpenShizukuSetup: () -> Unit,
+    onOpenProcessManager: () -> Unit,
     homeScreenViewModel: RootlessStoreHomeScreenViewModel = hiltViewModel()
 ){
     val memoryStatus by homeScreenViewModel.memoryStatus.collectAsState()
@@ -91,7 +92,8 @@ fun HomeScreen(
                 /* Device Status Overview */
                 HomeStatusOverview(
                     deviceStatus = deviceStatusSummary,
-                    onOpenShizukuSetup = onOpenShizukuSetup
+                    onOpenShizukuSetup = onOpenShizukuSetup,
+                    onClick = onOpenProcessManager
                 )
             }
 
@@ -130,6 +132,7 @@ fun HomeScreen(
             HomeStatusOverview(
                 deviceStatus = deviceStatusSummary,
                 onOpenShizukuSetup = onOpenShizukuSetup,
+                onClick = onOpenProcessManager,
                 modifier = resolveBasicWidthModifier()
             )
 

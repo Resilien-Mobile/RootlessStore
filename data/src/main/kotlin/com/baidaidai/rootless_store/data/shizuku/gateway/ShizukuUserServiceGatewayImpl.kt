@@ -1,10 +1,12 @@
 package com.baidaidai.rootless_store.data.shizuku.gateway
 
 import IShellService
+import IProcProcessScanner
 import android.content.ComponentName
 import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
+import com.baidaidai.rootless_store.data.process.shizuku.ProcProcessScanner
 import com.baidaidai.rootless_store.data.shizuku.server.ShizukuEndpointTemplate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +20,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class ShizukuUserServiceGatewayImpl @Inject constructor() {
 
     private var shizukuUserService: IShellService? = null
+    private var procProcessScannerUserService: IProcProcessScanner? = null
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
@@ -27,6 +30,22 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
         override fun onServiceDisconnected(name: ComponentName?) {
             shizukuUserService = null
         }
+    }
+
+    private val procProcessScannerConnection = object : ServiceConnection {
+
+        override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+
+            procProcessScannerUserService = IProcProcessScanner.Stub.asInterface(binder)
+
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+
+            procProcessScannerUserService = null
+
+        }
+
     }
 
     fun startShizukuUserService() {
@@ -48,6 +67,44 @@ class ShizukuUserServiceGatewayImpl @Inject constructor() {
 
     fun findShizukuUserService(): IShellService? {
         return shizukuUserService
+    }
+
+    fun startProcProcessScannerUserService() {
+
+        val args = Shizuku.UserServiceArgs(
+            ComponentName(
+                "com.baidaidai.rootless_store",
+                ProcProcessScanner::class.java.name
+            )
+        )
+            .processNameSuffix("proc_process_scanner")
+            .tag("proc_process_scanner_service")
+            .version(2)
+            .daemon(true)
+
+        Shizuku.bindUserService(args, procProcessScannerConnection)
+        Log.d(
+            "ShizukuEndpointManager",
+            "Start to bind ProcProcessScanner UserService"
+        )
+
+    }
+
+    fun findProcProcessScannerUserService(): IProcProcessScanner? {
+
+        return procProcessScannerUserService
+
+    }
+
+    fun observeProcProcessScannerUserServiceAvailability(): Flow<Boolean> = flow {
+
+        while (true) {
+
+            emit(procProcessScannerUserService != null)
+            delay(3000.milliseconds)
+
+        }
+
     }
 
     fun observeShizukuUserServiceAvailability(): Flow<Boolean> = flow {
