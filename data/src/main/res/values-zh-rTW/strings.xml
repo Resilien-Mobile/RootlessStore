@@ -1,0 +1,21 @@
+<resources>
+    <!-- Assistant API: Response Errors -->
+    <string name="assistant_api_prompt_required_title">需要輸入內容</string>
+    <string name="assistant_api_prompt_required_description">請先輸入內容，再請求助手回覆</string>
+    <string name="assistant_api_engine_unavailable_title">助手引擎無法使用</string>
+    <string name="assistant_api_engine_unavailable_description">初始化已完成，但目前沒有可用的助手引擎</string>
+
+    <!-- Assistant API: Engine Initialization Errors -->
+    <string name="assistant_api_gpu_backend_initialization_failed_title">GPU 後端初始化失敗</string>
+    <string name="assistant_api_gpu_backend_initialization_failed_description">LiteRT-LM 無法初始化 GPU 後端</string>
+    <string name="assistant_api_cpu_backend_initialization_failed_title">CPU 後端初始化失敗</string>
+    <string name="assistant_api_cpu_backend_initialization_failed_description">LiteRT-LM 無法初始化 CPU 後端</string>
+
+    <!-- Assistant API: Model Storage Errors -->
+    <string name="assistant_api_model_storage_unavailable_title">模型儲存空間無法使用</string>
+    <string name="assistant_api_model_storage_unavailable_description">應用程式外部檔案目錄無法使用，請確認其可存取後再試一次</string>
+    <string name="assistant_api_model_directory_unavailable_title">模型目錄無法使用</string>
+    <string name="assistant_api_model_directory_unavailable_description">無法建立模型目錄，請檢查儲存空間後再試一次</string>
+    <string name="assistant_api_model_file_not_found_title">找不到模型檔案</string>
+    <string name="assistant_api_model_file_not_found_description">模型目錄中應包含 Qwen.litertlm，請將模型檔案放入該目錄後再試一次</string>
+</resources>
