@@ -75,6 +75,25 @@
     <string name="shell_screen_run_command_content_description">Run Command</string>
     <string name="shell_screen_environment_menu_expand_content_description">Expand More</string>
 
+    <!-- Shell Screen: Assistant Engine Board -->
+    <string name="shell_screen_assistant_engine_board_title">Core Status</string>
+    <string name="shell_screen_assistant_engine_status_working">Working</string>
+    <string name="shell_screen_assistant_engine_status_released">Released</string>
+    <string name="shell_screen_assistant_engine_reload_action_title">Try Reloading the Core</string>
+    <string name="shell_screen_assistant_engine_reload_action_supporting">To get more detailed error information</string>
+    <string name="shell_screen_assistant_model_status_action_title">Model Status</string>
+    <string name="shell_screen_assistant_model_status_action_supporting">Try to check if the local model exists</string>
+    <string name="shell_screen_assistant_command_resolving_placeholder">Model is reasoning...</string>
+
+    <!-- Shell Screen: Assistant Error Dialog -->
+    <string name="shell_screen_assistant_error_check_button">Check</string>
+    <string name="shell_screen_assistant_error_command_rejected_title">Command rejected</string>
+    <string name="shell_screen_assistant_error_command_rejected_description">The assistant marked the generated command as illegal</string>
+    <string name="shell_screen_assistant_error_no_command_title">No command generated</string>
+    <string name="shell_screen_assistant_error_no_command_description">The assistant returned a legal response without shellCode</string>
+    <string name="shell_screen_assistant_error_model_file_not_found_title">Model file not found</string>
+    <string name="shell_screen_assistant_error_model_file_not_found_description">Place Qwen.litertlm in the /sdcard/Android/data/com.baidaidai.rootless_store/files/models directory</string>
+
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">Plugin</string>
     <string name="plugin_screen_top_app_bar_subtitle">Installed {pluginCount} plugins</string>

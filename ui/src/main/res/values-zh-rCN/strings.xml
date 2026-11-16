@@ -71,6 +71,25 @@
     <string name="shell_screen_run_command_content_description">运行命令</string>
     <string name="shell_screen_environment_menu_expand_content_description">展开更多</string>
 
+    <!-- Shell Screen: Assistant Engine Board -->
+    <string name="shell_screen_assistant_engine_board_title">核心状态</string>
+    <string name="shell_screen_assistant_engine_status_working">工作中</string>
+    <string name="shell_screen_assistant_engine_status_released">已释放</string>
+    <string name="shell_screen_assistant_engine_reload_action_title">尝试重载核心</string>
+    <string name="shell_screen_assistant_engine_reload_action_supporting">以获取更详细的错误信息</string>
+    <string name="shell_screen_assistant_model_status_action_title">模型状态</string>
+    <string name="shell_screen_assistant_model_status_action_supporting">检查本地模型文件是否存在</string>
+    <string name="shell_screen_assistant_command_resolving_placeholder">模型正在推理……</string>
+
+    <!-- Shell Screen: Assistant Error Dialog -->
+    <string name="shell_screen_assistant_error_check_button">检查</string>
+    <string name="shell_screen_assistant_error_command_rejected_title">命令已被拒绝</string>
+    <string name="shell_screen_assistant_error_command_rejected_description">助手判定生成的命令不合法</string>
+    <string name="shell_screen_assistant_error_no_command_title">未生成命令</string>
+    <string name="shell_screen_assistant_error_no_command_description">助手返回了合法结果，但没有提供 shellCode</string>
+    <string name="shell_screen_assistant_error_model_file_not_found_title">未找到模型文件</string>
+    <string name="shell_screen_assistant_error_model_file_not_found_description">请将 Qwen.litertlm 放入 /sdcard/Android/data/com.baidaidai.rootless_store/files/models 文件夹</string>
+
     <!-- Plugin Screen: Top App Bar -->
     <string name="plugin_screen_top_app_bar_title">插件页</string>
     <string name="plugin_screen_top_app_bar_subtitle">已安装了 {pluginCount} 个插件</string>
