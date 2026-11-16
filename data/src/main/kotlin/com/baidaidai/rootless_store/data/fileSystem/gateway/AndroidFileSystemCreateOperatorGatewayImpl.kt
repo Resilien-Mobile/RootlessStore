@@ -2,6 +2,7 @@ package com.baidaidai.rootless_store.data.fileSystem.gateway
 
 import android.content.Context
 import android.net.Uri
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemCreateOperatorGateway
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.io.FileOutputStream
@@ -9,7 +10,7 @@ import javax.inject.Inject
 
 class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+): AndroidFileSystemCreateOperatorGateway {
 
     // Create FS Operator
     fun ensureFilesDirectory(path: String) {
@@ -33,9 +34,15 @@ class AndroidFileSystemCreateOperatorGatewayImpl @Inject constructor(
         return isZipFileCreated
     }
 
-    fun resolveChildFile(parentDirectory: File, childName: String): File {
+    override fun resolveChildFile(parentDirectory: File, childName: String): File {
         return File(parentDirectory, childName)
     } // /File/Plugin/PLUGIN
+
+    override fun ensureDirectory(directory: File): File? {
+        return directory.takeIf {
+            it.isDirectory || it.mkdirs()
+        }
+    }
 
     fun writeTextFile(parentDirectory: File, fileName: String, content: String): File {
         val targetFile = File(parentDirectory, fileName)

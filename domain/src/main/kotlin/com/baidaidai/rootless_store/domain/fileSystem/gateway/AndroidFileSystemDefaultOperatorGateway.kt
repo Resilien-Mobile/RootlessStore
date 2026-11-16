@@ -10,6 +10,8 @@ interface AndroidFileSystemDefaultOperatorGateway {
 
     fun getExternalAppFilesDirectoryFile(): File
 
+    fun findExternalAppFilesDirectoryFile(): File?
+
     fun getExternalAppCacheDirectoryPath(): String
 
     fun getExternalAppCacheDirectoryFile(): File

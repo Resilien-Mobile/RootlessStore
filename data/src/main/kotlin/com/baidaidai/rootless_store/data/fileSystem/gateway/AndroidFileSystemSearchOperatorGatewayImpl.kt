@@ -32,6 +32,10 @@ class AndroidFileSystemSearchOperatorGatewayImpl @Inject constructor(
         return hasCacheDirectory(ENVIRONMENT_DIR_NAME)
     } // /Cache/Environment?
 
+    override fun findRegularFile(file: File): File? {
+        return file.takeIf { it.isFile }
+    }
+
     private fun hasInternalDirectory(path: String): Boolean {
         val targetFile = File(context.filesDir, path)
         Log.d("hasInternalDirectory", targetFile.exists().toString())

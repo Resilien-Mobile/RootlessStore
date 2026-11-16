@@ -74,6 +74,14 @@ dependencies {
     implementation("org.bouncycastle:bcprov-jdk18on:1.86")  // 基础密码学算法
     implementation("org.bouncycastle:bcpkix-jdk18on:1.86")  // 高级证书API
 
+    // LiteRT LLM
+    implementation(libs.litertlm.android)
+
+    // Json serialization
+    api(libs.kotlinx.serialization.json)
+
+    // Json chema - ktor
+    implementation("io.ktor:ktor-openapi-schema:3.6.1")
 
     // Local Modules
     implementation(project(":illusioncube"))

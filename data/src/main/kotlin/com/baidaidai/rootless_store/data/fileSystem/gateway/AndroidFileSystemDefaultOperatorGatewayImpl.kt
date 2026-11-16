@@ -56,6 +56,10 @@ class AndroidFileSystemDefaultOperatorGatewayImpl @Inject constructor(
         return getExternalAppFilesRootDirectory()
     } // /sdcard/Android/data/APP_PACKAGE/files
 
+    override fun findExternalAppFilesDirectoryFile(): File? {
+        return context.getExternalFilesDir(null)
+    }
+
     override fun getExternalAppCacheDirectoryPath(): String {
         return getExternalAppCacheRootDirectory().path
     } // /sdcard/Android/data/APP_PACKAGE/cache

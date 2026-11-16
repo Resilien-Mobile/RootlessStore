@@ -1,3 +1,23 @@
 <resources>
     <string name="notification_channel_id">Rootless Store Status Monitoring</string>
+
+    <!-- Assistant API: Response Errors -->
+    <string name="assistant_api_prompt_required_title">Prompt required</string>
+    <string name="assistant_api_prompt_required_description">Enter a prompt before requesting a response</string>
+    <string name="assistant_api_engine_unavailable_title">Engine unavailable</string>
+    <string name="assistant_api_engine_unavailable_description">Initialization completed without an active engine</string>
+
+    <!-- Assistant API: Engine Initialization Errors -->
+    <string name="assistant_api_gpu_backend_initialization_failed_title">GPU backend initialization failed</string>
+    <string name="assistant_api_gpu_backend_initialization_failed_description">LiteRT-LM could not initialize the GPU backend</string>
+    <string name="assistant_api_cpu_backend_initialization_failed_title">CPU backend initialization failed</string>
+    <string name="assistant_api_cpu_backend_initialization_failed_description">LiteRT-LM could not initialize the CPU backend</string>
+
+    <!-- Assistant API: Model Storage Errors -->
+    <string name="assistant_api_model_storage_unavailable_title">Model storage unavailable</string>
+    <string name="assistant_api_model_storage_unavailable_description">The app external files directory is unavailable. Make it accessible and try again</string>
+    <string name="assistant_api_model_directory_unavailable_title">Model directory unavailable</string>
+    <string name="assistant_api_model_directory_unavailable_description">Could not create the model directory. Check storage availability and try again</string>
+    <string name="assistant_api_model_file_not_found_title">Model file not found</string>
+    <string name="assistant_api_model_file_not_found_description">Expected Qwen.litertlm in the model directory. Place the model there and try again</string>
 </resources>

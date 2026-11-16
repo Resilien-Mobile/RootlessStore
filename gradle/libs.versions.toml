@@ -37,6 +37,7 @@ roomRuntime = "2.8.4"
 runtimeSaveable = "1.11.2"
 compileSdk = "37"
 kotlinxCoroutineAndroid = "1.11.0"
+litertLm = "0.19.1"
 
 # Navigation3
 nav3Core = "1.1.2"
@@ -107,6 +108,9 @@ androidx-compose-runtime-saveable = { group = "androidx.compose.runtime", name =
 # Core Navigation 3 libraries
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+
+# litertlm-android
+litertlm-android = { group = "com.google.ai.edge.litertlm", name = "litertlm-android", version.ref = "litertLm" }
 
 # Optional add-on Navigation 3 libraries
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }

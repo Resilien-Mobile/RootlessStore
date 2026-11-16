@@ -11,6 +11,7 @@ import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemSea
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemShareOperatorGatewayImpl
 import com.baidaidai.rootless_store.data.fileSystem.gateway.AndroidFileSystemUnzipOperatorGatewayImpl
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemChmodOperatorGateway
+import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemCreateOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDefaultOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemDeleteOperatorGateway
 import com.baidaidai.rootless_store.domain.fileSystem.gateway.AndroidFileSystemRezipOperatorGateway
@@ -29,6 +30,11 @@ abstract class ProvideFileSystemModule {
     abstract fun ProvideAndroidFileSystemChmodOperatorGateway(
         implementation: AndroidFileSystemChmodOperatorGatewayImpl
     ): AndroidFileSystemChmodOperatorGateway
+
+    @Binds
+    abstract fun ProvideAndroidFileSystemCreateOperatorGateway(
+        implementation: AndroidFileSystemCreateOperatorGatewayImpl
+    ): AndroidFileSystemCreateOperatorGateway
 
     @Binds
     abstract fun ProvideAndroidFileSystemDefaultOperatorGateway(
