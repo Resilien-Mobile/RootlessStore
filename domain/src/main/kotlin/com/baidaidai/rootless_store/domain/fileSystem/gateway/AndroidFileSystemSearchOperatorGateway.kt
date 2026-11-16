@@ -1,5 +1,7 @@
 package com.baidaidai.rootless_store.domain.fileSystem.gateway
 
+import java.io.File
+
 interface AndroidFileSystemSearchOperatorGateway {
 
     fun hasPluginDirectory(): Boolean
@@ -9,5 +11,9 @@ interface AndroidFileSystemSearchOperatorGateway {
     fun hasEnvironmentDirectory(): Boolean
 
     fun hasEnvironmentCacheDirectory(): Boolean
+
+    fun findRegularFile(
+        file: File
+    ): File?
 
 }
